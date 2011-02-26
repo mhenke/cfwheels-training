@@ -1,0 +1,333 @@
+h1. I3: Tagging
+
+In this iteration we'll add the ability to tag articles for organization and navigation.
+
+First we need to think about what a tag is and how it'll relate to the Article model.  If you're not familiar with tags, they're commonly used in blogs to assign the article to one or more categories.  For instance, if I write an article about a feature in Ruby on Rails, I might want it tagged with all of these categories: ruby, rails, programming, features.  That way if one of my readers is looking for more articles about one of those topics they can click on the tag and see a list of my articles with that tag.
+
+h3. Understanding the Relationship
+
+What is a tag?  We need to figure that out before we can create the model.  First, a tag must have a relationship to an article so they can be connected.  A single tag, like "ruby" for instance, should be able to relate to *many* articles.  On the other side of the relationship, the article might have multiple tags (like "ruby", "rails", and "programming" as above) - so it's also a *many* relationship.  Articles and tags have a *many-to-many* relationship.
+
+Many-to-many relationships are tricky because we're using an SQL database.  If an Article "has many" tags, then we would put the foreign key @article_id@ inside the @tags@ table - so then a Tag would "belong to" an Article.  But a tag can connect to *many* articles, not just one.  We can't model this relationship with just the @articles@ and @tags@ tables.
+
+When we start thinking about the database modeling, there are a few ways to achieve this setup.  One way is to create a "join table" that just tracks which tags are connected to which articles.  Traditionally this table would be named @articles_tags@ and Rails would express the relationships by saying that the Article model @has_and_belongs_to_many@ Tags, while the Tag model @has_and_belongs_to_many@ Articles.
+
+Most of the time this isn't the best way to really model the relationship.  The connection between the two models usually has value of its own, so we should promote it to a real model.  For our purposes, we'll introduce a model named "Tagging" which is the connection between Articles and Tags.  The relationships will setup like this:
+
+* An Article @has_many@ Taggings
+* A Tag @has_many@ Taggings
+* A Tagging @belongs_to@ an Article and @belongs_to@ a Tag
+
+h3. Making Models
+
+With those relationships in mind, let's design the new models:
+
+* Tag
+** @name@: A string
+* Tagging
+** @tag_id@: Integer holding the foreign key of the related Tag
+** @article_id@: Integer holding the foreign key of the related Article
+
+Note that there are no changes necessary to Article because the foreign key is stored in the Tagging model.  So now lets generate these models in your terminal:
+
+<pre class="console">
+ruby script/generate model Tag name:string
+ruby script/generate model Tagging tag_id:integer article_id:integer
+rake db:migrate
+</pre>
+
+h3. Expressing Relationships
+
+Now that our model files are generated we need to tell Rails about the relationships between them.  For each of the files below, add these lines:
+
+In @/app/models/article.rb@:
+
+<pre class=brush:ruby;">
+  has_many :taggings
+</pre>
+
+In @/app/models/tag.rb@:
+
+<pre class=brush:ruby;">
+  has_many :taggings
+</pre>
+
+Then in @/app/models/tagging.rb@:
+
+<pre class=brush:ruby;">
+  belongs_to :article
+  belongs_to :tag
+</pre>
+
+After Rails had been around for awhile, developers were finding this kind of relationship very common.  In practical usage, if I had an object named @article@ and I wanted to find its Tags, I'd have to run code like this:
+
+<pre class=brush:ruby;">
+tags = article.taggings.collect{|tagging| tagging.tag}
+</pre>
+
+That's a pain for something that we need commonly.  The solution was to augment the relationship with "through".  We'll add a second relationship now to the Article and Tag classes:
+
+In @/app/models/article.rb@:
+
+<pre class=brush:ruby;">
+  has_many :taggings
+  has_many :tags, :through => :taggings
+</pre>
+
+In @/app/models/tag.rb@:
+
+<pre class=brush:ruby;">
+  has_many :taggings
+  has_many :articles, :through => :taggings
+</pre>
+
+Now if we have an object like @article@ we can just ask for @article.tags@ or, conversely, if we have an object named @tag@ we can ask for @tag.articles@.
+
+h3. An Interface for Tagging Articles
+
+The first interface we're interested in is within the article itself.  When I write an article, I want to have a text box where I can enter a list of zero or more tags separated by commas.  When I save the article, my app should associate my article with the tags with those names, creating them if necessary.
+
+Adding the text field will take place in the file @/app/views/articles/_form.html.erb@.  Add in a set of paragraph tags underneath the body fields like this:
+
+<pre class="brush:ruby;">
+  <p>
+    <%= f.label :tag_list %><br />
+    <%= f.text_field :tag_list %>
+  </p>
+</pre>
+
+With that added, try to create an new article in your browser and your should see this error:
+
+<pre class="console">
+NoMethodError in Articles#new
+Showing app/views/articles/_form.html.erb where line #14 raised:
+undefined method `tag_list' for #<Article:0x10499bab0>
+</pre>
+
+An Article doesn't have a thing named @tag_list@ -- we made it up.  In order for the form to display, we need to add a method to the @article.rb@ file like this:
+
+<pre class="brush:ruby;">
+  def tag_list
+    return self.tags.join(", ")
+  end
+</pre>
+
+Your form should now show up and there's a text box at the bottom named "Tag list".  Enter content for another sample article and in the tag list enter @ruby, technology@.  Click SAVE and you'll get an error like this:
+
+<pre class="console">
+ActiveRecord::UnknownAttributeError in ArticlesController#create
+unknown attribute: tag_list
+</pre>
+
+What is this all about?  Let's start by looking at the form data that was posted when we clicked SAVE.  This data is in the production.log file which should be in the "Console" frame at the bottom of the RubyMine window.  Look for the line that starts "Processing ArticlesController#create", here's what mine looks like:
+
+<pre class="console">
+Processing ArticlesController#create (for 127.0.0.1) [POST]
+  Parameters: {"article"=>{"body"=>"Yes, the samples continue!", "title"=>"My Sample", "tag_list"=>"ruby, technology"}, "commit"=>"Save", "authenticity_token"=>"xxi0A3tZtoCUDeoTASi6Xx39wpnHt1QW/6Z1jxCMOm8="}
+</pre>
+
+The field that's interesting there is the @"tag_list"=>"technology, ruby"@.  Those are the tags as I typed them into the form.  The error came up in the @create@ method, so let's peek at @/app/controllers/articles_controller.rb@ in the @create@ method.  See the first line that calls @Article.new(params[:article])@?  This is the line that's causing the error as you could see in the middle of the stack trace.
+
+Since the @create@ method passes all the parameters from the form into the @Article.new@ method, the tags are sent in as the string @"technology, ruby"@.  The @new@ method will try to set the new Article's @tag_list@ equal to @"technology, ruby"@ but that method doesn't exist because there is no attribute named @tag_list@.  
+
+There are several ways to solve this problem, but the simplest is to pretend like we have an attribute named @tag_list@.  We can define the @tag_list=@ method inside @article.rb@ like this:
+
+<pre class="brush:ruby;">
+  def tag_list=(tags_string)
+    
+  end
+</pre>
+
+Just leave it blank for now and try to resubmit your sample article with tags.  It goes through!
+
+h3. Not So Fast
+
+Did it really work?  It's hard to tell.  Let's jump into the console and have a look.
+
+<pre class="console">
+a = Article.last
+a.tags
+</pre>
+
+I bet the console reported that @a@ had @[]@ tags -- an empty list.  So we didn't generate an error, but we didn't create any tags either.
+
+We need to return to that @tag_list=@ method in @article.rb@ and do some more work.  We're taking in a parameter, a string like @"tag1, tag2, tag3"@ and we need to associate the article with tags that have those names.  The pseudo-code would look like this:
+
+* Cut the parameter into a list of strings with leading and trailing whitespace removed (so @"tag1, tag2, tag3"@ would become @["tag1","tag2","tag3"]@
+* For each of those strings...
+** Look for a Tag object with that name.  If there isn't one, create it.
+** Create a Tagging object that connects this Article with that Tag
+
+The first step is something that Ruby does very easily using the @.split@ method.  Go into your console and try @"tag1, tag2, tag3".split@.  By default it split on the space character, but that's not what we want.  You can force split to work on any character by passing it in as a parameter, like this: @"tag1, tag2, tag3".split(",")@.  
+
+Look closely at the output and you'll see that the second element is @" tag2"@ instead of @"tag2"@ -- it has a leading space.  We don't want our tag system to end up with different tags because of some extra (non-meaningful) spaces, so we need to get rid of that.  Ruby's String class has a @strip@ method that pulls off leading or trailing whitespace -- try it with @" my sample ".strip@.  You'll see that the space in the center is preserved.
+
+So to combine that with our @strip@, try this code:
+
+<pre class="brush:ruby;">
+"tag1, tag2, tag3".split(",").collect{|s| s.strip.downcase}
+</pre>
+
+The @.split(",")@ will create the list with extra spaces as before, then the @.collect@ will take each element of that list and send it into the following block where the string is named @s@ and the @strip@ and @downcase@ methods are called on it.  The @downcase@ method is to make sure that "ruby" and "Ruby" don't end up as different tags.  This line should give you back @["tag1", "tag2", "tag3"]@.
+
+Now, back inside our @tag_list=@ method, let's add this line:
+
+<pre class="brush:ruby;">
+tag_names = tags_string.split(",").collect{|s| s.strip}
+</pre>
+
+So looking at our pseudo-code, the next step is to go through @each@ of those @tag_names@ and find or create a tag with that name.  Rails has a built in method to do just that, like this:
+
+<pre class="brush:ruby;">
+tag = Tag.find_or_create_by_name(tag_name)
+</pre>
+
+Once we find or create the @tag@, we need to create a @tagging@ which connects this article (here @self@) to the tag like this:
+
+<pre class="brush:ruby;">
+self.taggings.build(:tag => tag)
+</pre>
+
+The @build@ method is a special creation method.  It doesn't need an explicit save, Rails will wait to save the Tagging until the Article itself it saved.  So, putting these pieces together, your @tag_list=@ method should look like this:
+
+<pre class="brush:ruby;">
+  def tag_list=(tags_string)
+    tag_names = tags_string.split(",").collect{|s| s.strip.downcase}
+    tag_names.each do |tag_name|
+      tag = Tag.find_or_create_by_name(tag_name)
+      self.taggings.build(:tag => tag)
+    end
+  end
+</pre>
+
+h3. Testing in the Console
+
+Go back to your console and try these commands:
+
+<pre class="brush:ruby;">
+reload!
+a = Article.new(:title => "A Sample Article for Tagging!",:body => "Great article goes here", :tag_list => "ruby, technology")
+a.save
+a.tags
+</pre>
+
+You should get back a list of the two tags.  If you'd like to check the other side of the Article-Tagging-Tag relationship, try this:
+
+<pre class="console">
+t = a.tags.first
+t.articles
+</pre>
+
+And you'll see that this Tag is associated with just one Article.
+
+h3. Adding Tags to our Display
+
+According to our work in the console, articles can now have tags, but we haven't done anything to display them in the article pages.  Let's start with @/app/views/articles/show.html.erb@.  Right below the line that displays the @article.title@, add this line:
+
+<pre class="brush:ruby;">
+Tags: <%= tag_links(@article.tags) %><br />
+</pre>
+
+This line calls a helper named @tag_links@ and sends the @article.tags@ array as a parameter.  We need to then create the @tag_links@ helper.  Open up @/app/helpers/articles_helper.rb@ and add this method inside the @module@/@end@ keywords:
+
+<pre class="brush:ruby;">
+def tag_links(tags)
+
+end
+</pre>
+
+The desired outcome is a list of comma separated tags, where each one links to that tag's @show@ action -- the page where we'll list all the articles with that tag.
+
+A helper method has to return a string which will get rendered into the HTML.  In this case we'll use the @collect@ method to create a list of links, one for each Tag, where the link is created by the @link_to@ helper.  Then we'll @return@ back the @links@ connected by a comma and a space:
+
+<pre class="brush:ruby;">
+  def tag_links(tags)
+    links = tags.collect{|tag| link_to tag.name, tag_path(tag)}
+    return links.join(", ")
+  end  
+</pre>
+
+Refresh your view and...BOOM:
+
+<pre class="console">
+NoMethodError in Articles#show
+Showing app/views/articles/index.html.erb where line #6 raised:
+undefined method `tag_path' for #<ActionView::Base:0x104aaa460>
+</pre>
+
+The @link_to@ helper is trying to use @tag_path@ from the router, but the router doesn't know anything about our Tag object.  We created a model, but we never created a controller or route.  There's nothing to link to -- so let's generate that controller from your terminal:
+
+<pre class="console">
+ruby script/generate controller tags index show
+</pre>
+
+Then we need to add it to our @/config/routes.rb@ like this:
+
+<pre class="brush:ruby;">
+map.resources :tags
+</pre>
+
+Now refresh your view and you should see your linked tags showing up on the individual article pages.
+
+Lastly, use similar code in @/app/views/articles/index.html.erb@ to display the tags on the article listing page.
+
+h3. Avoiding Repeated Tags
+
+Try editing one of your article that already has some tags.  Save it and look at your article list.  You'll probably see that tags are getting repeated, which is obviously not what we want.  
+
+When we wrote our @tag_list=@ method inside of @article.rb@, we were just thinking about it running when creating a new article.  Thus we always built a new tagging for each tag in the list.  But when we're editing, we might get the string "ruby, technology" into the method while the Article was already linked to the tags "ruby" and "technology" when it was created.  As it is currently written, the method will just "retag" it with those tags, so we'll end up with a list like "ruby, technology, ruby, technology".
+
+There are a few ways we could fix this -- the first thing I want to do is remove any repeated tags in the parameter list by using the Ruby method @uniq@:
+
+<pre class="brush:ruby;">
+tag_names = tags_string.split(",").collect{|s| s.strip.downcase}.uniq
+</pre>
+
+This is a good start but it doesn't solve everything.  We'd still get repeated tags each time we edit an article.
+
+If we edit an article and *remove* a tag from the list, this method as it stands now isn't going to do anything about it.  Since we don't have anything valuable in the Tagging object besides the connection to the article and tag, they're disposible.  We can just destroy all the taggings at the beginning of the method.  Any tags that aren't in the @tags_string@ won't get re-linked.  This will both avoid removed tags and prevent the "double tagging" behavior.  Putting that all together, here's my final @tag_list=@ method:
+
+<pre class="brush:ruby;">
+  def tag_list=(tags_string)
+    self.taggings.destroy_all
+    tag_names = tags_string.split(",").collect{|s| s.strip.downcase}.uniq
+    tag_names.each do |tag_name|
+      tag = Tag.find_or_create_by_name(tag_name)
+      self.taggings.build(:tag => tag)
+    end
+  end
+</pre>
+
+It prevents duplicates and allows you to remove tags from the edit form.  Test it out and make sure things are working!
+
+h3. Listing Articles by Tag
+
+The links for our tags are showing up, but if you click on them you'll get our old friend, the "No action responded to show. Actions:" error.  Open up your @/app/controllers/tags_controller.rb@ and add a a @show@ method like this:
+
+<pre class="brush:ruby;">
+  def show
+    @tag = Tag.find(params[:id])
+  end  
+</pre>
+
+Then create a file @/app/views/tags/show.html.erb@ like this:
+
+<pre class="brush:ruby;">
+<h1>Articles Tagged with <%= @tag.name %></h1>
+
+<ul>
+  <% @tag.articles.each do |article| %>
+    <li><%= link_to article.title, article_path(article) %></li>
+  <% end %>
+</ul>
+</pre>
+
+Refresh your view and you should see a list of articles with that tag.  Keep in mind that there might be some abnormalities from articles we tagged before doing our fixes to the @tag_list=@ method.  For any article with issues, try going to it's @edit@ screen, saving it, and things should be fixed up.  If you wanted to clear out all taggings you could do @Tagging.destroy_all@ from your console.
+
+h3. Listing All Tags
+
+We've built the @show@ action, but the reader should also be able to browse the tags available at @http://localhost:3000/tags/@.  I think you can do this on your own.  Create an @index@ action in your @tags_controller.rb@ and an @index.html.erb@ in the corresponding views folder.  Look at your @articles_controller.rb@ and Article @index.html.erb@ if you need some clues.
+
+If that's easy, try creating a @destroy@ method in your @tags_controller.rb@ and adding a destroy link to the tag list.  If you do this, change the association in your @tag.rb@ so that it says @has_many :taggings, :dependent => :destroy@.  That'll prevent orphaned Tagging objects from hanging around.
+
+With that, a long Iteration 3 is complete!

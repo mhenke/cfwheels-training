@@ -1,0 +1,92 @@
+h2. I5: Authentication
+
+Authentication is an important part of almost any web application and there are several approaches to take. Thankfully some of these have been put together in plugins so we dont have to reinvent the wheel.
+
+Theflavor-of-the-weekis one named AuthLogic and I wrote up an iteration using it for the "JSMerchant":http://jumpstartlab.com/resources/rails-jumpstart/jsmerchant/ tutorial, but I think it is a little complicated for a Rails novice. You have to create several different models, controllers, and views manually. The documentation is kind of confusing, and I dont think my tutorial is that much better.
+
+So, instead, well use the most common authentication plugin, "restful_authentication":http://github.com/technoweenie/restful-authentication .
+
+h3. Installing restful_authentication
+
+In the previous iteration we installed libraries using RubyGems. This is the preferred way of managing plugins, but restful_authentication isnt available through RubyGems. Well have to use the older method of installing a plugin.
+
+At your terminal, enter the following:
+
+ruby git clone git://github.com/technoweenie/restful-authentication.git restful_authenticationIf you arent able to pull down the code from GitHub, youll need to download the code in a zip file "from github":http://github.com/technoweenie/restful-authentication/zipball/afa61fece60a3cd53a9c894d74b883889b440913 , then extract the zip into @/vendor/plugins/restful_authentication/@ .
+
+Once youve installed the plugin, you can test that its available with this command at your terminal:
+
+rails generateIn the output is a section titleInstalled Generators. It should have a line that says @Plugins (vendor/plugins): authenticated@ . If its there, youre ready to go!
+
+h3. Running the Generator
+
+This plugin makes it easy to get up an running because one generator creates most of the code youll need. Run this from your terminal:
+
+rails generate authenticated user sessionsTake a look at the output and youll see it created about 16 files and added a few routes to the @routes.rb@ file. The generator has a note that you shouldnt forget to add the routes to @routes.rb@ , but its already done that for you.
+
+Lets look at the CreateUsers migration that the generator created before we migrate the database. If you wanted your User models to have any additional information (likedeparment_nameorfavorite_color) you could add columns for that. For our purposes these fields look alright and, thanks to the flexibility of migrations, if we want to add columns later its easy. So go to your terminal and enter:
+
+rake db:migrateh3. Creating a First Account
+
+First, stop then restart your server in RubyMine to make sure its picked up the plugin. Then go to @http://localhost:3000/users/new@ and the new user form should popup.
+
+Go ahead and create yourself an account. If youre successful it will just bounce you to the @http://localhost:3000/@ root page. There isnt any information about our login status in our views, though, so its hard to tell if were really logged in.
+
+Lets open @/app/views/layouts/application.html.haml@ and add a little footer so the whole @%body%@ chunk looks like this:
+
+%body #container #content = yield %hr %h6 - if current_user = "Logged in as #{current_user.login}" = link_to "(logout)", logout_path - else = link_to "(login)", login_pathThe go to @http://localhost:3000/articles/@ and youll get this error:
+
+NameError in Articles#index Showing app/views/layouts/application.html.haml where line #14 raised: undefined local variable or method `current_user' for #<ActionView::Base:0x103147400>We tried to use the @current_user@ helper that comes with the restful_authentication plugin, but Rails isnt recognizing it. We need to do one more setup step. Open @/app/controllers/application_controller.rb@ , and underneath the @protect_from_forgery@ line, add this: @include AuthenticatedSystem@ .
+
+Now refresh your browser and your articles list should come up along with the new footer at the bottom.
+
+h3. An Aside on the Site Root
+
+Its annoying me that we keep going to @http://localhost:3000/@ and seeing the Rails starter page. Lets make the root show our articles index page.
+
+First, delete the file @/public/index.html@ . Files in the public directory will take precedence over routes in our application, so as long as that file exists we cant route the root address anywhere.
+
+Second, open @/config/routes.rb@ and right above the other routes add in this one:
+
+match '/' =>'articles#index'Now visit @http://localhost:3000@ and you should see your article list.
+
+h3. Securing New Users
+
+It looks like we can create a new user, but right away I want to make some changes. Were just going to use one layer of security for the appa user who is logged in has access to all the commands and pages, while a user who isnt logged in can only post comments and try to login. But that scheme will breakdown if just anyone can go to this %(caps)URL% and create an account, right?
+
+Lets add in a protection scheme like this to the new users form:
+
+* If there are zero users in the system, let anyone access the form
+* If there are more than zero users registered, only users already logged in can access this form
+
+That way when the app is first setup we can create an account, then new users can only be created by a logged in user.
+
+We can create a @before_filter@ which will run _before_ the @new@ and @create@ actions of our @users_controller.rb@ . Open that controller and on the second line youll see @include AuthenticatedSystem@ . You can remove that since we put it in the @application_controller@ and, in its place, put all this code:
+
+before_filter :zero_users_or_authenticated, :only =>[:new, :create] def zero_users_or_authenticated unless User.all.size == 0 || current_user redirect_to root_path return false end endThe first line declares that we want to run a before filter named @zero_or_authenticated@ when either the @new@ or @create@ methods are accessed. Then we define that filter, checking if there are either zero registered users OR if there is a user already logged in. If neither of those is true, we redirect to the root path (our articles list) and return false. If either one of them is true this filter wont do anything, allowing the requested user registration form to be rendered.
+
+With that in place, try accessing @/users/new@ when you logged in and when your logged out. If you want to test that it works when no users exist, try this at your console:
+
+User.destroy_allThen try to reach the registration form and it should work! Create yourself an account if youve destroyed it.
+
+h3. Securing the Rest of the Application
+
+The first thing we need to do is sprinkle @before_filters@ on most of our controllers:
+
+* In @users_controller@ , add a before filter to protect the actions besides @new@ and @create@ like this:
+ @before_filter :login_required, :except =>[:new, :create]@ 
+* In @tags_controller@ , we dont have any methods that need to be protected.
+* In @sessions_controller@ all the methods need to be accessible to allow login and logout
+* In @comments_controller@ , we never implemented @index@ and @destroy@ , but just in case we do lets allow unauthenticated users to only access @create@ :
+ @before_filter :login_required, :except =>[:create]@ 
+* In @articles_controller@ authentication should be required for @new@ , @create@ , @edit@ , @update@ and @destroy@ . Figure out how to write the before filter using either @:only@ or @:except@ 
+
+Now our app is pretty secure, but we should hide all those edit, destroy, and new article links from unauthenticated users.
+
+Open @/app/views/articles/index.html.erb@ and find the section where we output theActions. Wrap that whole section in an @if@ clause like this:
+
+<% if current_user %><% end %>Look at the article listing in your browser when youre logged out and make sure those links disappear. Then use the same technique to hide theCreate a New Articlelink.
+
+If you look at the @show@ view template, youll see that we never added an edit link! Add that link now, but protect it to only show up when a user is logged in.
+
+Your basic authentication is done, and Iteration 5 is complete!

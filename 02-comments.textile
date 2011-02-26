@@ -1,0 +1,240 @@
+h1. I2: Adding Comments
+
+Most blogs allow the reader to interact with the content by posting comments.  Let's add some simple comment functionality.
+
+h3. Designing the Comment Model
+
+First, we need to brainstorm what a comment _is_...what kinds of data does it have...
+
+* It's attached to an article
+* It has an author name
+* It usually has an author email address
+* It usually has an optional URL
+* It has a body
+
+With that understanding, let's create a Comment model.  Switch over to your terminal and enter this line:
+
+<pre class="console">
+ruby script/generate model Comment
+</pre>
+
+We've already gone through what files this generator creates, we'll be most interested in the migration file and the @comment.rb@.
+
+h3. Setting up the Migration
+
+Open the migration file that the generator created, @/db/migrate/some-timestamp_create_comments.rb@.  Inside the @self.up@ you need to add one line for each of the pieces of data we just brainstormed.  It'll start off with these...
+
+<pre class="brush:ruby;">
+t.integer :article_id
+t.string :author_name
+</pre>
+
+Then keep adding lines that create strings named @:author_email@, @:author_url@, and a text field named @:body@.
+
+Once that's complete, go to your terminal and run the migration with @rake db:migrate@.
+
+h3. Relationships
+
+The power of SQL databases is the ability to express relationships between elements of data.  We can join together the information about an order with the information about a customer.  Or in our case here, join together an article (in the articles table) with its comments (in the comments table).  We do this by using foreign keys.
+
+Foreign keys are a way of marking one-to-one and one-to-many relationships.  An article might have zero, five, or one hundred comments.  But a comment only belongs to one article.  These objects have a one-to-many relationship -- one article connects to many comments.
+
+Part of the big deal with Rails is that it makes working with these relationships very easy.  When we created the migration for comments we started with an @integer@ field named @article_id@.  The Rails convention is that, for a one-to-many relationship, the objects on the "many" end should have a foreign key referencing the "one" object.  And that foreign key should be titled with the name of the "one" object, then an underscore, then "id".  So in this case one article has many comments, so each comment has a field named @article_id@ which tracks which article they belong to.  Similarly, a store's customer might have many orders, so each order would have a @customer_id@ specifying which customer they belong to.
+
+Following this convention will get us a lot of functionality "for free."  Open your @/app/models/comment.rb@ and add the middle line so it looks like this:
+
+<pre class="brush:ruby;">
+class Comment < ActiveRecord::Base
+  belongs_to :article
+end
+</pre>
+
+A comment relates to a single article, it "belongs to" an article.  We then want to declare the other side of the relationship inside @/app/models/article.rb@ like this:
+
+<pre class="brush:ruby;">
+class Article < ActiveRecord::Base
+  has_many :comments
+end
+</pre>
+
+How an article "has many" comments, and a comment "belongs to" an article.  We have explained to Rails that these objects have a one-to-many relationship.
+
+h3. Testing in the Console
+
+Let's use the console to test how this relationship works in code.  If you don't have a console open, go to your terminal and enter @ruby script/console@ from your project directory.  If you have a console open already, enter the command @reload!@ to refresh any code changes.
+
+Run the following commands one at a time and observe the output:
+
+<pre class="console">
+a = Article.first
+a.comments
+Comment.new
+a.comments.new
+</pre>
+
+When you called the @comments@ method on object @a@, it gave you back a blank array because that article doesn't have any comments.  When you executed @Comment.new@ it gave you back a blank Comment object with those fields we defined in the migration.  But, if you look closely, when you did @a.comments.new@ the comment object you got back wasn't quite blank -- it has the @article_id@ field already filled in with the ID number of article @a@.
+
+Try creating a few comments for that article like this:
+
+<pre class="console">
+c = a.comments.new
+c.author_name = "Daffy Duck"
+c.author_url = "http://daffyduck.com"
+c.body = "I think this article is thhh-thhh-thupid!"
+c.save
+d = a.comments.create(:author_name => "Chewbacca", :body => "RAWR!")
+</pre>
+
+For the first comment, @c@, I used a series of commands like we've done before.  For the second comment, @d@, I used the @create@ method.  When you use @new@ it doesn't go to the database until you call @save@.  With @create@ you usually pass in the attributes then the object is created, those attributes set, and the object saved to the database all in one step.
+
+Now that you've created a few comments, try executing @a.comments@ again.  Did your comments all show up?  When I did it, only one comment came back.  The console tries to minimize the number of times it talks to the database, so sometimes if you ask it to do something it's already done, it'll get the information from the cache instead of really asking the database -- giving you the same answer it gave the first time.  That can be annoying.  To force it to clear the cache and lookup the accurate information, try this:
+
+<pre class="console">
+reload!
+a = Article.first
+a.comments
+</pre>
+
+So you'll see that the article has comments -- great.  Now we need to integrate them into the article display.
+
+h3. Displaying Comments for an Article
+
+We want to display any comments underneath their parent article.  Because we've setup the relationships between those models, this is very easy.  Open @/app/views/articles/show.html.erb@ and add the following lines right before the link to the articles list:
+
+<pre class="brush:ruby;">
+<h3>Comments</h3>
+<%= render :partial => 'comment', :collection => @article.comments %>
+</pre>
+
+This says that we want to render a partial named "comment" and that we want to do it once for each element in the collection @@article.comments@.  We saw in the console that when we call the @.comments@ method on an article we'll get back an array of it's associated comment objects.  So this render line will pass each element of that array one at a time into the partial named "comment".  Now we need to create the file @/app/views/articles/_comment.html.erb@ and add this code:
+
+<pre class="brush:ruby;">
+<div class="comment">
+  <h4>Comment by <%=h comment.author_name %></h4>
+  <p><%=h comment.body %></p>
+</div>
+</pre>
+
+With that in place, try clicking on your articles and find the one where you created the comments.  Did they show up?  What happens when an article doesn't have any comments?
+
+h3. Web-Based Comment Creation
+
+Good start, but our users (hopefully) can't get into the console to create their comments.  We'll need to create a web interface.  We'll go through some of the same steps that we did when creating the web interface for creating articles.
+
+Let's start with the form.  The comment form should be embedded into the article's @show@ template.  So let's add this code right above the "Back to Articles List" in the articles @show.html.erb@:
+
+<pre class="brush:ruby;">
+<%= render :partial => 'comment_form' %>
+</pre>
+
+Obviously this is expecting a file @/app/views/articles/_comment_form.html.erb@, so create that and add this content for now:
+
+<pre class="brush:ruby;">
+<h3>Post a Comment</h3>
+<p>(Comment form will go here)</p>
+</pre>
+
+Look at an article in your browser to make sure that partial is showing up.  Then we can start figuring out the details of the form.
+
+Ok, now look at your @articles_controller.rb@ in the @new@ method.  Remember how we had to create a blank Article object so Rails could figure out which fields an article has?  We need to do the same thing before we create a form for the comment.  But when we view the article and display the comment form we're not running the article's @new@ method, we're running the @show@ method.  So we'll need to create a blank Comment object inside that @show@ method like this:
+
+<pre class="brush:ruby;">
+@comment = @article.comments.new
+</pre>
+
+This is just like we did it in the console.  Now we can create a form inside our @_comment_form.html.erb@ partial like this:
+
+<pre class="brush:ruby;">
+<h3>Post a Comment</h3>
+
+<% form_for @comment do |f| %>
+  <%= f.hidden_field :article_id, :value => @article.id %>
+  <p>
+    <%= f.label :author_name %><br/>
+    <%= f.text_field :author_name %>
+  </p>
+  <p>
+    <%= f.label :author_email %><br/>
+    <%= f.text_field :author_email %>
+  </p>
+  <p>
+    <%= f.label :author_url %><br/>
+    <%= f.text_field :author_url %>
+  </p>
+  <p>
+    <%= f.label :body %><br/>
+    <%= f.text_area :body %>
+  </p>
+  <p>
+    <%= f.submit 'Submit' %>
+  </p>
+<% end %>
+</pre>
+
+The only new thing here is the hidden field helper.  This hidden field will hold the ID of the article to help when creating the comment object.
+
+Save then refresh in your web browser and...well...you'll get an error like this:
+
+<pre class="console">
+NoMethodError in Articles#show
+Showing app/views/articles/_comment_form.html.erb where line #3 raised:
+undefined method `comments_path' for #<ActionView::Base:0x10446e510>
+</pre>
+
+The @form_for@ helper is trying to build the form so that it submits to @comments_path@, but we haven't told the router anything about Comments yet.  Open @/config/routes.rb@ and add this line at the top:
+
+<pre class="brush:ruby;">
+map.resources :comments
+</pre>
+
+Then refresh your browser and your form should show up.  Try filling out the comments form and click SUBMIT -- you'll get an error about @uninitialized constant CommentsController@.
+
+h3. Creating a Comments Controller
+
+Just like we needed an @articles_controller.rb@ to manipulate our Articles, we'll need a @comments_controller.rb@.  Switch over to your terminal to generate it with this line:
+
+<pre class="console">
+ruby script/generate controller comments index create destroy
+</pre>
+
+What's up with those extra parameters?  Anything after the name of the controller (in this case "comments") will cause Rails to create stubs for methods with those names.  Now open your @/app/controllers/comments_controller.rb@ and you'll see it has the three method stubs already.
+
+The one we're interested in first is @create@.  You can cheat by looking at the @create@ method in your @articles_controller.rb@.  For your @comments_controller.rb@, everything should be the same just replace article with comment.  Then the redirect is a little different, use this:
+
+<pre class="brush:ruby;">
+redirect_to article_path(@comment.article)
+</pre>
+
+Test out your form to create another comment now -- and it should work!
+
+h3. Cleaning Up
+
+We've got some decent comment functionality, but there are a few things we should add and tweak.
+
+h4. Comments Count
+
+Let's make it so where the view template has the "Comments" header it displays how many comments there are, like "Comments (3)".  Open up your article's @show.html.erb@ and change the comments header so it looks like this:
+
+<pre class="brush:ruby;">
+<h3>Comments (<%= @article.comments.size %>)</h3>
+</pre>
+
+h4. Form Labels
+
+The comments form looks a little silly with "Author Name" and "Author URL" and such.  It should probably say "Your Name" and "Your URL (optional)", right?  To change the text that the label helper prints out, you just pass in the desired text as a second parameter, like this:
+
+<pre class="brush:ruby;">
+<%= f.label :author_name, "Your Name"  %>
+</pre>
+
+Change your @_comment_form.html.erb@ so it prints out "Your Name", "Your Email Address", "Your URL (optional)", and "Your Comment".
+
+h4. Add Timestamp to the Comment Display
+
+We should add something about when the comment was posted.  Rails has a really neat helper named @distance_of_time_in_words@ which takes two dates and creates a text description of their difference like "32 minutes later", "3 months later", and so on.  You can use it in your @_comment.html.erb@ partial like this:
+
+<pre class="brush:ruby;">
+<p>Posted <%= distance_of_time_in_words(comment.article.created_at, comment.created_at) %> later</p>
+</pre>
+
+With that, you're done with I2!

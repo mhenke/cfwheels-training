@@ -1,0 +1,122 @@
+h2. I4: Installing Plugins
+
+In this iteration well learn how to take advantage of the many plugins and libraries available to quickly add features to your application. First well work with *paperclip* , a library that manages file attachments and uploading.
+
+h3. Using the *Gemfile* to Setup a RubyGem
+
+In the past Rails plugins were distributed a zip or tar files that got stored into your applications file structure. One advantage of this method is that the plugin could be easily checked into your source control system along with everything you wrote in the app. The disadvantage is that it made upgrading to newer versions of the plugin, and dealing with the versions at all, complicated.
+
+Most Rails plugins are now moving toward RubyGems. RubyGems is a package management system for Ruby, similar to how Linux distributions use Apt or %(caps)RPM% . There are central servers that host libraries, and we can install those libraries on our machine with a single command. RubyGems takes care of any dependencies, allows us to pick an options if necessary, and installs the library.
+
+Lets see it in action. If you have your server running in RubyMine, click the red square button to %(caps)STOP% it. If you have a console session open, type @exit@ to exit. Then open up @/Gemfile@ and look for the lines like this:
+
+# gem 'bj' # gem 'nokogiri' # gem 'sqlite3-ruby', :require =>'sqlite3'These lines are commented out because they start with the @#@ character. By specifying a RubyGem with the @gem@ command, well tell the Rails applicationMake sure this gem is loaded when you start up. If it isnt available, freak out!Heres how well require the paperclip gem, add this near those commented lines:
+
+gem "paperclip"When youre writing a production application, you might specify additional parameters that require a specific version or a custom source for the library. With that config line declared, click the green arrow in RubyMine to startup your server. You should get an error like this:
+
+Could not find gem 'paperclip (>= 0, runtime)' in any of the gem sources listed in your Gemfile. Try running `bundle install`.The last line is keysince our config file is specifying which gems it needs, the @bundle@ command can help us install those gems. Go to your terminal and:
+
+bundleIt should then install the paperclip RubyGem with a version like 2.3.8. In some projects I work on, the config file specifies upwards of 18 gems. With that one @bundle@ command the app will check that all required gems are installed with the right version, and if not, install them.
+
+Now we can start using the library in our application!
+
+h3. Setting up the Database for Paperclip
+
+We want to add images to our articles. To keep it simple, well say that a single article could have zero or one images. In later versions of the app maybe wed add the ability to upload multiple images and appear at different places in the article, but for now the one will show us how to work with paperclip.
+
+First we need to add some fields to the Article model that will hold the information about the uploaded image. Any time we want to make a change to the database well need a migration. Go to your terminal and execute this:
+
+rails generate migration add_paperclip_fields_to_articleThat will create a file in your @/db/migrate/@ folder that ends in @_add_paperclip_fields_to_article.rb@ . Open that file now.
+
+Remember that the code inside the @self.up@ method is to migrate the database forward, while the @self.down@ should undo those changes. Well use the @add_column@ and @remove_column@ methods to setup the fields paperclip is expecting:
+
+class AddPaperclipFieldsToArticle<ActiveRecord::Migration def self.up add_column :articles, :image_file_name, :string add_column :articles, :image_content_type, :string add_column :articles, :image_file_size, :integer add_column :articles, :image_updated_at, :datetime end def self.down remove_column :articles, :image_file_name remove_column :articles, :image_content_type remove_column :articles, :image_file_size remove_column :articles, :image_updated_at end endThe go to your terminal and run @rake db:migrate@ . The rake command should show you that the migration ran and added columns to the database.
+
+h3. Adding to the Model
+
+The gem is loaded, the database is ready, but we need to tell our Rails application about the image attachment we want to add. Open @/app/models/article.rb@ and just below the existing @has_many@ lines, add this line:
+
+has_attached_file :imageThis @has_attached_file@ method is part of the paperclip library. With that declaration, paperclip will understand that this model should accept a file attachment and that there are fields to store information about that file which start with @image_@ in this models database table.
+
+h3. Modifying the Form Template
+
+First well add the ability to upload the file when editing the article, then well add the image display to the article show template. Open your @/app/views/articles/_form.html.erb@ view template. We need to make two changes
+
+In the very first line, we need to specify that this form needs to acceptmultipartdata. This is an instruction to the browser about how to submit the form. Change your top line so it looks like this:
+
+<% form_for(@article, :html =>{:multipart =>true}) do |f| %>Then further down the form, right before the paragraph with the save button, lets add a label and field for the file uploading:
+
+<p><%= f.label :image, "Attach an Image" %><br /><%= f.file_field :image %></p>h3. Trying it Out
+
+If your server isnt running, start it up with the green play button in RubyMine. Then go to @http://localhost:3000/articles/@ and click %(caps)EDIT% for your first article. The file field should show up towards the bottom. Click the @Choose a File@ and select one of the small images that Ive distributed to you. Click %(caps)SAVE% and youll return to the article index. Click the title of the article you just modified. What do you see? Did the image attach to the article?
+
+When I first did this, I wasnt sure it worked. Heres how I checked:
+
+# Open a console session ( @rails console@ from terminal)
+# Find the ID number of the article by looking at the %(caps)URL% . In my case, the url was @http://localhost:3000/articles/1@ so the ID number is just @1@ 
+# In console, enter @a = Article.find(1)@ 
+# Right away I see that the article has data in the @image_file_name@ and other fields, so I think it worked.
+# Enter @a.image@ to see even more data about the file
+
+Ok, its in there, but we need it to actually show up in the article. Open the @/app/views/articles/show.html.erb@ view template. In between the line that displays the title and the one that displays the body, lets add this line:
+
+<%= image_tag @article.image.url %>Then refresh the article in your browser. Tada!
+
+h3. Improving the Form
+
+When first working with the edit form I wasnt sure the upload was working because I expected the @file_field@ to display the name of the file that I had already uploaded. Go back to the edit screen in your browser for the article youve been working with. See how it just saysChoose File, no file selectednothing tells the user that a file already exists for this article. Lets add that information in now.
+
+So open that @/app/views/articles/_form.html.erb@ and look at the paragraph where we added the image upload field. Well add in some new logic that works like this:
+
+* If the article has an image filename* Display the image
+
+
+
+* Then display the @file_field@ button with the labelAttach a New Image
+So, turning that into code
+
+<p><% if @article.image_file_name %><%= image_tag @article.image.url %><br/><% end %><%= f.label :image, "Attach a New Image" %><br /><%= f.file_field :image %></p>Test how that looks both for articles that already have an image and ones that dont.
+
+When youshowan article that doesnt have an image attached itll have an ugly broken link. Go into your @/app/views/articles/show.html.erb@ and add a condition like we did in the form so the image is only displayed if it actually exists.
+
+Now our articles can have an image and all the hard work was handled by paperclip!
+
+h3. Further Notes about Paperclip
+
+Yes, a model (in our case an article) could have many attachments instead of just one. To accomplish this youd create a new model, lets call itAttachment, where each instance of the model can have one file using the same fields we put into Article above as well as an @article_id@ field. The Attachment would then @belong_to@ an article, and an article would @have_many@ attachments.
+
+Paperclip supports automatic image resizing and its easy. In your model, youd add an option like this:
+
+as_attached_file :image, :styles =>{ :medium =>"300x300>", :thumb =>"100x100>" }This would automatically create amediumsize where the largest dimension is 300 pixels and athumbsize where the largest dimension is 100 pixels. Then in your view, to display a specific version, you just pass in an extra parameter like this:
+
+<%= image_tag @article.image.url(:medium) %>If its so easy, why dont we do it right now? The catch is that paperclip doesnt do the image manipulation itself, it relies on a package called *imagemagick* . Image processing libraries like this are notoriously difficult to install. If youre on Linux, it might be as simple as @sudo apt-get install imagemagick@ . On OS X, if you have Mac Ports installed, itd just be @sudo port install imagemagick@ . On windows you need to download an copy some EXEs and DLLs. It can be a hassle, which is why we wont do it during this class.
+
+h3. Installing %(caps)HAML% / %(caps)SASS% 
+
+Another plugin that I use in every project is actually two libraries in one. %(caps)HAML% is an alternative templating style to the default %(caps)ERB% (which youve been using, hence all the view templates ending in @.erb@ ). %(caps)SASS% is a library for writing %(caps)CSS% and it makes %(caps)CSS% much, much easier to work with.
+
+Open your @Gemfile@ and add a @gem@ line for the gem @haml@ . Go to your terminal and @bundle@ and it should pull down the gem library for you. Stop (with the red square) then restart (green play button) your server within RubyMine. Both %(caps)HAML% and %(caps)SASS% are installed and ready to use.
+
+Look in RubyMines left navigation pane for the folder @/public/stylesheets/@ . Right click on this folder, click %(caps)NEW% , then %(caps)DIRECTORY% , and name it @sass@ . Then right click on the @sass@ folder, click %(caps)NEW% , %(caps)FILE% , then enter the name @styles.sass@ 
+
+h3. A Few Sass Examples
+
+All the details about Sass can be found here: "http://sass-lang.com/":http://sass-lang.com/ 
+
+Were not focusing on %(caps)CSS% development, so here are a few styles that you can copy&paste and modify to your hearts content:
+
+!primary_color = #AAA body :background-color = !primary_color :font :family Verdana, Helvetica, Arial :size 14px a :color #0000FF img :border none .clear :clear both :height 0 :overflow hidden #container :width 75% :margin 0 auto :background #fff :padding 20px 40px :border solid 1px black :margin-top 20px #content :clear both :padding-top 20pxBut our application isnt setup to load that stylesheet yet. We need to make a change to our view templates.
+
+h3. Working with Layouts
+
+Weve created about a dozen view templates between our different models. We _could_ go into each of those templates and add a line like this at the top:
+
+<%= stylesheet_link_tag 'styles' %>Which would find the Sass file we just wrote. Thats a lame job, imagine if we had 100 view templates. What if we want to change the name of the stylesheet later? Ugh.
+
+Rails and Ruby both emphasize the idea ofD.R.Y.Dont Repeat Yourself. In the area of view templates, we can achieve this by creating a *layout* . A layout is a special view template that wraps other views. Look in your navigation pane for @/app/views/layouts/@ , right click on that folder, click %(caps)NEW% and %(caps)FILE% then give it the name @application.html.haml@ .
+
+In this layout well put the view code that we want to render for every view template in the application. Just so you can see what %(caps)HAML% looks like, Ive used it to implement this layout. Youll notice that %(caps)HAML% uses fewer marking characters than %(caps)ERB% , but you must maintain the proper whitespace/indentation. All indentations are two spaces from the containing element. Add this code to your @application.html.haml@ :
+
+!!! Strict %html %head %title JSBlogger = stylesheet_link_tag 'styles' %body #container #content = yieldNow refresh your article listing page and you should see the styles take effect. Whatever code is in the individual view template gets inserted into the layout where you see the @yield@ . Using layouts makes it easy to add site-wide elements like navigation, sidebars, and so forth.
+
+ * %(caps)NOTE% * : If you dont see any change, look at your server log in RubyMine to see if there were any errors. At first I had a typo in one of the filenames so it wasnt being picked up properly. You might also need to stop&restart your server if you didnt do that after installing the @haml@ gem.
