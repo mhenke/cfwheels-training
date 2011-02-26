@@ -1,6 +1,6 @@
 h1. JSBlogger
 
-In this project you'll create a simple blog system and learn the basics of Ruby on CFWheels including:
+In this project you'll create a simple blog system and learn the basics of ColdFusion on Wheels including:
 
 * Models, Views, and Controllers ( %(caps)MVC% )
 * Data Structures&Relationships

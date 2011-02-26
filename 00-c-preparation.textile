@@ -2,31 +2,42 @@ h1. Preparation for CFWheels Projects
 
 There are a few extra steps of preparation when working with CFWheels projects:
 
+h3. Installing Servers
+
 h4. Install Tomcat
 
-Go to your terminal and execute the following:
+* Tomcat
+** Download and install "32-bit/64-bit Windows Service Installer":http://www.trieuvan.com/apache/tomcat/tomcat-7/v7.0.8/bin/apache-tomcat-7.0.8.exe
+** Test at "http://localhost:8080/":http://localhost:8080/
 
 h4. Install Railo
 
-Go to your terminal and execute the following:
+* Railo
+** Download and install "http://www.getrailo.org/down.cfm?item=/railo/remote/download/3.2.1.000/custom/all/railo-3.2.1.000.war":http://www.getrailo.org/down.cfm?item=/railo/remote/download/3.2.1.000/custom/all/railo-3.2.1.000.war
+** Rename railo-3.2.1.000.war to railo.war
+** Copy railo.war to "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\"
+** Test at "http://localhost:8080/railo/":http://localhost:8080/railo/
 
 h4. Install CFWheels
 
-Go to your terminal and execute the following:
+* CFWheels
+** Download and install "http://cfwheels.org/download/latest-version":http://cfwheels.org/download/latest-version
+** Extract and copy the file to "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\railo"
+** Test at "http://localhost:8080/railo/":http://localhost:8080/railo/
 
-h4. Install SQLite
-
-* Mac OS X
-** Download and install "http://www.sqlite.org/MySQL-3.6.16-osx-x86.bin.gz":http://www.sqlite.org/MySQL-3.6.16-osx-x86.bin.gz 
-
-
-* In your terminal window @sudo gem install MySQL-ruby@ 
+h4. Install MySQL
 
 * Windows
-** Download "http://www.sqlite.org/sqlite-3_6_16.zip":http://www.sqlite.org/sqlite-3_6_16.zip and "http://sqlite.org/sqlitedll-3_6_18.zip":http://sqlite.org/sqlitedll-3_6_18.zip 
+** Download and install "http://dev.mysql.com/downloads/mirror.php?id=401202":http://dev.mysql.com/downloads/mirror.php?id=401202 
 
+h3. Editor
 
-* Unzip the two archives, then copy all three files into both your @C:\windows\system32\@ and @C:\windows\@ folders
-* Close and reopen your Command Prompt window
-* At your command prompt @gem install MySQL-ruby@ 
-If youd like a %(caps)GUI% for managing you SQLite databases, open Firefox and install the extension here: "https://addons.mozilla.org/en-US/firefox/addon/5817":https://addons.mozilla.org/en-US/firefox/addon/5817 .
+h4. Install Eclipse
+
+* Windows
+** Download and install "http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/helios/SR2/eclipse-java-helios-SR2-win32.zip":http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/helios/SR2/eclipse-java-helios-SR2-win32.zip
+
+h4. Install CFEclipse
+
+* Windows
+** Update Site "http://cfeclipse.org/update":http://cfeclipse.org/update
