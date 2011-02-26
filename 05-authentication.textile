@@ -2,7 +2,7 @@ h2. I5: Authentication
 
 Authentication is an important part of almost any web application and there are several approaches to take. Thankfully some of these have been put together in plugins so we dont have to reinvent the wheel.
 
-Theflavor-of-the-weekis one named AuthLogic and I wrote up an iteration using it for the "JSMerchant":http://jumpstartlab.com/resources/rails-jumpstart/jsmerchant/ tutorial, but I think it is a little complicated for a Rails novice. You have to create several different models, controllers, and views manually. The documentation is kind of confusing, and I dont think my tutorial is that much better.
+Theflavor-of-the-weekis one named AuthLogic and I wrote up an iteration using it for the "JSMerchant":http://jumpstartlab.com/resources/CFWheels-jumpstart/jsmerchant/ tutorial, but I think it is a little complicated for a CFWheels novice. You have to create several different models, controllers, and views manually. The documentation is kind of confusing, and I dont think my tutorial is that much better.
 
 So, instead, well use the most common authentication plugin, "restful_authentication":http://github.com/technoweenie/restful-authentication .
 
@@ -16,19 +16,19 @@ ruby git clone git://github.com/technoweenie/restful-authentication.git restful_
 
 Once youve installed the plugin, you can test that its available with this command at your terminal:
 
-rails generateIn the output is a section titleInstalled Generators. It should have a line that says @Plugins (vendor/plugins): authenticated@ . If its there, you're ready to go!
+CFWheels generateIn the output is a section titleInstalled Generators. It should have a line that says @Plugins (vendor/plugins): authenticated@ . If its there, you're ready to go!
 
 h3. Running the Generator
 
 This plugin makes it easy to get up an running because one generator creates most of the code you'll need. Run this from your terminal:
 
-rails generate authenticated user sessionsTake a look at the output and you'll see it created about 16 files and added a few routes to the @routes.rb@ file. The generator has a note that you shouldnt forget to add the routes to @routes.rb@ , but its already done that for you.
+CFWheels generate authenticated user sessionsTake a look at the output and you'll see it created about 16 files and added a few routes to the @routes.rb@ file. The generator has a note that you shouldnt forget to add the routes to @routes.rb@ , but its already done that for you.
 
 Lets look at the CreateUsers migration that the generator created before we migrate the database. If you wanted your User models to have any additional information (likedeparment_nameorfavorite_color) you could add columns for that. For our purposes these fields look alright and, thanks to the flexibility of migrations, if we want to add columns later its easy. So go to your terminal and enter:
 
 rake db:migrateh3. Creating a First Account
 
-First, stop then restart your server in RubyMine to make sure its picked up the plugin. Then go to @http://localhost:3000/users/new@ and the new user form should popup.
+First, stop then restart your server in Eclipse to make sure its picked up the plugin. Then go to @http://localhost:3000/users/new@ and the new user form should popup.
 
 Go ahead and create yourself an account. If you're successful it will just bounce you to the @http://localhost:3000/@ root page. There isnt any information about our login status in our views, though, so its hard to tell if were really logged in.
 
@@ -36,13 +36,13 @@ Lets open @/app/views/layouts/application.html.haml@ and add a little footer so 
 
 %body #container #content = yield %hr %h6 - if current_user = "Logged in as #{current_user.login}" = link_to "(logout)", logout_path - else = link_to "(login)", login_pathThe go to @http://localhost:3000/articles/@ and you'll get this error:
 
-NameError in Articles#index Showing app/views/layouts/application.html.haml where line #14 raised: undefined local variable or method `current_user' for #<ActionView::Base:0x103147400>We tried to use the @current_user@ helper that comes with the restful_authentication plugin, but Rails isnt recognizing it. We need to do one more setup step. Open @/app/controllers/application_controller.rb@ , and underneath the @protect_from_forgery@ line, add this: @include AuthenticatedSystem@ .
+NameError in Articles#index Showing app/views/layouts/application.html.haml where line #14 raised: undefined local variable or method `current_user' for #<ActionView::Base:0x103147400>We tried to use the @current_user@ helper that comes with the restful_authentication plugin, but CFWheels isnt recognizing it. We need to do one more setup step. Open @/app/controllers/application_controller.rb@ , and underneath the @protect_from_forgery@ line, add this: @include AuthenticatedSystem@ .
 
 Now refresh your browser and your articles list should come up along with the new footer at the bottom.
 
 h3. An Aside on the Site Root
 
-Its annoying me that we keep going to @http://localhost:3000/@ and seeing the Rails starter page. Lets make the root show our articles index page.
+Its annoying me that we keep going to @http://localhost:3000/@ and seeing the CFWheels starter page. Lets make the root show our articles index page.
 
 First, delete the file @/public/index.html@ . Files in the public directory will take precedence over routes in our application, so as long as that file exists we cant route the root address anywhere.
 

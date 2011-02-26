@@ -1,26 +1,29 @@
-h1. Preparation for Rails Projects
+h1. Preparation for CFWheels Projects
 
-There are a few extra steps of preparation when working with Rails projects:
+There are a few extra steps of preparation when working with CFWheels projects:
 
-h4. Install Rails
+h4. Install Tomcat
 
 Go to your terminal and execute the following:
 
-* Mac OS X: @sudo gem install rails mongrel rspec rspec-rails cucumber@ 
-* Windows: @gem install rails mongrel rspec rspec-rails cucumber@ 
+h4. Install Railo
 
-h4. Check the MySQL Database System
+Go to your terminal and execute the following:
 
-You should be able to use a Oracle, MS SQL, PostgreSQL, MySQL, or H2 database server with very little alteration. For the purposes of these tutorials we will use SQLite because it is extremely lightweight, pretty easy for beginners, installed on many systems already, and that the database is stored in a simple file so that they can be exchanged easily. To check if you have SQLite installed already, open Terminal (OS X) or a Command Prompt (Windows) and enter @MySQL@ . At the time of this writing the latest version is @3.6.12@ , but any version above @3.5@ should be fine. Type @.quit@ inside SQLite to exit.
+h4. Install CFWheels
 
-h5. Install SQLite
+Go to your terminal and execute the following:
 
-* Mac OS X* Download and install "http://www.sqlite.org/MySQL-3.6.16-osx-x86.bin.gz":http://www.sqlite.org/MySQL-3.6.16-osx-x86.bin.gz 
+h4. Install SQLite
+
+* Mac OS X
+** Download and install "http://www.sqlite.org/MySQL-3.6.16-osx-x86.bin.gz":http://www.sqlite.org/MySQL-3.6.16-osx-x86.bin.gz 
 
 
 * In your terminal window @sudo gem install MySQL-ruby@ 
 
-* Windows* Download "http://www.sqlite.org/sqlite-3_6_16.zip":http://www.sqlite.org/sqlite-3_6_16.zip and "http://sqlite.org/sqlitedll-3_6_18.zip":http://sqlite.org/sqlitedll-3_6_18.zip 
+* Windows
+** Download "http://www.sqlite.org/sqlite-3_6_16.zip":http://www.sqlite.org/sqlite-3_6_16.zip and "http://sqlite.org/sqlitedll-3_6_18.zip":http://sqlite.org/sqlitedll-3_6_18.zip 
 
 
 * Unzip the two archives, then copy all three files into both your @C:\windows\system32\@ and @C:\windows\@ folders

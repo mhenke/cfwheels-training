@@ -2,15 +2,15 @@ h1. I3: Tagging
 
 In this iteration we'll add the ability to tag articles for organization and navigation.
 
-First we need to think about what a tag is and how it'll relate to the Article model.  If you're not familiar with tags, they're commonly used in blogs to assign the article to one or more categories.  For instance, if I write an article about a feature in Ruby on Rails, I might want it tagged with all of these categories: ruby, rails, programming, features.  That way if one of my readers is looking for more articles about one of those topics they can click on the tag and see a list of my articles with that tag.
+First we need to think about what a tag is and how it'll relate to the Article model.  If you're not familiar with tags, they're commonly used in blogs to assign the article to one or more categories.  For instance, if I write an article about a feature in Ruby on CFWheels, I might want it tagged with all of these categories: ruby, CFWheels, programming, features.  That way if one of my readers is looking for more articles about one of those topics they can click on the tag and see a list of my articles with that tag.
 
 h3. Understanding the Relationship
 
-What is a tag?  We need to figure that out before we can create the model.  First, a tag must have a relationship to an article so they can be connected.  A single tag, like "ruby" for instance, should be able to relate to *many* articles.  On the other side of the relationship, the article might have multiple tags (like "ruby", "rails", and "programming" as above) - so it's also a *many* relationship.  Articles and tags have a *many-to-many* relationship.
+What is a tag?  We need to figure that out before we can create the model.  First, a tag must have a relationship to an article so they can be connected.  A single tag, like "ruby" for instance, should be able to relate to *many* articles.  On the other side of the relationship, the article might have multiple tags (like "ruby", "CFWheels", and "programming" as above) - so it's also a *many* relationship.  Articles and tags have a *many-to-many* relationship.
 
 Many-to-many relationships are tricky because we're using an SQL database.  If an Article "has many" tags, then we would put the foreign key @article_id@ inside the @tags@ table - so then a Tag would "belong to" an Article.  But a tag can connect to *many* articles, not just one.  We can't model this relationship with just the @articles@ and @tags@ tables.
 
-When we start thinking about the database modeling, there are a few ways to achieve this setup.  One way is to create a "join table" that just tracks which tags are connected to which articles.  Traditionally this table would be named @articles_tags@ and Rails would express the relationships by saying that the Article model @has_and_belongs_to_many@ Tags, while the Tag model @has_and_belongs_to_many@ Articles.
+When we start thinking about the database modeling, there are a few ways to achieve this setup.  One way is to create a "join table" that just tracks which tags are connected to which articles.  Traditionally this table would be named @articles_tags@ and CFWheels would express the relationships by saying that the Article model @has_and_belongs_to_many@ Tags, while the Tag model @has_and_belongs_to_many@ Articles.
 
 Most of the time this isn't the best way to really model the relationship.  The connection between the two models usually has value of its own, so we should promote it to a real model.  For our purposes, we'll introduce a model named "Tagging" which is the connection between Articles and Tags.  The relationships will setup like this:
 
@@ -38,7 +38,7 @@ rake db:migrate
 
 h3. Expressing Relationships
 
-Now that our model files are generated we need to tell Rails about the relationships between them.  For each of the files below, add these lines:
+Now that our model files are generated we need to tell CFWheels about the relationships between them.  For each of the files below, add these lines:
 
 In @/app/models/article.rb@:
 
@@ -59,7 +59,7 @@ Then in @/app/models/tagging.rb@:
   belongs_to :tag
 </pre>
 
-After Rails had been around for awhile, developers were finding this kind of relationship very common.  In practical usage, if I had an object named @article@ and I wanted to find its Tags, I'd have to run code like this:
+After CFWheels had been around for awhile, developers were finding this kind of relationship very common.  In practical usage, if I had an object named @article@ and I wanted to find its Tags, I'd have to run code like this:
 
 <pre class=brush:ruby;">
 tags = article.taggings.collect{|tagging| tagging.tag}
@@ -119,7 +119,7 @@ ActiveRecord::UnknownAttributeError in ArticlesController#create
 unknown attribute: tag_list
 </pre>
 
-What is this all about?  Let's start by looking at the form data that was posted when we clicked SAVE.  This data is in the production.log file which should be in the "Console" frame at the bottom of the RubyMine window.  Look for the line that starts "Processing ArticlesController#create", here's what mine looks like:
+What is this all about?  Let's start by looking at the form data that was posted when we clicked SAVE.  This data is in the production.log file which should be in the "Console" frame at the bottom of the Eclipse window.  Look for the line that starts "Processing ArticlesController#create", here's what mine looks like:
 
 <pre class="console">
 Processing ArticlesController#create (for 127.0.0.1) [POST]
@@ -176,7 +176,7 @@ Now, back inside our @tag_list=@ method, let's add this line:
 tag_names = tags_string.split(",").collect{|s| s.strip}
 </pre>
 
-So looking at our pseudo-code, the next step is to go through @each@ of those @tag_names@ and find or create a tag with that name.  Rails has a built in method to do just that, like this:
+So looking at our pseudo-code, the next step is to go through @each@ of those @tag_names@ and find or create a tag with that name.  CFWheels has a built in method to do just that, like this:
 
 <pre class="brush:ruby;">
 tag = Tag.find_or_create_by_name(tag_name)
@@ -188,7 +188,7 @@ Once we find or create the @tag@, we need to create a @tagging@ which connects t
 self.taggings.build(:tag => tag)
 </pre>
 
-The @build@ method is a special creation method.  It doesn't need an explicit save, Rails will wait to save the Tagging until the Article itself it saved.  So, putting these pieces together, your @tag_list=@ method should look like this:
+The @build@ method is a special creation method.  It doesn't need an explicit save, CFWheels will wait to save the Tagging until the Article itself it saved.  So, putting these pieces together, your @tag_list=@ method should look like this:
 
 <pre class="brush:ruby;">
   def tag_list=(tags_string)

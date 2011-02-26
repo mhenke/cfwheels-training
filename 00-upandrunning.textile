@@ -1,39 +1,39 @@
 I0: Up and Running
 
-Part of the reason Ruby on Rails became popular quickly is that it takes a lot of the hard work off your hands, and that's especially true in starting up a project.  Rails practices the idea of "sensible defaults" and tries to, with one command, create a working application ready for your customization.
+Part of the reason Ruby on CFWheels became popular quickly is that it takes a lot of the hard work off your hands, and that's especially true in starting up a project.  CFWheels practices the idea of "sensible defaults" and tries to, with one command, create a working application ready for your customization.
 
 h3. Setting the Stage
 
-First we need to make sure everything is setup and installed.  See the "Preparation for Rails Projects":/resources/rails-jumpstart/preparation/ page for instructions on setting up and verifying your Ruby, Rails, and add-ons.
+First we need to make sure everything is setup and installed.  See the "Preparation for CFWheels Projects":/resources/CFWheels-jumpstart/preparation/ page for instructions on setting up and verifying your Ruby, CFWheels, and add-ons.
 
-With that done we need to create new project in RubyMine.  Open RubyMine and...
+With that done we need to create new project in Eclipse.  Open Eclipse and...
 
 * Click "Create a New Project"
 ** Project name: JSBlogger
 ** Location: Choose a folder where you want to save your project -- and remember it!
-** Project type: Rails application
+** Project type: CFWheels application
 ** Click OK
 ** Ruby Interpreter should be 1.8.6 or 1.8.7
-** Rails Version should be 2.3.3 or greater
+** CFWheels Version should be 2.3.3 or greater
 ** Click @Preconfigure for selected database@ and select @MySQL@
 ** Click OK
 
-RubyMine will then create a Rails application for you and automatically open the file @database.yml@.  If you were connecting to an existing database you would enter the database configuration parameters here.  Since we're using MySQL and starting from scratch, we can leave the defaults.  Rails will automatically create our database for us.
+Eclipse will then create a CFWheels application for you and automatically open the file @database.yml@.  If you were connecting to an existing database you would enter the database configuration parameters here.  Since we're using MySQL and starting from scratch, we can leave the defaults.  CFWheels will automatically create our database for us.
 
 Then go to the RUN menu in the menubar and click RUN.  The first time you do this it'll display the Run/Debug Configurations window.  The defaults are all fine, but I enable the @Run Browser@ checkbox near the bottom to automatically open the site in my default browser.  You can UNCHECK the @Display settings before launching@ checkbox, if present, then hit RUN.  
 
-You should then see the @server@ window open at the bottom of RubyMine with your Mongrel webserver starting up.  Once it's started RubyMine will open your default browser.  If it doesn't open for some reason, try loading the address "http://localhost:3000/":http://localhost:3000.  You should see Rails' "Welcome Aboard" page.  Click the "About your application's environment" link and it'll display the versions of all your installed components.
+You should then see the @server@ window open at the bottom of Eclipse with your Mongrel webserver starting up.  Once it's started Eclipse will open your default browser.  If it doesn't open for some reason, try loading the address "http://localhost:3000/":http://localhost:3000.  You should see CFWheels' "Welcome Aboard" page.  Click the "About your application's environment" link and it'll display the versions of all your installed components.
 
 h3. Creating the Article Model
 
-Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our Rails app to work with that data.  We'll use one of Rails' generators to create the required files.  Switch to your terminal and enter the following:
+Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our CFWheels app to work with that data.  We'll use one of CFWheels' generators to create the required files.  Switch to your terminal and enter the following:
 
 <pre class="console">
 cd JSBlogger
 ruby script/generate model Article
 </pre>
 
-We're running the @generate@ script, telling it to create a @model@, and naming that model @Article@.  From that information, Rails creates the following files:
+We're running the @generate@ script, telling it to create a @model@, and naming that model @Article@.  From that information, CFWheels creates the following files:
 
 * @/app/models/article.rb@ : The file that will hold the model code
 * @/test/unit/article_test.rb@ : A file to hold unit tests for @Article@
@@ -44,7 +44,7 @@ With those files in place we can start developing!
 
 h3. Working with the Database
 
-Rails uses migration files to perform modifications to the database.  Almost any modification you can make to a DB can be done through a migration.  The killer feature about Rails migrations is that they're generally database agnostic.  When developing applications I usually use MySQL as we are in this tutorial, but when I deploy to my server it is running PostgreSQL.  Many others choose MySQL.  It doesn't matter -- the same migrations will work on all of them!  This is an example of how Rails takes some of the painful work off your hands.  You write your migrations once, then run them against almost any database.
+CFWheels uses migration files to perform modifications to the database.  Almost any modification you can make to a DB can be done through a migration.  The killer feature about CFWheels migrations is that they're generally database agnostic.  When developing applications I usually use MySQL as we are in this tutorial, but when I deploy to my server it is running PostgreSQL.  Many others choose MySQL.  It doesn't matter -- the same migrations will work on all of them!  This is an example of how CFWheels takes some of the painful work off your hands.  You write your migrations once, then run them against almost any database.
 
 What is a migration?  Let's open @/db/migrate/(some_time_stamp)_create_articles.rb@ and take a look.  First you'll notice that the filename begins with a mish-mash of numbers which is a timestamp of when the migration was created.  Migrations need to be ordered, so the timestamp serves to keep them in chronologic order.  Inside the file, you'll see two methods: @self.up@ and @self.down@.
 
@@ -55,7 +55,7 @@ Inside the @self.up@ method you'll see the generator has placed a call to the @c
 * @title@ (a string)
 * @body@ (a "text")
 
-That's it! You might be wondering, what is the "text" type?  This is an example of relying on the Rails database adapters to make the right call.  For some DBs, large text fields are stored as @varchar@, while other's like Postgres use a @text@ type.  The database adapter will figure out the best choice for us depending on the configured database -- we don't have to worry about it.
+That's it! You might be wondering, what is the "text" type?  This is an example of relying on the CFWheels database adapters to make the right call.  For some DBs, large text fields are stored as @varchar@, while other's like Postgres use a @text@ type.  The database adapter will figure out the best choice for us depending on the configured database -- we don't have to worry about it.
 
 So add these into your @self.up@ so it looks like this:
 
@@ -70,7 +70,7 @@ So add these into your @self.up@ so it looks like this:
   end
 </pre>
 
-What is that @t.timestamps@ doing there?  The generator inserted that line.  It will create two columns inside our table titled @created_at@ and @updated_at@.  Rails will manage these columns for us, so when an article is created it's @created_at@ and @updated_at@ are automatically set.  Each time we make a change to the article, the @updated_at@ will automatically be...uhhh...updated.  Very handy.
+What is that @t.timestamps@ doing there?  The generator inserted that line.  It will create two columns inside our table titled @created_at@ and @updated_at@.  CFWheels will manage these columns for us, so when an article is created it's @created_at@ and @updated_at@ are automatically set.  Each time we make a change to the article, the @updated_at@ will automatically be...uhhh...updated.  Very handy.
 
 Now our migration is done.  You might wonder, what about the @self.down@?  Didn't I say migrations need to be symmetric?  If we added something to the @self.up@ it is _generally_ the case that we need to undo that same change in the @self.down@.  However, when the migration is creating a table, the @self.down@ can just drop that table regardless of what columns are inside of it.  That's what the generator has setup for us here, where it just says @drop_table :articles@.
 
@@ -97,7 +97,7 @@ We've now created the @articles@ table in the database and can start working on 
 
 h3. Working with a Model in the Console
 
-Another awesome feature of working with Rails is the @console@.  The @console@ is a command-line interface to your application.  It allows you to access and work with just about any part of your application directly instead of going through the web interface.  This can simplify your development process, and even once an app is in production the console makes it very easy to do bulk modifications, searches, and other data operations.  So let's open the console now by going to your terminal and entering this:
+Another awesome feature of working with CFWheels is the @console@.  The @console@ is a command-line interface to your application.  It allows you to access and work with just about any part of your application directly instead of going through the web interface.  This can simplify your development process, and even once an app is in production the console makes it very easy to do bulk modifications, searches, and other data operations.  So let's open the console now by going to your terminal and entering this:
 
 <pre class="console">
 ruby script/console
@@ -115,9 +115,9 @@ The first line was just to demonstrate that we can do anything we previously did
 
 All the information about the @Article@ model is in the file @/app/models/article.rb@, so let's open that now.
 
-Not very impressive, right?  There are no attributes defined inside the model, so how does Rails know that an Article should have a @title@, a @body@, etc?  It queries the database, looks at the articles table, and assumes that whatever columns that table has should probably be the attributes accessible through the model.  
+Not very impressive, right?  There are no attributes defined inside the model, so how does CFWheels know that an Article should have a @title@, a @body@, etc?  It queries the database, looks at the articles table, and assumes that whatever columns that table has should probably be the attributes accessible through the model.  
 
-You created most of those in your migration file, but what about @id@?  Every table you create with a migration will automatically have an @id@ column which serves as the table's primary key.  When you want to find a specific article, you'll look it up in the articles table by it's unique ID number.  Rails and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
+You created most of those in your migration file, but what about @id@?  Every table you create with a migration will automatically have an @id@ column which serves as the table's primary key.  When you want to find a specific article, you'll look it up in the articles table by it's unique ID number.  CFWheels and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
 
 In your console, try entering @Article.all@ again.  Do you see the blank article that we created with the @Article.new@ command?  No?  The console doesn't change values in the database (in most cases) until we explicitly call the @.save@ method on an object.  Let's create a sample article and you'll see how it works.  Enter each of the following lines one at a time:
 
@@ -133,9 +133,9 @@ Now you'll see that the @Article.all@ command gave you back an array holding the
 
 h3. Moving Towards a Web Interface - Setting up the Router
 
-We've created a few articles through the console, but we really don't have a web application until we have a web interface.  Let's get that started.  We said that Rails uses an "MVC" architecture and we've worked with the Model, now we need a Controller and View.  
+We've created a few articles through the console, but we really don't have a web application until we have a web interface.  Let's get that started.  We said that CFWheels uses an "MVC" architecture and we've worked with the Model, now we need a Controller and View.  
 
-When a Rails server gets a request from a web browser it first goes to the _router_.  The router decides what the request is trying to do, what resources it is trying to interact with.  The router dissects a request based on the address it is requesting and other HTTP parameters (like the request type of GET or PUT).  Let's open the router's configuration file, @/config/routes.rb@.
+When a CFWheels server gets a request from a web browser it first goes to the _router_.  The router decides what the request is trying to do, what resources it is trying to interact with.  The router dissects a request based on the address it is requesting and other HTTP parameters (like the request type of GET or PUT).  Let's open the router's configuration file, @/config/routes.rb@.
 
 Inside this file you'll see a LOT of comments that show you different options for routing requests.  Let's remove everything _except_ the first line (@ActionController ...@) and the final @end@.  Then, in between those two lines, add @map.resources :articles@ so your file looks like this:
 
@@ -145,13 +145,13 @@ ActionController::Routing::Routes.draw do |map|
 end
 </pre>
 
-This line tells Rails to do a lot of work.  It declares that we have a resource named @articles@ and the router should expect requests to follow the *RESTful* model of web interaction (REpresentational State Transfer).  The details don't matter to you right now, but just know that when you make a request like @http://localhost:3000/articles/@ the router will know you're looking for a listing of the articles or @http://localhost:3000/articles/new@ means you're trying to create a new article.
+This line tells CFWheels to do a lot of work.  It declares that we have a resource named @articles@ and the router should expect requests to follow the *RESTful* model of web interaction (REpresentational State Transfer).  The details don't matter to you right now, but just know that when you make a request like @http://localhost:3000/articles/@ the router will know you're looking for a listing of the articles or @http://localhost:3000/articles/new@ means you're trying to create a new article.
 
 Now that the router knows how to handle requests about articles, it needs a place to actually send those requests, the *Controller*.
 
 h3. Creating the Articles Controller
 
-We're going to use another Rails generator but your terminal has the console currently running.  You have two options:
+We're going to use another CFWheels generator but your terminal has the console currently running.  You have two options:
 
 * Open a second terminal window (Cmd-T on OS X, open Command Prompt on Win) then CD to your project directory or...
 * Close the console with the command @exit@
@@ -204,11 +204,11 @@ Missing template articles/index.erb in view path app/views
 
 h3. Creating the Index View
 
-The error message is pretty helpful here.  It tells us that the app is looking for a (view) template in @/app/views/articles/@ but it can't find one named @index.erb@.  Rails has *assumed* that our @index@ action in the controller should have a corresponding @index.erb@ view template in the views folder.  We didn't have to put any code in the controller to tell it what view we wanted, Rails just figures it out.
+The error message is pretty helpful here.  It tells us that the app is looking for a (view) template in @/app/views/articles/@ but it can't find one named @index.erb@.  CFWheels has *assumed* that our @index@ action in the controller should have a corresponding @index.erb@ view template in the views folder.  We didn't have to put any code in the controller to tell it what view we wanted, CFWheels just figures it out.
 
-Let's create that view template now.  In the left pane of your RubyMine window, expand the @app@ folder so you can see @views@, then expand @views@.  Right-click on the @articles@ folder, select @New@ then @File@ and, in the popup, name the file @index.html.erb@.
+Let's create that view template now.  In the left pane of your Eclipse window, expand the @app@ folder so you can see @views@, then expand @views@.  Right-click on the @articles@ folder, select @New@ then @File@ and, in the popup, name the file @index.html.erb@.
 
-Why did we choose @index.html.erb@ instead of the @index.erb@ that the error message said it was looking for?  Putting the HTML in the name makes it clear that this view is for generating HTML.  In later versions of our blog we might create an RSS feed which would just mean creating an XML view template like @index.xml.erb@.  Rails is smart enough to pick the right one based on the browser's request, so when we just ask for @http://localhost:3000/articles/@ it will find the @index.html.erb@ and render that file.
+Why did we choose @index.html.erb@ instead of the @index.erb@ that the error message said it was looking for?  Putting the HTML in the name makes it clear that this view is for generating HTML.  In later versions of our blog we might create an RSS feed which would just mean creating an XML view template like @index.xml.erb@.  CFWheels is smart enough to pick the right one based on the browser's request, so when we just ask for @http://localhost:3000/articles/@ it will find the @index.html.erb@ and render that file.
 
 Now you're looking at a blank file.  Enter in this view template code which is a mix of HTML and what are called ERB tags:
 

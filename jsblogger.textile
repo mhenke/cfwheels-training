@@ -1,39 +1,39 @@
 I0: Up and Running
 
-Part of the reason Ruby on Rails became popular quickly is that it takes a lot of the hard work off your hands, and that's especially true in starting up a project.  Rails practices the idea of "sensible defaults" and tries to, with one command, create a working application ready for your customization.
+Part of the reason Ruby on CFWheels became popular quickly is that it takes a lot of the hard work off your hands, and that's especially true in starting up a project.  CFWheels practices the idea of "sensible defaults" and tries to, with one command, create a working application ready for your customization.
 
 h3. Setting the Stage
 
-First we need to make sure everything is setup and installed.  See the "Preparation for Rails Projects":/resources/rails-jumpstart/preparation/ page for instructions on setting up and verifying your Ruby, Rails, and add-ons.
+First we need to make sure everything is setup and installed.  See the "Preparation for CFWheels Projects":/resources/CFWheels-jumpstart/preparation/ page for instructions on setting up and verifying your Ruby, CFWheels, and add-ons.
 
-With that done we need to create new project in RubyMine.  Open RubyMine and...
+With that done we need to create new project in Eclipse.  Open Eclipse and...
 
 * Click "Create a New Project"
 ** Project name: JSBlogger
 ** Location: Choose a folder where you want to save your project -- and remember it!
-** Project type: Rails application
+** Project type: CFWheels application
 ** Click OK
 ** Ruby Interpreter should be 1.8.6 or 1.8.7
-** Rails Version should be 2.3.3 or greater
+** CFWheels Version should be 2.3.3 or greater
 ** Click @Preconfigure for selected database@ and select @MySQL@
 ** Click OK
 
-RubyMine will then create a Rails application for you and automatically open the file @database.yml@.  If you were connecting to an existing database you would enter the database configuration parameters here.  Since we're using MySQL and starting from scratch, we can leave the defaults.  Rails will automatically create our database for us.
+Eclipse will then create a CFWheels application for you and automatically open the file @database.yml@.  If you were connecting to an existing database you would enter the database configuration parameters here.  Since we're using MySQL and starting from scratch, we can leave the defaults.  CFWheels will automatically create our database for us.
 
 Then go to the RUN menu in the menubar and click RUN.  The first time you do this it'll display the Run/Debug Configurations window.  The defaults are all fine, but I enable the @Run Browser@ checkbox near the bottom to automatically open the site in my default browser.  You can UNCHECK the @Display settings before launching@ checkbox, if present, then hit RUN.  
 
-You should then see the @server@ window open at the bottom of RubyMine with your Mongrel webserver starting up.  Once it's started RubyMine will open your default browser.  If it doesn't open for some reason, try loading the address "http://localhost:3000/":http://localhost:3000.  You should see Rails' "Welcome Aboard" page.  Click the "About your application's environment" link and it'll display the versions of all your installed components.
+You should then see the @server@ window open at the bottom of Eclipse with your Mongrel webserver starting up.  Once it's started Eclipse will open your default browser.  If it doesn't open for some reason, try loading the address "http://localhost:3000/":http://localhost:3000.  You should see CFWheels' "Welcome Aboard" page.  Click the "About your application's environment" link and it'll display the versions of all your installed components.
 
 h3. Creating the Article Model
 
-Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our Rails app to work with that data.  We'll use one of Rails' generators to create the required files.  Switch to your terminal and enter the following:
+Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our CFWheels app to work with that data.  We'll use one of CFWheels' generators to create the required files.  Switch to your terminal and enter the following:
 
 <pre class="console">
 cd JSBlogger
 ruby script/generate model Article
 </pre>
 
-We're running the @generate@ script, telling it to create a @model@, and naming that model @Article@.  From that information, Rails creates the following files:
+We're running the @generate@ script, telling it to create a @model@, and naming that model @Article@.  From that information, CFWheels creates the following files:
 
 * @/app/models/article.rb@ : The file that will hold the model code
 * @/test/unit/article_test.rb@ : A file to hold unit tests for @Article@
@@ -44,7 +44,7 @@ With those files in place we can start developing!
 
 h3. Working with the Database
 
-Rails uses migration files to perform modifications to the database.  Almost any modification you can make to a DB can be done through a migration.  The killer feature about Rails migrations is that they're generally database agnostic.  When developing applications I usually use MySQL as we are in this tutorial, but when I deploy to my server it is running PostgreSQL.  Many others choose MySQL.  It doesn't matter -- the same migrations will work on all of them!  This is an example of how Rails takes some of the painful work off your hands.  You write your migrations once, then run them against almost any database.
+CFWheels uses migration files to perform modifications to the database.  Almost any modification you can make to a DB can be done through a migration.  The killer feature about CFWheels migrations is that they're generally database agnostic.  When developing applications I usually use MySQL as we are in this tutorial, but when I deploy to my server it is running PostgreSQL.  Many others choose MySQL.  It doesn't matter -- the same migrations will work on all of them!  This is an example of how CFWheels takes some of the painful work off your hands.  You write your migrations once, then run them against almost any database.
 
 What is a migration?  Let's open @/db/migrate/(some_time_stamp)_create_articles.rb@ and take a look.  First you'll notice that the filename begins with a mish-mash of numbers which is a timestamp of when the migration was created.  Migrations need to be ordered, so the timestamp serves to keep them in chronologic order.  Inside the file, you'll see two methods: @self.up@ and @self.down@.
 
@@ -55,7 +55,7 @@ Inside the @self.up@ method you'll see the generator has placed a call to the @c
 * @title@ (a string)
 * @body@ (a "text")
 
-That's it! You might be wondering, what is the "text" type?  This is an example of relying on the Rails database adapters to make the right call.  For some DBs, large text fields are stored as @varchar@, while other's like Postgres use a @text@ type.  The database adapter will figure out the best choice for us depending on the configured database -- we don't have to worry about it.
+That's it! You might be wondering, what is the "text" type?  This is an example of relying on the CFWheels database adapters to make the right call.  For some DBs, large text fields are stored as @varchar@, while other's like Postgres use a @text@ type.  The database adapter will figure out the best choice for us depending on the configured database -- we don't have to worry about it.
 
 So add these into your @self.up@ so it looks like this:
 
@@ -70,7 +70,7 @@ So add these into your @self.up@ so it looks like this:
   end
 </pre>
 
-What is that @t.timestamps@ doing there?  The generator inserted that line.  It will create two columns inside our table titled @created_at@ and @updated_at@.  Rails will manage these columns for us, so when an article is created it's @created_at@ and @updated_at@ are automatically set.  Each time we make a change to the article, the @updated_at@ will automatically be...uhhh...updated.  Very handy.
+What is that @t.timestamps@ doing there?  The generator inserted that line.  It will create two columns inside our table titled @created_at@ and @updated_at@.  CFWheels will manage these columns for us, so when an article is created it's @created_at@ and @updated_at@ are automatically set.  Each time we make a change to the article, the @updated_at@ will automatically be...uhhh...updated.  Very handy.
 
 Now our migration is done.  You might wonder, what about the @self.down@?  Didn't I say migrations need to be symmetric?  If we added something to the @self.up@ it is _generally_ the case that we need to undo that same change in the @self.down@.  However, when the migration is creating a table, the @self.down@ can just drop that table regardless of what columns are inside of it.  That's what the generator has setup for us here, where it just says @drop_table :articles@.
 
@@ -97,7 +97,7 @@ We've now created the @articles@ table in the database and can start working on 
 
 h3. Working with a Model in the Console
 
-Another awesome feature of working with Rails is the @console@.  The @console@ is a command-line interface to your application.  It allows you to access and work with just about any part of your application directly instead of going through the web interface.  This can simplify your development process, and even once an app is in production the console makes it very easy to do bulk modifications, searches, and other data operations.  So let's open the console now by going to your terminal and entering this:
+Another awesome feature of working with CFWheels is the @console@.  The @console@ is a command-line interface to your application.  It allows you to access and work with just about any part of your application directly instead of going through the web interface.  This can simplify your development process, and even once an app is in production the console makes it very easy to do bulk modifications, searches, and other data operations.  So let's open the console now by going to your terminal and entering this:
 
 <pre class="console">
 ruby script/console
@@ -115,9 +115,9 @@ The first line was just to demonstrate that we can do anything we previously did
 
 All the information about the @Article@ model is in the file @/app/models/article.rb@, so let's open that now.
 
-Not very impressive, right?  There are no attributes defined inside the model, so how does Rails know that an Article should have a @title@, a @body@, etc?  It queries the database, looks at the articles table, and assumes that whatever columns that table has should probably be the attributes accessible through the model.  
+Not very impressive, right?  There are no attributes defined inside the model, so how does CFWheels know that an Article should have a @title@, a @body@, etc?  It queries the database, looks at the articles table, and assumes that whatever columns that table has should probably be the attributes accessible through the model.  
 
-You created most of those in your migration file, but what about @id@?  Every table you create with a migration will automatically have an @id@ column which serves as the table's primary key.  When you want to find a specific article, you'll look it up in the articles table by it's unique ID number.  Rails and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
+You created most of those in your migration file, but what about @id@?  Every table you create with a migration will automatically have an @id@ column which serves as the table's primary key.  When you want to find a specific article, you'll look it up in the articles table by it's unique ID number.  CFWheels and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
 
 In your console, try entering @Article.all@ again.  Do you see the blank article that we created with the @Article.new@ command?  No?  The console doesn't change values in the database (in most cases) until we explicitly call the @.save@ method on an object.  Let's create a sample article and you'll see how it works.  Enter each of the following lines one at a time:
 
@@ -133,9 +133,9 @@ Now you'll see that the @Article.all@ command gave you back an array holding the
 
 h3. Moving Towards a Web Interface - Setting up the Router
 
-We've created a few articles through the console, but we really don't have a web application until we have a web interface.  Let's get that started.  We said that Rails uses an "MVC" architecture and we've worked with the Model, now we need a Controller and View.  
+We've created a few articles through the console, but we really don't have a web application until we have a web interface.  Let's get that started.  We said that CFWheels uses an "MVC" architecture and we've worked with the Model, now we need a Controller and View.  
 
-When a Rails server gets a request from a web browser it first goes to the _router_.  The router decides what the request is trying to do, what resources it is trying to interact with.  The router dissects a request based on the address it is requesting and other HTTP parameters (like the request type of GET or PUT).  Let's open the router's configuration file, @/config/routes.rb@.
+When a CFWheels server gets a request from a web browser it first goes to the _router_.  The router decides what the request is trying to do, what resources it is trying to interact with.  The router dissects a request based on the address it is requesting and other HTTP parameters (like the request type of GET or PUT).  Let's open the router's configuration file, @/config/routes.rb@.
 
 Inside this file you'll see a LOT of comments that show you different options for routing requests.  Let's remove everything _except_ the first line (@ActionController ...@) and the final @end@.  Then, in between those two lines, add @map.resources :articles@ so your file looks like this:
 
@@ -145,13 +145,13 @@ ActionController::Routing::Routes.draw do |map|
 end
 </pre>
 
-This line tells Rails to do a lot of work.  It declares that we have a resource named @articles@ and the router should expect requests to follow the *RESTful* model of web interaction (REpresentational State Transfer).  The details don't matter to you right now, but just know that when you make a request like @http://localhost:3000/articles/@ the router will know you're looking for a listing of the articles or @http://localhost:3000/articles/new@ means you're trying to create a new article.
+This line tells CFWheels to do a lot of work.  It declares that we have a resource named @articles@ and the router should expect requests to follow the *RESTful* model of web interaction (REpresentational State Transfer).  The details don't matter to you right now, but just know that when you make a request like @http://localhost:3000/articles/@ the router will know you're looking for a listing of the articles or @http://localhost:3000/articles/new@ means you're trying to create a new article.
 
 Now that the router knows how to handle requests about articles, it needs a place to actually send those requests, the *Controller*.
 
 h3. Creating the Articles Controller
 
-We're going to use another Rails generator but your terminal has the console currently running.  You have two options:
+We're going to use another CFWheels generator but your terminal has the console currently running.  You have two options:
 
 * Open a second terminal window (Cmd-T on OS X, open Command Prompt on Win) then CD to your project directory or...
 * Close the console with the command @exit@
@@ -204,11 +204,11 @@ Missing template articles/index.erb in view path app/views
 
 h3. Creating the Index View
 
-The error message is pretty helpful here.  It tells us that the app is looking for a (view) template in @/app/views/articles/@ but it can't find one named @index.erb@.  Rails has *assumed* that our @index@ action in the controller should have a corresponding @index.erb@ view template in the views folder.  We didn't have to put any code in the controller to tell it what view we wanted, Rails just figures it out.
+The error message is pretty helpful here.  It tells us that the app is looking for a (view) template in @/app/views/articles/@ but it can't find one named @index.erb@.  CFWheels has *assumed* that our @index@ action in the controller should have a corresponding @index.erb@ view template in the views folder.  We didn't have to put any code in the controller to tell it what view we wanted, CFWheels just figures it out.
 
-Let's create that view template now.  In the left pane of your RubyMine window, expand the @app@ folder so you can see @views@, then expand @views@.  Right-click on the @articles@ folder, select @New@ then @File@ and, in the popup, name the file @index.html.erb@.
+Let's create that view template now.  In the left pane of your Eclipse window, expand the @app@ folder so you can see @views@, then expand @views@.  Right-click on the @articles@ folder, select @New@ then @File@ and, in the popup, name the file @index.html.erb@.
 
-Why did we choose @index.html.erb@ instead of the @index.erb@ that the error message said it was looking for?  Putting the HTML in the name makes it clear that this view is for generating HTML.  In later versions of our blog we might create an RSS feed which would just mean creating an XML view template like @index.xml.erb@.  Rails is smart enough to pick the right one based on the browser's request, so when we just ask for @http://localhost:3000/articles/@ it will find the @index.html.erb@ and render that file.
+Why did we choose @index.html.erb@ instead of the @index.erb@ that the error message said it was looking for?  Putting the HTML in the name makes it clear that this view is for generating HTML.  In later versions of our blog we might create an RSS feed which would just mean creating an XML view template like @index.xml.erb@.  CFWheels is smart enough to pick the right one based on the browser's request, so when we just ask for @http://localhost:3000/articles/@ it will find the @index.html.erb@ and render that file.
 
 Now you're looking at a blank file.  Enter in this view template code which is a mix of HTML and what are called ERB tags:
 
@@ -239,7 +239,7 @@ We've created articles from the console, but that isn't a viable long-term solut
 
 h3. Creating the NEW Action and View
 
-Previously we setup the @map.resources :articles@ route in @routes.rb@, and that told Rails that we were going to follow the RESTful conventions for this model named Article.  Following this convention, the URL for creating a new article would be @http://localhost:3000/articles/new@.  Enter that into your browser and see what comes up.
+Previously we setup the @map.resources :articles@ route in @routes.rb@, and that told CFWheels that we were going to follow the RESTful conventions for this model named Article.  Following this convention, the URL for creating a new article would be @http://localhost:3000/articles/new@.  Enter that into your browser and see what comes up.
 
 <pre class="console">
 Unknown action
@@ -273,7 +273,7 @@ Refresh your browser and you should just see the heading "Create a New Article".
 
 h3. Writing a Form
 
-It's not very impressive so far -- we need to add a form to the @new.html.erb@ so the user can enter in the article title and body.  Because we're following the RESTful conventions, Rails can take care of many of the details.  Inside that @erb@ file, enter this code below your header:
+It's not very impressive so far -- we need to add a form to the @new.html.erb@ so the user can enter in the article title and body.  Because we're following the RESTful conventions, CFWheels can take care of many of the details.  Inside that @erb@ file, enter this code below your header:
 
 <pre class="brush:ruby">
 <% form_for(@article) do |f| %>
@@ -293,7 +293,7 @@ It's not very impressive so far -- we need to add a form to the @new.html.erb@ s
 
 What is all that?  Let's look at it piece by piece:
 
-* @form_for@ is a Rails helper method which takes one parameter, in this case @@article@ and a block with the form fields.  The first line basically says "Create a form for the object named @@article@, refer to the form by the name @f@ and add the following elements to the form..."
+* @form_for@ is a CFWheels helper method which takes one parameter, in this case @@article@ and a block with the form fields.  The first line basically says "Create a form for the object named @@article@, refer to the form by the name @f@ and add the following elements to the form..."
 * The @f.label@ helper creates an HTML label for a field, this is good usability practice and will have some other benefits for us later
 * The @f.text_field@ helper creates a single-line text box named @title@
 * The @f.text_area@ helper creates a multi-line text box named @body@
@@ -316,7 +316,7 @@ Extracted source (around line #3):
 
 What's it trying to tell us.  In our @new.html.erb@ on line #3 there was an error about "Called id for nil".  As we learned in the Ruby in 100 minutes tutorial, @nil@ is Ruby's way of referring to nothingness.  Somewhere in line #3 we're working with an object that doesn't exist.
 
-And since there's only one object in line #3, it makes it pretty obvious -- the problem is that we started talking about a thing named @@article@ without ever creating that thing.  Rails uses some of the _reflection_ techniques that we talked about earlier in order to setup the form.  Remember in the console when we called @Article.new@ to see what fields an Article has?  Rails wants to do the same thing, but we need to create the blank object for it.
+And since there's only one object in line #3, it makes it pretty obvious -- the problem is that we started talking about a thing named @@article@ without ever creating that thing.  CFWheels uses some of the _reflection_ techniques that we talked about earlier in order to setup the form.  Remember in the console when we called @Article.new@ to see what fields an Article has?  CFWheels wants to do the same thing, but we need to create the blank object for it.
 
 Go into your @articles_controller.rb@, and _inside_ the @new@ method, add this line:
 
@@ -348,9 +348,9 @@ When we loaded the form we accessed the @new@ action, but when that form is subm
 This method says...
 
 * Create an object named @@article@ and send in the parameter @params[:article]@
-* Rails makes the form data available inside the variable named @params@.  If were to look at @params@ as a data structure, it'd be a hash with only one key -- @:article@.  The value of that pair is another hash with keys @:title@ and @:body@.  The values for those keys are the data we entered into the text boxes on the form.  So when @Article.new@ is called and the hash @params[:article]@ is passed in, the @new@ method looks for the value with key @:title@ and puts that into the Article's @title@ attribute.  Then it looks for the value for key @:body@ and puts that into the article's @body@ attribute.
+* CFWheels makes the form data available inside the variable named @params@.  If were to look at @params@ as a data structure, it'd be a hash with only one key -- @:article@.  The value of that pair is another hash with keys @:title@ and @:body@.  The values for those keys are the data we entered into the text boxes on the form.  So when @Article.new@ is called and the hash @params[:article]@ is passed in, the @new@ method looks for the value with key @:title@ and puts that into the Article's @title@ attribute.  Then it looks for the value for key @:body@ and puts that into the article's @body@ attribute.
 * The line @@article.save!@ saves the object to the database, just like we did in the console.  We've added the exclamation mark here because we haven't implemented any error checking.  The normal @save@ method will "fail silently" if there's a problem saving the article, but the @save!@ method will raise errors and basically freak out.
-* Finally, the @redirect_to@ tells Rails that we don't want to render a view for this action.  Once the previous steps are done, we want to bounce to the list of all articles.  The router generates many friendly path-related variables for us just from the simple @map.resources :articles@ declaration.  One of them is the @articles_path@ we use here -- it'll resolve to http://localhost:3000/articles/.
+* Finally, the @redirect_to@ tells CFWheels that we don't want to render a view for this action.  Once the previous steps are done, we want to bounce to the list of all articles.  The router generates many friendly path-related variables for us just from the simple @map.resources :articles@ declaration.  One of them is the @articles_path@ we use here -- it'll resolve to http://localhost:3000/articles/.
 
 Go back in your browser so you get to the form with the sample data you entered and click CREATE.  You should then bounce to the full articles list with your new article added.
 
@@ -358,7 +358,7 @@ h3. Adding Navigation to the Index
 
 Right now our article list is very plain and we end up typing in a bunch of URLs by hand.  Let's add some links.  Open your @/app/views/articles/index.html.erb@ and...
 
-* Add this code at the very bottom:<br/>@<%= link_to "Create a New Article", new_article_path %>@<br/>which uses the Rails @link_to@ helper, tells it we want a link with the text "Create a New Article" that points to the address @new_article_path@ (which the router handles for us)
+* Add this code at the very bottom:<br/>@<%= link_to "Create a New Article", new_article_path %>@<br/>which uses the CFWheels @link_to@ helper, tells it we want a link with the text "Create a New Article" that points to the address @new_article_path@ (which the router handles for us)
 * Find where, in the middle of the view, we output just the @article.title@.  Change it so it says @link_to article.title, article_path(article)@.  This creates a link with the text of the articles title which points to a page where we'll show just that article.
 
 Refresh your browser and you should now see a list of just the article titles that are linked somewhere and a link at the bottom to "Create a New Article".  Test that this create link takes you to the new article form.  Then go back to the article list and click one of the article titles.
@@ -412,7 +412,7 @@ Look at your @index.html.erb@ and change the whole @<li>@ segment so it looks li
 
 The first link we added, for edit, is pretty similar to what we've done before -- creating a link with the text "edit" pointing to the address @edit_article_path@, which is defined by the router, and editing the thing named @article@.
 
-The second one is a little more complex.  Web browsers don't yet properly implement all the REST conventions, so Rails creates a hack for destroying objects.  The details aren't too important.  So this link will have the text "remove", will point to the @article@, and will use the HTTP method "delete".  We've also added a @:confirm@ parameter.  If a link has a @:confirm@, then Rails will generate some Javascript which will popup a box when the link is clicked that contains the text in the @:confirm@.  Here we're setting the message to check that the user wants to remove the article and including the article's title in the message.
+The second one is a little more complex.  Web browsers don't yet properly implement all the REST conventions, so CFWheels creates a hack for destroying objects.  The details aren't too important.  So this link will have the text "remove", will point to the @article@, and will use the HTTP method "delete".  We've also added a @:confirm@ parameter.  If a link has a @:confirm@, then CFWheels will generate some Javascript which will popup a box when the link is clicked that contains the text in the @:confirm@.  Here we're setting the message to check that the user wants to remove the article and including the article's title in the message.
 
 Refresh your browser and you should see "edit" and "remove" links for each article.  Click the EDIT link for your first article.
 
@@ -448,7 +448,7 @@ All the @edit@ action is really going to do is find the article to be edited, th
 <% end %>
 </pre>
 
-In the Ruby and Rails communities there is a mantra of "Don't Repeat Yourself" -- but that's exactly what I've done here.  This view is basically the same as the @new.html.erb@ -- the only changes are the H1 and the name of the button.  We can abstract this form into a single file called a _partial_, then reference this partial from both @new.html.erb@ and @edit.html.erb@.
+In the Ruby and CFWheels communities there is a mantra of "Don't Repeat Yourself" -- but that's exactly what I've done here.  This view is basically the same as the @new.html.erb@ -- the only changes are the H1 and the name of the button.  We can abstract this form into a single file called a _partial_, then reference this partial from both @new.html.erb@ and @edit.html.erb@.
 
 Create a file @/app/views/articles/_form.html.erb@ and, yes, it has to have the underscore at the beginning of the filename.  Go into your @/app/views/articles/new.html.erb@ and CUT all the text from and including the @form_for@ line all the way to it's @end@.  The only thing left will be your H1 line.  Then add the following code at the bottom of that view:
 
@@ -497,7 +497,7 @@ h3. Adding a Flash
 
 It would be nice, though, if we gave the user some kind of status message about the operation that took place.  When we create an article the message might say "Article 'the-article-title' was created", or "Article 'the-article-title' was removed" for the remove action.  We can accomplish this with a special object called the @flash@.
 
-Rails creates the object named @flash@, so we don't need to do anything to set it up.  We can start by integrating it into our @index.html.erb@ by adding this line at the very top:
+CFWheels creates the object named @flash@, so we don't need to do anything to set it up.  We can start by integrating it into our @index.html.erb@ by adding this line at the very top:
 
 <pre class="brush:ruby;">
 <div class="flash"><p><%= flash[:message] %></p></div>
@@ -511,7 +511,7 @@ flash[:message] = "Article '#{@article.title}' was created."
 
 Then go to your articles list, create another sample article, and when you click create you should see the flash message at the top of your view.
 
-Here's something cool about how Rails handles the @flash@ -- hit your browser's REFRESH button while looking at the articles list.  See how the flash disappears?  Once you display the message in a flash Rails clears it out.  That's why it's perfect for status messages like this.
+Here's something cool about how CFWheels handles the @flash@ -- hit your browser's REFRESH button while looking at the articles list.  See how the flash disappears?  Once you display the message in a flash CFWheels clears it out.  That's why it's perfect for status messages like this.
 
 Similarly, add a flash message into your @destroy@ method and confirm that it shows up when an article is removed.  Then add one to your @update@ method that'll display when an article is edited.
 
@@ -558,7 +558,7 @@ The power of SQL databases is the ability to express relationships between eleme
 
 Foreign keys are a way of marking one-to-one and one-to-many relationships.  An article might have zero, five, or one hundred comments.  But a comment only belongs to one article.  These objects have a one-to-many relationship -- one article connects to many comments.
 
-Part of the big deal with Rails is that it makes working with these relationships very easy.  When we created the migration for comments we started with an @integer@ field named @article_id@.  The Rails convention is that, for a one-to-many relationship, the objects on the "many" end should have a foreign key referencing the "one" object.  And that foreign key should be titled with the name of the "one" object, then an underscore, then "id".  So in this case one article has many comments, so each comment has a field named @article_id@ which tracks which article they belong to.  Similarly, a store's customer might have many orders, so each order would have a @customer_id@ specifying which customer they belong to.
+Part of the big deal with CFWheels is that it makes working with these relationships very easy.  When we created the migration for comments we started with an @integer@ field named @article_id@.  The CFWheels convention is that, for a one-to-many relationship, the objects on the "many" end should have a foreign key referencing the "one" object.  And that foreign key should be titled with the name of the "one" object, then an underscore, then "id".  So in this case one article has many comments, so each comment has a field named @article_id@ which tracks which article they belong to.  Similarly, a store's customer might have many orders, so each order would have a @customer_id@ specifying which customer they belong to.
 
 Following this convention will get us a lot of functionality "for free."  Open your @/app/models/comment.rb@ and add the middle line so it looks like this:
 
@@ -576,7 +576,7 @@ class Article < ActiveRecord::Base
 end
 </pre>
 
-How an article "has many" comments, and a comment "belongs to" an article.  We have explained to Rails that these objects have a one-to-many relationship.
+How an article "has many" comments, and a comment "belongs to" an article.  We have explained to CFWheels that these objects have a one-to-many relationship.
 
 h3. Testing in the Console
 
@@ -655,7 +655,7 @@ Obviously this is expecting a file @/app/views/articles/_comment_form.html.erb@,
 
 Look at an article in your browser to make sure that partial is showing up.  Then we can start figuring out the details of the form.
 
-Ok, now look at your @articles_controller.rb@ in the @new@ method.  Remember how we had to create a blank Article object so Rails could figure out which fields an article has?  We need to do the same thing before we create a form for the comment.  But when we view the article and display the comment form we're not running the article's @new@ method, we're running the @show@ method.  So we'll need to create a blank Comment object inside that @show@ method like this:
+Ok, now look at your @articles_controller.rb@ in the @new@ method.  Remember how we had to create a blank Article object so CFWheels could figure out which fields an article has?  We need to do the same thing before we create a form for the comment.  But when we view the article and display the comment form we're not running the article's @new@ method, we're running the @show@ method.  So we'll need to create a blank Comment object inside that @show@ method like this:
 
 <pre class="brush:ruby;">
 @comment = @article.comments.new
@@ -716,7 +716,7 @@ Just like we needed an @articles_controller.rb@ to manipulate our Articles, we'l
 ruby script/generate controller comments index create destroy
 </pre>
 
-What's up with those extra parameters?  Anything after the name of the controller (in this case "comments") will cause Rails to create stubs for methods with those names.  Now open your @/app/controllers/comments_controller.rb@ and you'll see it has the three method stubs already.
+What's up with those extra parameters?  Anything after the name of the controller (in this case "comments") will cause CFWheels to create stubs for methods with those names.  Now open your @/app/controllers/comments_controller.rb@ and you'll see it has the three method stubs already.
 
 The one we're interested in first is @create@.  You can cheat by looking at the @create@ method in your @articles_controller.rb@.  For your @comments_controller.rb@, everything should be the same just replace article with comment.  Then the redirect is a little different, use this:
 
@@ -750,7 +750,7 @@ Change your @_comment_form.html.erb@ so it prints out "Your Name", "Your Email A
 
 h4. Add Timestamp to the Comment Display
 
-We should add something about when the comment was posted.  Rails has a really neat helper named @distance_of_time_in_words@ which takes two dates and creates a text description of their difference like "32 minutes later", "3 months later", and so on.  You can use it in your @_comment.html.erb@ partial like this:
+We should add something about when the comment was posted.  CFWheels has a really neat helper named @distance_of_time_in_words@ which takes two dates and creates a text description of their difference like "32 minutes later", "3 months later", and so on.  You can use it in your @_comment.html.erb@ partial like this:
 
 <pre class="brush:ruby;">
 <p>Posted <%= distance_of_time_in_words(comment.article.created_at, comment.created_at) %> later</p>
@@ -762,15 +762,15 @@ h1. I3: Tagging
 
 In this iteration we'll add the ability to tag articles for organization and navigation.
 
-First we need to think about what a tag is and how it'll relate to the Article model.  If you're not familiar with tags, they're commonly used in blogs to assign the article to one or more categories.  For instance, if I write an article about a feature in Ruby on Rails, I might want it tagged with all of these categories: ruby, rails, programming, features.  That way if one of my readers is looking for more articles about one of those topics they can click on the tag and see a list of my articles with that tag.
+First we need to think about what a tag is and how it'll relate to the Article model.  If you're not familiar with tags, they're commonly used in blogs to assign the article to one or more categories.  For instance, if I write an article about a feature in Ruby on CFWheels, I might want it tagged with all of these categories: ruby, CFWheels, programming, features.  That way if one of my readers is looking for more articles about one of those topics they can click on the tag and see a list of my articles with that tag.
 
 h3. Understanding the Relationship
 
-What is a tag?  We need to figure that out before we can create the model.  First, a tag must have a relationship to an article so they can be connected.  A single tag, like "ruby" for instance, should be able to relate to *many* articles.  On the other side of the relationship, the article might have multiple tags (like "ruby", "rails", and "programming" as above) - so it's also a *many* relationship.  Articles and tags have a *many-to-many* relationship.
+What is a tag?  We need to figure that out before we can create the model.  First, a tag must have a relationship to an article so they can be connected.  A single tag, like "ruby" for instance, should be able to relate to *many* articles.  On the other side of the relationship, the article might have multiple tags (like "ruby", "CFWheels", and "programming" as above) - so it's also a *many* relationship.  Articles and tags have a *many-to-many* relationship.
 
 Many-to-many relationships are tricky because we're using an SQL database.  If an Article "has many" tags, then we would put the foreign key @article_id@ inside the @tags@ table - so then a Tag would "belong to" an Article.  But a tag can connect to *many* articles, not just one.  We can't model this relationship with just the @articles@ and @tags@ tables.
 
-When we start thinking about the database modeling, there are a few ways to achieve this setup.  One way is to create a "join table" that just tracks which tags are connected to which articles.  Traditionally this table would be named @articles_tags@ and Rails would express the relationships by saying that the Article model @has_and_belongs_to_many@ Tags, while the Tag model @has_and_belongs_to_many@ Articles.
+When we start thinking about the database modeling, there are a few ways to achieve this setup.  One way is to create a "join table" that just tracks which tags are connected to which articles.  Traditionally this table would be named @articles_tags@ and CFWheels would express the relationships by saying that the Article model @has_and_belongs_to_many@ Tags, while the Tag model @has_and_belongs_to_many@ Articles.
 
 Most of the time this isn't the best way to really model the relationship.  The connection between the two models usually has value of its own, so we should promote it to a real model.  For our purposes, we'll introduce a model named "Tagging" which is the connection between Articles and Tags.  The relationships will setup like this:
 
@@ -798,7 +798,7 @@ rake db:migrate
 
 h3. Expressing Relationships
 
-Now that our model files are generated we need to tell Rails about the relationships between them.  For each of the files below, add these lines:
+Now that our model files are generated we need to tell CFWheels about the relationships between them.  For each of the files below, add these lines:
 
 In @/app/models/article.rb@:
 
@@ -819,7 +819,7 @@ Then in @/app/models/tagging.rb@:
   belongs_to :tag
 </pre>
 
-After Rails had been around for awhile, developers were finding this kind of relationship very common.  In practical usage, if I had an object named @article@ and I wanted to find its Tags, I'd have to run code like this:
+After CFWheels had been around for awhile, developers were finding this kind of relationship very common.  In practical usage, if I had an object named @article@ and I wanted to find its Tags, I'd have to run code like this:
 
 <pre class=brush:ruby;">
 tags = article.taggings.collect{|tagging| tagging.tag}
@@ -879,7 +879,7 @@ ActiveRecord::UnknownAttributeError in ArticlesController#create
 unknown attribute: tag_list
 </pre>
 
-What is this all about?  Let's start by looking at the form data that was posted when we clicked SAVE.  This data is in the production.log file which should be in the "Console" frame at the bottom of the RubyMine window.  Look for the line that starts "Processing ArticlesController#create", here's what mine looks like:
+What is this all about?  Let's start by looking at the form data that was posted when we clicked SAVE.  This data is in the production.log file which should be in the "Console" frame at the bottom of the Eclipse window.  Look for the line that starts "Processing ArticlesController#create", here's what mine looks like:
 
 <pre class="console">
 Processing ArticlesController#create (for 127.0.0.1) [POST]
@@ -936,7 +936,7 @@ Now, back inside our @tag_list=@ method, let's add this line:
 tag_names = tags_string.split(",").collect{|s| s.strip}
 </pre>
 
-So looking at our pseudo-code, the next step is to go through @each@ of those @tag_names@ and find or create a tag with that name.  Rails has a built in method to do just that, like this:
+So looking at our pseudo-code, the next step is to go through @each@ of those @tag_names@ and find or create a tag with that name.  CFWheels has a built in method to do just that, like this:
 
 <pre class="brush:ruby;">
 tag = Tag.find_or_create_by_name(tag_name)
@@ -948,7 +948,7 @@ Once we find or create the @tag@, we need to create a @tagging@ which connects t
 self.taggings.build(:tag => tag)
 </pre>
 
-The @build@ method is a special creation method.  It doesn't need an explicit save, Rails will wait to save the Tagging until the Article itself it saved.  So, putting these pieces together, your @tag_list=@ method should look like this:
+The @build@ method is a special creation method.  It doesn't need an explicit save, CFWheels will wait to save the Tagging until the Article itself it saved.  So, putting these pieces together, your @tag_list=@ method should look like this:
 
 <pre class="brush:ruby;">
   def tag_list=(tags_string)

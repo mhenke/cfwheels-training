@@ -8,7 +8,7 @@ There are very few requirements to participate in a JumpstartLab course:
 ** If you're over 18, you're good
 
 
-* If you're under 18, Id feel most comfortable if you are partnered with an adult attendee. If thats not possible, it's probably still ok but I'd like to talk to you and a parent/guardian first.
+* If you're under 18, I'd feel most comfortable if you are partnered with an adult attendee. If thats not possible, it's probably still ok but I'd like to talk to you and a parent/guardian first.
 
 * Technology
 ** One laptop per attendee. Windows is ideal, but Mac OS X and Linux are OK too.
