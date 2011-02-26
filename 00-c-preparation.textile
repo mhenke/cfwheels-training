@@ -9,21 +9,21 @@ Go to your terminal and execute the following:
 * Mac OS X: @sudo gem install rails mongrel rspec rspec-rails cucumber@ 
 * Windows: @gem install rails mongrel rspec rspec-rails cucumber@ 
 
-h4. Check the SQLite3 Database System
+h4. Check the MySQL Database System
 
-You should be able to use a PostgreSQL, MySQL, or SQLite database server with very little alteration. For the purposes of these tutorials we will use SQLite because it is extremely lightweight, pretty easy for beginners, installed on many systems already, and that the database is stored in a simple file so that they can be exchanged easily. To check if you have SQLite installed already, open Terminal (OS X) or a Command Prompt (Windows) and enter @sqlite3@ . At the time of this writing the latest version is @3.6.12@ , but any version above @3.5@ should be fine. Type @.quit@ inside SQLite to exit.
+You should be able to use a Oracle, MS SQL, PostgreSQL, MySQL, or H2 database server with very little alteration. For the purposes of these tutorials we will use SQLite because it is extremely lightweight, pretty easy for beginners, installed on many systems already, and that the database is stored in a simple file so that they can be exchanged easily. To check if you have SQLite installed already, open Terminal (OS X) or a Command Prompt (Windows) and enter @MySQL@ . At the time of this writing the latest version is @3.6.12@ , but any version above @3.5@ should be fine. Type @.quit@ inside SQLite to exit.
 
 h5. Install SQLite
 
-* Mac OS X* Download and install "http://www.sqlite.org/sqlite3-3.6.16-osx-x86.bin.gz":http://www.sqlite.org/sqlite3-3.6.16-osx-x86.bin.gz 
+* Mac OS X* Download and install "http://www.sqlite.org/MySQL-3.6.16-osx-x86.bin.gz":http://www.sqlite.org/MySQL-3.6.16-osx-x86.bin.gz 
 
 
-* In your terminal window @sudo gem install sqlite3-ruby@ 
+* In your terminal window @sudo gem install MySQL-ruby@ 
 
 * Windows* Download "http://www.sqlite.org/sqlite-3_6_16.zip":http://www.sqlite.org/sqlite-3_6_16.zip and "http://sqlite.org/sqlitedll-3_6_18.zip":http://sqlite.org/sqlitedll-3_6_18.zip 
 
 
 * Unzip the two archives, then copy all three files into both your @C:\windows\system32\@ and @C:\windows\@ folders
 * Close and reopen your Command Prompt window
-* At your command prompt @gem install sqlite3-ruby@ 
+* At your command prompt @gem install MySQL-ruby@ 
 If youd like a %(caps)GUI% for managing you SQLite databases, open Firefox and install the extension here: "https://addons.mozilla.org/en-US/firefox/addon/5817":https://addons.mozilla.org/en-US/firefox/addon/5817 .

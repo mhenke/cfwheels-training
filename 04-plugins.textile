@@ -10,7 +10,7 @@ Most Rails plugins are now moving toward RubyGems. RubyGems is a package managem
 
 Lets see it in action. If you have your server running in RubyMine, click the red square button to %(caps)STOP% it. If you have a console session open, type @exit@ to exit. Then open up @/Gemfile@ and look for the lines like this:
 
-# gem 'bj' # gem 'nokogiri' # gem 'sqlite3-ruby', :require =>'sqlite3'These lines are commented out because they start with the @#@ character. By specifying a RubyGem with the @gem@ command, well tell the Rails applicationMake sure this gem is loaded when you start up. If it isnt available, freak out!Heres how well require the paperclip gem, add this near those commented lines:
+# gem 'bj' # gem 'nokogiri' # gem 'MySQL-ruby', :require =>'MySQL'These lines are commented out because they start with the @#@ character. By specifying a RubyGem with the @gem@ command, well tell the Rails applicationMake sure this gem is loaded when you start up. If it isnt available, freak out!Heres how well require the paperclip gem, add this near those commented lines:
 
 gem "paperclip"When you're writing a production application, you might specify additional parameters that require a specific version or a custom source for the library. With that config line declared, click the green arrow in RubyMine to startup your server. You should get an error like this:
 

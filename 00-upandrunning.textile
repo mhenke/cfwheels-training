@@ -15,10 +15,10 @@ With that done we need to create new project in RubyMine.  Open RubyMine and...
 ** Click OK
 ** Ruby Interpreter should be 1.8.6 or 1.8.7
 ** Rails Version should be 2.3.3 or greater
-** Click @Preconfigure for selected database@ and select @SQLite3@
+** Click @Preconfigure for selected database@ and select @MySQL@
 ** Click OK
 
-RubyMine will then create a Rails application for you and automatically open the file @database.yml@.  If you were connecting to an existing database you would enter the database configuration parameters here.  Since we're using SQLite3 and starting from scratch, we can leave the defaults.  Rails will automatically create our database for us.
+RubyMine will then create a Rails application for you and automatically open the file @database.yml@.  If you were connecting to an existing database you would enter the database configuration parameters here.  Since we're using MySQL and starting from scratch, we can leave the defaults.  Rails will automatically create our database for us.
 
 Then go to the RUN menu in the menubar and click RUN.  The first time you do this it'll display the Run/Debug Configurations window.  The defaults are all fine, but I enable the @Run Browser@ checkbox near the bottom to automatically open the site in my default browser.  You can UNCHECK the @Display settings before launching@ checkbox, if present, then hit RUN.  
 
@@ -44,7 +44,7 @@ With those files in place we can start developing!
 
 h3. Working with the Database
 
-Rails uses migration files to perform modifications to the database.  Almost any modification you can make to a DB can be done through a migration.  The killer feature about Rails migrations is that they're generally database agnostic.  When developing applications I usually use SQLite3 as we are in this tutorial, but when I deploy to my server it is running PostgreSQL.  Many others choose MySQL.  It doesn't matter -- the same migrations will work on all of them!  This is an example of how Rails takes some of the painful work off your hands.  You write your migrations once, then run them against almost any database.
+Rails uses migration files to perform modifications to the database.  Almost any modification you can make to a DB can be done through a migration.  The killer feature about Rails migrations is that they're generally database agnostic.  When developing applications I usually use MySQL as we are in this tutorial, but when I deploy to my server it is running PostgreSQL.  Many others choose MySQL.  It doesn't matter -- the same migrations will work on all of them!  This is an example of how Rails takes some of the painful work off your hands.  You write your migrations once, then run them against almost any database.
 
 What is a migration?  Let's open @/db/migrate/(some_time_stamp)_create_articles.rb@ and take a look.  First you'll notice that the filename begins with a mish-mash of numbers which is a timestamp of when the migration was created.  Migrations need to be ordered, so the timestamp serves to keep them in chronologic order.  Inside the file, you'll see two methods: @self.up@ and @self.down@.
 
