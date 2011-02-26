@@ -12,17 +12,17 @@ In the previous iteration we installed libraries using RubyGems. This is the pre
 
 At your terminal, enter the following:
 
-ruby git clone git://github.com/technoweenie/restful-authentication.git restful_authenticationIf you arent able to pull down the code from GitHub, youll need to download the code in a zip file "from github":http://github.com/technoweenie/restful-authentication/zipball/afa61fece60a3cd53a9c894d74b883889b440913 , then extract the zip into @/vendor/plugins/restful_authentication/@ .
+ruby git clone git://github.com/technoweenie/restful-authentication.git restful_authenticationIf you arent able to pull down the code from GitHub, you'll need to download the code in a zip file "from github":http://github.com/technoweenie/restful-authentication/zipball/afa61fece60a3cd53a9c894d74b883889b440913 , then extract the zip into @/vendor/plugins/restful_authentication/@ .
 
 Once youve installed the plugin, you can test that its available with this command at your terminal:
 
-rails generateIn the output is a section titleInstalled Generators. It should have a line that says @Plugins (vendor/plugins): authenticated@ . If its there, youre ready to go!
+rails generateIn the output is a section titleInstalled Generators. It should have a line that says @Plugins (vendor/plugins): authenticated@ . If its there, you're ready to go!
 
 h3. Running the Generator
 
-This plugin makes it easy to get up an running because one generator creates most of the code youll need. Run this from your terminal:
+This plugin makes it easy to get up an running because one generator creates most of the code you'll need. Run this from your terminal:
 
-rails generate authenticated user sessionsTake a look at the output and youll see it created about 16 files and added a few routes to the @routes.rb@ file. The generator has a note that you shouldnt forget to add the routes to @routes.rb@ , but its already done that for you.
+rails generate authenticated user sessionsTake a look at the output and you'll see it created about 16 files and added a few routes to the @routes.rb@ file. The generator has a note that you shouldnt forget to add the routes to @routes.rb@ , but its already done that for you.
 
 Lets look at the CreateUsers migration that the generator created before we migrate the database. If you wanted your User models to have any additional information (likedeparment_nameorfavorite_color) you could add columns for that. For our purposes these fields look alright and, thanks to the flexibility of migrations, if we want to add columns later its easy. So go to your terminal and enter:
 
@@ -30,11 +30,11 @@ rake db:migrateh3. Creating a First Account
 
 First, stop then restart your server in RubyMine to make sure its picked up the plugin. Then go to @http://localhost:3000/users/new@ and the new user form should popup.
 
-Go ahead and create yourself an account. If youre successful it will just bounce you to the @http://localhost:3000/@ root page. There isnt any information about our login status in our views, though, so its hard to tell if were really logged in.
+Go ahead and create yourself an account. If you're successful it will just bounce you to the @http://localhost:3000/@ root page. There isnt any information about our login status in our views, though, so its hard to tell if were really logged in.
 
 Lets open @/app/views/layouts/application.html.haml@ and add a little footer so the whole @%body%@ chunk looks like this:
 
-%body #container #content = yield %hr %h6 - if current_user = "Logged in as #{current_user.login}" = link_to "(logout)", logout_path - else = link_to "(login)", login_pathThe go to @http://localhost:3000/articles/@ and youll get this error:
+%body #container #content = yield %hr %h6 - if current_user = "Logged in as #{current_user.login}" = link_to "(logout)", logout_path - else = link_to "(login)", login_pathThe go to @http://localhost:3000/articles/@ and you'll get this error:
 
 NameError in Articles#index Showing app/views/layouts/application.html.haml where line #14 raised: undefined local variable or method `current_user' for #<ActionView::Base:0x103147400>We tried to use the @current_user@ helper that comes with the restful_authentication plugin, but Rails isnt recognizing it. We need to do one more setup step. Open @/app/controllers/application_controller.rb@ , and underneath the @protect_from_forgery@ line, add this: @include AuthenticatedSystem@ .
 
@@ -61,7 +61,7 @@ Lets add in a protection scheme like this to the new users form:
 
 That way when the app is first setup we can create an account, then new users can only be created by a logged in user.
 
-We can create a @before_filter@ which will run _before_ the @new@ and @create@ actions of our @users_controller.rb@ . Open that controller and on the second line youll see @include AuthenticatedSystem@ . You can remove that since we put it in the @application_controller@ and, in its place, put all this code:
+We can create a @before_filter@ which will run _before_ the @new@ and @create@ actions of our @users_controller.rb@ . Open that controller and on the second line you'll see @include AuthenticatedSystem@ . You can remove that since we put it in the @application_controller@ and, in its place, put all this code:
 
 before_filter :zero_users_or_authenticated, :only =>[:new, :create] def zero_users_or_authenticated unless User.all.size == 0 || current_user redirect_to root_path return false end endThe first line declares that we want to run a before filter named @zero_or_authenticated@ when either the @new@ or @create@ methods are accessed. Then we define that filter, checking if there are either zero registered users OR if there is a user already logged in. If neither of those is true, we redirect to the root path (our articles list) and return false. If either one of them is true this filter wont do anything, allowing the requested user registration form to be rendered.
 
@@ -85,8 +85,8 @@ Now our app is pretty secure, but we should hide all those edit, destroy, and ne
 
 Open @/app/views/articles/index.html.erb@ and find the section where we output theActions. Wrap that whole section in an @if@ clause like this:
 
-<% if current_user %><% end %>Look at the article listing in your browser when youre logged out and make sure those links disappear. Then use the same technique to hide theCreate a New Articlelink.
+<% if current_user %><% end %>Look at the article listing in your browser when you're logged out and make sure those links disappear. Then use the same technique to hide theCreate a New Articlelink.
 
-If you look at the @show@ view template, youll see that we never added an edit link! Add that link now, but protect it to only show up when a user is logged in.
+If you look at the @show@ view template, you'll see that we never added an edit link! Add that link now, but protect it to only show up when a user is logged in.
 
 Your basic authentication is done, and Iteration 5 is complete!

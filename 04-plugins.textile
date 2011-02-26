@@ -12,7 +12,7 @@ Lets see it in action. If you have your server running in RubyMine, click the re
 
 # gem 'bj' # gem 'nokogiri' # gem 'sqlite3-ruby', :require =>'sqlite3'These lines are commented out because they start with the @#@ character. By specifying a RubyGem with the @gem@ command, well tell the Rails applicationMake sure this gem is loaded when you start up. If it isnt available, freak out!Heres how well require the paperclip gem, add this near those commented lines:
 
-gem "paperclip"When youre writing a production application, you might specify additional parameters that require a specific version or a custom source for the library. With that config line declared, click the green arrow in RubyMine to startup your server. You should get an error like this:
+gem "paperclip"When you're writing a production application, you might specify additional parameters that require a specific version or a custom source for the library. With that config line declared, click the green arrow in RubyMine to startup your server. You should get an error like this:
 
 Could not find gem 'paperclip (>= 0, runtime)' in any of the gem sources listed in your Gemfile. Try running `bundle install`.The last line is keysince our config file is specifying which gems it needs, the @bundle@ command can help us install those gems. Go to your terminal and:
 
@@ -48,7 +48,7 @@ In the very first line, we need to specify that this form needs to acceptmultipa
 
 <p><%= f.label :image, "Attach an Image" %><br /><%= f.file_field :image %></p>h3. Trying it Out
 
-If your server isnt running, start it up with the green play button in RubyMine. Then go to @http://localhost:3000/articles/@ and click %(caps)EDIT% for your first article. The file field should show up towards the bottom. Click the @Choose a File@ and select one of the small images that Ive distributed to you. Click %(caps)SAVE% and youll return to the article index. Click the title of the article you just modified. What do you see? Did the image attach to the article?
+If your server isnt running, start it up with the green play button in RubyMine. Then go to @http://localhost:3000/articles/@ and click %(caps)EDIT% for your first article. The file field should show up towards the bottom. Click the @Choose a File@ and select one of the small images that Ive distributed to you. Click %(caps)SAVE% and you'll return to the article index. Click the title of the article you just modified. What do you see? Did the image attach to the article?
 
 When I first did this, I wasnt sure it worked. Heres how I checked:
 
@@ -89,7 +89,7 @@ Paperclip supports automatic image resizing and its easy. In your model, youd ad
 
 as_attached_file :image, :styles =>{ :medium =>"300x300>", :thumb =>"100x100>" }This would automatically create amediumsize where the largest dimension is 300 pixels and athumbsize where the largest dimension is 100 pixels. Then in your view, to display a specific version, you just pass in an extra parameter like this:
 
-<%= image_tag @article.image.url(:medium) %>If its so easy, why dont we do it right now? The catch is that paperclip doesnt do the image manipulation itself, it relies on a package called *imagemagick* . Image processing libraries like this are notoriously difficult to install. If youre on Linux, it might be as simple as @sudo apt-get install imagemagick@ . On OS X, if you have Mac Ports installed, itd just be @sudo port install imagemagick@ . On windows you need to download an copy some EXEs and DLLs. It can be a hassle, which is why we wont do it during this class.
+<%= image_tag @article.image.url(:medium) %>If its so easy, why dont we do it right now? The catch is that paperclip doesnt do the image manipulation itself, it relies on a package called *imagemagick* . Image processing libraries like this are notoriously difficult to install. If you're on Linux, it might be as simple as @sudo apt-get install imagemagick@ . On OS X, if you have Mac Ports installed, itd just be @sudo port install imagemagick@ . On windows you need to download an copy some EXEs and DLLs. It can be a hassle, which is why we wont do it during this class.
 
 h3. Installing %(caps)HAML% / %(caps)SASS% 
 
@@ -115,7 +115,7 @@ Weve created about a dozen view templates between our different models. We _coul
 
 Rails and Ruby both emphasize the idea ofD.R.Y.Dont Repeat Yourself. In the area of view templates, we can achieve this by creating a *layout* . A layout is a special view template that wraps other views. Look in your navigation pane for @/app/views/layouts/@ , right click on that folder, click %(caps)NEW% and %(caps)FILE% then give it the name @application.html.haml@ .
 
-In this layout well put the view code that we want to render for every view template in the application. Just so you can see what %(caps)HAML% looks like, Ive used it to implement this layout. Youll notice that %(caps)HAML% uses fewer marking characters than %(caps)ERB% , but you must maintain the proper whitespace/indentation. All indentations are two spaces from the containing element. Add this code to your @application.html.haml@ :
+In this layout well put the view code that we want to render for every view template in the application. Just so you can see what %(caps)HAML% looks like, Ive used it to implement this layout. you'll notice that %(caps)HAML% uses fewer marking characters than %(caps)ERB% , but you must maintain the proper whitespace/indentation. All indentations are two spaces from the containing element. Add this code to your @application.html.haml@ :
 
 !!! Strict %html %head %title JSBlogger = stylesheet_link_tag 'styles' %body #container #content = yieldNow refresh your article listing page and you should see the styles take effect. Whatever code is in the individual view template gets inserted into the layout where you see the @yield@ . Using layouts makes it easy to add site-wide elements like navigation, sidebars, and so forth.
 

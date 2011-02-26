@@ -1,0 +1,27 @@
+h1. JSBlogger
+
+In this project you'll create a simple blog system and learn the basics of Ruby on Rails including:
+
+* Models, Views, and Controllers ( %(caps)MVC% )
+* Data Structures&Relationships
+* Routing
+* Migrations
+* Views with forms, partials, and helpers
+* RESTful design
+* Using Rails plugins/gems
+
+The project will be developed in five iterations below. The last page, Completed Iterations, has zip files of the complete project after each iteration:
+
+h2. I0: Up and Running
+
+h2. I1: Form-Based Workflow
+
+h2. I2: Adding Comments
+
+h2. I3: Tagging
+
+h2. I4: Installing Plugins
+
+h2. I5: Authentication
+
+h2. I6: Extras
