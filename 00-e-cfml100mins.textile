@@ -1,6 +1,6 @@
-h1. CFML in 100 Minutes
+h1. 
 
-CFML is a great language for beginners because it was written to make the programmers job easy and not care if the computers job is hard. In this brief introduction well look at the key language features you need to get started.
+CFML is a great language for beginners because it was written to make the programmers job easy and not care if the computer's job is hard. In this brief introduction well look at the key language features you need to get started.
 
 # Instructions and Engines
 # Variables
@@ -32,20 +32,18 @@ h2. 1. Code Syntax & Engines
 There are two ways to write CFML code. You can use the tag or script syntax. You will write one or more instructions in a file then run that file through the CFML engine. We might have a file named my_program.cfm like this:
 
 class Sample def hello puts "Hello, World!" end end s = Sample.new s.hello
-CFML TAG EXAMPLE
+TODO: CFML TAG EXAMPLE
 
 Or we could code the program like this:
-CFML SCRIPT EXAMPLE
+TODO: CFML SCRIPT EXAMPLE
 
-The code examples will show both examples when useful. Each code example will be tagged in on github.
-
-ColdFusion has different cfml engines available: Adobe, Railo, and OpenBD. We will be using Railo.
+ColdFusion has different CFML engines available: Adobe, Railo, and OpenBD.
 
 h2. 2. Variables
 
 Everything needs a name so we can refer to it. A variable, like in math, is just a name for a piece of data. In CFML variables are very flexible and can be changed at any time. Variables are assigned using a single equals sign ( = ) where the *right* side of the equals sign is evaluated first, then the value is assigned to the variable named on the *left* side of the equals. 
 
-Go into a cfml file , enter in these example instructions, and observe the output that CFML gives you back:
+Go into a CFML file , enter in these example instructions, and observe the output that CFML gives you back:
 
 <cfscript>
 	a = 5;
@@ -73,13 +71,19 @@ Go into a cfml file , enter in these example instructions, and observe the outpu
 
 h2. 3. Objects, Attributes, and Methods
 
+TODO: Improve "cfc represents an object"
+
 In CFML, cfc represents an object. Objects know information, called attributes, and they can do actions, called methods.
 
 For an example of an object, think about you as a human being. You have attributes like height, weight, and eye color. You have methods like walk, run, wash dishes, and daydream. Different kinds of objects have different attributes and methods. In the next sections well look at a few specific kinds of objects common in CFML.
 
+TODO: Make example CFML
+
 In CFML we define an object using the @class@ keyword, Here's an example defining the object type @PersonalChef@ :
 
 class PersonalChef endInside the class we usually define one or more methods using the @def@ keyword like this:
+
+TODO: Make example CFML
 
 class PersonalChef def make_toast puts "Making your toast!" end endInside the @def@ and @end@ lines wed put the instructions for how the chef should make the toast.
 
