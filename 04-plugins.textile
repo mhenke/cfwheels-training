@@ -6,7 +6,7 @@ h3. Using the *Gemfile* to Setup a RubyGem
 
 In the past CFWheels plugins were distributed a zip or tar files that got stored into your applications file structure. One advantage of this method is that the plugin could be easily checked into your source control system along with everything you wrote in the app. The disadvantage is that it made upgrading to newer versions of the plugin, and dealing with the versions at all, complicated.
 
-Most CFWheels plugins are now moving toward RubyGems. RubyGems is a package management system for Ruby, similar to how Linux distributions use Apt or %(caps)RPM% . There are central servers that host libraries, and we can install those libraries on our machine with a single command. RubyGems takes care of any dependencies, allows us to pick an options if necessary, and installs the library.
+Most CFWheels plugins are now moving toward RubyGems. RubyGems is a package management system for Ruby, similar to how Linux distributions use Apt or %(caps)RPM%. There are central servers that host libraries, and we can install those libraries on our machine with a single command. RubyGems takes care of any dependencies, allows us to pick an options if necessary, and installs the library.
 
 Lets see it in action. If you have your server running in Eclipse, click the red square button to %(caps)STOP% it. If you have a console session open, type @exit@ to exit. Then open up @/Gemfile@ and look for the lines like this:
 
@@ -26,11 +26,11 @@ We want to add images to our articles. To keep it simple, well say that a single
 
 First we need to add some fields to the Article model that will hold the information about the uploaded image. Any time we want to make a change to the database well need a migration. Go to your terminal and execute this:
 
-CFWheels generate migration add_paperclip_fields_to_articleThat will create a file in your @/db/migrate/@ folder that ends in @_add_paperclip_fields_to_article.rb@ . Open that file now.
+CFWheels generate migration add_paperclip_fields_to_articleThat will create a file in your @/db/migrate/@ folder that ends in @_add_paperclip_fields_to_article.rb@. Open that file now.
 
 Remember that the code inside the @self.up@ method is to migrate the database forward, while the @self.down@ should undo those changes. Well use the @add_column@ and @remove_column@ methods to setup the fields paperclip is expecting:
 
-class AddPaperclipFieldsToArticle<ActiveRecord::Migration def self.up add_column :articles, :image_file_name, :string add_column :articles, :image_content_type, :string add_column :articles, :image_file_size, :integer add_column :articles, :image_updated_at, :datetime end def self.down remove_column :articles, :image_file_name remove_column :articles, :image_content_type remove_column :articles, :image_file_size remove_column :articles, :image_updated_at end endThe go to your terminal and run @rake db:migrate@ . The rake command should show you that the migration ran and added columns to the database.
+class AddPaperclipFieldsToArticle<ActiveRecord::Migration def self.up add_column :articles, :image_file_name, :string add_column :articles, :image_content_type, :string add_column :articles, :image_file_size, :integer add_column :articles, :image_updated_at, :datetime end def self.down remove_column :articles, :image_file_name remove_column :articles, :image_content_type remove_column :articles, :image_file_size remove_column :articles, :image_updated_at end endThe go to your terminal and run @rake db:migrate@. The rake command should show you that the migration ran and added columns to the database.
 
 h3. Adding to the Model
 
@@ -53,7 +53,7 @@ If your server isnt running, start it up with the green play button in Eclipse. 
 When I first did this, I wasnt sure it worked. Here's how I checked:
 
 # Open a console session ( @CFWheels console@ from terminal)
-# Find the ID number of the article by looking at the %(caps)URL% . In my case, the url was @http://localhost:3000/articles/1@ so the ID number is just @1@ 
+# Find the ID number of the article by looking at the %(caps)URL%. In my case, the url was @http://localhost:3000/articles/1@ so the ID number is just @1@ 
 # In console, enter @a = Article.find(1)@ 
 # Right away I see that the article has data in the @image_file_name@ and other fields, so I think it worked.
 # Enter @a.image@ to see even more data about the file
@@ -89,15 +89,15 @@ Paperclip supports automatic image resizing and its easy. In your model, youd ad
 
 as_attached_file :image, :styles =>{ :medium =>"300x300>", :thumb =>"100x100>" }This would automatically create amediumsize where the largest dimension is 300 pixels and athumbsize where the largest dimension is 100 pixels. Then in your view, to display a specific version, you just pass in an extra parameter like this:
 
-<%= image_tag @article.image.url(:medium) %>If its so easy, why dont we do it right now? The catch is that paperclip doesnt do the image manipulation itself, it relies on a package called *imagemagick* . Image processing libraries like this are notoriously difficult to install. If you're on Linux, it might be as simple as @sudo apt-get install imagemagick@ . On OS X, if you have Mac Ports installed, itd just be @sudo port install imagemagick@ . On windows you need to download an copy some EXEs and DLLs. It can be a hassle, which is why we wont do it during this class.
+<%= image_tag @article.image.url(:medium) %>If its so easy, why dont we do it right now? The catch is that paperclip doesnt do the image manipulation itself, it relies on a package called *imagemagick*. Image processing libraries like this are notoriously difficult to install. If you're on Linux, it might be as simple as @sudo apt-get install imagemagick@. On OS X, if you have Mac Ports installed, itd just be @sudo port install imagemagick@. On windows you need to download an copy some EXEs and DLLs. It can be a hassle, which is why we wont do it during this class.
 
 h3. Installing %(caps)HAML% / %(caps)SASS% 
 
 Another plugin that I use in every project is actually two libraries in one. %(caps)HAML% is an alternative templating style to the default %(caps)ERB% (which you've been using, hence all the view templates ending in @.erb@ ). %(caps)SASS% is a library for writing %(caps)CSS% and it makes %(caps)CSS% much, much easier to work with.
 
-Open your @Gemfile@ and add a @gem@ line for the gem @haml@ . Go to your terminal and @bundle@ and it should pull down the gem library for you. Stop (with the red square) then restart (green play button) your server within Eclipse. Both %(caps)HAML% and %(caps)SASS% are installed and ready to use.
+Open your @Gemfile@ and add a @gem@ line for the gem @haml@. Go to your terminal and @bundle@ and it should pull down the gem library for you. Stop (with the red square) then restart (green play button) your server within Eclipse. Both %(caps)HAML% and %(caps)SASS% are installed and ready to use.
 
-Look in Eclipses left navigation pane for the folder @/public/stylesheets/@ . Right click on this folder, click %(caps)NEW% , then %(caps)DIRECTORY% , and name it @sass@ . Then right click on the @sass@ folder, click %(caps)NEW% , %(caps)FILE% , then enter the name @styles.sass@ 
+Look in Eclipses left navigation pane for the folder @/public/stylesheets/@. Right click on this folder, click %(caps)NEW% , then %(caps)DIRECTORY% , and name it @sass@. Then right click on the @sass@ folder, click %(caps)NEW% , %(caps)FILE% , then enter the name @styles.sass@ 
 
 h3. A Few Sass Examples
 
@@ -105,7 +105,7 @@ All the details about Sass can be found here: "http://sass-lang.com/":http://sas
 
 Were not focusing on %(caps)CSS% development, so here are a few styles that you can copy&paste and modify to your hearts content:
 
-!primary_color = #AAA body :background-color = !primary_color :font :family Verdana, Helvetica, Arial :size 14px a :color #0000FF img :border none .clear :clear both :height 0 :overflow hidden #container :width 75% :margin 0 auto :background #fff :padding 20px 40px :border solid 1px black :margin-top 20px #content :clear both :padding-top 20pxBut our application isnt setup to load that stylesheet yet. We need to make a change to our view templates.
+!primary_color = #AAA body :background-color = !primary_color :font :family Verdana, Helvetica, Arial :size 14px a :color #0000FF img :border none.clear :clear both :height 0 :overflow hidden #container :width 75% :margin 0 auto :background #fff :padding 20px 40px :border solid 1px black :margin-top 20px #content :clear both :padding-top 20pxBut our application isnt setup to load that stylesheet yet. We need to make a change to our view templates.
 
 h3. Working with Layouts
 
@@ -113,10 +113,10 @@ Weve created about a dozen view templates between our different models. We _coul
 
 <%= stylesheet_link_tag 'styles' %>Which would find the Sass file we just wrote. Thats a lame job, imagine if we had 100 view templates. What if we want to change the name of the stylesheet later? Ugh.
 
-CFWheels and Ruby both emphasize the idea ofD.R.Y.Dont Repeat Yourself. In the area of view templates, we can achieve this by creating a *layout* . A layout is a special view template that wraps other views. Look in your navigation pane for @/app/views/layouts/@ , right click on that folder, click %(caps)NEW% and %(caps)FILE% then give it the name @application.html.haml@ .
+CFWheels and Ruby both emphasize the idea ofD.R.Y.Dont Repeat Yourself. In the area of view templates, we can achieve this by creating a *layout*. A layout is a special view template that wraps other views. Look in your navigation pane for @/app/views/layouts/@ , right click on that folder, click %(caps)NEW% and %(caps)FILE% then give it the name @application.html.haml@.
 
 In this layout well put the view code that we want to render for every view template in the application. Just so you can see what %(caps)HAML% looks like, Ive used it to implement this layout. you'll notice that %(caps)HAML% uses fewer marking characters than %(caps)ERB% , but you must maintain the proper whitespace/indentation. All indentations are two spaces from the containing element. Add this code to your @application.html.haml@ :
 
-!!! Strict %html %head %title JSBlogger = stylesheet_link_tag 'styles' %body #container #content = yieldNow refresh your article listing page and you should see the styles take effect. Whatever code is in the individual view template gets inserted into the layout where you see the @yield@ . Using layouts makes it easy to add site-wide elements like navigation, sidebars, and so forth.
+!!! Strict %html %head %title JSBlogger = stylesheet_link_tag 'styles' %body #container #content = yieldNow refresh your article listing page and you should see the styles take effect. Whatever code is in the individual view template gets inserted into the layout where you see the @yield@. Using layouts makes it easy to add site-wide elements like navigation, sidebars, and so forth.
 
  * %(caps)NOTE% * : If you dont see any change, look at your server log in Eclipse to see if there were any errors. At first I had a typo in one of the filenames so it wasnt being picked up properly. You might also need to stop&restart your server if you didnt do that after installing the @haml@ gem.
