@@ -2,7 +2,7 @@ h1. Requirements to Participate
 
 h2. Requirements to Participate
 
-There are very few requirements to participate in a JumpstartLab course:
+There are very few requirements to participate in a this course:
 
 * Age
 ** If you're over 18, you're good
