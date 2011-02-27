@@ -64,7 +64,7 @@ Ok, its in there, but we need it to actually show up in the article. Open the @/
 
 h3. Improving the Form
 
-When first working with the edit form I wasnt sure the upload was working because I expected the @file_field@ to display the name of the file that I had already uploaded. Go back to the edit screen in your browser for the article youve been working with. See how it just saysChoose File, no file selectednothing tells the user that a file already exists for this article. Lets add that information in now.
+When first working with the edit form I wasnt sure the upload was working because I expected the @file_field@ to display the name of the file that I had already uploaded. Go back to the edit screen in your browser for the article you've been working with. See how it just saysChoose File, no file selectednothing tells the user that a file already exists for this article. Lets add that information in now.
 
 So open that @/app/views/articles/_form.html.erb@ and look at the paragraph where we added the image upload field. Well add in some new logic that works like this:
 
@@ -93,7 +93,7 @@ as_attached_file :image, :styles =>{ :medium =>"300x300>", :thumb =>"100x100>" }
 
 h3. Installing %(caps)HAML% / %(caps)SASS% 
 
-Another plugin that I use in every project is actually two libraries in one. %(caps)HAML% is an alternative templating style to the default %(caps)ERB% (which youve been using, hence all the view templates ending in @.erb@ ). %(caps)SASS% is a library for writing %(caps)CSS% and it makes %(caps)CSS% much, much easier to work with.
+Another plugin that I use in every project is actually two libraries in one. %(caps)HAML% is an alternative templating style to the default %(caps)ERB% (which you've been using, hence all the view templates ending in @.erb@ ). %(caps)SASS% is a library for writing %(caps)CSS% and it makes %(caps)CSS% much, much easier to work with.
 
 Open your @Gemfile@ and add a @gem@ line for the gem @haml@ . Go to your terminal and @bundle@ and it should pull down the gem library for you. Stop (with the red square) then restart (green play button) your server within Eclipse. Both %(caps)HAML% and %(caps)SASS% are installed and ready to use.
 

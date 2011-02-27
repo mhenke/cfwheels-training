@@ -26,9 +26,9 @@ ColdFusion was released in 95 and it grew an audience quickly in the government 
 
 Rob Cameron founded the ColdFusion on Wheels project in 2005. He still blogs about Ruby, Rails, and open source software on his personal site, Riding the Clutch. Per was the principal developer of ColdFusion on Wheels and helped lead the project to finishing the 1.0 and 1.1 releases. Now Anthony Petruzzi is the principal developer of the Wheels core team. He has a blog called Rip's Domain.
 
-Wheels approach is very different from other ColdFusion frameworks. Wheels was inspired by Ruby on Rails. Rails was extracted from the real world unlike other Java and Microsoft introduced frameworks. Wheeles tried to solve only the necessary problems and defer developing features until they are necessary. The simplicity approach was a big hit and has powered the growth of the Wheels community ever since.
+Wheels approach is very different from other ColdFusion frameworks. Wheels was inspired by Ruby on Rails. Rails was extracted from the real world unlike other Java and Microsoft introduced frameworks. Wheels tried to solve only the necessary problems and defer developing features until they are necessary. The simplicity approach was a big hit and has powered the growth of the Wheels community ever since.
 
-And if you want to learn Wheels, you need to learn CFML first! Here goes
+And if you want to learn Wheels, you need to learn CFML first! Here goes.
 
 h2. 1. Code Syntax & Engines
 
@@ -38,19 +38,43 @@ class Sample def hello puts "Hello, World!" end end s = Sample.new s.hello
 CFML TAG EXAMPLE
 
 Or we could code the program like this:
-SFML SCRIPT EXAMPLE
+CFML SCRIPT EXAMPLE
+
+The code examples will show both examples when useful.
 
 h2. 2. Variables
 
-Everything needs a name so we can refer to it. A variable, like in math, is just a name for a piece of data. In CFML variables are very flexible and can be changed at any time. Variables are assigned using a single equals sign ( @=@ ) where the *right* side of the equals sign is evaluated first, then the value is assigned to the variable named on the *left* side of the equals. Go into %(caps)IRB% , enter in these example instructions, and observe the output that CFML gives you back:
+Everything needs a name so we can refer to it. A variable, like in math, is just a name for a piece of data. In CFML variables are very flexible and can be changed at any time. Variables are assigned using a single equals sign ( = ) where the *right* side of the equals sign is evaluated first, then the value is assigned to the variable named on the *left* side of the equals. Go into a cfml file , enter in these example instructions, and observe the output that CFML gives you back:
 
-a = 5 b = 10 + 5 c = 15 + a + b b = c - a d = "Hello, " e = "World!" f = d + e g = d*a + e b = "hi!" * bThe first few lines are simple if youve worked with any programming language before, but the last few get interesting when combining strings and numbers.
+<cfscript>
+a = 5;
+b = 10 + 5;
+c = 15 + a + b;
+b = c - a;
+d = "Hello, ";
+e = "World!";
+f = d & e;
+g = d & a & e;
+b = "hi!";
+</cfscript>
+
+<cfoutput>
+	a = #a#<br/>
+	b = #b#<br/>
+	c = #c#<br/>
+	d = #d#<br/>
+	e = #e#<br/>
+	f = #f#<br/>
+	g = #g#<br/>
+</cfoutput>
+
+*The first few lines are simple if you've kind with any programming language before, but the last few get interesting when combining strings and numbers.
 
 h2. 3. Objects, Attributes, and Methods
 
-In CFML, everything is an object. Objects know information, called _attributes_ , and they can do actions, called _methods_ .
+In CFML, cfc is an object. Objects know information, called attributes , and they can do actions, called methods.
 
-For an example of an object, think about you as a human being. You have attributes like height, weight, and eye color. You have methods likewalk,run,wash dishes, anddaydream.Different kinds of objects have different attributes and methods. In the next sections well look at a few specific kinds of objects common in CFML.
+For an example of an object, think about you as a human being. You have attributes like height, weight, and eye color. You have methods like walk, run, wash dishes, and daydream. Different kinds of objects have different attributes and methods. In the next sections well look at a few specific kinds of objects common in CFML.
 
 In CFML we define an object using the @class@ keyword, heres an example defining the object type @PersonalChef@ :
 
@@ -58,7 +82,7 @@ class PersonalChef endInside the class we usually define one or more methods usi
 
 class PersonalChef def make_toast puts "Making your toast!" end endInside the @def@ and @end@ lines wed put the instructions for how the chef should make the toast.
 
-A class is an *abstract* idea, it defines what all objects of that type can know and do. Think of the chair you're sitting in. Its not an abstract chair, it is an actual chair. Wed call this actual chair an *instance* it is a realization of the idea chair. It has measurable attributes like height, color, weight. The *class* chair, on the other hand, has an abstract weight, color, and sizewe cant determine them ahead of time.
+A class is an *abstract* idea, it defines what all objects of that type can know and do. Think of the chair you're sitting in. Its not an abstract chair, it is an actual chair. Wed call this actual chair an *instance* it is a realization of the idea chair. It has measurable attributes like height, color, weight. The *class* chair, on the other hand, has an abstract weight, color, and size we can't determine them ahead of time.
 
 Once we define a class, we create an @instance@ of that class like this:
 
@@ -93,12 +117,6 @@ That should work just like it did before when we ran it in %(caps)IRB% . Now let
 def make_eggs(quantity) puts "Making you #{quantity} eggs!" return self endSave the file in your editor. Then we need to tell CFML to re-read the file. We can do that with this instruction in %(caps)IRB% :
 
 load 'personal_chef.rb'Now try calling @frank.make_eggs(6)@ and it should work.
-
-h3. Method Chaining
-
-Often well want to call multiple methods on an object one after the otherthis is called _method chaining_ . Still thinking about @frank@ , we might want to call @make_toast@ and @make_eggs@ one after the other. We can call multiple methods by using the format @object.method1.method2.method3@ . So for this example, we might say:
-
-frank.make_toast("burned").make_eggs(6)To read that in Engish, were telling @frank@ to @make_toast@ with the parameter @burned@ , then _after that is completed_ telling him to @make_eggs@ with the parameter @6@ . Try it in your %(caps)IRB% and make sure it works!
 
 h2. 4. Strings
 
@@ -240,7 +258,7 @@ def countdown(counter) until counter == 0 puts "The counter is #{counter}" count
 
 You can also combine conditional statements using logical operators. The most common are known aslogical andandlogical or. In CFML you can write a logical and with either the work @and@ or with double ampersands like this: @&&@ . You can write a logical or with the word @or@ or with double pipes like this: @||@ . For each operation, the symbolic representation ( @&&@ and @||@ ) is more common.
 
-h2. 9. Nil&Nothingness
+h2. 9. Nulls & Nothingness
 
 What is nothingness? Is there nothingness only in outer space? Really, when we think ofnothingisnt it just the absence of something? Ok, thats too much philosophy
 
