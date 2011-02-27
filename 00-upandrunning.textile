@@ -4,25 +4,26 @@ Part of the reason ColdFusion on Wheels became popular quickly is that it takes 
 
 h3. Setting the Stage
 
-First we need to make sure everything is setup and installed. See the "00-c-preparation.textile" page for instructions on setting up and verifying your ColdFusion, CFWheels, and add-ons.
+First we need to make sure everything is setup and installed. See the "00-c-preparation.textile" page for instructions on setting up and verifying your ColdFusion, CFWheels, MySql, and add-ons.
 
-With that done we need to create new project in Eclipse. Open Eclipse and...
+With that done we need to load our tables into MySql
+
+h4. Open MySql Workbench and...
+
+* Load and run the sql jsblogger.sql
+** Verify the new tables are present
+
+h4. Open Eclipse and...
 
 * Click "Create a New Project"
 ** Project name: JSBlogger
-** Location: Choose a folder where you want to save your project -- and remember it!
+** Location: C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\railo
 ** Project type: CFEclipse application
 ** Click OK
 
-Eclipse will then create a CFWheels application for you and automatically open the file xxxSQLxxx.SQL. If you were connecting to an existing database you would enter the database configuration parameters here. Since we're using MySQL and starting from scratch, we can leave the defaults. CFWheels will automatically create our database for us.
-
-Then go to the RUN menu in the menubar and click RUN. The first time you do this it'll display the Run/Debug Configurations window. The defaults are all fine, but I enable the @Run Browser@ checkbox near the bottom to automatically open the site in my default browser. You can UNCHECK the @Display settings before launching@ checkbox, if present, then hit RUN. 
-
-You should then see the @server@ window open at the bottom of Eclipse with your Mongrel webserver starting up. Once it's started Eclipse will open your default browser. If it doesn't open for some reason, try loading the address "http://localhost:3000/":http://localhost:3000. You should see CFWheels' "Welcome Aboard" page. Click the "About your application's environment" link and it'll display the versions of all your installed components.
-
 h3. Creating the Article Model
 
-Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our CFWheels app to work with that data. We'll use one of CFWheels' generators to create the required files. Switch to your terminal and enter the following:
+Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our CFWheels app to work with that data. We'll the required files for our application. Switch to Eclipse and enter the following:
 
 <pre class="console">
 cd JSBlogger
