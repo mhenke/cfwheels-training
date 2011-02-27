@@ -2,7 +2,7 @@ h1.
 
 CFML is a great language for beginners because it was written to make the programmers job easy and not care if the computer's job is hard. In this brief introduction well look at the key language features you need to get started.
 
-# Instructions and Engines
+# Syntax and Engines
 # Variables
 # Methods
 # Strings
@@ -11,8 +11,8 @@ CFML is a great language for beginners because it was written to make the progra
 # Arrays
 # Structures
 # Conditionals
-# Conditional Decisions
-# Conditional Looping
+## Conditional Decisions
+## Conditional Looping
 # Nulls & Nothingness
 
 h2. CFML History
@@ -267,9 +267,9 @@ h2. 9. Nulls & Nothingness
 
 What is nothingness? Is there nothingness only in outer space? Really, when we think of nothing isnt it just the absence of something? Ok, thats too much philosophy
 
-ColdFusion does not have a way of referring to nothingness. However, ColdFusion can recieve a NULL from an external source. ColdFusion will maintain the NULL value until you use it. Then ColdFusion will convert the NULL into an empty string.
+ColdFusion does not have a way of referring to nothingness. However, ColdFusion can recieve a NULL value from an external source. ColdFusion will maintain the NULL value until you use it. Then ColdFusion will convert the NULL into an empty string.
 
-If you have three eggs, eat three eggs, then you might think you havenothing, but in terms of eggs you have0. Zero is something, its a number, and its not nothing.
+If you have three eggs, eat three eggs, then you might think you have nothing, but in terms of eggs you have0. Zero is something, its a number, and its not nothing.
 
 
 A large percentage of the errors you encounter while writing CFML code will involvea variable not existing . You thought something was there, you tried to do something to it, and you can't do something to nothing so CFML creates an error. Lets rewrite our @make_eggs@ method to illustrate @nil@ :
