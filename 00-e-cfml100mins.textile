@@ -25,7 +25,7 @@ And if you want to learn CFML, here goes!
 
 h2. 1. Code Syntax & Engines
 
-There are two ways to write CFML code. You can use the tag or script syntax. You will write one or more instructions in a file then run that file through the CFML engine. We might have a file named my_program.cfm like this:
+There are two ways to write CFML code. You can use the tag or script syntax. For the examples, please focus on one or the other so this tutorial is not confusing. You will write one or more instructions in a file then run that file through the CFML engine. We might have a file named my_program.cfm like this:
 
 @class Sample def hello puts "Hello, World!" end end s = Sample.new s.hello@
 TODO: CFML TAG EXAMPLE
