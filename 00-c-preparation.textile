@@ -10,20 +10,20 @@ h4. Install Tomcat
 ** Download and install "32-bit/64-bit Windows Service Installer":http://www.trieuvan.com/apache/tomcat/tomcat-7/v7.0.8/bin/apache-tomcat-7.0.8.exe
 ** Test at "http://localhost:8080/":http://localhost:8080/
 
-h4. Install Railo
+h4. Install Adobe ColdFusion 9
 
-* Railo
-** Download and install "http://www.getrailo.org/down.cfm?item=/railo/remote/download/3.2.1.000/custom/all/railo-3.2.1.000.war":http://www.getrailo.org/down.cfm?item=/railo/remote/download/3.2.1.000/custom/all/railo-3.2.1.000.war
-** Rename railo-3.2.1.000.war to railo.war
-** Copy railo.war to "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\"
-** Test at "http://localhost:8080/railo/":http://localhost:8080/railo/
+* Adobe ColdFusion 9
+** Download and install "http://www.adobe.com/products/coldfusion/":http://www.adobe.com/products/coldfusion/ as a war
+** Rename cfusion.war to cf9.war
+** Copy cf9.war to "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\"
+** Test at "http://localhost:8080/cf9/":http://localhost:8080/cf9/
 
 h4. Install CFWheels
 
 * CFWheels
 ** Download "http://cfwheels.org/download/latest-version":http://cfwheels.org/download/latest-version
-** Extract and copy the file to "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\railo"
-** Test at "http://localhost:8080/railo/":http://localhost:8080/railo/
+** Extract and copy the file to "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9"
+** Test at "http://localhost:8080/cf9/":http://localhost:8080/cf9/
 
 h4. Install MySQL Server
 
