@@ -21,7 +21,7 @@ CFML (ColdFusion Markup Language) is thought of by many as an old programming la
 
 ColdFusion was released in 95 and it grew an audience quickly in the government and public sector. CFML tag syntax resembles HTML and its script syntax resembles JavaScript.
 
-And if you want to learn CFML first! Here goes.
+And if you want to learn CFML, here goes!
 
 h2. 1. Code Syntax & Engines
 
