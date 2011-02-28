@@ -41,9 +41,9 @@ h4. Install MySQL Workbench
 h4. Install Eclipse
 
 * Windows
-** Download and install "http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/helios/SR2/eclipse-java-helios-SR2-win32.zip":http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/helios/SR2/eclipse-java-helios-SR2-win32.zip
+** Download and extract "http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/helios/SR2/eclipse-java-helios-SR2-win32.zip":http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/helios/SR2/eclipse-java-helios-SR2-win32.zip
 
-h4. Install CFEclipse
+h4. Install ColdFusion Builder
 
 * Windows
-** Update Site "http://cfeclipse.org/update":http://cfeclipse.org/update
+** Download and install as a plugin "http://www.adobe.com/products/coldfusion/cfbuilder/features/":http://www.adobe.com/products/coldfusion/cfbuilder/features/
