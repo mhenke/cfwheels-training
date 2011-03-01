@@ -273,5 +273,5 @@ If you have three eggs, eat three eggs, then you might think you have nothing, b
 
 A large percentage of the errors you encounter while writing CFML code will involve a variable not existing. You thought something was there, you tried to do something to it, and you can't do something to nothing so CFML creates an error. Lets rewrite our @make_eggs@ method to illustrate @nil@ :
 
-REWRITE ISDEFINED()
+TODO: REWRITE ISDEFINED()
 def make_eggs(quantity) if quantity.nil? puts "How am I supposed to make nothingness number of eggs?" else puts "Making your #{quantity} eggs!" quantity.times do puts "Making an Egg." end end return self endReload the file, call @frank.make_eggs(3)@ then try @frank.make_eggs(nil)@. The only method we can rely on @nil@ executing is @.nil?@ , pretty much anything else will create an error.
