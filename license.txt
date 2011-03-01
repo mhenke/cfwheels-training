@@ -1,5 +1,0 @@
-License
-These works were created by Jeff Casimir (jeff@jumpstartlab.com) and Jumpstart Lab (http://jumpstartlab.com). 
-They are licensed Attribution-Noncommercial-Share Alike 3.0. If they are useful to you please drop me an email!
-
-Modified for ColdFusion On Wheels by Mike Henke (henke.mike@gmail.com).

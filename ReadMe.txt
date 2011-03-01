@@ -1,2 +1,0 @@
-Introducing Wheels
-ColdFusion on Wheels is a powerful web application framework that has become popular in the past few years. It is relatively easy to develop with and can be used for simple sites like xxxx.xxx, or gigantic ones like xxxx.xxx and xxxx.xxx. You’ll spend the two days working through a single concept, going from an idea to a finished product.
