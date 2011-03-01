@@ -19,10 +19,14 @@ You'll spend the two days working through a single concept by creating a simple 
 
 h2. License
 
-These works were created by Jeff Casimir (jeff@jumpstartlab.com) and "Jumpstart Lab":http://jumpstartlab.com . They are licensed "Attribution-Noncommercial-Share Alike 3.0":http://creativecommons.org/licenses/by-nc-sa/3.0/us/ . If they are useful to you please drop me an email!
+These works were created by Jeff Casimir (jeff@jumpstartlab.com) and "Jumpstart Lab":http://jumpstartlab.com . They are licensed "Attribution-Noncommercial-Share Alike 3.0":http://creativecommons.org/licenses/by-nc-sa/3.0/us/ . If they are useful to you please drop him an email!
 
 h2. Contributors 
 
 Please add yourself if you helped
 
 Mike Henke (henke.mike@gmail.com) - https://github.com/mhenke/CFML-in-100-minutes
+
+h2. Git Workflow for Contributors
+
+This project uses the excellent "Git Workflow series":http://www.silverwareconsulting.com/index.cfm/Git-Workflow/ by "Bob Silverburg":https://github.com/bobsilverberg/ for contributions.
