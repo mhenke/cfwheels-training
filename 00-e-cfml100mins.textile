@@ -196,7 +196,7 @@ An *array* is a number-indexed list. Picture a city block of houses. Together th
 
 favorite_colors = ["red","blue","green","black","brown"] puts favorite_colors[3] puts favorite_colors.first puts favorite_colors.lastKeep going with these, but note that the first line below should give you some unusual output. Try and understand what CFML is telling you:
 
-puts favorite_colors[5] favorite_colors<<"orange" puts favorite_colors[5] puts favorite_colorsIn order to get a specific element in the array you use the syntax @arrayname[index]@. So looking at the @favorite_colors@ array
+puts favorite_colors[5] favorite_colors <<"orange" puts favorite_colors[5] puts favorite_colorsIn order to get a specific element in the array you use the syntax @arrayname[index]@. So looking at the @favorite_colors@ array
 
 * Whats the index of @"brown"@ ?
 * Why did the fifth line of the example give you @nil@ ? (For more discussion of @nil@ , check out the very end of this document).
