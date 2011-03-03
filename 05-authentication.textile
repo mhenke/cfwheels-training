@@ -8,7 +8,7 @@ So, instead, well use the most common authentication plugin, "restful_authentica
 
 h3. Installing restful_authentication
 
-In the previous iteration we installed libraries using RubyGems. This is the preferred way of managing plugins, but restful_authentication isnt available through RubyGems. Well have to use the older method of installing a plugin.
+In the previous iteration we installed libraries using RubyGems. This is the preferred way of managing plugins, but restful_authentication isn't available through RubyGems. Well have to use the older method of installing a plugin.
 
 At your terminal, enter the following:
 
@@ -30,13 +30,13 @@ rake db:migrateh3. Creating a First Account
 
 First, stop then restart your server in Eclipse to make sure its picked up the plugin. Then go to @http://localhost:3000/users/new@ and the new user form should popup.
 
-Go ahead and create yourself an account. If you're successful it will just bounce you to the @http://localhost:3000/@ root page. There isnt any information about our login status in our views, though, so its hard to tell if were really logged in.
+Go ahead and create yourself an account. If you're successful it will just bounce you to the @http://localhost:3000/@ root page. There isn't any information about our login status in our views, though, so its hard to tell if were really logged in.
 
 Lets open @/app/views/layouts/application.html.haml@ and add a little footer so the whole @%body%@ chunk looks like this:
 
 %body #container #content = yield %hr %h6 - if current_user = "Logged in as #{current_user.login}" = link_to "(logout)", logout_path - else = link_to "(login)", login_pathThe go to @http://localhost:3000/articles/@ and you'll get this error:
 
-NameError in Articles#index Showing app/views/layouts/application.html.haml where line #14 raised: undefined local variable or method `current_user' for #<ActionView::Base:0x103147400>We tried to use the @current_user@ helper that comes with the restful_authentication plugin, but CFWheels isnt recognizing it. We need to do one more setup step. Open @/app/controllers/application_controller.rb@ , and underneath the @protect_from_forgery@ line, add this: @include AuthenticatedSystem@.
+NameError in Articles#index Showing app/views/layouts/application.html.haml where line #14 raised: undefined local variable or method `current_user' for #<ActionView::Base:0x103147400>We tried to use the @current_user@ helper that comes with the restful_authentication plugin, but CFWheels isn't recognizing it. We need to do one more setup step. Open @/app/controllers/application_controller.rb@ , and underneath the @protect_from_forgery@ line, add this: @include AuthenticatedSystem@.
 
 Now refresh your browser and your articles list should come up along with the new footer at the bottom.
 
@@ -52,7 +52,7 @@ match '/' =>'articles#index'Now visit @http://localhost:3000@ and you should see
 
 h3. Securing New Users
 
-It looks like we can create a new user, but right away I want to make some changes. Were just going to use one layer of security for the appa user who is logged in has access to all the commands and pages, while a user who isnt logged in can only post comments and try to login. But that scheme will breakdown if just anyone can go to this %(caps)URL% and create an account, right?
+It looks like we can create a new user, but right away I want to make some changes. Were just going to use one layer of security for the appa user who is logged in has access to all the commands and pages, while a user who isn't logged in can only post comments and try to login. But that scheme will breakdown if just anyone can go to this %(caps)URL% and create an account, right?
 
 Lets add in a protection scheme like this to the new users form:
 

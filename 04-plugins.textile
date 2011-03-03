@@ -10,7 +10,7 @@ Most CFWheels plugins are now moving toward RubyGems. RubyGems is a package mana
 
 Lets see it in action. If you have your server running in Eclipse, click the red square button to %(caps)STOP% it. If you have a console session open, type @exit@ to exit. Then open up @/Gemfile@ and look for the lines like this:
 
-# gem 'bj' # gem 'nokogiri' # gem 'MySQL-ruby', :require =>'MySQL'These lines are commented out because they start with the @#@ character. By specifying a RubyGem with the @gem@ command, well tell the CFWheels applicationMake sure this gem is loaded when you start up. If it isnt available, freak out!Here's how well require the paperclip gem, add this near those commented lines:
+# gem 'bj' # gem 'nokogiri' # gem 'MySQL-ruby', :require =>'MySQL'These lines are commented out because they start with the @#@ character. By specifying a RubyGem with the @gem@ command, well tell the CFWheels applicationMake sure this gem is loaded when you start up. If it isn't available, freak out!Here's how well require the paperclip gem, add this near those commented lines:
 
 gem "paperclip"When you're writing a production application, you might specify additional parameters that require a specific version or a custom source for the library. With that config line declared, click the green arrow in Eclipse to startup your server. You should get an error like this:
 
@@ -48,7 +48,7 @@ In the very first line, we need to specify that this form needs to acceptmultipa
 
 <p><%= f.label :image, "Attach an Image" %><br /><%= f.file_field :image %></p>h3. Trying it Out
 
-If your server isnt running, start it up with the green play button in Eclipse. Then go to @http://localhost:3000/articles/@ and click %(caps)EDIT% for your first article. The file field should show up towards the bottom. Click the @Choose a File@ and select one of the small images that Ive distributed to you. Click %(caps)SAVE% and you'll return to the article index. Click the title of the article you just modified. What do you see? Did the image attach to the article?
+If your server isn't running, start it up with the green play button in Eclipse. Then go to @http://localhost:3000/articles/@ and click %(caps)EDIT% for your first article. The file field should show up towards the bottom. Click the @Choose a File@ and select one of the small images that Ive distributed to you. Click %(caps)SAVE% and you'll return to the article index. Click the title of the article you just modified. What do you see? Did the image attach to the article?
 
 When I first did this, I wasn't sure it worked. Here's how I checked:
 
@@ -105,7 +105,7 @@ All the details about Sass can be found here: "http://sass-lang.com/":http://sas
 
 Were not focusing on %(caps)CSS% development, so here are a few styles that you can copy&paste and modify to your hearts content:
 
-!primary_color = #AAA body :background-color = !primary_color :font :family Verdana, Helvetica, Arial :size 14px a :color #0000FF img :border none.clear :clear both :height 0 :overflow hidden #container :width 75% :margin 0 auto :background #fff :padding 20px 40px :border solid 1px black :margin-top 20px #content :clear both :padding-top 20pxBut our application isnt setup to load that stylesheet yet. We need to make a change to our view templates.
+!primary_color = #AAA body :background-color = !primary_color :font :family Verdana, Helvetica, Arial :size 14px a :color #0000FF img :border none.clear :clear both :height 0 :overflow hidden #container :width 75% :margin 0 auto :background #fff :padding 20px 40px :border solid 1px black :margin-top 20px #content :clear both :padding-top 20pxBut our application isn't setup to load that stylesheet yet. We need to make a change to our view templates.
 
 h3. Working with Layouts
 
