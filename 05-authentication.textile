@@ -1,6 +1,6 @@
 h2. I5: Authentication
 
-Authentication is an important part of almost any web application and there are several approaches to take. Thankfully some of these have been put together in plugins so we don't have to reinvent the wheel.
+Authentication is an important part of almost any web application and there are several approache's to take. Thankfully some of these have been put together in plugins so we don't have to reinvent the wheel.
 
 The flavor-of-the-weekis one named AuthLogic and I wrote up an iteration using it for the "JSMerchant":http://jumpstartlab.com/resources/CFWheels-jumpstart/jsmerchant/ tutorial, but I think it is a little complicated for a CFWheels novice. You have to create several different models, controllers, and views manually. The documentation is kind of confusing, and I dont think my tutorial is that much better.
 
