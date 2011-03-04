@@ -83,13 +83,13 @@ Now our articles can have an image and all the hard work was handled by papercli
 
 h3. Further Notes about Paperclip
 
-Yes, a model (in our case an article) could have many attachments instead of just one. To accomplish this youd create a new model, lets call itAttachment, where each instance of the model can have one file using the same fields we put into Article above as well as an @article_id@ field. The Attachment would then @belong_to@ an article, and an article would @have_many@ attachments.
+Yes, a model (in our case an article) could have many attachments instead of just one. To accomplish this you'd create a new model, lets call itAttachment, where each instance of the model can have one file using the same fields we put into Article above as well as an @article_id@ field. The Attachment would then @belong_to@ an article, and an article would @have_many@ attachments.
 
-Paperclip supports automatic image resizing and its easy. In your model, youd add an option like this:
+Paperclip supports automatic image resizing and its easy. In your model, you'd add an option like this:
 
 as_attached_file :image, :styles =>{ :medium =>"300x300>", :thumb =>"100x100>" }This would automatically create amediumsize where the largest dimension is 300 pixels and athumbsize where the largest dimension is 100 pixels. Then in your view, to display a specific version, you just pass in an extra parameter like this:
 
-<%= image_tag @article.image.url(:medium) %>If its so easy, why dont we do it right now? The catch is that paperclip doesnt do the image manipulation itself, it relies on a package called *imagemagick*. Image processing libraries like this are notoriously difficult to install. If you're on Linux, it might be as simple as @sudo apt-get install imagemagick@. On OS X, if you have Mac Ports installed, itd just be @sudo port install imagemagick@. On windows you need to download an copy some EXEs and DLLs. It can be a hassle, which is why we wont do it during this class.
+<%= image_tag @article.image.url(:medium) %>If its so easy, why dont we do it right now? The catch is that paperclip doesnt do the image manipulation itself, it relies on a package called *imagemagick*. Image processing libraries like this are notoriously difficult to install. If you're on Linux, it might be as simple as @sudo apt-get install imagemagick@. On OS X, if you have Mac Ports installed, it'd just be @sudo port install imagemagick@. On windows you need to download an copy some EXEs and DLLs. It can be a hassle, which is why we wont do it during this class.
 
 h3. Installing %(caps)HAML% / %(caps)SASS% 
 
