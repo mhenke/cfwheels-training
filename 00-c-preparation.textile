@@ -37,15 +37,29 @@ h4. Install MySQL Server
 * Windows
 ** Download and install "http://dev.mysql.com/downloads/mirror.php?id=401202":http://dev.mysql.com/downloads/mirror.php?id=401202 
 
-
 h3. Client Tools
-
-h4. Install MySQL Workbench
-
-* Windows
-** Download and install "http://dev.mysql.com/downloads/mirror.php?id=398176":http://dev.mysql.com/downloads/mirror.php?id=398176 
 
 h4. Install ColdFusion Builder
 
 * Windows
 ** Download and install as standalone "http://www.adobe.com/products/coldfusion/cfbuilder/features/":http://www.adobe.com/products/coldfusion/cfbuilder/features/
+
+h4. Install SQL Explorer
+
+** Edit MySql driver http://www.sqlexplorer.org/drivers.php
+http://eclipsesql.sourceforge.net/
+
+Extra Class Path tab - Add JARs button
+Driver Class Name:
+
+** "JDBC Driver for MySQL (Connector/J)":http://www.mysql.com/downloads/connector/j/
+
+** Add connection
+
+NameL JSBloggers
+Driver: MySQL
+URL: jdbc:mysql://localhost:3306/
+
+** Create Database
+
+Steps
