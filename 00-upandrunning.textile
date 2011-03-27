@@ -1,4 +1,4 @@
-I0: Up and Running
+h2. I0: Up and Running
 
 Part of the reason ColdFusion on Wheels became popular quickly is that it takes a lot of the hard work off your hands, and that's especially true in starting up a project. CFWheels practices the idea of "sensible defaults" and tries to, with one command, create a working application ready for your customization.
 
