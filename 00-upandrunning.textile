@@ -26,7 +26,7 @@ You should then see the @server@ window open at the bottom of Eclipse with your 
 
 h3. Creating the Article Model
 
-Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our CFWheels app to work with that data. We'll use one of CFWheels' generators to create the required files. Switch to your terminal and enter the following:
+Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our CFWheels app to work with that data. We'll use one of CFWheels' DBMigrate to create the required files. Switch to your terminal and enter the following:
 
 <pre class="console">
 cd JSBlogger
@@ -44,7 +44,7 @@ With those files in place we can start developing!
 
 h3. Working with the Database
 
-CFWheels uses migration files to perform modifications to the database. Almost any modification you can make to a DB can be done through a migration. The killer feature about CFWheels migrations is that they're generally database agnostic. When developing applications I usually use MySQL as we are in this tutorial, but when I deploy to my server it is running PostgreSQL. Many others choose MySQL. It doesn't matter -- the same migrations will work on all of them!  This is an example of how CFWheels takes some of the painful work off your hands. You write your migrations once, then run them against almost any database.
+CFWheels can uses migration files to perform modifications to the database with DBMigrate. Almost any modification you can make to a DB can be done through a migration. The killer feature about CFWheels migrations is that they're generally database agnostic. When developing applications I usually use MySQL as we are in this tutorial, but when I deploy to my server it is running PostgreSQL. Many others choose MySQL. It doesn't matter -- the same migrations will work on all of them!  This is an example of how CFWheels takes some of the painful work off your hands. You write your migrations once, then run them against almost any database.
 
 What is a migration?  Let's open @/db/migrate/(some_time_stamp)_create_articles.rb@ and take a look. First you'll notice that the filename begins with a mish-mash of numbers which is a timestamp of when the migration was created. Migrations need to be ordered, so the timestamp serves to keep them in chronologic order. Inside the file, you'll see two methods: @self.up@ and @self.down@.
 
@@ -59,15 +59,25 @@ That's it! You might be wondering, what is the "text" type?  This is an example 
 
 So add these into your @self.up@ so it looks like this:
 
-<pre class="brush:ruby;">
-  def self.up
-    create_table :articles do |t|
-      t.string :title
-      t.text :body
-
-      t.timestamps
-    end
-  end
+<pre>
+<code>
+<cfcomponent extends="plugins.dbmigrate.Migration" hint="creates articles table">
+  <cffunction name="up">
+    <cfscript>
+    t = createTable('articles');
+    t.string('title');
+    t.text('body');
+    t.timestamps();
+    t.create();
+    </cfscript>
+  </cffunction>
+  <cffunction name="down">
+    <cfscript>
+    dropTable('articles');
+    </cfscript>
+  </cffunction>
+</cfcomponent>
+</code>
 </pre>
 
 What is that @t.timestamps@ doing there?  The generator inserted that line. It will create two columns inside our table titled @created_at@ and @updated_at@. CFWheels will manage these columns for us, so when an article is created it's @created_at@ and @updated_at@ are automatically set. Each time we make a change to the article, the @updated_at@ will automatically be...uhhh...updated. Very handy.
@@ -85,10 +95,10 @@ This command starts the @rake@ program which is a ruby utility for running maint
 In this case we had just one migration to run and it should print some output like this to your terminal:
 
 <pre class="console">
-==  CreateArticles: migrating =================================================
--- create_table(:articles)
-   -> 0.0012s
-==  CreateArticles: migrated (0.0013s) ========================================
+Migrating from 0 up to 20110326210512.
+
+-------- 20110326210512_creates_articles_table -------------
+Created table articles
 </pre>
 
 It tells you that it is running the migration named @CreateArticles@. And the "migrated" line means that it completed without errors. As I said before, rake keeps track of which migrations have and have not been run. Try running @rake db:migrate@ again now, and see what happens.

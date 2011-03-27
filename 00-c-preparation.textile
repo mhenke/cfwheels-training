@@ -1,4 +1,4 @@
-h1. Preparation for CFWheels Projects
+h1. Preparation for JSBloggers Project
 
 There are a few extra steps of preparation when working with CFWheels projects:
 
@@ -18,12 +18,19 @@ h4. Install Adobe ColdFusion 9
 ** Copy cf9.war to "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\"
 ** Test at "http://localhost:8080/cf9/":http://localhost:8080/cf9/
 
-h4. Install CFWheels
+h4. Install ColdFusion on Wheels
 
-* CFWheels
+* ColdFusion on Wheels
 ** Download "http://cfwheels.org/download/latest-version":http://cfwheels.org/download/latest-version
 ** Extract and copy the file to "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9"
 ** Test at "http://localhost:8080/cf9/":http://localhost:8080/cf9/
+
+h4. Install DBMigrate Plugin
+
+* DBMigrate
+** Download "http://code.google.com/p/cfwheels-dbmigrate/":http://code.google.com/p/cfwheels-dbmigrate/
+** Move the downloaded zip into "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9\plugins"
+** Reload CFWheels "http://localhost:8080/cf9/":http://localhost:8080/cf9/
 
 h4. Install MySQL Server
 
@@ -38,12 +45,7 @@ h4. Install MySQL Workbench
 * Windows
 ** Download and install "http://dev.mysql.com/downloads/mirror.php?id=398176":http://dev.mysql.com/downloads/mirror.php?id=398176 
 
-h4. Install Eclipse
-
-* Windows
-** Download and extract "http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/helios/SR2/eclipse-java-helios-SR2-win32.zip":http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/helios/SR2/eclipse-java-helios-SR2-win32.zip
-
 h4. Install ColdFusion Builder
 
 * Windows
-** Download and install as a plugin "http://www.adobe.com/products/coldfusion/cfbuilder/features/":http://www.adobe.com/products/coldfusion/cfbuilder/features/
+** Download and install as standalone "http://www.adobe.com/products/coldfusion/cfbuilder/features/":http://www.adobe.com/products/coldfusion/cfbuilder/features/
