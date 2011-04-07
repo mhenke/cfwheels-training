@@ -31,6 +31,15 @@ h4. Install DBMigrate Plugin
 ** Download "http://code.google.com/p/cfwheels-dbmigrate/":http://code.google.com/p/cfwheels-dbmigrate/
 ** Move the downloaded zip into "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9\plugins"
 ** Reload CFWheels "http://localhost:8080/cf9/":http://localhost:8080/cf9/
+** You should see DBMigrate under Plugins
+
+h4. Install Scaffold Plugin
+
+* Scaffold
+** Download "http://cfwheels.org/plugins/listing/9":http://cfwheels.org/plugins/listing/9
+** Move the downloaded zip into "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9\plugins"
+** Reload CFWheels "http://localhost:8080/cf9/":http://localhost:8080/cf9/
+** You should see Scaffold under Plugins
 
 h4. Install MySQL Server
 

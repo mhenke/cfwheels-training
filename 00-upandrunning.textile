@@ -8,52 +8,44 @@ First we need to make sure everything is setup and installed. See the "Preparati
 
 With that done we need to create new project in Eclipse. Open Eclipse and...
 
-* Click "Create a New Project"
-** Project name: JSBlogger
-** Location: Choose a folder where you want to save your project -- and remember it!
-** Project type: CFWheels application
-** Click OK
-** Ruby Interpreter should be 1.8.6 or 1.8.7
-** CFWheels Version should be 2.3.3 or greater
-** Click @Preconfigure for selected database@ and select @MySQL@
-** Click OK
+* File --> New (Alt+Shift+N) --> ColdFusion Project
+** Project Name: JSBlogger
+** Uncheck Use Default Location in Project Location put "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9"
+** Click Finish
 
-Eclipse will then create a CFWheels application for you and automatically open the file @database.yml@. If you were connecting to an existing database you would enter the database configuration parameters here. Since we're using MySQL and starting from scratch, we can leave the defaults. CFWheels will automatically create our database for us.
+Eclipse will then create a ColdFusion project for you and automatically open the project.
 
-Then go to the RUN menu in the menubar and click RUN. The first time you do this it'll display the Run/Debug Configurations window. The defaults are all fine, but I enable the @Run Browser@ checkbox near the bottom to automatically open the site in my default browser. You can UNCHECK the @Display settings before launching@ checkbox, if present, then hit RUN. 
+Using ColdFusion Builder's Server view, we can add the our ColdFusion server. Open up the Servers view (Window - Show Views - Servers). In the Server view, click the add server icon. In the New ColdFusion Server Setup window, add JSBlogger in the Server Name, Other in Application Server, localhost in Host Name, select Is Local, 8080 in WebServer Port, and select Next. In the Document Root, add "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9" and then click Finish.
 
-You should then see the @server@ window open at the bottom of Eclipse with your Mongrel webserver starting up. Once it's started Eclipse will open your default browser. If it doesn't open for some reason, try loading the address "http://localhost:3000/":http://localhost:3000. You should see CFWheels' "Welcome Aboard" page. Click the "About your application's environment" link and it'll display the versions of all your installed components.
+You should then see the @JSBloggers@ server in the Servers view. If it isn't Running, please start Tomcat. Once it's started, try loading the address "http://localhost:8080/cf9":http://localhost:8080/cf9. You should see CFWheels' "Congratulations!" page. Scroll down and the Wheels debugging section displays the Wheels version, CFML Engine version along with other useful information.
 
 h3. Creating the Article Model
 
-Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our CFWheels app to work with that data. We'll use one of CFWheels' DBMigrate to create the required files. Switch to your terminal and enter the following:
+Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our CFWheels app to work with that data. We'll use one of CFWheels' plugins called Scaffolding to create the required file. Click the Scaffold link in the Wheels Debuggins section. Then type article for the Object name and select Model for Type. We'll leave the Template as default and click Generate. The page should refresh and "*File 'models/Article.cfc*' created." should appear.
 
-<pre class="console">
-cd JSBlogger
-ruby script/generate model Article
-</pre>
+* TODO: Should a mapping be created called cf9 to "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9"
 
-We're running the @generate@ script, telling it to create a @model@, and naming that model @Article@. From that information, CFWheels creates the following files:
 
-* @/app/models/article.rb@ : The file that will hold the model code
-* @/test/unit/article_test.rb@ : A file to hold unit tests for @Article@
-* @/test/fixtures/articles.yml@ : A fixtures file to assist with unit testing
-* @/db/migrate/(some_time_stamp)_create_articles.rb@ : A database migration to create the @articles@ table
+We used the @scaffold@ plugin, telling it to create a @model@, and naming that model @Article@. From that information, the plugin creates the following files:
 
-With those files in place we can start developing!
+* @/models/Article.cfc@ : The file that will hold the model code
+
+With this file in place we can start developing!
 
 h3. Working with the Database
 
-CFWheels can uses migration files to perform modifications to the database with DBMigrate. Almost any modification you can make to a DB can be done through a migration. The killer feature about CFWheels migrations is that they're generally database agnostic. When developing applications I usually use MySQL as we are in this tutorial, but when I deploy to my server it is running PostgreSQL. Many others choose MySQL. It doesn't matter -- the same migrations will work on all of them!  This is an example of how CFWheels takes some of the painful work off your hands. You write your migrations once, then run them against almost any database.
+CFWheels can uses migration files to perform modifications to the database with the DBMigrate plugin. Almost any modification you can make to a DB can be done through a migration. The killer feature about CFWheels migrations is that they're generally database agnostic. When developing applications a person might usually use MySQL as we are in this tutorial, but when deploying to their production server it is running PostgreSQL. Many others choose SQL Server. It doesn't matter -- the same migrations will work on all of them!  This is an example of how CFWheels takes some of the painful work off your hands. You write your migrations once, then run them against almost any database.
 
-What is a migration?  Let's open @/db/migrate/(some_time_stamp)_create_articles.rb@ and take a look. First you'll notice that the filename begins with a mish-mash of numbers which is a timestamp of when the migration was created. Migrations need to be ordered, so the timestamp serves to keep them in chronologic order. Inside the file, you'll see two methods: @self.up@ and @self.down@.
+h4. What is a migration?
 
-Migrations are meant to be _symmetric_. Whatever a migration changes inside the @self.up@ method should be _undone_ with the @self.down@ method. Frequently in development you'll think you want the database to look one way, then realize you need something different. You can create a migration to make your changes to the DB, start building, and then revert as necessary.
+Migrations are meant to be _symmetric_. Whatever a migration changes inside the @up@ method should be _undone_ with the @down@ method. Frequently in development you'll think you want the database to look one way, then realize you need something different. You can create a migration to make your changes to the DB, start building, and then revert as necessary.
 
-Inside the @self.up@ method you'll see the generator has placed a call to the @create_table@ method, passed the symbol @:articles@ as a parameter, and created a block with the variable @t@ referencing the table that's created. We can tell @t@ what kind of columns we want in the @articles@ table. Well, what kind of fields does our Article need to have?  Since migrations make it easy to add or change columns later, we don't need to think of EVERYTHING right now, we just need a few to get us rolling. Here's a starter set:
+Inside the @up@ method you'll see the generator has placed a call to the @create_table@ method, passed the symbol @:articles@ as a parameter, and created a block with the variable @t@ referencing the table that's created. We can tell @t@ what kind of columns we want in the @articles@ table. Well, what kind of fields does our Article need to have?  Since migrations make it easy to add or change columns later, we don't need to think of EVERYTHING right now, we just need a few to get us rolling. Here's a starter set:
 
 * @title@ (a string)
 * @body@ (a "text")
+
+Let's open @/db/migrate/(some_time_stamp)_create_articles.rb@ and take a look. First you'll notice that the filename begins with a mish-mash of numbers which is a timestamp of when the migration was created. Migrations need to be ordered, so the timestamp serves to keep them in chronologic order. Inside the file, you'll see two methods: @self.up@ and @self.down@.
 
 That's it! You might be wondering, what is the "text" type?  This is an example of relying on the CFWheels database adapters to make the right call. For some DBs, large text fields are stored as @varchar@, while other's like Postgres use a @text@ type. The database adapter will figure out the best choice for us depending on the configured database -- we don't have to worry about it.
 
