@@ -15,16 +15,28 @@ With that done we need to create new project in Eclipse. Open Eclipse and...
 
 Eclipse will then create a ColdFusion project for you and automatically open the project.
 
-Using ColdFusion Builder's Server view, we can add the our ColdFusion server. Open up the Servers view (Window - Show Views - Servers). In the Server view, click the add server icon. In the New ColdFusion Server Setup window, add JSBlogger in the Server Name, Other in Application Server, localhost in Host Name, select Is Local, 8080 in WebServer Port, and select Next. In the Document Root, add "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9" and then click Finish.
+Using ColdFusion Builder's Server view, we can add the our ColdFusion server. Open up the Servers view (Window - Show Views - Servers). In the Server view, click the add server icon. In the New ColdFusion Server Setup window set:
+
+* Server Name: JSBloggers
+* Application Server: Other
+* Host Name: localhost
+** Select Is Local
+*WebServer Port: 8080 
+*Click Next
+
+In the next screen, for Document Root add "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9" and then click Finish.
 
 You should then see the @JSBloggers@ server in the Servers view. If it isn't Running, please start Tomcat. Once it's started, try loading the address "http://localhost:8080/cf9":http://localhost:8080/cf9. You should see CFWheels' "Congratulations!" page. Scroll down and the Wheels debugging section displays the Wheels version, CFML Engine version along with other useful information.
 
+We need to change the Wheels datasource convention. Wheels assumes our datasource connection is the folder name Wheels resides in but for our case it is not CF9 but JSBloggers. We could have easily named our war file that but I wanted to show how we can easily override a Wheels convention.
+
+Press Ctrl+Shift+R while in Eclipse. This is the Open Resource window. I use this alot when coding. Sometimes I highlight a file name in code and press Ctrl+Shift+R, other times I type in the file name like we will. Type in @settings.cfm@, and select @settings.cfm - /JSBloggers/config@. This will open that file for use and paste in @<cfset set(dataSourceName="JSBloggers")>@ to tell Wheels to use this as are datasource. Then reload Wheels and you should see under DataSource, JSBloggers.
+
 h3. Creating the Article Model
 
-Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our CFWheels app to work with that data. We'll use one of CFWheels' plugins called Scaffolding to create the required file. Click the Scaffold link in the Wheels Debuggins section. Then type article for the Object name and select Model for Type. We'll leave the Template as default and click Generate. The page should refresh and "*File 'models/Article.cfc*' created." should appear.
+Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our CFWheels app to work with that data. We'll use one of CFWheels' plugins called Scaffolding to create the required file. Click the Scaffold link in the Wheels debugging section. Then type article for the Object name and select Model for Type. We'll leave the Template as default and click Generate. The page should refresh and "*File 'models/Article.cfc*' created." should appear.
 
 * TODO: Should a mapping be created called cf9 to "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9"
-
 
 We used the @scaffold@ plugin, telling it to create a @model@, and naming that model @Article@. From that information, the plugin creates the following files:
 
@@ -38,68 +50,98 @@ CFWheels can uses migration files to perform modifications to the database with 
 
 h4. What is a migration?
 
-Migrations are meant to be _symmetric_. Whatever a migration changes inside the @up@ method should be _undone_ with the @down@ method. Frequently in development you'll think you want the database to look one way, then realize you need something different. You can create a migration to make your changes to the DB, start building, and then revert as necessary.
+Migrations are a convenient way for you to alter your database in a structured and organized manner. Migrations are meant to be _symmetric_. Whatever a migration changes inside the @up@ method should be _undone_ with the @down@ method. Frequently in development you'll think you want the database to look one way, then realize you need something different. You can create a migration to make your changes to the DB, start building, and then revert as necessary.
 
-Inside the @up@ method you'll see the generator has placed a call to the @create_table@ method, passed the symbol @:articles@ as a parameter, and created a block with the variable @t@ referencing the table that's created. We can tell @t@ what kind of columns we want in the @articles@ table. Well, what kind of fields does our Article need to have?  Since migrations make it easy to add or change columns later, we don't need to think of EVERYTHING right now, we just need a few to get us rolling. Here's a starter set:
+Let's generate a "Create table" migration for our articles. In the browser select, DBMigration link in the Wheels debugging section. And complete the page like: 
 
-* @title@ (a string)
-* @body@ (a "text")
+* Template: Create table
+* Migration prefix: Timestamp (e.g. 20110406075307)
+* Migration description: create articles table
+* Click create
 
-Let's open @/db/migrate/(some_time_stamp)_create_articles.rb@ and take a look. First you'll notice that the filename begins with a mish-mash of numbers which is a timestamp of when the migration was created. Migrations need to be ordered, so the timestamp serves to keep them in chronologic order. Inside the file, you'll see two methods: @self.up@ and @self.down@.
+On the page, you should see text like @The migration 20110406195353_create_articles_table.cfc file was created@ showing the create was successful. Two new sections appear also on the page: *Migrate* and *Available migrations*. Under *Available migrations* you should see something like @20110406195353 - create_articles_table (create articles table) - not migrated@. This is saying a migration script exists but hasn't been ran.
 
-That's it! You might be wondering, what is the "text" type?  This is an example of relying on the CFWheels database adapters to make the right call. For some DBs, large text fields are stored as @varchar@, while other's like Postgres use a @text@ type. The database adapter will figure out the best choice for us depending on the configured database -- we don't have to worry about it.
-
-So add these into your @self.up@ so it looks like this:
+Let's open @/db/migrate/(some_time_stamp)__create_articles_table.cfc@ and take a look. First you'll notice that the filename is our comment with a underlines instead of spaces and a timestamp of when the migration was created. Migrations need to be ordered, so the timestamp serves to keep them in chronologic order. Inside the file, you'll see two methods: @up@ and @down@.
 
 <pre>
 <code>
-<cfcomponent extends="plugins.dbmigrate.Migration" hint="creates articles table">
+<cfcomponent extends="plugins.dbmigrate.Migration" hint="create articles table">
   <cffunction name="up">
     <cfscript>
-    t = createTable('articles');
-    t.string('title');
-    t.text('body');
+    t = createTable('[tableName]');
+   
     t.timestamps();
     t.create();
     </cfscript>
   </cffunction>
   <cffunction name="down">
     <cfscript>
-    dropTable('articles');
+    dropTable('[tableName]');
     </cfscript>
   </cffunction>
 </cfcomponent>
 </code>
 </pre>
 
-What is that @t.timestamps@ doing there?  The generator inserted that line. It will create two columns inside our table titled @created_at@ and @updated_at@. CFWheels will manage these columns for us, so when an article is created it's @created_at@ and @updated_at@ are automatically set. Each time we make a change to the article, the @updated_at@ will automatically be...uhhh...updated. Very handy.
+Inside the @up@ method you'll see the generator has placed a call to the @createTable@ method, passed @[tableName]@ as a parameter, and created a block with the variable @t@ referencing the table that's created. Let's change @[tableName]@ to @[articles]@. We can tell @t@ what kind of columns we want in the @articles@ table. 
 
-Now our migration is done. You might wonder, what about the @self.down@?  Didn't I say migrations need to be symmetric?  If we added something to the @self.up@ it is _generally_ the case that we need to undo that same change in the @self.down@. However, when the migration is creating a table, the @self.down@ can just drop that table regardless of what columns are inside of it. That's what the generator has setup for us here, where it just says @drop_table :articles@.
+But first you might be wondering "What is that @t.timestamps@ doing there?".  The generator inserted that line. It will create three columns inside our table titled @createdat@ for when created, @updatedat@ for last updated, and @deletedat@ for soft deletes. CFWheels will manage these columns for us, so when an article is created it's @createdat@ and @updatedat@ are automatically set. Each time we make a change to the article, the @updatedat@ will automatically be...uhhh...updated. Very handy.
 
-Save that migration file, switch over to your terminal, and run this command:
+Well, what kind of fields does our Article need to have?  Since migrations make it easy to add or change columns later, we don't need to think of EVERYTHING right now, we just need a few to get us rolling. Here's a starter set:
 
-<pre class="console">
-rake db:migrate
+* @title@ (a string)
+* @body@ (a "text")
+
+That's it! You might be wondering, what is the "text" type?  This is an example of relying on the CFWheels database adapters to make the right call. For some DBs, large text fields are stored as @varchar@, while other's like Postgres use a @text@ type. The database adapter will figure out the best choice for us depending on the configured database -- we don't have to worry about it.
+
+So add these into your @up@ so it looks like this:
+
+<pre>
+<code>
+ <cffunction name="up">
+   <cfscript>
+   t = createTable('articles');
+   t.string('title');
+   t.text('body');
+   t.timestamps();
+   t.create();
+   </cfscript>
+ </cffunction>
+</code>
 </pre>
 
-This command starts the @rake@ program which is a ruby utility for running maintenance-like functions on your application (working with the DB, executing unit tests, deploying to a server, etc). We tell @rake@ to @db:migrate@ which means "look in your set of functions for the database (@db@) and run the @migrate@ function."  The @migrate@ action finds all migrations in the @/db/migrate/@ folder, looks at a special table in the DB to determine which migrations have and have not been run yet, then runs any migration that hasn't been run. 
+Now our migration is done. You might wonder, what about the @down@?  Didn't I say migrations need to be symmetric?  If we added something to the @up@ it is _generally_ the case that we need to undo that same change in the @down@. However, when the migration is creating a table, the @down@ can just drop that table regardless of what columns are inside of it. That's what the generator has setup for us here, where it just says @dropTable('[tableName]');@ just replace @[tableName]@ with @articles@.
 
-In this case we had just one migration to run and it should print some output like this to your terminal:
+<pre>
+<code>
+  <cffunction name="down">
+    <cfscript>
+    dropTable('articles');
+    </cfscript>
+  </cffunction>
+</code>
+</pre>
+
+Save that migration cfc file, switch over to your browser, and click go under the *Migrate* section:
+
+This says "look in your set of cfcs for the database (@db@) and run the @migrates@."  The @All non-migrated@ option finds all migrations in the @/db/migrate/@ folder, determines which migrations have and have not been run yet, then runs any migration that hasn't been run. 
+
+In this case we had just one migration to run and it should print some output like this to your browser under *Migration Results*:
 
 <pre class="console">
-Migrating from 0 up to 20110326210512.
+Migrating from 0 up to 20110406195353.
 
--------- 20110326210512_creates_articles_table -------------
+-------- 20110406195353_create_articles_table --------------
 Created table articles
 </pre>
 
-It tells you that it is running the migration named @CreateArticles@. And the "migrated" line means that it completed without errors. As I said before, rake keeps track of which migrations have and have not been run. Try running @rake db:migrate@ again now, and see what happens.
+It tells you that it ran the migration. As I said before, DBMigrate keeps track of which migrations have and have not been run. Try running @All non-migrated@ again now, and see what happens.
 
 We've now created the @articles@ table in the database and can start working on our @Article@ model.
 
 h3. Working with a Model in the Console
 
-Another awesome feature of working with CFWheels is the @console@. The @console@ is a command-line interface to your application. It allows you to access and work with just about any part of your application directly instead of going through the web interface. This can simplify your development process, and even once an app is in production the console makes it very easy to do bulk modifications, searches, and other data operations. So let's open the console now by going to your terminal and entering this:
+Another awesome feature of working with CFWheels is the @console@. The @console@ is a command-line interface to your application. It allows you to access and work with just about any part of your application directly instead of going through the web interface. This can simplify your development process, and even once an app is in production the console makes it very easy to do bulk modifications, searches, and other data operations. So let's open the console now by going to your browser and entering this:
 
 <pre class="console">
 ruby script/console
@@ -153,14 +195,14 @@ Now that the router knows how to handle requests about articles, it needs a plac
 
 h3. Creating the Articles Controller
 
-We're going to use another CFWheels generator but your terminal has the console currently running. You have two options:
+We're going to use another CFWheels generator but your browser has the console currently running. You have two options:
 
-* Open a second terminal window (Cmd-T on OS X, open Command Prompt on Win) then CD to your project directory or...
+* Open a second browser window (Cmd-T on OS X, open Command Prompt on Win) then CD to your project directory or...
 * Close the console with the command @exit@
 
-I like to have several terminal windows available to me when developing, so I'd always choose the first option.
+I like to have several browser windows available to me when developing, so I'd always choose the first option.
 
-In your terminal, enter this command:
+In your browser, enter this command:
 
 <pre class="console">
 ruby script/generate controller articles
