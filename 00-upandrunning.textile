@@ -145,8 +145,8 @@ Another awesome feature of working with CFWheels is the @ORM@. The @ORM@ stands 
 
 * File --> New (Alt+Shift+N) --> ColdFusion Component
 * Source Location: /JSBloggers/controllers
-** By  clicking Browse... 
-* Component Name: Working
+** By clicking Browse... 
+* Component Name: Examples
 * Extends: Controller
 * Click Finish
 
@@ -154,26 +154,41 @@ Our new component opened automatically and we'll add some code in between the @c
 
 <pre>
 <code>
- <cffunction name="example">
+ <cffunction name="one">
   <cfset time = now() />
   <cfdump var="#now()#">
-  <cfset myArticles = model("article").findAll() />
-  <cfdump var="#myArticles#">
+  <cfset articles = model("article").findAll() />
+  <cfdump var="#articles#">
   <cfset article = model("article").new() />
   <cfdump var="#article#">
+  <cfabort>
  </cffunction>
 </code>
 </pre>
 
-The first line was just to demonstrate that we can do anything we previously did during @CFML in 100 minutes@ and now inside our @controller@. The second like referenced the @Article@ model and called the @findAll@ method which returns a query of all articles in the database -- so far an empty result. The third line created a new article object. You can see that this new object had attributes @id@, @title@, @body@, @created_at@, and @updated_at@.
+The first line was just to demonstrate that we can do anything we previously did during @CFML in 100 minutes@ and now inside our @controller@. The second line referenced the @Article@ model and called the @findAll@ method which returns a query of all articles in the database -- so far an empty result. The third line created a new article object and returns it. The object is not saved to the database; it only exists in memory. Property names and values can be passed in either using named arguments or as a struct to the properties argument.
 
-All the information about the @Article@ model is in the file @/app/models/article.rb@, so let's open that now.
+All the information about the @Article@ model is in the file @/models/Article.cfc@, so let's open that now.
 
-Not very impressive, right?  There are no attributes defined inside the model, so how does CFWheels know that an Article should have a @title@, a @body@, etc?  It queries the database, looks at the articles table, and assumes that whatever columns that table has should probably be the attributes accessible through the model. 
+Not very impressive, right?  There are no attributes defined inside the model, so how does CFWheels know that an Article should have a @title@, a @body@, etc?  It queries the database, looks at the articles table, and assumes that whatever columns that table has should probably be the attributes accessible through the model. Let's look at what our migration file created.
 
-You created most of those in your migration file, but what about @id@?  Every table you create with a migration will automatically have an @id@ column which serves as the table's primary key. When you want to find a specific article, you'll look it up in the articles table by it's unique ID number. CFWheels and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
+You created most of those columns in your migration file, but what about @id@?  Every table you create with a migration will automatically have an @id@ column which serves as the table's primary key. When you want to find a specific article, you'll look it up in the articles table by it's unique ID number. CFWheels and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
 
-In your console, try entering @Article.all@ again. Do you see the blank article that we created with the @Article.new@ command?  No?  The console doesn't change values in the database (in most cases) until we explicitly call the @.save@ method on an object. Let's create a sample article and you'll see how it works. Enter each of the following lines one at a time:
+Back to the @<cfset article = model("article").new() />@ instruction. The @new()@ method doesn't change values in the database until we explicitly call the @save@ method on an object but in our example the @article@ object didn't have the  attributes @id@, @title@, @body@, @createdat@, and @updatedat@. Let's create a sample article and you'll see how it to add these. Enter each of the following lines one at a time:
+
+<pre>
+<code>
+ <cffunction name="two">
+  <cfset a.title = "Sample Article Title" />
+  <cfset a.body = "This is the text for my article, woo hoo!" />
+  <cfset article = model("article").new(a) />
+  <cfset article.save() />
+  <cfset articles = model("article").findAll() />
+  <cfdump var="#articles#">
+  <cfabort>
+ </cffunction>
+</code>
+</pre>
 
 <pre class="console">
 a = Article.new
@@ -183,7 +198,7 @@ a.save
 Article.all
 </pre>
 
-Now you'll see that the @Article.all@ command gave you back an array holding the one article we created and saved. Go ahead and *create 3 more sample articles*.
+Now you'll see that the @findAll()@ command gave you back an query object holding the one article we created and saved. Go ahead and *create 3 more sample articles*.
 
 h3. Moving Towards a Web Interface - Setting up the Router
 
