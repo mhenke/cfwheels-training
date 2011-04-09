@@ -190,31 +190,23 @@ Back to the @<cfset article = model("article").new() />@ instruction. The @new()
 </code>
 </pre>
 
-<pre class="console">
-a = Article.new
-a.title = "Sample Article Title"
-a.body = "This is the text for my article, woo hoo!"
-a.save
-Article.all
-</pre>
-
 Now you'll see that the @findAll()@ command gave you back an query object holding the one article we created and saved. Go ahead and *create 3 more sample articles*.
 
 h3. Moving Towards a Web Interface - Setting up the Router
 
-We've created a few articles through the console, but we really don't have a web application until we have a web interface. Let's get that started. We said that CFWheels uses an "MVC" architecture and we've worked with the Model, now we need a Controller and View. 
+We've created a few articles through the Examples controller, but we really don't have a web application until we have a better web interface. Let's get that started. We said that CFWheels uses an "MVC" architecture and we've worked with the Model, now we need a Controller and View. 
 
-When a CFWheels server gets a request from a web browser it first goes to the _router_. The router decides what the request is trying to do, what resources it is trying to interact with. The router dissects a request based on the address it is requesting and other HTTP parameters (like the request type of GET or PUT). Let's open the router's configuration file, @/config/routes.rb@.
+When a CFWheels server gets a request from a web browser it first goes to the _router_. The router decides what the request is trying to do, what resources it is trying to interact with. The router dissects a request based on the address it is requesting and other HTTP parameters (like the request type of GET or PUT). Let's open the router's configuration file, @/config/routes.cfm@.
 
-Inside this file you'll see a LOT of comments that show you different options for routing requests. Let's remove everything _except_ the first line (@ActionController...@) and the final @end@. Then, in between those two lines, add @map.resources :articles@ so your file looks like this:
+Inside this file you'll see @<cfset addRoute(name="home", pattern="", controller="wheels", action="wheels")>@. This is the default route and is the Congratulations page, you saw when we first loaded our application. Let's replace it with:
 
-<pre class="brush:ruby;">
-ActionController::Routing::Routes.draw do |map|
-  map.resources :articles
-end
+<pre>
+<code>
+ <cfset addRoute(name="home", pattern="", controller="Articles", action="index")>
+</code>
 </pre>
 
-This line tells CFWheels to do a lot of work. It declares that we have a resource named @articles@ and the router should expect requests to follow the *RESTful* model of web interaction (REpresentational State Transfer). The details don't matter to you right now, but just know that when you make a request like @http://localhost:3000/articles/@ the router will know you're looking for a listing of the articles or @http://localhost:3000/articles/new@ means you're trying to create a new article.
+This line tells CFWheels to do a lot of work. It declares that we have a resource named @home@ and the router should expect requests to follow the *RESTful* model of web interaction (REpresentational State Transfer). The details don't matter to you right now, but just know that when you make a request like @http://wheels.local/@ and the router will know you're looking for a @index action@ of the @Articles controller@.
 
 Now that the router knows how to handle requests about articles, it needs a place to actually send those requests, the *Controller*.
 
