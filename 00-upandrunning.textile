@@ -212,65 +212,42 @@ Now that the router knows how to handle requests about articles, it needs a plac
 
 h3. Creating the Articles Controller
 
-We're going to use the Scaffold plugin again through the browser. Let's load @http://wheels.local/@. You'll notice our updated default route is mapping the code to the @index@ action of the @Articles@ controller but we are getting ann error since the view doesn't exist.
+We're going to use the Scaffold plugin again through the browser. In your browser, enter this url to get to the Scaffold plugin again. @http://wheels.local/index.cfm?controller=wheels&action=wheels&view=plugins&name=scaffold@:
+
+Then type *article* for the Object name and select *Controller* for Type. We'll leave the Template as default and click Generate. The page should refresh and "*File 'controllers/Articles.cfc' created.*" should appear.
+
+The output shows that the generator created this file for you:
+
+* @/controllers/articles_controller.cfc@ : The controller file itself
+
+Let's open up the controller file, @/controllers/Articles.cfc@. You'll see that the @Scaffold@ plugin generated a lot of code. It created these actions for us: @index@, @show@, @new@, @edit@, @create@, @update@, @delete@.
+
+Any additional code we add to the controller must go _between_ the beginning and ending @cfcomponent@ instructions, so I like to insert a bunch of blank lines between them so I have room work work and push that final @end@ farther down the page.
+
+h3. Defining the Index Action
+
+The first action we want to talk about is the "index". This is what the app will send back when a user requests @http://wheels.local/index.cfm/Articles/@ -- following the RESTful conventions, this should be a list of the articles. So when the router sees this request come in, it tries to call the @index@ action inside @Articles@ controller. It goes to the @index@ action which gets all our articles:
+
+<pre>
+<code>
+ <cffunction name="index">
+  <cfset articles = model("Article").findAll()>
+ </cffunction>
+</code>
+</pre>
+
+What scope is @articles@? Usually in a @cfc@ we will @var@ scope variables to stop data issues. That marks the variable as a "local variable". We want the list of articles to be accessible from both the controller and the view that we're about to create. In order for it to be visible in both places it has to be in the variable scope. If we had just named it @var articles@, that local variable would only be available within the @index@ method of the controller.
+
+Let's load @http://wheels.local/@. You'll notice our updated default route is mapping the code to the @index@ action of the @Articles@ controller but we are getting ann error since the view doesn't exist.
 
 <pre class="console">
 Wheels.ViewNotFound
 Could not find the view page for the index action in the Examples controller.
 </pre>
 
-Did you catch it wasn't an error about the missing @Articles@ Controller?It is an error about a missing view. Wheels is smart enough for prototyping a skeleton application without any controller logic (actually the controller doesn't even to need to exist like this example).
-
-In your browser, enter this url to get to the Scaffold plugin again. @http://wheels.local/index.cfm?controller=wheels&action=wheels&view=plugins&name=scaffold@:
-
-Then type *article* for the Object name and select *Controller* for Type. We'll leave the Template as default and click Generate. The page should refresh and "*File 'controllers/Articles.cfc' created.*" should appear.
-
-
-The output shows that the generator created this file for you:
-
-* @/controllers/articles_controller.cfc@ : The controller file itself
-* @actions@
-** index
-** show
-** new
-** edit
-** create
-** update
-** delete
-
-Let's open up the controller file, @/app/controllers/articles_controller.rb@. You'll see that this is basically a blank class, beginning with the @class@ keyword and ending with the @end@ keyword. Any code we add to the controller must go _between_ these two lines, so I like to insert a bunch of blank lines between them so I have room work work and push that final @end@ farther down the page.
-
-h3. Defining the Index Action
-
-The first feature we want to add is an "index" page. This is what the app will send back when a user requests @http://localhost:3000/articles/@ -- following the RESTful conventions, this should be a list of the articles. So when the router sees this request come in, it tries to call the @index@ action inside @articles_controller@.
-
-Let's first try it out by entering @http://localhost:3000/articles/@ into your web browser. You should get an error message that looks like this:
-
-<pre class="console">
-Unknown action
-No action responded to index. Actions:
-</pre>
-
-The router tried to call the @index@ action, but the articles controller doesn't have a method with that name. It then lists available actions, but there aren't any. This is because our controller is still blank. Let's add the following method inside the controller:
-
-<pre class="brush:ruby;">
-  def index
-    @articles = Article.all
-  end  
-</pre>
-
-What is that "at" sign doing on the front of @@articles@?  That marks this variable as an "instance level variable". We want the list of articles to be accessible from both the controller and the view that we're about to create. In order for it to be visible in both places it has to be an instance variable. If we had just named it @articles@, that local variable would only be available within the @index@ method of the controller.
-
-Now refresh your browser. The error message changed, but you've still got an error, right?  
-
-<pre class="console">
-Template is missing
-Missing template articles/index.erb in view path app/views
-</pre>
-
 h3. Creating the Index View
 
-The error message is pretty helpful here. It tells us that the app is looking for a (view) template in @/app/views/articles/@ but it can't find one named @index.erb@. CFWheels has *assumed* that our @index@ action in the controller should have a corresponding @index.erb@ view template in the views folder. We didn't have to put any code in the controller to tell it what view we wanted, CFWheels just figures it out.
+The error message is pretty helpful here. It tells us that the app is looking for a (view) template in @/views/articles/@ but it can't find one named @index.cfm@. CFWheels has *assumed* that our @index@ action in the controller should have a corresponding @index.erb@ view template in the views folder. We didn't have to put any code in the controller to tell it what view we wanted, CFWheels just figures it out.
 
 Let's create that view template now. In the left pane of your Eclipse window, expand the @app@ folder so you can see @views@, then expand @views@. Right-click on the @articles@ folder, select @New@ then @File@ and, in the popup, name the file @index.html.erb@.
 
