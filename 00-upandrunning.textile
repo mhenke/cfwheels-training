@@ -249,7 +249,7 @@ h3. Creating the Index View
 
 The error message is pretty helpful here. It tells us that the app is looking for a (view) template in @/views/articles/@ but it can't find one named @index.cfm@. CFWheels has *assumed* that our @index@ action in the controller should have a corresponding @index.erb@ view template in the views folder. We didn't have to put any code in the controller to tell it what view we wanted, CFWheels just figures it out.
 
-Let's create that view template now. In the left pane of your Eclipse window, expand the @app@ folder so you can see @views@, then expand @views@. Right-click on the @articles@ folder, select @New@ then @File@ and, in the popup, name the file @index.html.erb@.
+Let's create that view template now. In the left pane of your Eclipse window, expand the @JSBloggers@ project so you can see @views@, then expand @views@. Right-click on the @articles@ folder, select @New@ then @Folder@ and, in the popup, name the folder @Articles@. Next repeat the process, but select @File@ and, in the popup, name the file @index.cfm@
 
 Why did we choose @index.html.erb@ instead of the @index.erb@ that the error message said it was looking for?  Putting the HTML in the name makes it clear that this view is for generating HTML. In later versions of our blog we might create an RSS feed which would just mean creating an XML view template like @index.xml.erb@. CFWheels is smart enough to pick the right one based on the browser's request, so when we just ask for @http://localhost:3000/articles/@ it will find the @index.html.erb@ and render that file.
 
