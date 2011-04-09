@@ -34,7 +34,7 @@ Press Ctrl+Shift+R while in Eclipse. This is the Open Resource window. I use thi
 
 h3. Creating the Article Model
 
-Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our CFWheels app to work with that data. We'll use one of CFWheels' plugins called Scaffolding to create the required file. Click the Scaffold link in the Wheels debugging section. Then type article for the Object name and select Model for Type. We'll leave the Template as default and click Generate. The page should refresh and "*File 'models/Article.cfc*' created." should appear.
+Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our CFWheels app to work with that data. We'll use one of CFWheels' plugins called Scaffolding to create the required file. Click the Scaffold link in the Wheels debugging section. Then type *article* for the Object name and select *Model* for Type. We'll leave the Template as default and click Generate. The page should refresh and "*File 'models/Article.cfc*' created." should appear.
 
 * TODO: Should a mapping be created called cf9 to "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9"
 
@@ -212,21 +212,31 @@ Now that the router knows how to handle requests about articles, it needs a plac
 
 h3. Creating the Articles Controller
 
-We're going to use the Scaffold plugin again through the browser. Let's load @http://wheels.local/@.
-
-In your browser, enter this command:
+We're going to use the Scaffold plugin again through the browser. Let's load @http://wheels.local/@. You'll notice our updated default route is mapping the code to the @index@ action of the @Articles@ controller but we are getting ann error since the view doesn't exist.
 
 <pre class="console">
-ruby script/generate controller articles
+Wheels.ViewNotFound
+Could not find the view page for the index action in the Examples controller.
 </pre>
 
-The output shows that the generator created several files/folders for you:
+Did you catch it wasn't an error about the missing @Articles@ Controller?It is an error about a missing view. Wheels is smart enough for prototyping a skeleton application without any controller logic (actually the controller doesn't even to need to exist like this example).
 
-* @app/views/articles@ : The directory to contain the controller's view templates
-* @app/controllers/articles_controller.rb@ : The controller file itself
-* @test/functional/articles_controller_test.rb@ : The controller's unit tests file
-* @app/helpers/articles_helper.rb@ : A helper file to assist with the views (discussed later)
-* @test/unit/helpers/articles_helper_test.rb@ : The helper's unit test file
+In your browser, enter this url to get to the Scaffold plugin again. @http://wheels.local/index.cfm?controller=wheels&action=wheels&view=plugins&name=scaffold@:
+
+Then type *article* for the Object name and select *Controller* for Type. We'll leave the Template as default and click Generate. The page should refresh and "*File 'controllers/Articles.cfc' created.*" should appear.
+
+
+The output shows that the generator created this file for you:
+
+* @/controllers/articles_controller.cfc@ : The controller file itself
+* @actions@
+** index
+** show
+** new
+** edit
+** create
+** update
+** delete
 
 Let's open up the controller file, @/app/controllers/articles_controller.rb@. You'll see that this is basically a blank class, beginning with the @class@ keyword and ending with the @end@ keyword. Any code we add to the controller must go _between_ these two lines, so I like to insert a bunch of blank lines between them so I have room work work and push that final @end@ farther down the page.
 
