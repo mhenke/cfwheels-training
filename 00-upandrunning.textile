@@ -1,6 +1,6 @@
 h2. I0: Up and Running
 
-Part of the reason ColdFusion on Wheels became popular quickly is that it takes a lot of the hard work off your hands, and that's especially true in starting up a project. CFWheels practices the idea of "sensible defaults" and tries to, with one command, create a working application ready for your customization.
+Part of the reason ColdFusion on Wheels became popular quickly is that it takes a lot of the hard work off your hands, and that's especially true in starting up a project. CFWheels practices the idea of "sensible defaults" and tries to, with a couple simple actions, create a working application ready for your customization.
 
 h3. Setting the Stage
 
@@ -30,7 +30,7 @@ You should then see the @JSBloggers@ server in the Servers view. If it isn't Run
 
 We need to change the Wheels datasource convention. Wheels assumes our datasource connection is the folder name Wheels resides in but for our case it is not CF9 but JSBloggers. We could have easily named our war file that but I wanted to show how we can easily override a Wheels convention.
 
-Press Ctrl+Shift+R while in Eclipse. This is the Open Resource window. I use this alot when coding. Sometimes I highlight a file name in code and press Ctrl+Shift+R, other times I type in the file name like we will. Type in @settings.cfm@, and select @settings.cfm - /JSBloggers/config@. This will open that file for use and paste in @<cfset set(dataSourceName="JSBloggers")>@ to tell Wheels to use this as are datasource. Then reload Wheels and you should see under DataSource, JSBloggers.
+Press Ctrl+Shift+R while in Eclipse. This is the Open Resource window. I use this alot when coding. Sometimes I highlight a file name in code and press Ctrl+Shift+R, other times I type in the file name like we will. Type in @settings.cfm@, and select @settings.cfm - /JSBloggers/config@. This will open that file for use and paste in @<cfset set(dataSourceName="JSBloggers") />@ to tell Wheels to use this as are datasource. Then reload Wheels and you should see under DataSource, JSBloggers.
 
 h3. Creating the Article Model
 
@@ -124,7 +124,7 @@ Now our migration is done. You might wonder, what about the @down@?  Didn't I sa
 
 Save that migration cfc file, switch over to your browser, and click go under the *Migrate* section:
 
-This says "look in your set of cfcs for the database (@db@) and run the @migrates@."  The @All non-migrated@ option finds all migrations in the @/db/migrate/@ folder, determines which migrations have and have not been run yet, then runs any migration that hasn't been run. 
+The @All non-migrated@ option finds all migrations in the @/db/migrate/@ folder, determines which migrations have and have not been run yet, then runs any migration that hasn't been run.  Pretty much it says "look in your set of cfcs for the database in @/db/migrate/@ and run the migrations not yet ran."  
 
 In this case we had just one migration to run and it should print some output like this to your browser under *Migration Results*:
 
@@ -139,23 +139,33 @@ It tells you that it ran the migration. As I said before, DBMigrate keeps track 
 
 We've now created the @articles@ table in the database and can start working on our @Article@ model.
 
-h3. Working with a Model in the Console
+h3. Working with a Model
 
-Another awesome feature of working with CFWheels is the @console@. The @console@ is a command-line interface to your application. It allows you to access and work with just about any part of your application directly instead of going through the web interface. This can simplify your development process, and even once an app is in production the console makes it very easy to do bulk modifications, searches, and other data operations. So let's open the console now by going to your browser and entering this:
+Another awesome feature of working with CFWheels is the @ORM@. The @ORM@ stands for Object-relational mapping. It allows you to mapping objects in your application to records in your database tables. This can simplify your development process, and even once an app is in production the @ORM@ makes it very easy to do modifications, searches, and other data operations. So let's create a controller cfc to do some simple interactions with our model. 
 
-<pre class="console">
-ruby script/console
+* File --> New (Alt+Shift+N) --> ColdFusion Component
+* Source Location: /JSBloggers/controllers
+** By  clicking Browse... 
+* Component Name: Working
+* Extends: Controller
+* Click Finish
+
+Our new component opened automatically and we'll add some code in between the @cfcomponent@ tags. Let's try some experiments... Enter each of these instructions and observe the results:
+
+<pre>
+<code>
+ <cffunction name="example">
+  <cfset time = now() />
+  <cfdump var="#now()#">
+  <cfset myArticles = model("article").findAll() />
+  <cfdump var="#myArticles#">
+  <cfset article = model("article").new() />
+  <cfdump var="#article#">
+ </cffunction>
+</code>
 </pre>
 
-You'll then just get back a prompt of @>>@. You're now inside an @irb@ interpreter with full access to your application. Let's try some experiments...enter each of these commands one at a time and observe the results:
-
-<pre class="console">
-puts Time.now
-Article.all
-Article.new
-</pre>
-
-The first line was just to demonstrate that we can do anything we previously did inside @irb@ now inside of our @console@. The second like referenced the @Article@ model and called the @all@ method which returns an array of all articles in the database -- so far an empty array. The third line created a new article object. You can see that this new object had attributes @id@, @title@, @body@, @created_at@, and @updated_at@.
+The first line was just to demonstrate that we can do anything we previously did during @CFML in 100 minutes@ and now inside our @controller@. The second like referenced the @Article@ model and called the @findAll@ method which returns a query of all articles in the database -- so far an empty result. The third line created a new article object. You can see that this new object had attributes @id@, @title@, @body@, @created_at@, and @updated_at@.
 
 All the information about the @Article@ model is in the file @/app/models/article.rb@, so let's open that now.
 

@@ -18,6 +18,15 @@ h4. Install Adobe ColdFusion 9
 ** Copy cf9.war to "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\"
 ** Test at "http://localhost:8080/cf9/":http://localhost:8080/cf9/
 
+h3. Install UrlRewritingFilter
+
+* UrlRewritingFilter
+** Download the "UrlRewritingFilter zip":http://tuckey.org/urlrewrite/#download
+** Follow the steps at "http://www.tuckey.org/urlrewrite/":http://www.tuckey.org/urlrewrite/
+*** Your context's directory is C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9
+** 
+**
+
 h4. Install ColdFusion on Wheels
 
 * ColdFusion on Wheels
