@@ -11,7 +11,7 @@ h4. Install Adobe ColdFusion 9
 ** Name the instance **cfwheels101**
 ** Test at "http://localhost:8301/":http://localhost:8301/
 
-h3. Install Apache ( optional for http://wheels.local/ )
+h3. Install Apache ( optional )
 
 * Apache
 ** Download and install the "Win32 Binary without crypto (no mod_ssl) (MSI Installer)":http://apache.tradebit.com/pub//httpd/binaries/win32/httpd-2.2.17-win32-x86-no_ssl.msi
@@ -99,6 +99,17 @@ h4. Install ColdFusion Builder
 
 h4. Install SQL Explorer
 
+* SQL Explorer
+** Open CFBuilder
+** Select Help --> Install New Software...
+** Paste in Work With: "http://eclipsesql.sourceforge.net/":http://eclipsesql.sourceforge.net/
+** Click Add...
+** Type in Name: SQL Explorer
+** Once loaded, check SQL Explorer
+** Click Finish
+
+h5. Install MySQL driver
+
 ** Edit MySql driver http://www.sqlexplorer.org/drivers.php
 http://eclipsesql.sourceforge.net/
 
@@ -107,12 +118,15 @@ Driver Class Name:
 
 ** "JDBC Driver for MySQL (Connector/J)":http://www.mysql.com/downloads/connector/j/
 
+h5. Add JSBloggers connection
+
 ** Add connection
 
 NameL JSBloggers
 Driver: MySQL
 URL: jdbc:mysql://localhost:3306/
 
-** Create Database
+h4. Create JSBloggers Database
 
-Steps
+* do this
+* and this
