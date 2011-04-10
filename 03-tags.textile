@@ -89,7 +89,7 @@ The first interface we're interested in is within the article itself. When I wri
 
 Adding the text field will take place in the file @/app/views/articles/_form.html.erb@. Add in a set of paragraph tags underneath the body fields like this:
 
-<pre class="brush:ruby;">
+<pre>
   <p>
     <%= f.label :tag_list %><br />
     <%= f.text_field :tag_list %>
@@ -106,7 +106,7 @@ undefined method `tag_list' for #<Article:0x10499bab0>
 
 An Article doesn't have a thing named @tag_list@ -- we made it up. In order for the form to display, we need to add a method to the @article.rb@ file like this:
 
-<pre class="brush:ruby;">
+<pre>
   def tag_list
     return self.tags.join(", ")
   end
@@ -132,7 +132,7 @@ Since the @create@ method passes all the parameters from the form into the @Arti
 
 There are several ways to solve this problem, but the simplest is to pretend like we have an attribute named @tag_list@. We can define the @tag_list=@ method inside @article.rb@ like this:
 
-<pre class="brush:ruby;">
+<pre>
   def tag_list=(tags_string)
     
   end
@@ -164,7 +164,7 @@ Look closely at the output and you'll see that the second element is @" tag2"@ i
 
 So to combine that with our @strip@, try this code:
 
-<pre class="brush:ruby;">
+<pre>
 "tag1, tag2, tag3".split(",").collect{|s| s.strip.downcase}
 </pre>
 
@@ -172,25 +172,25 @@ The @.split(",")@ will create the list with extra spaces as before, then the @.c
 
 Now, back inside our @tag_list=@ method, let's add this line:
 
-<pre class="brush:ruby;">
+<pre>
 tag_names = tags_string.split(",").collect{|s| s.strip}
 </pre>
 
 So looking at our pseudo-code, the next step is to go through @each@ of those @tag_names@ and find or create a tag with that name. CFWheels has a built in method to do just that, like this:
 
-<pre class="brush:ruby;">
+<pre>
 tag = Tag.find_or_create_by_name(tag_name)
 </pre>
 
 Once we find or create the @tag@, we need to create a @tagging@ which connects this article (here @self@) to the tag like this:
 
-<pre class="brush:ruby;">
+<pre>
 self.taggings.build(:tag => tag)
 </pre>
 
 The @build@ method is a special creation method. It doesn't need an explicit save, CFWheels will wait to save the Tagging until the Article itself it saved. So, putting these pieces together, your @tag_list=@ method should look like this:
 
-<pre class="brush:ruby;">
+<pre>
   def tag_list=(tags_string)
     tag_names = tags_string.split(",").collect{|s| s.strip.downcase}
     tag_names.each do |tag_name|
@@ -204,7 +204,7 @@ h3. Testing in the Console
 
 Go back to your console and try these commands:
 
-<pre class="brush:ruby;">
+<pre>
 reload!
 a = Article.new(:title => "A Sample Article for Tagging!",:body => "Great article goes here", :tag_list => "ruby, technology")
 a.save
@@ -224,13 +224,13 @@ h3. Adding Tags to our Display
 
 According to our work in the console, articles can now have tags, but we haven't done anything to display them in the article pages. Let's start with @/app/views/articles/show.html.erb@. Right below the line that displays the @article.title@, add this line:
 
-<pre class="brush:ruby;">
+<pre>
 Tags: <%= tag_links(@article.tags) %><br />
 </pre>
 
 This line calls a helper named @tag_links@ and sends the @article.tags@ array as a parameter. We need to then create the @tag_links@ helper. Open up @/app/helpers/articles_helper.rb@ and add this method inside the @module@/@end@ keywords:
 
-<pre class="brush:ruby;">
+<pre>
 def tag_links(tags)
 
 end
@@ -240,7 +240,7 @@ The desired outcome is a list of comma separated tags, where each one links to t
 
 A helper method has to return a string which will get rendered into the HTML. In this case we'll use the @collect@ method to create a list of links, one for each Tag, where the link is created by the @link_to@ helper. Then we'll @return@ back the @links@ connected by a comma and a space:
 
-<pre class="brush:ruby;">
+<pre>
   def tag_links(tags)
     links = tags.collect{|tag| link_to tag.name, tag_path(tag)}
     return links.join(", ")
@@ -263,7 +263,7 @@ ruby script/generate controller tags index show
 
 Then we need to add it to our @/config/routes.rb@ like this:
 
-<pre class="brush:ruby;">
+<pre>
 map.resources :tags
 </pre>
 
@@ -279,7 +279,7 @@ When we wrote our @tag_list=@ method inside of @article.rb@, we were just thinki
 
 There are a few ways we could fix this -- the first thing I want to do is remove any repeated tags in the parameter list by using the Ruby method @uniq@:
 
-<pre class="brush:ruby;">
+<pre>
 tag_names = tags_string.split(",").collect{|s| s.strip.downcase}.uniq
 </pre>
 
@@ -287,7 +287,7 @@ This is a good start but it doesn't solve everything. We'd still get repeated ta
 
 If we edit an article and *remove* a tag from the list, this method as it stands now isn't going to do anything about it. Since we don't have anything valuable in the Tagging object besides the connection to the article and tag, they're disposible. We can just destroy all the taggings at the beginning of the method. Any tags that aren't in the @tags_string@ won't get re-linked. This will both avoid removed tags and prevent the "double tagging" behavior. Putting that all together, here's my final @tag_list=@ method:
 
-<pre class="brush:ruby;">
+<pre>
   def tag_list=(tags_string)
     self.taggings.destroy_all
     tag_names = tags_string.split(",").collect{|s| s.strip.downcase}.uniq
@@ -304,7 +304,7 @@ h3. Listing Articles by Tag
 
 The links for our tags are showing up, but if you click on them you'll get our old friend, the "No action responded to show. Actions:" error. Open up your @/app/controllers/tags_controller.rb@ and add a a @show@ method like this:
 
-<pre class="brush:ruby;">
+<pre>
   def show
     @tag = Tag.find(params[:id])
   end  
@@ -312,7 +312,7 @@ The links for our tags are showing up, but if you click on them you'll get our o
 
 Then create a file @/app/views/tags/show.html.erb@ like this:
 
-<pre class="brush:ruby;">
+<pre>
 <h1>Articles Tagged with <%= @tag.name %></h1>
 
 <ul>

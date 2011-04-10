@@ -24,7 +24,7 @@ h3. Setting up the Migration
 
 Open the migration file that the generator created, @/db/migrate/some-timestamp_create_comments.rb@. Inside the @self.up@ you need to add one line for each of the pieces of data we just brainstormed. It'll start off with these...
 
-<pre class="brush:ruby;">
+<pre>
 t.integer :article_id
 t.string :author_name
 </pre>
@@ -43,7 +43,7 @@ Part of the big deal with CFWheels is that it makes working with these relations
 
 Following this convention will get us a lot of functionality "for free."  Open your @/app/models/comment.rb@ and add the middle line so it looks like this:
 
-<pre class="brush:ruby;">
+<pre>
 class Comment < ActiveRecord::Base
   belongs_to :article
 end
@@ -51,7 +51,7 @@ end
 
 A comment relates to a single article, it "belongs to" an article. We then want to declare the other side of the relationship inside @/app/models/article.rb@ like this:
 
-<pre class="brush:ruby;">
+<pre>
 class Article < ActiveRecord::Base
   has_many :comments
 end
@@ -101,14 +101,14 @@ h3. Displaying Comments for an Article
 
 We want to display any comments underneath their parent article. Because we've setup the relationships between those models, this is very easy. Open @/app/views/articles/show.html.erb@ and add the following lines right before the link to the articles list:
 
-<pre class="brush:ruby;">
+<pre>
 <h3>Comments</h3>
 <%= render :partial => 'comment', :collection => @article.comments %>
 </pre>
 
 This says that we want to render a partial named "comment" and that we want to do it once for each element in the collection @@article.comments@. We saw in the console that when we call the @.comments@ method on an article we'll get back an array of it's associated comment objects. So this render line will pass each element of that array one at a time into the partial named "comment". Now we need to create the file @/app/views/articles/_comment.html.erb@ and add this code:
 
-<pre class="brush:ruby;">
+<pre>
 <div class="comment">
   <h4>Comment by <%=h comment.author_name %></h4>
   <p><%=h comment.body %></p>
@@ -123,13 +123,13 @@ Good start, but our users (hopefully) can't get into the console to create their
 
 Let's start with the form. The comment form should be embedded into the article's @show@ template. So let's add this code right above the "Back to Articles List" in the articles @show.html.erb@:
 
-<pre class="brush:ruby;">
+<pre>
 <%= render :partial => 'comment_form' %>
 </pre>
 
 Obviously this is expecting a file @/app/views/articles/_comment_form.html.erb@, so create that and add this content for now:
 
-<pre class="brush:ruby;">
+<pre>
 <h3>Post a Comment</h3>
 <p>(Comment form will go here)</p>
 </pre>
@@ -138,13 +138,13 @@ Look at an article in your browser to make sure that partial is showing up. Then
 
 Ok, now look at your @articles_controller.rb@ in the @new@ method. Remember how we had to create a blank Article object so CFWheels could figure out which fields an article has?  We need to do the same thing before we create a form for the comment. But when we view the article and display the comment form we're not running the article's @new@ method, we're running the @show@ method. So we'll need to create a blank Comment object inside that @show@ method like this:
 
-<pre class="brush:ruby;">
+<pre>
 @comment = @article.comments.new
 </pre>
 
 This is just like we did it in the console. Now we can create a form inside our @_comment_form.html.erb@ partial like this:
 
-<pre class="brush:ruby;">
+<pre>
 <h3>Post a Comment</h3>
 
 <% form_for @comment do |f| %>
@@ -183,7 +183,7 @@ undefined method `comments_path' for #<ActionView::Base:0x10446e510>
 
 The @form_for@ helper is trying to build the form so that it submits to @comments_path@, but we haven't told the router anything about Comments yet. Open @/config/routes.rb@ and add this line at the top:
 
-<pre class="brush:ruby;">
+<pre>
 map.resources :comments
 </pre>
 
@@ -201,7 +201,7 @@ What's up with those extra parameters?  Anything after the name of the controlle
 
 The one we're interested in first is @create@. You can cheat by looking at the @create@ method in your @articles_controller.rb@. For your @comments_controller.rb@, everything should be the same just replace article with comment. Then the redirect is a little different, use this:
 
-<pre class="brush:ruby;">
+<pre>
 redirect_to article_path(@comment.article)
 </pre>
 
@@ -215,7 +215,7 @@ h4. Comments Count
 
 Let's make it so where the view template has the "Comments" header it displays how many comments there are, like "Comments (3)". Open up your article's @show.html.erb@ and change the comments header so it looks like this:
 
-<pre class="brush:ruby;">
+<pre>
 <h3>Comments (<%= @article.comments.size %>)</h3>
 </pre>
 
@@ -223,7 +223,7 @@ h4. Form Labels
 
 The comments form looks a little silly with "Author Name" and "Author URL" and such. It should probably say "Your Name" and "Your URL (optional)", right?  To change the text that the label helper prints out, you just pass in the desired text as a second parameter, like this:
 
-<pre class="brush:ruby;">
+<pre>
 <%= f.label :author_name, "Your Name"  %>
 </pre>
 
@@ -233,7 +233,7 @@ h4. Add Timestamp to the Comment Display
 
 We should add something about when the comment was posted. CFWheels has a really neat helper named @distance_of_time_in_words@ which takes two dates and creates a text description of their difference like "32 minutes later", "3 months later", and so on. You can use it in your @_comment.html.erb@ partial like this:
 
-<pre class="brush:ruby;">
+<pre>
 <p>Posted <%= distance_of_time_in_words(comment.article.created_at, comment.created_at) %> later</p>
 </pre>
 

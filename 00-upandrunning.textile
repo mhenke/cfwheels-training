@@ -52,7 +52,7 @@ h4. What is a migration?
 
 Migrations are a convenient way for you to alter your database in a structured and organized manner. Migrations are meant to be _symmetric_. Whatever a migration changes inside the @up@ method should be _undone_ with the @down@ method. Frequently in development you'll think you want the database to look one way, then realize you need something different. You can create a migration to make your changes to the DB, start building, and then revert as necessary.
 
-Let's generate a "Create table" migration for our articles. In the browser select, DBMigration link in the Wheels debugging section. And complete the page like: 
+Let's generate a "Create table" migration for our articles. In the browser select, DBMigration link in the Wheels debugging section and open it in a new tab (This will make switching between plugins and our code easier). And complete the page like: 
 
 * Template: Create table
 * Migration prefix: Timestamp (e.g. 20110406075307)
@@ -247,31 +247,45 @@ Could not find the view page for the index action in the Examples controller.
 
 h3. Creating the Index View
 
-The error message is pretty helpful here. It tells us that the app is looking for a (view) template in @/views/articles/@ but it can't find one named @index.cfm@. CFWheels has *assumed* that our @index@ action in the controller should have a corresponding @index.erb@ view template in the views folder. We didn't have to put any code in the controller to tell it what view we wanted, CFWheels just figures it out.
+The error message is pretty helpful here. It tells us that the app is looking for a (view) template in @/views/Articles/@ but it can't find one named @index.cfm@. CFWheels has *assumed* that our @index@ action in the controller should have a corresponding @index.cfm@ view template in the views folder. We didn't have to put any code in the controller to tell it what view we wanted, CFWheels just figures it out.
 
-Let's create that view template now. In the left pane of your Eclipse window, expand the @JSBloggers@ project so you can see @views@, then expand @views@. Right-click on the @articles@ folder, select @New@ then @Folder@ and, in the popup, name the folder @Articles@. Next repeat the process, but select @File@ and, in the popup, name the file @index.cfm@
+Let's create that view template now. In the left pane of your Eclipse window, expand the @JSBloggers@ project so you can see @views@, then expand @views@. Right-click on the @views@ folder, select @New@ then @Folder@ and, in the popup, name the folder @Articles@. Next repeat the process, but select @File@ and, in the popup, name the file @index.cfm@
 
-Why did we choose @index.html.erb@ instead of the @index.erb@ that the error message said it was looking for?  Putting the HTML in the name makes it clear that this view is for generating HTML. In later versions of our blog we might create an RSS feed which would just mean creating an XML view template like @index.xml.erb@. CFWheels is smart enough to pick the right one based on the browser's request, so when we just ask for @http://localhost:3000/articles/@ it will find the @index.html.erb@ and render that file.
+Now you're looking at a blank file. Enter in this view template code which is a mix of HTML and what are called CFML tags:
 
-Now you're looking at a blank file. Enter in this view template code which is a mix of HTML and what are called ERB tags:
+<pre>
+<code>
+<h1>Listing articles</h1>
 
-<pre class="brush:ruby;">
-<h1>All Articles</h1>
+<cftable query="articles" colHeaders="true" HTMLTable="true">
 
-<ul>
-  <% @articles.each do |article| %>
-    <li>
-      <b><%= article.title %></b><br/>
-      <%= article.body %>
-    </li>  
-  <% end %>
-</ul>
+ <cfcol header="Id" text="#id#" />
+
+ <cfcol header="Title" text="#title#" />
+
+ <cfcol header="Body" text="#body#" />
+
+ <cfcol header="Createdat" text="#createdat#" />
+
+ <cfcol header="Updatedat" text="#updatedat#" />
+
+ <cfcol header="Deletedat" text="#deletedat#" />
+
+ <cfcol header="" text="#linkTo(text='Show', action='show', key=id)#" />
+ <cfcol header="" text="#linkTo(text='Edit', action='edit', key=id)#" />
+ <cfcol header="" text="#linkTo(text='Delete', action='delete', key=id, confirm='Are you sure?')#" />
+</cftable>
+
+<cfoutput>
+	<p>#linkTo(text="New article", action="new")#</p>
+</cfoutput>
+</code>
 </pre>
 
-ERB is a templating language that allows us to mix Ruby into our HTML. There are only a few things to know about ERB:
+CFML is a templating language that allows us to mix CFML into our HTML. There are only a few things to know about CFM:
 
-* An ERB clause starts with @<%@ or @<%=@ and ends with @%>@
-* If the clause started with @<%@, the result of the ruby code will be hidden
-* If the clause started with @<%=@, the result of the ruby code will be output in place of the clause
+* An CFML clause starts with @<cf..>@ and ends with @</cf..>@
+* If the clause started with @<!---@ and ends with @--->@, the result of the code in between will be commented out (not ran)
+* If the clause started with @<cfoutput>@ and endes with @</cfoutput>@, the result of the CFML code will be output in place of the instructions
 
 Save the file and refresh your web browser. You should see a listing of the articles you created in the console. We've got the start of a web application!
