@@ -99,14 +99,14 @@ So you'll see that the article has comments -- great. Now we need to integrate t
 
 h3. Displaying Comments for an Article
 
-We want to display any comments underneath their parent article. Because we've setup the relationships between those models, this is very easy. Open @/app/views/articles/show.html.erb@ and add the following lines right before the link to the articles list:
+We want to display any comments underneath their parent article. Because we've setup the relationships between those models, this is very easy. Open @/app/views/articles/show.cfm@ and add the following lines right before the link to the articles list:
 
 <pre>
 <h3>Comments</h3>
 <%= render :partial => 'comment', :collection => @article.comments %>
 </pre>
 
-This says that we want to render a partial named "comment" and that we want to do it once for each element in the collection @@article.comments@. We saw in the console that when we call the @.comments@ method on an article we'll get back an array of it's associated comment objects. So this render line will pass each element of that array one at a time into the partial named "comment". Now we need to create the file @/app/views/articles/_comment.html.erb@ and add this code:
+This says that we want to render a partial named "comment" and that we want to do it once for each element in the collection @@article.comments@. We saw in the console that when we call the @.comments@ method on an article we'll get back an array of it's associated comment objects. So this render line will pass each element of that array one at a time into the partial named "comment". Now we need to create the file @/app/views/articles/_comment.cfm@ and add this code:
 
 <pre>
 <div class="comment">
@@ -121,13 +121,13 @@ h3. Web-Based Comment Creation
 
 Good start, but our users (hopefully) can't get into the console to create their comments. We'll need to create a web interface. We'll go through some of the same steps that we did when creating the web interface for creating articles.
 
-Let's start with the form. The comment form should be embedded into the article's @show@ template. So let's add this code right above the "Back to Articles List" in the articles @show.html.erb@:
+Let's start with the form. The comment form should be embedded into the article's @show@ template. So let's add this code right above the "Back to Articles List" in the articles @show.cfm@:
 
 <pre>
 <%= render :partial => 'comment_form' %>
 </pre>
 
-Obviously this is expecting a file @/app/views/articles/_comment_form.html.erb@, so create that and add this content for now:
+Obviously this is expecting a file @/app/views/articles/_comment_form.cfm@, so create that and add this content for now:
 
 <pre>
 <h3>Post a Comment</h3>
@@ -136,13 +136,13 @@ Obviously this is expecting a file @/app/views/articles/_comment_form.html.erb@,
 
 Look at an article in your browser to make sure that partial is showing up. Then we can start figuring out the details of the form.
 
-Ok, now look at your @articles_controller.rb@ in the @new@ method. Remember how we had to create a blank Article object so CFWheels could figure out which fields an article has?  We need to do the same thing before we create a form for the comment. But when we view the article and display the comment form we're not running the article's @new@ method, we're running the @show@ method. So we'll need to create a blank Comment object inside that @show@ method like this:
+Ok, now look at your @Articles.cfc.rb@ in the @new@ method. Remember how we had to create a blank Article object so CFWheels could figure out which fields an article has?  We need to do the same thing before we create a form for the comment. But when we view the article and display the comment form we're not running the article's @new@ method, we're running the @show@ method. So we'll need to create a blank Comment object inside that @show@ method like this:
 
 <pre>
 @comment = @article.comments.new
 </pre>
 
-This is just like we did it in the console. Now we can create a form inside our @_comment_form.html.erb@ partial like this:
+This is just like we did it in the console. Now we can create a form inside our @_comment_form.cfm@ partial like this:
 
 <pre>
 <h3>Post a Comment</h3>
@@ -177,7 +177,7 @@ Save then refresh in your web browser and...well...you'll get an error like this
 
 <pre>
 NoMethodError in Articles#show
-Showing app/views/articles/_comment_form.html.erb where line #3 raised:
+Showing app/views/articles/_comment_form.cfm where line #3 raised:
 undefined method `comments_path' for #<ActionView::Base:0x10446e510>
 </pre>
 
@@ -191,7 +191,7 @@ Then refresh your browser and your form should show up. Try filling out the comm
 
 h3. Creating a Comments Controller
 
-Just like we needed an @articles_controller.rb@ to manipulate our Articles, we'll need a @comments_controller.rb@. Switch over to your terminal to generate it with this line:
+Just like we needed an @Articles.cfc.rb@ to manipulate our Articles, we'll need a @comments_controller.rb@. Switch over to your terminal to generate it with this line:
 
 <pre>
 ruby script/generate controller comments index create destroy
@@ -199,7 +199,7 @@ ruby script/generate controller comments index create destroy
 
 What's up with those extra parameters?  Anything after the name of the controller (in this case "comments") will cause CFWheels to create stubs for methods with those names. Now open your @/app/controllers/comments_controller.rb@ and you'll see it has the three method stubs already.
 
-The one we're interested in first is @create@. You can cheat by looking at the @create@ method in your @articles_controller.rb@. For your @comments_controller.rb@, everything should be the same just replace article with comment. Then the redirect is a little different, use this:
+The one we're interested in first is @create@. You can cheat by looking at the @create@ method in your @Articles.cfc.rb@. For your @comments_controller.rb@, everything should be the same just replace article with comment. Then the redirect is a little different, use this:
 
 <pre>
 redirect_to article_path(@comment.article)
@@ -213,7 +213,7 @@ We've got some decent comment functionality, but there are a few things we shoul
 
 h4. Comments Count
 
-Let's make it so where the view template has the "Comments" header it displays how many comments there are, like "Comments (3)". Open up your article's @show.html.erb@ and change the comments header so it looks like this:
+Let's make it so where the view template has the "Comments" header it displays how many comments there are, like "Comments (3)". Open up your article's @show.cfm@ and change the comments header so it looks like this:
 
 <pre>
 <h3>Comments (<%= @article.comments.size %>)</h3>
@@ -227,11 +227,11 @@ The comments form looks a little silly with "Author Name" and "Author URL" and s
 <%= f.label :author_name, "Your Name"  %>
 </pre>
 
-Change your @_comment_form.html.erb@ so it prints out "Your Name", "Your Email Address", "Your URL (optional)", and "Your Comment".
+Change your @_comment_form.cfm@ so it prints out "Your Name", "Your Email Address", "Your URL (optional)", and "Your Comment".
 
 h4. Add Timestamp to the Comment Display
 
-We should add something about when the comment was posted. CFWheels has a really neat helper named @distance_of_time_in_words@ which takes two dates and creates a text description of their difference like "32 minutes later", "3 months later", and so on. You can use it in your @_comment.html.erb@ partial like this:
+We should add something about when the comment was posted. CFWheels has a really neat helper named @distance_of_time_in_words@ which takes two dates and creates a text description of their difference like "32 minutes later", "3 months later", and so on. You can use it in your @_comment.cfm@ partial like this:
 
 <pre>
 <p>Posted <%= distance_of_time_in_words(comment.article.created_at, comment.created_at) %> later</p>

@@ -40,7 +40,7 @@ has_attached_file :imageThis @has_attached_file@ method is part of the paperclip
 
 h3. Modifying the Form Template
 
-First well add the ability to upload the file when editing the article, then well add the image display to the article show template. Open your @/app/views/articles/_form.html.erb@ view template. We need to make two changes
+First well add the ability to upload the file when editing the article, then well add the image display to the article show template. Open your @/app/views/articles/_form.cfm@ view template. We need to make two changes
 
 In the very first line, we need to specify that this form needs to acceptmultipartdata. This is an instruction to the browser about how to submit the form. Change your top line so it looks like this:
 
@@ -48,17 +48,17 @@ In the very first line, we need to specify that this form needs to acceptmultipa
 
 <p><%= f.label :image, "Attach an Image" %><br /><%= f.file_field :image %></p>h3. Trying it Out
 
-If your server isn't running, start it up with the green play button in Eclipse. Then go to @http://wheels.local/articles/@ and click %(caps)EDIT% for your first article. The file field should show up towards the bottom. Click the @Choose a File@ and select one of the small images that Ive distributed to you. Click %(caps)SAVE% and you'll return to the article index. Click the title of the article you just modified. What do you see? Did the image attach to the article?
+If your server isn't running, start it up with the green play button in Eclipse. Then go to @http://wheels.local/index.cfm/articles/@ and click %(caps)EDIT% for your first article. The file field should show up towards the bottom. Click the @Choose a File@ and select one of the small images that Ive distributed to you. Click %(caps)SAVE% and you'll return to the article index. Click the title of the article you just modified. What do you see? Did the image attach to the article?
 
 When I first did this, I wasn't sure it worked. Here's how I checked:
 
 # Open a console session ( @CFWheels console@ from terminal)
-# Find the ID number of the article by looking at the %(caps)URL%. In my case, the url was @http://wheels.local/articles/1@ so the ID number is just @1@ 
+# Find the ID number of the article by looking at the %(caps)URL%. In my case, the url was @http://wheels.local/index.cfm/articles/1@ so the ID number is just @1@ 
 # In console, enter @a = Article.find(1)@ 
 # Right away I see that the article has data in the @image_file_name@ and other fields, so I think it worked.
 # Enter @a.image@ to see even more data about the file
 
-Ok, its in there, but we need it to actually show up in the article. Open the @/app/views/articles/show.html.erb@ view template. In between the line that displays the title and the one that displays the body, lets add this line:
+Ok, its in there, but we need it to actually show up in the article. Open the @/app/views/articles/show.cfm@ view template. In between the line that displays the title and the one that displays the body, lets add this line:
 
 <%= image_tag @article.image.url %>Then refresh the article in your browser. Tada!
 
@@ -66,7 +66,7 @@ h3. Improving the Form
 
 When first working with the edit form I wasn't sure the upload was working because I expected the @file_field@ to display the name of the file that I had already uploaded. Go back to the edit screen in your browser for the article you've been working with. See how it just saysChoose File, no file selectednothing tells the user that a file already exists for this article. Lets add that information in now.
 
-So open that @/app/views/articles/_form.html.erb@ and look at the paragraph where we added the image upload field. Well add in some new logic that works like this:
+So open that @/app/views/articles/_form.cfm@ and look at the paragraph where we added the image upload field. Well add in some new logic that works like this:
 
 * If the article has an image filename* Display the image
 
@@ -77,7 +77,7 @@ So, turning that into code
 
 <p><% if @article.image_file_name %><%= image_tag @article.image.url %><br/><% end %><%= f.label :image, "Attach a New Image" %><br /><%= f.file_field :image %></p>Test how that looks both for articles that already have an image and ones that dont.
 
-When youshowan article that doesnt have an image attached it'll have an ugly broken link. Go into your @/app/views/articles/show.html.erb@ and add a condition like we did in the form so the image is only displayed if it actually exists.
+When youshowan article that doesnt have an image attached it'll have an ugly broken link. Go into your @/app/views/articles/show.cfm@ and add a condition like we did in the form so the image is only displayed if it actually exists.
 
 Now our articles can have an image and all the hard work was handled by paperclip!
 

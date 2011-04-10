@@ -87,7 +87,7 @@ h3. An Interface for Tagging Articles
 
 The first interface we're interested in is within the article itself. When I write an article, I want to have a text box where I can enter a list of zero or more tags separated by commas. When I save the article, my app should associate my article with the tags with those names, creating them if necessary.
 
-Adding the text field will take place in the file @/app/views/articles/_form.html.erb@. Add in a set of paragraph tags underneath the body fields like this:
+Adding the text field will take place in the file @/app/views/articles/_form.cfm@. Add in a set of paragraph tags underneath the body fields like this:
 
 <pre>
   <p>
@@ -100,7 +100,7 @@ With that added, try to create an new article in your browser and your should se
 
 <pre>
 NoMethodError in Articles#new
-Showing app/views/articles/_form.html.erb where line #14 raised:
+Showing app/views/articles/_form.cfm where line #14 raised:
 undefined method `tag_list' for #<Article:0x10499bab0>
 </pre>
 
@@ -126,7 +126,7 @@ Processing ArticlesController#create (for 127.0.0.1) [POST]
   Parameters: {"article"=>{"body"=>"Yes, the samples continue!", "title"=>"My Sample", "tag_list"=>"ruby, technology"}, "commit"=>"Save", "authenticity_token"=>"xxi0A3tZtoCUDeoTASi6Xx39wpnHt1QW/6Z1jxCMOm8="}
 </pre>
 
-The field that's interesting there is the @"tag_list"=>"technology, ruby"@. Those are the tags as I typed them into the form. The error came up in the @create@ method, so let's peek at @/app/controllers/articles_controller.rb@ in the @create@ method. See the first line that calls @Article.new(params[:article])@?  This is the line that's causing the error as you could see in the middle of the stack trace.
+The field that's interesting there is the @"tag_list"=>"technology, ruby"@. Those are the tags as I typed them into the form. The error came up in the @create@ method, so let's peek at @/controllers/Articles.cfc@ in the @create@ method. See the first line that calls @Article.new(params[:article])@?  This is the line that's causing the error as you could see in the middle of the stack trace.
 
 Since the @create@ method passes all the parameters from the form into the @Article.new@ method, the tags are sent in as the string @"technology, ruby"@. The @new@ method will try to set the new Article's @tag_list@ equal to @"technology, ruby"@ but that method doesn't exist because there is no attribute named @tag_list@. 
 
@@ -222,7 +222,7 @@ And you'll see that this Tag is associated with just one Article.
 
 h3. Adding Tags to our Display
 
-According to our work in the console, articles can now have tags, but we haven't done anything to display them in the article pages. Let's start with @/app/views/articles/show.html.erb@. Right below the line that displays the @article.title@, add this line:
+According to our work in the console, articles can now have tags, but we haven't done anything to display them in the article pages. Let's start with @/app/views/articles/show.cfm@. Right below the line that displays the @article.title@, add this line:
 
 <pre>
 Tags: <%= tag_links(@article.tags) %><br />
@@ -251,7 +251,7 @@ Refresh your view and...BOOM:
 
 <pre>
 NoMethodError in Articles#show
-Showing app/views/articles/index.html.erb where line #6 raised:
+Showing app/views/articles/index.cfm where line #6 raised:
 undefined method `tag_path' for #<ActionView::Base:0x104aaa460>
 </pre>
 
@@ -269,7 +269,7 @@ map.resources :tags
 
 Now refresh your view and you should see your linked tags showing up on the individual article pages.
 
-Lastly, use similar code in @/app/views/articles/index.html.erb@ to display the tags on the article listing page.
+Lastly, use similar code in @/app/views/articles/index.cfm@ to display the tags on the article listing page.
 
 h3. Avoiding Repeated Tags
 
@@ -310,7 +310,7 @@ The links for our tags are showing up, but if you click on them you'll get our o
   end  
 </pre>
 
-Then create a file @/app/views/tags/show.html.erb@ like this:
+Then create a file @/app/views/tags/show.cfm@ like this:
 
 <pre>
 <h1>Articles Tagged with <%= @tag.name %></h1>
@@ -326,7 +326,7 @@ Refresh your view and you should see a list of articles with that tag. Keep in m
 
 h3. Listing All Tags
 
-We've built the @show@ action, but the reader should also be able to browse the tags available at @http://wheels.local/tags/@. I think you can do this on your own. Create an @index@ action in your @tags_controller.rb@ and an @index.html.erb@ in the corresponding views folder. Look at your @articles_controller.rb@ and Article @index.html.erb@ if you need some clues.
+We've built the @show@ action, but the reader should also be able to browse the tags available at @http://wheels.local/tags/@. I think you can do this on your own. Create an @index@ action in your @tags_controller.rb@ and an @index.cfm@ in the corresponding views folder. Look at your @Articles.cfc.rb@ and Article @index.cfm@ if you need some clues.
 
 If that's easy, try creating a @destroy@ method in your @tags_controller.rb@ and adding a destroy link to the tag list. If you do this, change the association in your @tag.rb@ so that it says @has_many :taggings, :dependent => :destroy@. That'll prevent orphaned Tagging objects from hanging around.
 

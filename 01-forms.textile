@@ -4,61 +4,66 @@ We've created an articles page, but that isn't a viable long-term solution. The 
 
 h3. Creating the NEW Action and View
 
-Previously we setup the @map.resources :articles@ route in @routes.rb@, and that told CFWheels that we were going to follow the RESTful conventions for this model named Article. Following this convention, the URL for creating a new article would be @http://wheels.local/articles/new@. Enter that into your browser and see what comes up.
+Previously we setup the @<cfset addRoute(name="home", pattern="", controller="Articles", action="index")>@ route in @/config/routes.cfm@, and that told CFWheels that we were going to follow the RESTful conventions for this model named Article. Following this convention, the URL for creating a new article would be @http://wheels.local/index.cfm/articles/new@. Enter that into your browser and see what comes up.
 
 <pre>
-Unknown action
-No action responded to new. Actions: index
+<code>
+Wheels.ViewNotFound
+Could not find the view page for the new action in the Articles controller.
+
+Suggested action
+
+Create a file named new.cfm in the views/articles directory (create the directory as well if it doesn't already exist).
+</code>
 </pre>
 
-This is an error message we've seen before. The router went looking for an action named @new@ inside the @articles_controller@ and didn't find it. For our convenience the message lists the actions that are available -- the only one being the @index@ we created in I0. 
+This is an error message we've seen before. The router went looking for an action named @new@ inside the @Articles.cfc@ and didn't find it.
 
-So first let's create that action. Open @/app/controllers/articles_controller.rb@ and add this method structure, making sure it's _inside_ the @ArticlesController@ class, but _outside_ the existing @index@ method:
+So first let's create that action. Open @/controllers/Articles.cfc@ and add this method structure, making sure it's _inside_ the @cfcomponent@ instruction, but _outside_ the existing @index@ method:
 
 <pre>
-  def new
-        
-  end
+<code>
+<cffunction name="new">
+
+</cffunction>
+</code>
 </pre>
 
-With that defined, refresh your browser and you should get this:
+Create a new file @/views/Articles/new.cfm@ with these contents:
 
 <pre>
-Template is missing
-Missing template articles/new.erb in view path app/views
+<code>
+<h1>Create new article</h1>
+</code>
 </pre>
 
-Again, an error message we saw in I0. Create a new file @/app/views/articles/new.html.erb@ with these contents:
-
-<pre>
-<h1>Create a New Article</h1>
-</pre>
-
-Refresh your browser and you should just see the heading "Create a New Article".
+Refresh your browser and you should just see the heading "Create new article".
 
 h3. Writing a Form
 
-It's not very impressive so far -- we need to add a form to the @new.html.erb@ so the user can enter in the article title and body. Because we're following the RESTful conventions, CFWheels can take care of many of the details. Inside that @erb@ file, enter this code below your header:
+It's not very impressive so far -- we need to add a form to the @new.cfm@ so the user can enter in the article title and body. Because we're following the RESTful conventions, CFWheels can take care of many of the details. Inside that @cfm@ file, enter this code below your header:
 
-<pre class="brush:ruby">
-<% form_for(@article) do |f| %>
-  <p>
-    <%= f.label :title %><br />
-    <%= f.text_field :title %>
-  </p>
-  <p>
-    <%= f.label :body %><br />
-    <%= f.text_area :body %>
-  </p>
-  <p>
-    <%= f.submit 'Create' %>
-  </p>
-<% end %>
+<pre>
+<code>
+<cfoutput>
+ #startFormTag(action="create")#
+
+
+ #textField(objectName='article', property='title', label='Title')#
+
+ #textField(objectName='article', property='body', label='Body')#
+
+
+ #submitTag()#
+
+ #endFormTag()#
+</cfoutput>
+</code>
 </pre>
 
 What is all that?  Let's look at it piece by piece:
 
-* @form_for@ is a CFWheels helper method which takes one parameter, in this case @@article@ and a block with the form fields. The first line basically says "Create a form for the object named @@article@, refer to the form by the name @f@ and add the following elements to the form..."
+* @startFormTag@ is a CFWheels helper method which takes one parameter, in this case @@article@ and a block with the form fields. The first line basically says "Create a form for the object named @@article@, refer to the form by the name @f@ and add the following elements to the form..."
 * The @f.label@ helper creates an HTML label for a field, this is good usability practice and will have some other benefits for us later
 * The @f.text_field@ helper creates a single-line text box named @title@
 * The @f.text_area@ helper creates a multi-line text box named @body@
@@ -68,7 +73,7 @@ Refresh your browser and you'll see this:
 
 <pre>
 RuntimeError in Articles#new
-Showing app/views/articles/new.html.erb where line #3 raised:
+Showing app/views/articles/new.cfm where line #3 raised:
 Called id for nil, which would mistakenly be 4 -- if you really wanted the id of nil, use object_id
 
 Extracted source (around line #3):
@@ -79,13 +84,13 @@ Extracted source (around line #3):
 5: 
 </pre>
 
-What's it trying to tell us. In our @new.html.erb@ on line #3 there was an error about "Called id for nil". As we learned in the Ruby in 100 minutes tutorial, @nil@ is Ruby's way of referring to nothingness. Somewhere in line #3 we're working with an object that doesn't exist.
+What's it trying to tell us. In our @new.cfm@ on line #3 there was an error about "Called id for nil". As we learned in the Ruby in 100 minutes tutorial, @nil@ is Ruby's way of referring to nothingness. Somewhere in line #3 we're working with an object that doesn't exist.
 
 And since there's only one object in line #3, it makes it pretty obvious -- the problem is that we started talking about a thing named @@article@ without ever creating that thing. CFWheels uses some of the _reflection_ techniques that we talked about earlier in order to setup the form. Remember in the console when we called @Article.new@ to see what fields an Article has?  CFWheels wants to do the same thing, but we need to create the blank object for it.
 
-Go into your @articles_controller.rb@, and _inside_ the @new@ method, add this line:
+Go into your @Articles.cfc.rb@, and _inside_ the @new@ method, add this line:
 
-<pre class="brush:ruby">
+<pre>
 @article = Article.new
 </pre>
 
@@ -100,7 +105,7 @@ Unknown action
 No action responded to create. Actions: index and new
 </pre>
 
-When we loaded the form we accessed the @new@ action, but when that form is submitted to the application, following the REST convention, it goes to a @create@ action. We need to create that action. Inside your @articles_controller.rb@ add this method (again, _inside_ the ArticlesContoller class, but _outside_ the other methods):
+When we loaded the form we accessed the @new@ action, but when that form is submitted to the application, following the REST convention, it goes to a @create@ action. We need to create that action. Inside your @Articles.cfc.rb@ add this method (again, _inside_ the ArticlesContoller class, but _outside_ the other methods):
 
 <pre>
   def create
@@ -115,13 +120,13 @@ This method says...
 * Create an object named @@article@ and send in the parameter @params[:article]@
 * CFWheels makes the form data available inside the variable named @params@. If were to look at @params@ as a data structure, it'd be a hash with only one key -- @:article@. The value of that pair is another hash with keys @:title@ and @:body@. The values for those keys are the data we entered into the text boxes on the form. So when @Article.new@ is called and the hash @params[:article]@ is passed in, the @new@ method looks for the value with key @:title@ and puts that into the Article's @title@ attribute. Then it looks for the value for key @:body@ and puts that into the article's @body@ attribute.
 * The line @@article.save!@ saves the object to the database, just like we did in the console. We've added the exclamation mark here because we haven't implemented any error checking. The normal @save@ method will "fail silently" if there's a problem saving the article, but the @save!@ method will raise errors and basically freak out.
-* Finally, the @redirect_to@ tells CFWheels that we don't want to render a view for this action. Once the previous steps are done, we want to bounce to the list of all articles. The router generates many friendly path-related variables for us just from the simple @map.resources :articles@ declaration. One of them is the @articles_path@ we use here -- it'll resolve to http://wheels.local/articles/.
+* Finally, the @redirect_to@ tells CFWheels that we don't want to render a view for this action. Once the previous steps are done, we want to bounce to the list of all articles. The router generates many friendly path-related variables for us just from the simple @map.resources :articles@ declaration. One of them is the @articles_path@ we use here -- it'll resolve to http://wheels.local/index.cfm/articles/.
 
 Go back in your browser so you get to the form with the sample data you entered and click CREATE. You should then bounce to the full articles list with your new article added.
 
 h3. Adding Navigation to the Index
 
-Right now our article list is very plain and we end up typing in a bunch of URLs by hand. Let's add some links. Open your @/app/views/articles/index.html.erb@ and...
+Right now our article list is very plain and we end up typing in a bunch of URLs by hand. Let's add some links. Open your @/app/views/articles/index.cfm@ and...
 
 * Add this code at the very bottom:<br/>@<%= link_to "Create a New Article", new_article_path %>@<br/>which uses the CFWheels @link_to@ helper, tells it we want a link with the text "Create a New Article" that points to the address @new_article_path@ (which the router handles for us)
 * Find where, in the middle of the view, we output just the @article.title@. Change it so it says @link_to article.title, article_path(article)@. This creates a link with the text of the articles title which points to a page where we'll show just that article.
@@ -130,7 +135,7 @@ Refresh your browser and you should now see a list of just the article titles th
 
 h3. Creating the SHOW Action
 
-Tired of this error message yet?  Go to your @articles_controller.rb@ and add a method like this:
+Tired of this error message yet?  Go to your @Articles.cfc.rb@ and add a method like this:
 
 <pre>
 def show
@@ -140,7 +145,7 @@ end
 
 Refresh the browser and you'll get the "Template is Missing" error. Let's pause here before creating the view template.
 
-Look at the URL: @http://wheels.local/articles/1@. When we added the @link_to@ in the index and pointed it to the @article_path@ for this @article@, the router created this URL. Following the RESTful convention, this URL goes to a SHOW method which would display the Article with ID number @1@. Your URL might have a different number depending on which article title you clicked in the index.
+Look at the URL: @http://wheels.local/index.cfm/articles/1@. When we added the @link_to@ in the index and pointed it to the @article_path@ for this @article@, the router created this URL. Following the RESTful convention, this URL goes to a SHOW method which would display the Article with ID number @1@. Your URL might have a different number depending on which article title you clicked in the index.
 
 So what do we want to do when the user clicks an article title?  Find the article, then display a page with it's title and body. We'll use the number on the end of the URL to find the article in the database. The router will send us this number in the variable @params[:id]@. Inside the @show@ method that we just created, add this line:
 
@@ -148,7 +153,7 @@ So what do we want to do when the user clicks an article title?  Find the articl
 @article = Article.find(params[:id])
 </pre>
 
-Now create the file @/app/views/articles/show.html.erb@ and add this code:
+Now create the file @/app/views/articles/show.cfm@ and add this code:
 
 <pre>
 <h2><%= @article.title %></h2>
@@ -162,7 +167,7 @@ h3. But You Never Make Mistakes!
 
 We can create articles and we can display them, but when we eventually deliver this to less perfect people than us, they're going to make mistakes. Right now there's no way to edit an article once it's been created. There's also no way to remove an article. Let's add those functions.
 
-Look at your @index.html.erb@ and change the whole @<li>@ segment so it looks like this:
+Look at your @index.cfm@ and change the whole @<li>@ segment so it looks like this:
 
 <pre>
     <li>
@@ -183,7 +188,7 @@ Refresh your browser and you should see "edit" and "remove" links for each artic
 
 h3. Creating an Edit Action & View
 
-The router is expecting to find an action in @articles_controller.rb@ named @edit@, so let's add this:
+The router is expecting to find an action in @Articles.cfc.rb@ named @edit@, so let's add this:
 
 <pre>
   def edit
@@ -191,7 +196,7 @@ The router is expecting to find an action in @articles_controller.rb@ named @edi
   end
 </pre>
 
-All the @edit@ action is really going to do is find the article to be edited, then display the editing form. If you refresh after adding that @edit@ action you'll see the template missing error. Create a file @/app/views/articles/edit.html.erb@ but *hold on before you type anything*. Below is what the edit form should look like:
+All the @edit@ action is really going to do is find the article to be edited, then display the editing form. If you refresh after adding that @edit@ action you'll see the template missing error. Create a file @/app/views/articles/edit.cfm@ but *hold on before you type anything*. Below is what the edit form should look like:
 
 <pre>
 <h1>Edit an Article</h1>
@@ -213,21 +218,21 @@ All the @edit@ action is really going to do is find the article to be edited, th
 <% end %>
 </pre>
 
-In the Ruby and CFWheels communities there is a mantra of "Don't Repeat Yourself" -- but that's exactly what I've done here. This view is basically the same as the @new.html.erb@ -- the only changes are the H1 and the name of the button. We can abstract this form into a single file called a _partial_, then reference this partial from both @new.html.erb@ and @edit.html.erb@.
+In the Ruby and CFWheels communities there is a mantra of "Don't Repeat Yourself" -- but that's exactly what I've done here. This view is basically the same as the @new.cfm@ -- the only changes are the H1 and the name of the button. We can abstract this form into a single file called a _partial_, then reference this partial from both @new.cfm@ and @edit.cfm@.
 
-Create a file @/app/views/articles/_form.html.erb@ and, yes, it has to have the underscore at the beginning of the filename. Go into your @/app/views/articles/new.html.erb@ and CUT all the text from and including the @form_for@ line all the way to it's @end@. The only thing left will be your H1 line. Then add the following code at the bottom of that view:
+Create a file @/app/views/articles/_form.cfm@ and, yes, it has to have the underscore at the beginning of the filename. Go into your @/views/articles/new.cfm@ and CUT all the text from and including the @form_for@ line all the way to it's @end@. The only thing left will be your H1 line. Then add the following code at the bottom of that view:
 
 <pre>
 <%= render :partial => 'form' %>
 </pre>
 
-Now go back to the @_form.html.erb@ and paste the form code. Change the text on the @submit@ button to say "Save" so it makes sense both when creating a new article and editing and existing one.
+Now go back to the @_form.cfm@ and paste the form code. Change the text on the @submit@ button to say "Save" so it makes sense both when creating a new article and editing and existing one.
 
-Then look at your @edit.html.erb@ file, write an H1 header saying "Edit an Article", then use the same code to render the partial named @form@.
+Then look at your @edit.cfm@ file, write an H1 header saying "Edit an Article", then use the same code to render the partial named @form@.
 
 Go back to your articles list and try creating a new article -- it should work just fine. Try editing an article and you should see the form with the existing article's data -- it works OK until you click SAVE.
 
-The router is looking for an action named @update@. Just like the @new@ action sends it's form data to the @create@ action, the @edit@ action sends it's form data to the @update@ action. In fact, within our @articles_controller.rb@, the @update@ method will look very similar to @create@:
+The router is looking for an action named @update@. Just like the @new@ action sends it's form data to the @create@ action, the @edit@ action sends it's form data to the @update@ action. In fact, within our @Articles.cfc.rb@, the @update@ method will look very similar to @create@:
 
 <pre>
   def update
@@ -244,7 +249,7 @@ Now try editing and saving some of your articles.
 
 h3. Creating a Destroy Action
 
-Next, click the REMOVE link for one article and hit OK. You can see that the router is expecting there to be a @destroy@ action. Go into @articles_controller.rb@ and add a destroy method like this:
+Next, click the REMOVE link for one article and hit OK. You can see that the router is expecting there to be a @destroy@ action. Go into @Articles.cfc.rb@ and add a destroy method like this:
 
 <pre>
   def destroy
@@ -262,13 +267,13 @@ h3. Adding a Flash
 
 It would be nice, though, if we gave the user some kind of status message about the operation that took place. When we create an article the message might say "Article 'the-article-title' was created", or "Article 'the-article-title' was removed" for the remove action. We can accomplish this with a special object called the @flash@.
 
-CFWheels creates the object named @flash@, so we don't need to do anything to set it up. We can start by integrating it into our @index.html.erb@ by adding this line at the very top:
+CFWheels creates the object named @flash@, so we don't need to do anything to set it up. We can start by integrating it into our @index.cfm@ by adding this line at the very top:
 
 <pre>
 <div class="flash"><p><%= flash[:message] %></p></div>
 </pre>
 
-This just outputs the value stored in the @flash@ object with the key @:message@. If you refresh your articles list you won't see anything because we haven't stored a message in there yet. Look at @articles_controller.rb@ and add this line right after the @save!@ line in your @create@ method:
+This just outputs the value stored in the @flash@ object with the key @:message@. If you refresh your articles list you won't see anything because we haven't stored a message in there yet. Look at @Articles.cfc.rb@ and add this line right after the @save!@ line in your @create@ method:
 
 <pre>
 flash[:message] = "Article '#{@article.title}' was created."

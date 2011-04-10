@@ -216,7 +216,7 @@ Then type *article* for the Object name and select *Controller* for Type. We'll 
 
 The output shows that the generator created this file for you:
 
-* @/controllers/articles_controller.cfc@ : The controller file itself
+* @/controllers/Articles.cfc.cfc@ : The controller file itself
 
 Let's open up the controller file, @/controllers/Articles.cfc@. You'll see that the @Scaffold@ plugin generated a lot of code. It created these actions for us: @index@, @show@, @new@, @edit@, @create@, @update@, @delete@.
 
@@ -241,6 +241,10 @@ Let's load @http://wheels.local/@. You'll notice our updated default route is ma
 <pre>
 Wheels.ViewNotFound
 Could not find the view page for the index action in the Examples controller.
+
+Suggested action
+
+Create a file named index.cfm in the views/examples directory (create the directory as well if it doesn't already exist).
 </pre>
 
 h3. Creating the Index View
