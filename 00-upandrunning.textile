@@ -6,7 +6,7 @@ h3. Setting the Stage
 
 First we need to make sure everything is setup and installed. See the "Preparation for CFWheels Projects":/resources/CFWheels-jumpstart/preparation/ page for instructions on setting up and verifying your ColdFusion, CFWheels, and add-ons.
 
-With that done we need to create new project in Eclipse. Open Eclipse and...
+With that done, we need to create new project in Eclipse. Open Eclipse and...
 
 * File --> New (Alt+Shift+N) --> ColdFusion Project
 ** Project Name: JSBlogger
