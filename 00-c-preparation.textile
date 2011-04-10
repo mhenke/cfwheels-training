@@ -18,15 +18,41 @@ h4. Install Adobe ColdFusion 9
 ** Copy cf9.war to "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\"
 ** Test at "http://localhost:8080/cf9/":http://localhost:8080/cf9/
 
-h3. Install UrlRewritingFilter
+h3. Install Apache (optional)
 
-* UrlRewritingFilter
-** Download the "UrlRewritingFilter zip":http://tuckey.org/urlrewrite/#download
-** Follow the steps at "http://www.tuckey.org/urlrewrite/":http://www.tuckey.org/urlrewrite/
-*** Your context's directory is C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9
-** 
-**
+* Apache
+** Download and install the "Win32 Binary without crypto (no mod_ssl) (MSI Installer)":http://apache.tradebit.com/pub//httpd/binaries/win32/httpd-2.2.17-win32-x86-no_ssl.msi
+** We will change three files:
+C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\extra\httpd-vhosts.conf
+<pre>
+<code>
+<VirtualHost *:80>
+ ServerName wheels.local
 
+ ProxyRequests Off
+  <Proxy *>
+  Order deny,allow
+  Allow from all
+  </Proxy>
+
+ ProxyPass / http://wheels.local:8308/
+ ProxyPassReverse / http://wheels.local:8308/
+</VirtualHost>
+</code>
+</pre>
+C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\httpd.conf
+<pre>
+<code>
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
+</code>
+</pre>
+C:\Windows\System32\drivers\etc\hosts
+<pre>
+<code>
+
+</code>
+</pre>
 h4. Install ColdFusion on Wheels
 
 * ColdFusion on Wheels
