@@ -28,13 +28,13 @@ Lets look at the CreateUsers migration that the generator created before we migr
 
 rake db:migrateh3. Creating a First Account
 
-First, stop then restart your server in Eclipse to make sure its picked up the plugin. Then go to @http://localhost:3000/users/new@ and the new user form should popup.
+First, stop then restart your server in Eclipse to make sure its picked up the plugin. Then go to @http://wheels.local/users/new@ and the new user form should popup.
 
-Go ahead and create yourself an account. If you're successful it will just bounce you to the @http://localhost:3000/@ root page. There isn't any information about our login status in our views, though, so its hard to tell if were really logged in.
+Go ahead and create yourself an account. If you're successful it will just bounce you to the @http://wheels.local/@ root page. There isn't any information about our login status in our views, though, so its hard to tell if were really logged in.
 
 Lets open @/app/views/layouts/application.html.haml@ and add a little footer so the whole @%body%@ chunk looks like this:
 
-%body #container #content = yield %hr %h6 - if current_user = "Logged in as #{current_user.login}" = link_to "(logout)", logout_path - else = link_to "(login)", login_pathThe go to @http://localhost:3000/articles/@ and you'll get this error:
+%body #container #content = yield %hr %h6 - if current_user = "Logged in as #{current_user.login}" = link_to "(logout)", logout_path - else = link_to "(login)", login_pathThe go to @http://wheels.local/articles/@ and you'll get this error:
 
 NameError in Articles#index Showing app/views/layouts/application.html.haml where line #14 raised: undefined local variable or method `current_user' for #<ActionView::Base:0x103147400>We tried to use the @current_user@ helper that comes with the restful_authentication plugin, but CFWheels isn't recognizing it. We need to do one more setup step. Open @/app/controllers/application_controller.rb@ , and underneath the @protect_from_forgery@ line, add this: @include AuthenticatedSystem@.
 
@@ -42,13 +42,13 @@ Now refresh your browser and your articles list should come up along with the ne
 
 h3. An Aside on the Site Root
 
-Its annoying me that we keep going to @http://localhost:3000/@ and seeing the CFWheels starter page. Lets make the root show our articles index page.
+Its annoying me that we keep going to @http://wheels.local/@ and seeing the CFWheels starter page. Lets make the root show our articles index page.
 
 First, delete the file @/public/index.html@. Files in the public directory will take precedence over routes in our application, so as long as that file exists we can't route the root address anywhere.
 
 Second, open @/config/routes.rb@ and right above the other routes add in this one:
 
-match '/' =>'articles#index'Now visit @http://localhost:3000@ and you should see your article list.
+match '/' =>'articles#index'Now visit @http://wheels.local@ and you should see your article list.
 
 h3. Securing New Users
 

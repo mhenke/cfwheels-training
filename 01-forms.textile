@@ -1,10 +1,10 @@
 h1. I1: Form-Based Workflow
 
-We've created articles from the console, but that isn't a viable long-term solution. The users of our app will expect to add content through a web interface. In this iteration we'll create an HTML form to submit the article, then all the backend processing to get it into the database.
+We've created an articles page, but that isn't a viable long-term solution. The users of our app will expect to add content through a web interface. In this iteration we'll create an HTML form to submit the article, then all the backend processing to get it into the database.
 
 h3. Creating the NEW Action and View
 
-Previously we setup the @map.resources :articles@ route in @routes.rb@, and that told CFWheels that we were going to follow the RESTful conventions for this model named Article. Following this convention, the URL for creating a new article would be @http://localhost:3000/articles/new@. Enter that into your browser and see what comes up.
+Previously we setup the @map.resources :articles@ route in @routes.rb@, and that told CFWheels that we were going to follow the RESTful conventions for this model named Article. Following this convention, the URL for creating a new article would be @http://wheels.local/articles/new@. Enter that into your browser and see what comes up.
 
 <pre>
 Unknown action
@@ -115,7 +115,7 @@ This method says...
 * Create an object named @@article@ and send in the parameter @params[:article]@
 * CFWheels makes the form data available inside the variable named @params@. If were to look at @params@ as a data structure, it'd be a hash with only one key -- @:article@. The value of that pair is another hash with keys @:title@ and @:body@. The values for those keys are the data we entered into the text boxes on the form. So when @Article.new@ is called and the hash @params[:article]@ is passed in, the @new@ method looks for the value with key @:title@ and puts that into the Article's @title@ attribute. Then it looks for the value for key @:body@ and puts that into the article's @body@ attribute.
 * The line @@article.save!@ saves the object to the database, just like we did in the console. We've added the exclamation mark here because we haven't implemented any error checking. The normal @save@ method will "fail silently" if there's a problem saving the article, but the @save!@ method will raise errors and basically freak out.
-* Finally, the @redirect_to@ tells CFWheels that we don't want to render a view for this action. Once the previous steps are done, we want to bounce to the list of all articles. The router generates many friendly path-related variables for us just from the simple @map.resources :articles@ declaration. One of them is the @articles_path@ we use here -- it'll resolve to http://localhost:3000/articles/.
+* Finally, the @redirect_to@ tells CFWheels that we don't want to render a view for this action. Once the previous steps are done, we want to bounce to the list of all articles. The router generates many friendly path-related variables for us just from the simple @map.resources :articles@ declaration. One of them is the @articles_path@ we use here -- it'll resolve to http://wheels.local/articles/.
 
 Go back in your browser so you get to the form with the sample data you entered and click CREATE. You should then bounce to the full articles list with your new article added.
 
@@ -140,7 +140,7 @@ end
 
 Refresh the browser and you'll get the "Template is Missing" error. Let's pause here before creating the view template.
 
-Look at the URL: @http://localhost:3000/articles/1@. When we added the @link_to@ in the index and pointed it to the @article_path@ for this @article@, the router created this URL. Following the RESTful convention, this URL goes to a SHOW method which would display the Article with ID number @1@. Your URL might have a different number depending on which article title you clicked in the index.
+Look at the URL: @http://wheels.local/articles/1@. When we added the @link_to@ in the index and pointed it to the @article_path@ for this @article@, the router created this URL. Following the RESTful convention, this URL goes to a SHOW method which would display the Article with ID number @1@. Your URL might have a different number depending on which article title you clicked in the index.
 
 So what do we want to do when the user clicks an article title?  Find the article, then display a page with it's title and body. We'll use the number on the end of the URL to find the article in the database. The router will send us this number in the variable @params[:id]@. Inside the @show@ method that we just created, add this line:
 

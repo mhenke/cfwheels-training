@@ -48,12 +48,12 @@ In the very first line, we need to specify that this form needs to acceptmultipa
 
 <p><%= f.label :image, "Attach an Image" %><br /><%= f.file_field :image %></p>h3. Trying it Out
 
-If your server isn't running, start it up with the green play button in Eclipse. Then go to @http://localhost:3000/articles/@ and click %(caps)EDIT% for your first article. The file field should show up towards the bottom. Click the @Choose a File@ and select one of the small images that Ive distributed to you. Click %(caps)SAVE% and you'll return to the article index. Click the title of the article you just modified. What do you see? Did the image attach to the article?
+If your server isn't running, start it up with the green play button in Eclipse. Then go to @http://wheels.local/articles/@ and click %(caps)EDIT% for your first article. The file field should show up towards the bottom. Click the @Choose a File@ and select one of the small images that Ive distributed to you. Click %(caps)SAVE% and you'll return to the article index. Click the title of the article you just modified. What do you see? Did the image attach to the article?
 
 When I first did this, I wasn't sure it worked. Here's how I checked:
 
 # Open a console session ( @CFWheels console@ from terminal)
-# Find the ID number of the article by looking at the %(caps)URL%. In my case, the url was @http://localhost:3000/articles/1@ so the ID number is just @1@ 
+# Find the ID number of the article by looking at the %(caps)URL%. In my case, the url was @http://wheels.local/articles/1@ so the ID number is just @1@ 
 # In console, enter @a = Article.find(1)@ 
 # Right away I see that the article has data in the @image_file_name@ and other fields, so I think it worked.
 # Enter @a.image@ to see even more data about the file

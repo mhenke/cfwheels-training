@@ -22,7 +22,7 @@ Eclipse will then create a CFWheels application for you and automatically open t
 
 Then go to the RUN menu in the menubar and click RUN. The first time you do this it'll display the Run/Debug Configurations window. The defaults are all fine, but I enable the @Run Browser@ checkbox near the bottom to automatically open the site in my default browser. You can UNCHECK the @Display settings before launching@ checkbox, if present, then hit RUN. 
 
-You should then see the @server@ window open at the bottom of Eclipse with your Mongrel webserver starting up. Once it's started Eclipse will open your default browser. If it doesn't open for some reason, try loading the address "http://localhost:3000/":http://localhost:3000. You should see CFWheels' "Welcome Aboard" page. Click the "About your application's environment" link and it'll display the versions of all your installed components.
+You should then see the @server@ window open at the bottom of Eclipse with your Mongrel webserver starting up. Once it's started Eclipse will open your default browser. If it doesn't open for some reason, try loading the address "http://wheels.local/":http://wheels.local. You should see CFWheels' "Welcome Aboard" page. Click the "About your application's environment" link and it'll display the versions of all your installed components.
 
 h3. Creating the Article Model
 
@@ -145,7 +145,7 @@ ActionController::Routing::Routes.draw do |map|
 end
 </pre>
 
-This line tells CFWheels to do a lot of work. It declares that we have a resource named @articles@ and the router should expect requests to follow the *RESTful* model of web interaction (REpresentational State Transfer). The details don't matter to you right now, but just know that when you make a request like @http://localhost:3000/articles/@ the router will know you're looking for a listing of the articles or @http://localhost:3000/articles/new@ means you're trying to create a new article.
+This line tells CFWheels to do a lot of work. It declares that we have a resource named @articles@ and the router should expect requests to follow the *RESTful* model of web interaction (REpresentational State Transfer). The details don't matter to you right now, but just know that when you make a request like @http://wheels.local/articles/@ the router will know you're looking for a listing of the articles or @http://wheels.local/articles/new@ means you're trying to create a new article.
 
 Now that the router knows how to handle requests about articles, it needs a place to actually send those requests, the *Controller*.
 
@@ -176,9 +176,9 @@ Let's open up the controller file, @/app/controllers/articles_controller.rb@. Yo
 
 h3. Defining the Index Action
 
-The first feature we want to add is an "index" page. This is what the app will send back when a user requests @http://localhost:3000/articles/@ -- following the RESTful conventions, this should be a list of the articles. So when the router sees this request come in, it tries to call the @index@ action inside @articles_controller@.
+The first feature we want to add is an "index" page. This is what the app will send back when a user requests @http://wheels.local/articles/@ -- following the RESTful conventions, this should be a list of the articles. So when the router sees this request come in, it tries to call the @index@ action inside @articles_controller@.
 
-Let's first try it out by entering @http://localhost:3000/articles/@ into your web browser. You should get an error message that looks like this:
+Let's first try it out by entering @http://wheels.local/articles/@ into your web browser. You should get an error message that looks like this:
 
 <pre>
 Unknown action
@@ -208,7 +208,7 @@ The error message is pretty helpful here. It tells us that the app is looking fo
 
 Let's create that view template now. In the left pane of your Eclipse window, expand the @app@ folder so you can see @views@, then expand @views@. Right-click on the @articles@ folder, select @New@ then @File@ and, in the popup, name the file @index.html.erb@.
 
-Why did we choose @index.html.erb@ instead of the @index.erb@ that the error message said it was looking for?  Putting the HTML in the name makes it clear that this view is for generating HTML. In later versions of our blog we might create an RSS feed which would just mean creating an XML view template like @index.xml.erb@. CFWheels is smart enough to pick the right one based on the browser's request, so when we just ask for @http://localhost:3000/articles/@ it will find the @index.html.erb@ and render that file.
+Why did we choose @index.html.erb@ instead of the @index.erb@ that the error message said it was looking for?  Putting the HTML in the name makes it clear that this view is for generating HTML. In later versions of our blog we might create an RSS feed which would just mean creating an XML view template like @index.xml.erb@. CFWheels is smart enough to pick the right one based on the browser's request, so when we just ask for @http://wheels.local/articles/@ it will find the @index.html.erb@ and render that file.
 
 Now you're looking at a blank file. Enter in this view template code which is a mix of HTML and what are called ERB tags:
 
@@ -239,7 +239,7 @@ We've created articles from the console, but that isn't a viable long-term solut
 
 h3. Creating the NEW Action and View
 
-Previously we setup the @map.resources :articles@ route in @routes.rb@, and that told CFWheels that we were going to follow the RESTful conventions for this model named Article. Following this convention, the URL for creating a new article would be @http://localhost:3000/articles/new@. Enter that into your browser and see what comes up.
+Previously we setup the @map.resources :articles@ route in @routes.rb@, and that told CFWheels that we were going to follow the RESTful conventions for this model named Article. Following this convention, the URL for creating a new article would be @http://wheels.local/articles/new@. Enter that into your browser and see what comes up.
 
 <pre>
 Unknown action
@@ -350,7 +350,7 @@ This method says...
 * Create an object named @@article@ and send in the parameter @params[:article]@
 * CFWheels makes the form data available inside the variable named @params@. If were to look at @params@ as a data structure, it'd be a hash with only one key -- @:article@. The value of that pair is another hash with keys @:title@ and @:body@. The values for those keys are the data we entered into the text boxes on the form. So when @Article.new@ is called and the hash @params[:article]@ is passed in, the @new@ method looks for the value with key @:title@ and puts that into the Article's @title@ attribute. Then it looks for the value for key @:body@ and puts that into the article's @body@ attribute.
 * The line @@article.save!@ saves the object to the database, just like we did in the console. We've added the exclamation mark here because we haven't implemented any error checking. The normal @save@ method will "fail silently" if there's a problem saving the article, but the @save!@ method will raise errors and basically freak out.
-* Finally, the @redirect_to@ tells CFWheels that we don't want to render a view for this action. Once the previous steps are done, we want to bounce to the list of all articles. The router generates many friendly path-related variables for us just from the simple @map.resources :articles@ declaration. One of them is the @articles_path@ we use here -- it'll resolve to http://localhost:3000/articles/.
+* Finally, the @redirect_to@ tells CFWheels that we don't want to render a view for this action. Once the previous steps are done, we want to bounce to the list of all articles. The router generates many friendly path-related variables for us just from the simple @map.resources :articles@ declaration. One of them is the @articles_path@ we use here -- it'll resolve to http://wheels.local/articles/.
 
 Go back in your browser so you get to the form with the sample data you entered and click CREATE. You should then bounce to the full articles list with your new article added.
 
@@ -375,7 +375,7 @@ end
 
 Refresh the browser and you'll get the "Template is Missing" error. Let's pause here before creating the view template.
 
-Look at the URL: @http://localhost:3000/articles/1@. When we added the @link_to@ in the index and pointed it to the @article_path@ for this @article@, the router created this URL. Following the RESTful convention, this URL goes to a SHOW method which would display the Article with ID number @1@. Your URL might have a different number depending on which article title you clicked in the index.
+Look at the URL: @http://wheels.local/articles/1@. When we added the @link_to@ in the index and pointed it to the @article_path@ for this @article@, the router created this URL. Following the RESTful convention, this URL goes to a SHOW method which would display the Article with ID number @1@. Your URL might have a different number depending on which article title you clicked in the index.
 
 So what do we want to do when the user clicks an article title?  Find the article, then display a page with it's title and body. We'll use the number on the end of the URL to find the article in the database. The router will send us this number in the variable @params[:id]@. Inside the @show@ method that we just created, add this line:
 
@@ -1086,7 +1086,7 @@ Refresh your view and you should see a list of articles with that tag. Keep in m
 
 h3. Listing All Tags
 
-We've built the @show@ action, but the reader should also be able to browse the tags available at @http://localhost:3000/tags/@. I think you can do this on your own. Create an @index@ action in your @tags_controller.rb@ and an @index.html.erb@ in the corresponding views folder. Look at your @articles_controller.rb@ and Article @index.html.erb@ if you need some clues.
+We've built the @show@ action, but the reader should also be able to browse the tags available at @http://wheels.local/tags/@. I think you can do this on your own. Create an @index@ action in your @tags_controller.rb@ and an @index.html.erb@ in the corresponding views folder. Look at your @articles_controller.rb@ and Article @index.html.erb@ if you need some clues.
 
 If that's easy, try creating a @destroy@ method in your @tags_controller.rb@ and adding a destroy link to the tag list. If you do this, change the association in your @tag.rb@ so that it says @has_many :taggings, :dependent => :destroy@. That'll prevent orphaned Tagging objects from hanging around.
 
