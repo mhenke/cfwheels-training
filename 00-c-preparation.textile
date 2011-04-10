@@ -2,9 +2,9 @@ h1. Preparation for JSBloggers Project
 
 There are a few extra steps of preparation when working with CFWheels projects:
 
-h3. Installing Servers
+h2. Installing Servers
 
-h4. Install Adobe ColdFusion 9
+h3. Install Adobe ColdFusion 9
 
 * Adobe ColdFusion 9
 ** Download and install "http://www.adobe.com/products/coldfusion/":http://www.adobe.com/products/coldfusion/ as multiple instances
@@ -62,7 +62,7 @@ Finally, open this file and add this line.
 
 Now instead of you should get to our ColdFusion server via "http://wheels.local/":http://wheels.local/ .
 
-h4. Install ColdFusion on Wheels
+h3. Install ColdFusion on Wheels
 
 * ColdFusion on Wheels
 ** Download "http://cfwheels.org/download/latest-version":http://cfwheels.org/download/latest-version
@@ -85,19 +85,19 @@ h4. Install Scaffold Plugin
 ** Reload CFWheels "http://wheels.local/":http://wheels.local/
 ** You should see Scaffold under Plugins
 
-h4. Install MySQL Server
+h3. Install MySQL Server
 
 * Windows
 ** Download and install "http://dev.mysql.com/downloads/mirror.php?id=401202":http://dev.mysql.com/downloads/mirror.php?id=401202 
 
-h3. Client Tools
+h2. Client Tools
 
-h4. Install ColdFusion Builder
+h3. Install ColdFusion Builder
 
 * Windows
 ** Download and install as standalone "http://www.adobe.com/products/coldfusion/cfbuilder/features/":http://www.adobe.com/products/coldfusion/cfbuilder/features/
 
-h4. Install SQL Explorer
+h3. Install SQL Explorer
 
 * SQL Explorer
 ** Open CFBuilder
@@ -108,7 +108,7 @@ h4. Install SQL Explorer
 ** Once loaded, check SQL Explorer
 ** Click Finish
 
-h5. Install MySQL driver
+h4. Install MySQL driver
 
 ** Edit MySql driver http://www.sqlexplorer.org/drivers.php
 http://eclipsesql.sourceforge.net/
@@ -118,7 +118,7 @@ Driver Class Name:
 
 ** "JDBC Driver for MySQL (Connector/J)":http://www.mysql.com/downloads/connector/j/
 
-h5. Add JSBloggers connection
+h4. Add JSBloggers connection
 
 ** Add connection
 
