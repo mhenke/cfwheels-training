@@ -33,11 +33,11 @@ Create a new file @/views/Articles/new.cfm@ with these contents:
 
 <pre>
 <code>
-<h1>Create new article</h1>
+<h1>Create a New Article</h1>
 </code>
 </pre>
 
-Refresh your browser and you should just see the heading "Create new article".
+Refresh your browser and you should just see the heading "Create a New Article".
 
 h3. Writing a Form
 
@@ -47,15 +47,9 @@ It's not very impressive so far -- we need to add a form to the @new.cfm@ so the
 <code>
 <cfoutput>
  #startFormTag(action="create")#
-
-
- #textField(objectName='article', property='title', label='Title')#
-
- #textField(objectName='article', property='body', label='Body')#
-
-
- #submitTag()#
-
+  #textField(objectName='article', property='title', label='Title')#
+  #textField(objectName='article', property='body', label='Body')#
+  #submitTag()#
  #endFormTag()#
 </cfoutput>
 </code>
@@ -63,56 +57,66 @@ It's not very impressive so far -- we need to add a form to the @new.cfm@ so the
 
 What is all that?  Let's look at it piece by piece:
 
-* @startFormTag@ is a CFWheels helper method which takes one parameter, in this case @@article@ and a block with the form fields. The first line basically says "Create a form for the object named @@article@, refer to the form by the name @f@ and add the following elements to the form..."
-* The @f.label@ helper creates an HTML label for a field, this is good usability practice and will have some other benefits for us later
-* The @f.text_field@ helper creates a single-line text box named @title@
-* The @f.text_area@ helper creates a multi-line text box named @body@
-* The @f.submit@ helper creates a button labeled "Create"
+* @startFormTag@ is a CFWheels helper instruction which takes an action parameter, in this case @create@, The first line basically says "Make an openning form tag with the name of the action included in the URL" .
+* The @textField@ helper creates a single-line text field control
+** The @objectName@ parameter which says for this input use the object named @article@ to build the form control
+** The @property@ parameter create the name of the property to use in the form control
+** The @lable@ parameter creates an HTML label for the form control, this is good usability practice and will have some other benefits for us later
+* The @submitTag@ helper creates a submit button labeled "Save changes"
+* The @endFormTag@ helper creates the ending form tag
 
 Refresh your browser and you'll see this:
 
 <pre>
-RuntimeError in Articles#new
-Showing app/views/articles/new.cfm where line #3 raised:
-Called id for nil, which would mistakenly be 4 -- if you really wanted the id of nil, use object_id
+Wheels.ObjectNotFound
+Wheels tried to find the model object article for the form helper, but it does not exist.
 
-Extracted source (around line #3):
-1: <h1>Create a New Article</h1>
-2: 
-3: <% form_for(@article) do |f| %>
-4:   <%= f.error_messages %>
-5: 
+Error location
+
+Line 4 in views\articles\new.cfm
+
+2: <cfoutput>
+3:  #startFormTag(action="create")#
+4:   #textField(objectName='article', property='title', label='Title')#
+5:   #textField(objectName='article', property='body', label='Body')#
+6:   #submitTag()#
 </pre>
 
-What's it trying to tell us. In our @new.cfm@ on line #3 there was an error about "Called id for nil". As we learned in the Ruby in 100 minutes tutorial, @nil@ is Ruby's way of referring to nothingness. Somewhere in line #3 we're working with an object that doesn't exist.
+What's it trying to tell us. In our @new.cfm@ on line #4 there was an error about "Wheels.ObjectNotFound". Somewhere in line #4 we're working with an object that doesn't exist.
 
-And since there's only one object in line #3, it makes it pretty obvious -- the problem is that we started talking about a thing named @@article@ without ever creating that thing. CFWheels uses some of the _reflection_ techniques that we talked about earlier in order to setup the form. Remember in the console when we called @Article.new@ to see what fields an Article has?  CFWheels wants to do the same thing, but we need to create the blank object for it.
+And since there's only one object in line #4, it makes it pretty obvious -- the problem is that we started talking about a thing named @srticle@ without ever creating that thing. CFWheels uses some of the _reflection_ techniques that we talked about earlier in order to setup the form. Remember in the @Examples.cfc@ when we called @Article.new@ to create a new object?  CFWheels wants to do the same thing, but we need to create the blank object for it.
 
-Go into your @Articles.cfc.rb@, and _inside_ the @new@ method, add this line:
+Go into your @Articles.cfc@, and _inside_ the @new@ method, add this line:
 
 <pre>
-@article = Article.new
+<cfset article = model("Article").new()>
 </pre>
 
-Then refresh your browser and your form should come up. Enter in a title, some body text, and click CREATE.
+Then refresh your browser and your form should come up. Enter in a title, some body text, and click "Save changes".
 
 h3. The CREATE Action
 
 You're old friend pops up again...
 
 <pre>
-Unknown action
-No action responded to create. Actions: index and new
+Wheels.ViewNotFound
+Could not find the view page for the create action in the Articles controller.
+
+Suggested action
+
+Create a file named create.cfm in the views/articles directory (create the directory as well if it doesn't already exist).
 </pre>
 
-When we loaded the form we accessed the @new@ action, but when that form is submitted to the application, following the REST convention, it goes to a @create@ action. We need to create that action. Inside your @Articles.cfc.rb@ add this method (again, _inside_ the ArticlesContoller class, but _outside_ the other methods):
+When we loaded the form we accessed the @new@ action, but when that form is submitted to the application, following the REST convention, it goes to a @create@ action. We need to create that action. Inside your @Articles.cfc@ add this method (again, _inside_ the @cfcomponent@ instuction, but _outside_ the other methods):
 
 <pre>
-  def create
-    @article = Article.new(params[:article])
-    @article.save!
-    redirect_to articles_path
-  end
+<code>
+ <cffunction name="create">
+  <cfset article = model("Article").new(params.article)>
+  <cfset article.save() />
+  <cfset renderPage(action="new")>
+ </cffunction>
+</code>
 </pre>
 
 This method says...
@@ -135,7 +139,7 @@ Refresh your browser and you should now see a list of just the article titles th
 
 h3. Creating the SHOW Action
 
-Tired of this error message yet?  Go to your @Articles.cfc.rb@ and add a method like this:
+Tired of this error message yet?  Go to your @Articles.cfc@ and add a method like this:
 
 <pre>
 def show
@@ -188,7 +192,7 @@ Refresh your browser and you should see "edit" and "remove" links for each artic
 
 h3. Creating an Edit Action & View
 
-The router is expecting to find an action in @Articles.cfc.rb@ named @edit@, so let's add this:
+The router is expecting to find an action in @Articles.cfc@ named @edit@, so let's add this:
 
 <pre>
   def edit
@@ -232,7 +236,7 @@ Then look at your @edit.cfm@ file, write an H1 header saying "Edit an Article", 
 
 Go back to your articles list and try creating a new article -- it should work just fine. Try editing an article and you should see the form with the existing article's data -- it works OK until you click SAVE.
 
-The router is looking for an action named @update@. Just like the @new@ action sends it's form data to the @create@ action, the @edit@ action sends it's form data to the @update@ action. In fact, within our @Articles.cfc.rb@, the @update@ method will look very similar to @create@:
+The router is looking for an action named @update@. Just like the @new@ action sends it's form data to the @create@ action, the @edit@ action sends it's form data to the @update@ action. In fact, within our @Articles.cfc@, the @update@ method will look very similar to @create@:
 
 <pre>
   def update
@@ -249,7 +253,7 @@ Now try editing and saving some of your articles.
 
 h3. Creating a Destroy Action
 
-Next, click the REMOVE link for one article and hit OK. You can see that the router is expecting there to be a @destroy@ action. Go into @Articles.cfc.rb@ and add a destroy method like this:
+Next, click the REMOVE link for one article and hit OK. You can see that the router is expecting there to be a @destroy@ action. Go into @Articles.cfc@ and add a destroy method like this:
 
 <pre>
   def destroy
@@ -273,7 +277,7 @@ CFWheels creates the object named @flash@, so we don't need to do anything to se
 <div class="flash"><p><%= flash[:message] %></p></div>
 </pre>
 
-This just outputs the value stored in the @flash@ object with the key @:message@. If you refresh your articles list you won't see anything because we haven't stored a message in there yet. Look at @Articles.cfc.rb@ and add this line right after the @save!@ line in your @create@ method:
+This just outputs the value stored in the @flash@ object with the key @:message@. If you refresh your articles list you won't see anything because we haven't stored a message in there yet. Look at @Articles.cfc@ and add this line right after the @save!@ line in your @create@ method:
 
 <pre>
 flash[:message] = "Article '#{@article.title}' was created."

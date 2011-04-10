@@ -136,7 +136,7 @@ Obviously this is expecting a file @/app/views/articles/_comment_form.cfm@, so c
 
 Look at an article in your browser to make sure that partial is showing up. Then we can start figuring out the details of the form.
 
-Ok, now look at your @Articles.cfc.rb@ in the @new@ method. Remember how we had to create a blank Article object so CFWheels could figure out which fields an article has?  We need to do the same thing before we create a form for the comment. But when we view the article and display the comment form we're not running the article's @new@ method, we're running the @show@ method. So we'll need to create a blank Comment object inside that @show@ method like this:
+Ok, now look at your @Articles.cfc@ in the @new@ method. Remember how we had to create a blank Article object so CFWheels could figure out which fields an article has?  We need to do the same thing before we create a form for the comment. But when we view the article and display the comment form we're not running the article's @new@ method, we're running the @show@ method. So we'll need to create a blank Comment object inside that @show@ method like this:
 
 <pre>
 @comment = @article.comments.new
@@ -191,7 +191,7 @@ Then refresh your browser and your form should show up. Try filling out the comm
 
 h3. Creating a Comments Controller
 
-Just like we needed an @Articles.cfc.rb@ to manipulate our Articles, we'll need a @comments_controller.rb@. Switch over to your terminal to generate it with this line:
+Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @comments_controller.rb@. Switch over to your terminal to generate it with this line:
 
 <pre>
 ruby script/generate controller comments index create destroy
@@ -199,7 +199,7 @@ ruby script/generate controller comments index create destroy
 
 What's up with those extra parameters?  Anything after the name of the controller (in this case "comments") will cause CFWheels to create stubs for methods with those names. Now open your @/app/controllers/comments_controller.rb@ and you'll see it has the three method stubs already.
 
-The one we're interested in first is @create@. You can cheat by looking at the @create@ method in your @Articles.cfc.rb@. For your @comments_controller.rb@, everything should be the same just replace article with comment. Then the redirect is a little different, use this:
+The one we're interested in first is @create@. You can cheat by looking at the @create@ method in your @Articles.cfc@. For your @comments_controller.rb@, everything should be the same just replace article with comment. Then the redirect is a little different, use this:
 
 <pre>
 redirect_to article_path(@comment.article)

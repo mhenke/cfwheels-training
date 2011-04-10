@@ -326,7 +326,7 @@ Refresh your view and you should see a list of articles with that tag. Keep in m
 
 h3. Listing All Tags
 
-We've built the @show@ action, but the reader should also be able to browse the tags available at @http://wheels.local/tags/@. I think you can do this on your own. Create an @index@ action in your @tags_controller.rb@ and an @index.cfm@ in the corresponding views folder. Look at your @Articles.cfc.rb@ and Article @index.cfm@ if you need some clues.
+We've built the @show@ action, but the reader should also be able to browse the tags available at @http://wheels.local/tags/@. I think you can do this on your own. Create an @index@ action in your @tags_controller.rb@ and an @index.cfm@ in the corresponding views folder. Look at your @Articles.cfc@ and Article @index.cfm@ if you need some clues.
 
 If that's easy, try creating a @destroy@ method in your @tags_controller.rb@ and adding a destroy link to the tag list. If you do this, change the association in your @tag.rb@ so that it says @has_many :taggings, :dependent => :destroy@. That'll prevent orphaned Tagging objects from hanging around.
 
