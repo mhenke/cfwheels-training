@@ -4,26 +4,30 @@ There are a few extra steps of preparation when working with CFWheels projects:
 
 h3. Installing Servers
 
-h4. Install Tomcat
-
-* Tomcat
-** Download and install "32-bit/64-bit Windows Service Installer":http://www.trieuvan.com/apache/tomcat/tomcat-7/v7.0.8/bin/apache-tomcat-7.0.8.exe
-** Test at "http://localhost:8080/":http://localhost:8080/
-
 h4. Install Adobe ColdFusion 9
 
 * Adobe ColdFusion 9
-** Download and install "http://www.adobe.com/products/coldfusion/":http://www.adobe.com/products/coldfusion/ as a war
-** Rename cfusion.war to cf9.war
-** Copy cf9.war to "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\"
-** Test at "http://localhost:8080/cf9/":http://localhost:8080/cf9/
+** Download and install "http://www.adobe.com/products/coldfusion/":http://www.adobe.com/products/coldfusion/ as a multiple instances
+** Test at "http://localhost:8301/":http://localhost:8301/
 
-h3. Install Apache (optional)
+h3. Install Apache ( optional for http://wheels.local/ )
 
 * Apache
 ** Download and install the "Win32 Binary without crypto (no mod_ssl) (MSI Installer)":http://apache.tradebit.com/pub//httpd/binaries/win32/httpd-2.2.17-win32-x86-no_ssl.msi
-** We will change three files:
-C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\extra\httpd-vhosts.conf
+** We will modify three files.
+
+First uncomment these lines by deleting the hash in front of the line and save the file.
+* C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\httpd.conf
+<pre>
+<code>
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
+Include conf/extra/httpd-vhosts.conf
+</code>
+</pre>
+
+Next add this code to the bottom the the next file.
+* C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\extra\httpd-vhosts.conf
 <pre>
 <code>
 <VirtualHost *:80>
@@ -35,37 +39,35 @@ C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\extra\httpd-vho
   Allow from all
   </Proxy>
 
- ProxyPass / http://wheels.local:8308/
- ProxyPassReverse / http://wheels.local:8308/
+ ProxyPass / http://wheels.local:8301/
+ ProxyPassReverse / http://wheels.local:8301/
 </VirtualHost>
 </code>
 </pre>
-C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\httpd.conf
-<pre>
-<code>
-LoadModule proxy_module modules/mod_proxy.so
-LoadModule proxy_http_module modules/mod_proxy_http.so
-</code>
-</pre>
-C:\Windows\System32\drivers\etc\hosts
-<pre>
-<code>
 
+Finally, open this file and add this line.
+* C:\Windows\System32\drivers\etc\hosts add this:
+<pre>
+<code>
+127.0.0.1 	wheels.local
 </code>
 </pre>
+
+Now instead of you should get to our ColdFusion server via "http://wheels.local/":http://wheels.local/ .
+
 h4. Install ColdFusion on Wheels
 
 * ColdFusion on Wheels
 ** Download "http://cfwheels.org/download/latest-version":http://cfwheels.org/download/latest-version
 ** Extract and copy the file to "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9"
-** Test at "http://localhost:8080/cf9/":http://localhost:8080/cf9/
+** Test at "http://wheels.local/":http://wheels.local/
 
 h4. Install DBMigrate Plugin
 
 * DBMigrate
 ** Download "http://code.google.com/p/cfwheels-dbmigrate/":http://code.google.com/p/cfwheels-dbmigrate/
 ** Move the downloaded zip into "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9\plugins"
-** Reload CFWheels "http://localhost:8080/cf9/":http://localhost:8080/cf9/
+** Reload CFWheels "http://wheels.local/":http://wheels.local/
 ** You should see DBMigrate under Plugins
 
 h4. Install Scaffold Plugin
@@ -73,7 +75,7 @@ h4. Install Scaffold Plugin
 * Scaffold
 ** Download "http://cfwheels.org/plugins/listing/9":http://cfwheels.org/plugins/listing/9
 ** Move the downloaded zip into "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9\plugins"
-** Reload CFWheels "http://localhost:8080/cf9/":http://localhost:8080/cf9/
+** Reload CFWheels "http://wheels.local/":http://wheels.local/
 ** You should see Scaffold under Plugins
 
 h4. Install MySQL Server
