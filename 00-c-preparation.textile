@@ -7,7 +7,8 @@ h3. Installing Servers
 h4. Install Adobe ColdFusion 9
 
 * Adobe ColdFusion 9
-** Download and install "http://www.adobe.com/products/coldfusion/":http://www.adobe.com/products/coldfusion/ as a multiple instances
+** Download and install "http://www.adobe.com/products/coldfusion/":http://www.adobe.com/products/coldfusion/ as multiple instances
+** Name the instance **cfwheels101**
 ** Test at "http://localhost:8301/":http://localhost:8301/
 
 h3. Install Apache ( optional for http://wheels.local/ )
@@ -65,14 +66,14 @@ h4. Install ColdFusion on Wheels
 
 * ColdFusion on Wheels
 ** Download "http://cfwheels.org/download/latest-version":http://cfwheels.org/download/latest-version
-** Extract and copy the file to "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9"
+** Extract and copy the file to "C:\JRun4\servers\cfwheels101"
 ** Test at "http://wheels.local/":http://wheels.local/
 
 h4. Install DBMigrate Plugin
 
 * DBMigrate
 ** Download "http://code.google.com/p/cfwheels-dbmigrate/":http://code.google.com/p/cfwheels-dbmigrate/
-** Move the downloaded zip into "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9\plugins"
+** Move the downloaded zip into "C:\JRun4\servers\cfwheels101\plugins"
 ** Reload CFWheels "http://wheels.local/":http://wheels.local/
 ** You should see DBMigrate under Plugins
 
@@ -80,7 +81,7 @@ h4. Install Scaffold Plugin
 
 * Scaffold
 ** Download "http://cfwheels.org/plugins/listing/9":http://cfwheels.org/plugins/listing/9
-** Move the downloaded zip into "C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\cf9\plugins"
+** Move the downloaded zip into "C:\JRun4\servers\cfwheels101\plugins"
 ** Reload CFWheels "http://wheels.local/":http://wheels.local/
 ** You should see Scaffold under Plugins
 
