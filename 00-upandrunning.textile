@@ -282,7 +282,7 @@ Now you're looking at a blank file. Enter in this view template code which is a 
 </code>
 </pre>
 
-CFML is a templating language that allows us to mix CFML into our HTML. There are only a few things to know about CFM:
+CFML is a templating language that allows us to mix CFML into our HTML. There are only a few things to know about CFML:
 
 * An CFML clause starts with @<cf..>@ and ends with @</cf..>@
 * If the clause started with @<!---@ and ends with @--->@, the result of the code in between will be commented out (not ran)
