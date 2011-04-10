@@ -128,7 +128,7 @@ The @All non-migrated@ option finds all migrations in the @/db/migrate/@ folder,
 
 In this case we had just one migration to run and it should print some output like this to your browser under *Migration Results*:
 
-<pre class="console">
+<pre>
 Migrating from 0 up to 20110406195353.
 
 -------- 20110406195353_create_articles_table --------------
@@ -240,7 +240,7 @@ What scope is @articles@? Usually in a @cfc@ we will @var@ scope variables to st
 
 Let's load @http://wheels.local/@. You'll notice our updated default route is mapping the code to the @index@ action of the @Articles@ controller but we are getting ann error since the view doesn't exist.
 
-<pre class="console">
+<pre>
 Wheels.ViewNotFound
 Could not find the view page for the index action in the Examples controller.
 </pre>

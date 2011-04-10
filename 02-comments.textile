@@ -14,7 +14,7 @@ First, we need to brainstorm what a comment _is_...what kinds of data does it ha
 
 With that understanding, let's create a Comment model. Switch over to your terminal and enter this line:
 
-<pre class="console">
+<pre>
 ruby script/generate model Comment
 </pre>
 
@@ -65,7 +65,7 @@ Let's use the console to test how this relationship works in code. If you don't 
 
 Run the following commands one at a time and observe the output:
 
-<pre class="console">
+<pre>
 a = Article.first
 a.comments
 Comment.new
@@ -76,7 +76,7 @@ When you called the @comments@ method on object @a@, it gave you back a blank ar
 
 Try creating a few comments for that article like this:
 
-<pre class="console">
+<pre>
 c = a.comments.new
 c.author_name = "Daffy Duck"
 c.author_url = "http://daffyduck.com"
@@ -89,7 +89,7 @@ For the first comment, @c@, I used a series of commands like we've done before. 
 
 Now that you've created a few comments, try executing @a.comments@ again. Did your comments all show up?  When I did it, only one comment came back. The console tries to minimize the number of times it talks to the database, so sometimes if you ask it to do something it's already done, it'll get the information from the cache instead of really asking the database -- giving you the same answer it gave the first time. That can be annoying. To force it to clear the cache and lookup the accurate information, try this:
 
-<pre class="console">
+<pre>
 reload!
 a = Article.first
 a.comments
@@ -175,7 +175,7 @@ The only new thing here is the hidden field helper. This hidden field will hold 
 
 Save then refresh in your web browser and...well...you'll get an error like this:
 
-<pre class="console">
+<pre>
 NoMethodError in Articles#show
 Showing app/views/articles/_comment_form.html.erb where line #3 raised:
 undefined method `comments_path' for #<ActionView::Base:0x10446e510>
@@ -193,7 +193,7 @@ h3. Creating a Comments Controller
 
 Just like we needed an @articles_controller.rb@ to manipulate our Articles, we'll need a @comments_controller.rb@. Switch over to your terminal to generate it with this line:
 
-<pre class="console">
+<pre>
 ruby script/generate controller comments index create destroy
 </pre>
 

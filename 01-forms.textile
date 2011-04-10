@@ -6,7 +6,7 @@ h3. Creating the NEW Action and View
 
 Previously we setup the @map.resources :articles@ route in @routes.rb@, and that told CFWheels that we were going to follow the RESTful conventions for this model named Article. Following this convention, the URL for creating a new article would be @http://localhost:3000/articles/new@. Enter that into your browser and see what comes up.
 
-<pre class="console">
+<pre>
 Unknown action
 No action responded to new. Actions: index
 </pre>
@@ -23,7 +23,7 @@ So first let's create that action. Open @/app/controllers/articles_controller.rb
 
 With that defined, refresh your browser and you should get this:
 
-<pre class="console">
+<pre>
 Template is missing
 Missing template articles/new.erb in view path app/views
 </pre>
@@ -66,7 +66,7 @@ What is all that?  Let's look at it piece by piece:
 
 Refresh your browser and you'll see this:
 
-<pre class="console">
+<pre>
 RuntimeError in Articles#new
 Showing app/views/articles/new.html.erb where line #3 raised:
 Called id for nil, which would mistakenly be 4 -- if you really wanted the id of nil, use object_id
@@ -95,7 +95,7 @@ h3. The CREATE Action
 
 You're old friend pops up again...
 
-<pre class="console">
+<pre>
 Unknown action
 No action responded to create. Actions: index and new
 </pre>

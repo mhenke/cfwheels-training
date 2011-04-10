@@ -28,7 +28,7 @@ h3. Creating the Article Model
 
 Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our CFWheels app to work with that data. We'll use one of CFWheels' generators to create the required files. Switch to your terminal and enter the following:
 
-<pre class="console">
+<pre>
 cd JSBlogger
 ruby script/generate model Article
 </pre>
@@ -76,7 +76,7 @@ Now our migration is done. You might wonder, what about the @self.down@?  Didn't
 
 Save that migration file, switch over to your terminal, and run this command:
 
-<pre class="console">
+<pre>
 rake db:migrate
 </pre>
 
@@ -84,7 +84,7 @@ This command starts the @rake@ program which is a ruby utility for running maint
 
 In this case we had just one migration to run and it should print some output like this to your terminal:
 
-<pre class="console">
+<pre>
 ==  CreateArticles: migrating =================================================
 -- create_table(:articles)
    -> 0.0012s
@@ -99,13 +99,13 @@ h3. Working with a Model in the Console
 
 Another awesome feature of working with CFWheels is the @console@. The @console@ is a command-line interface to your application. It allows you to access and work with just about any part of your application directly instead of going through the web interface. This can simplify your development process, and even once an app is in production the console makes it very easy to do bulk modifications, searches, and other data operations. So let's open the console now by going to your terminal and entering this:
 
-<pre class="console">
+<pre>
 ruby script/console
 </pre>
 
 You'll then just get back a prompt of @>>@. You're now inside an @irb@ interpreter with full access to your application. Let's try some experiments...enter each of these commands one at a time and observe the results:
 
-<pre class="console">
+<pre>
 puts Time.now
 Article.all
 Article.new
@@ -121,7 +121,7 @@ You created most of those in your migration file, but what about @id@?  Every ta
 
 In your console, try entering @Article.all@ again. Do you see the blank article that we created with the @Article.new@ command?  No?  The console doesn't change values in the database (in most cases) until we explicitly call the @.save@ method on an object. Let's create a sample article and you'll see how it works. Enter each of the following lines one at a time:
 
-<pre class="console">
+<pre>
 a = Article.new
 a.title = "Sample Article Title"
 a.body = "This is the text for my article, woo hoo!"
@@ -160,7 +160,7 @@ I like to have several terminal windows available to me when developing, so I'd 
 
 In your terminal, enter this command:
 
-<pre class="console">
+<pre>
 ruby script/generate controller articles
 </pre>
 
@@ -180,7 +180,7 @@ The first feature we want to add is an "index" page. This is what the app will s
 
 Let's first try it out by entering @http://localhost:3000/articles/@ into your web browser. You should get an error message that looks like this:
 
-<pre class="console">
+<pre>
 Unknown action
 No action responded to index. Actions:
 </pre>
@@ -197,7 +197,7 @@ What is that "at" sign doing on the front of @@articles@?  That marks this varia
 
 Now refresh your browser. The error message changed, but you've still got an error, right?  
 
-<pre class="console">
+<pre>
 Template is missing
 Missing template articles/index.erb in view path app/views
 </pre>
@@ -241,7 +241,7 @@ h3. Creating the NEW Action and View
 
 Previously we setup the @map.resources :articles@ route in @routes.rb@, and that told CFWheels that we were going to follow the RESTful conventions for this model named Article. Following this convention, the URL for creating a new article would be @http://localhost:3000/articles/new@. Enter that into your browser and see what comes up.
 
-<pre class="console">
+<pre>
 Unknown action
 No action responded to new. Actions: index
 </pre>
@@ -258,7 +258,7 @@ So first let's create that action. Open @/app/controllers/articles_controller.rb
 
 With that defined, refresh your browser and you should get this:
 
-<pre class="console">
+<pre>
 Template is missing
 Missing template articles/new.erb in view path app/views
 </pre>
@@ -301,7 +301,7 @@ What is all that?  Let's look at it piece by piece:
 
 Refresh your browser and you'll see this:
 
-<pre class="console">
+<pre>
 RuntimeError in Articles#new
 Showing app/views/articles/new.html.erb where line #3 raised:
 Called id for nil, which would mistakenly be 4 -- if you really wanted the id of nil, use object_id
@@ -330,7 +330,7 @@ h3. The CREATE Action
 
 You're old friend pops up again...
 
-<pre class="console">
+<pre>
 Unknown action
 No action responded to create. Actions: index and new
 </pre>
@@ -533,7 +533,7 @@ First, we need to brainstorm what a comment _is_...what kinds of data does it ha
 
 With that understanding, let's create a Comment model. Switch over to your terminal and enter this line:
 
-<pre class="console">
+<pre>
 ruby script/generate model Comment
 </pre>
 
@@ -584,7 +584,7 @@ Let's use the console to test how this relationship works in code. If you don't 
 
 Run the following commands one at a time and observe the output:
 
-<pre class="console">
+<pre>
 a = Article.first
 a.comments
 Comment.new
@@ -595,7 +595,7 @@ When you called the @comments@ method on object @a@, it gave you back a blank ar
 
 Try creating a few comments for that article like this:
 
-<pre class="console">
+<pre>
 c = a.comments.new
 c.author_name = "Daffy Duck"
 c.author_url = "http://daffyduck.com"
@@ -608,7 +608,7 @@ For the first comment, @c@, I used a series of commands like we've done before. 
 
 Now that you've created a few comments, try executing @a.comments@ again. Did your comments all show up?  When I did it, only one comment came back. The console tries to minimize the number of times it talks to the database, so sometimes if you ask it to do something it's already done, it'll get the information from the cache instead of really asking the database -- giving you the same answer it gave the first time. That can be annoying. To force it to clear the cache and lookup the accurate information, try this:
 
-<pre class="console">
+<pre>
 reload!
 a = Article.first
 a.comments
@@ -694,7 +694,7 @@ The only new thing here is the hidden field helper. This hidden field will hold 
 
 Save then refresh in your web browser and...well...you'll get an error like this:
 
-<pre class="console">
+<pre>
 NoMethodError in Articles#show
 Showing app/views/articles/_comment_form.html.erb where line #3 raised:
 undefined method `comments_path' for #<ActionView::Base:0x10446e510>
@@ -712,7 +712,7 @@ h3. Creating a Comments Controller
 
 Just like we needed an @articles_controller.rb@ to manipulate our Articles, we'll need a @comments_controller.rb@. Switch over to your terminal to generate it with this line:
 
-<pre class="console">
+<pre>
 ruby script/generate controller comments index create destroy
 </pre>
 
@@ -790,7 +790,7 @@ With those relationships in mind, let's design the new models:
 
 Note that there are no changes necessary to Article because the foreign key is stored in the Tagging model. So now lets generate these models in your terminal:
 
-<pre class="console">
+<pre>
 ruby script/generate model Tag name:string
 ruby script/generate model Tagging tag_id:integer article_id:integer
 rake db:migrate
@@ -858,7 +858,7 @@ Adding the text field will take place in the file @/app/views/articles/_form.htm
 
 With that added, try to create an new article in your browser and your should see this error:
 
-<pre class="console">
+<pre>
 NoMethodError in Articles#new
 Showing app/views/articles/_form.html.erb where line #14 raised:
 undefined method `tag_list' for #<Article:0x10499bab0>
@@ -874,14 +874,14 @@ An Article doesn't have a thing named @tag_list@ -- we made it up. In order for 
 
 Your form should now show up and there's a text box at the bottom named "Tag list". Enter content for another sample article and in the tag list enter @ruby, technology@. Click SAVE and you'll get an error like this:
 
-<pre class="console">
+<pre>
 ActiveRecord::UnknownAttributeError in ArticlesController#create
 unknown attribute: tag_list
 </pre>
 
 What is this all about?  Let's start by looking at the form data that was posted when we clicked SAVE. This data is in the production.log file which should be in the "Console" frame at the bottom of the Eclipse window. Look for the line that starts "Processing ArticlesController#create", here's what mine looks like:
 
-<pre class="console">
+<pre>
 Processing ArticlesController#create (for 127.0.0.1) [POST]
   Parameters: {"article"=>{"body"=>"Yes, the samples continue!", "title"=>"My Sample", "tag_list"=>"ruby, technology"}, "commit"=>"Save", "authenticity_token"=>"xxi0A3tZtoCUDeoTASi6Xx39wpnHt1QW/6Z1jxCMOm8="}
 </pre>
@@ -904,7 +904,7 @@ h3. Not So Fast
 
 Did it really work?  It's hard to tell. Let's jump into the console and have a look.
 
-<pre class="console">
+<pre>
 a = Article.last
 a.tags
 </pre>
@@ -973,7 +973,7 @@ a.tags
 
 You should get back a list of the two tags. If you'd like to check the other side of the Article-Tagging-Tag relationship, try this:
 
-<pre class="console">
+<pre>
 t = a.tags.first
 t.articles
 </pre>
@@ -1009,7 +1009,7 @@ A helper method has to return a string which will get rendered into the HTML. In
 
 Refresh your view and...BOOM:
 
-<pre class="console">
+<pre>
 NoMethodError in Articles#show
 Showing app/views/articles/index.html.erb where line #6 raised:
 undefined method `tag_path' for #<ActionView::Base:0x104aaa460>
@@ -1017,7 +1017,7 @@ undefined method `tag_path' for #<ActionView::Base:0x104aaa460>
 
 The @link_to@ helper is trying to use @tag_path@ from the router, but the router doesn't know anything about our Tag object. We created a model, but we never created a controller or route. There's nothing to link to -- so let's generate that controller from your terminal:
 
-<pre class="console">
+<pre>
 ruby script/generate controller tags index show
 </pre>
 
