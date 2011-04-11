@@ -194,7 +194,7 @@ h3. Creating a Comments Controller
 Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @comments_controller.rb@. Switch over to your terminal to generate it with this line:
 
 <pre>
-ColdFusion script/generate controller comments index create destroy
+ColdFusion script/generate controller comments index create delete
 </pre>
 
 What's up with those extra parameters?  Anything after the name of the controller (in this case "comments") will cause CFWheels to create stubs for methods with those names. Now open your @/app/controllers/comments_controller.rb@ and you'll see it has the three method stubs already.

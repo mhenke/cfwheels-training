@@ -348,7 +348,7 @@ When we loaded the form we accessed the @new@ action, but when that form is subm
 This method says...
 
 * Create an object named @article@ and send in the parameter @params[article]@
-* CFWheels makes the form data available inside the variable named @params@. If were to look at @params@ as a data structure, it'd be a hash with only one key -- @article@. The value of that pair is another hash with keys @title@ and @body@. The values for those keys are the data we entered into the text boxes on the form. So when @Article.new@ is called and the hash @params[article]@ is passed in, the @new@ method looks for the value with key @title@ and puts that into the Article's @title@ attribute. Then it looks for the value for key @body@ and puts that into the article's @body@ attribute.
+* CFWheels makes the form data available inside the variable named @params@. If were to look at @params@ as a data structure, it'd be a structure with only one key -- @article@. The value of that pair is another structure with keys @title@ and @body@. The values for those keys are the data we entered into the text boxes on the form. So when @Article.new@ is called and the structure @params[article]@ is passed in, the @new@ method looks for the value with key @title@ and puts that into the Article's @title@ attribute. Then it looks for the value for key @body@ and puts that into the article's @body@ attribute.
 * The line @article.save!@ saves the object to the database, just like we did in the console. We've added the exclamation mark here because we haven't implemented any error checking. The normal @save@ method will "fail silently" if there's a problem saving the article, but the @save!@ method will raise errors and basically freak out.
 * Finally, the @redirect_to@ tells CFWheels that we don't want to render a view for this action. Once the previous steps are done, we want to bounce to the list of all articles. The router generates many friendly path-related variables for us just from the simple @map.resources :articles@ declaration. One of them is the @articles_path@ we use here -- it'll resolve to http://wheels.local/index.cfm/articles/.
 
@@ -377,10 +377,10 @@ Refresh the browser and you'll get the "Template is Missing" error. Let's pause 
 
 Look at the URL: @http://wheels.local/index.cfm/articles/1@. When we added the @linkTo@ in the index and pointed it to the @article_path@ for this @article@, the router created this URL. Following the RESTful convention, this URL goes to a SHOW method which would display the Article with ID number @1@. Your URL might have a different number depending on which article title you clicked in the index.
 
-So what do we want to do when the user clicks an article title?  Find the article, then display a page with it's title and body. We'll use the number on the end of the URL to find the article in the database. The router will send us this number in the variable @params[id]@. Inside the @show@ method that we just created, add this line:
+So what do we want to do when the user clicks an article title?  Find the article, then display a page with it's title and body. We'll use the number on the end of the URL to find the article in the database. The router will send us this number in the variable @params.key@. Inside the @show@ method that we just created, add this line:
 
 <pre>
-@article = Article.find(params[id])
+@article = Article.find(params.key)
 </pre>
 
 Now create the file @/views/articles/show.cfm@ and add this code:
@@ -412,7 +412,7 @@ Look at your @index.cfm@ and change the whole @<li>@ segment so it looks like th
 
 The first link we added, for edit, is pretty similar to what we've done before -- creating a link with the text "edit" pointing to the address @edit@, which is defined by the router, and editing the thing named @article@.
 
-The second one is a little more complex. Web browsers don't yet properly implement all the REST conventions, so CFWheels creates a hack for destroying objects. The details aren't too important. So this link will have the text "remove", will point to the @article@, and will use the HTTP method "delete". We've also added a @confirm@ parameter. If a link has a @confirm@, then CFWheels will generate some Javascript which will popup a box when the link is clicked that contains the text in the @confirm@. Here we're setting the message to check that the user wants to remove the article and including the article's title in the message.
+The second one is a little more complex. Web browsers don't yet properly implement all the REST conventions, so CFWheels creates a hack for deleteing objects. The details aren't too important. So this link will have the text "remove", will point to the @article@, and will use the HTTP method "delete". We've also added a @confirm@ parameter. If a link has a @confirm@, then CFWheels will generate some Javascript which will popup a box when the link is clicked that contains the text in the @confirm@. Here we're setting the message to check that the user wants to remove the article and including the article's title in the message.
 
 Refresh your browser and you should see "edit" and "remove" links for each article. Click the EDIT link for your first article.
 
@@ -422,7 +422,7 @@ The router is expecting to find an action in @Articles.cfc@ named @edit@, so let
 
 <pre>
   def edit
-    @article = Article.find(params[id])
+    @article = Article.find(params.key)
   end
 </pre>
 
@@ -466,30 +466,30 @@ The router is looking for an action named @update@. Just like the @new@ action s
 
 <pre>
   def update
-    @article = Article.find(params[id])
+    @article = Article.find(params.key)
     @article.update_attributes(params[article])
     @article.save!
     redirect_to article_path(@article)    
   end
 </pre>
 
-The only new bit here is the @update_attributes@ method. This method works very similar to when we called the @Article.new@ method and passed in the hash of form data. When we call @update_attributes@ on the @article@ object and pass in the data from the form, it changes the values in the object to match the values submitted with the form. Then we save the object to the database and redirect to the articles list.
+The only new bit here is the @update@ method. This method works very similar to when we called the @Article.new@ method and passed in the structure of form data. When we call @update@ on the @article@ object and pass in the data from the form, it changes the values in the object to match the values submitted with the form. Then we save the object to the database and redirect to the articles list.
 
 Now try editing and saving some of your articles.
 
-h3. Creating a Destroy Action
+h3. Creating a delete Action
 
-Next, click the REMOVE link for one article and hit OK. You can see that the router is expecting there to be a @destroy@ action. Go into @Articles.cfc@ and add a destroy method like this:
+Next, click the REMOVE link for one article and hit OK. You can see that the router is expecting there to be a @delete@ action. Go into @Articles.cfc@ and add a delete method like this:
 
 <pre>
-  def destroy
-    @article = Article.find(params[id])
-    @article.destroy
+  def delete
+    @article = Article.find(params.key)
+    @article.delete
     redirect_to articles_path
   end
 </pre>
 
-Here we're doing a @find@ based on @params[id]@ like we did in the @show@ action. We call that object's @destroy@ method, then redirect back to the articles list.
+Here we're doing a @find@ based on @params.key@ like we did in the @show@ action. We call that object's @delete@ method, then redirect back to the articles list.
 
 Try it out in your browser.
 
@@ -513,7 +513,7 @@ Then go to your articles list, create another sample article, and when you click
 
 Here's something cool about how CFWheels handles the @flash@ -- hit your browser's REFRESH button while looking at the articles list. See how the flash disappears?  Once you display the message in a flash CFWheels clears it out. That's why it's perfect for status messages like this.
 
-Similarly, add a flash message into your @destroy@ method and confirm that it shows up when an article is removed. Then add one to your @update@ method that'll display when an article is edited.
+Similarly, add a flash message into your @delete@ method and confirm that it shows up when an article is removed. Then add one to your @update@ method that'll display when an article is edited.
 
 And, finally, you're done with I1!
 
@@ -713,7 +713,7 @@ h3. Creating a Comments Controller
 Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @comments_controller.rb@. Switch over to your terminal to generate it with this line:
 
 <pre>
-ColdFusion script/generate controller comments index create destroy
+ColdFusion script/generate controller comments index create delete
 </pre>
 
 What's up with those extra parameters?  Anything after the name of the controller (in this case "comments") will cause CFWheels to create stubs for methods with those names. Now open your @/app/controllers/comments_controller.rb@ and you'll see it has the three method stubs already.
@@ -1045,11 +1045,11 @@ tag_names = tags_string.split(",").collect{|s| s.strip.downcase}.uniq
 
 This is a good start but it doesn't solve everything. We'd still get repeated tags each time we edit an article.
 
-If we edit an article and *remove* a tag from the list, this method as it stands now isn't going to do anything about it. Since we don't have anything valuable in the Tagging object besides the connection to the article and tag, they're disposible. We can just destroy all the taggings at the beginning of the method. Any tags that aren't in the @tags_string@ won't get re-linked. This will both avoid removed tags and prevent the "double tagging" behavior. Putting that all together, here's my final @tag_list=@ method:
+If we edit an article and *remove* a tag from the list, this method as it stands now isn't going to do anything about it. Since we don't have anything valuable in the Tagging object besides the connection to the article and tag, they're disposible. We can just delete all the taggings at the beginning of the method. Any tags that aren't in the @tags_string@ won't get re-linked. This will both avoid removed tags and prevent the "double tagging" behavior. Putting that all together, here's my final @tag_list=@ method:
 
 <pre>
   def tag_list=(tags_string)
-    self.taggings.destroy_all
+    self.taggings.delete_all
     tag_names = tags_string.split(",").collect{|s| s.strip.downcase}.uniq
     tag_names.each do |tag_name|
       tag = Tag.find_or_create_by_name(tag_name)
@@ -1066,7 +1066,7 @@ The links for our tags are showing up, but if you click on them you'll get our o
 
 <pre>
   def show
-    @tag = Tag.find(params[id])
+    @tag = Tag.find(params.key)
   end  
 </pre>
 
@@ -1082,12 +1082,12 @@ Then create a file @/app/views/tags/show.cfm@ like this:
 </ul>
 </pre>
 
-Refresh your view and you should see a list of articles with that tag. Keep in mind that there might be some abnormalities from articles we tagged before doing our fixes to the @tag_list=@ method. For any article with issues, try going to it's @edit@ screen, saving it, and things should be fixed up. If you wanted to clear out all taggings you could do @Tagging.destroy_all@ from your console.
+Refresh your view and you should see a list of articles with that tag. Keep in mind that there might be some abnormalities from articles we tagged before doing our fixes to the @tag_list=@ method. For any article with issues, try going to it's @edit@ screen, saving it, and things should be fixed up. If you wanted to clear out all taggings you could do @Tagging.delete_all@ from your console.
 
 h3. Listing All Tags
 
 We've built the @show@ action, but the reader should also be able to browse the tags available at @http://wheels.local/tags/@. I think you can do this on your own. Create an @index@ action in your @tags_controller.rb@ and an @index.cfm@ in the corresponding views folder. Look at your @Articles.cfc@ and Article @index.cfm@ if you need some clues.
 
-If that's easy, try creating a @destroy@ method in your @tags_controller.rb@ and adding a destroy link to the tag list. If you do this, change the association in your @tag.rb@ so that it says @has_many :taggings, :dependent => :destroy@. That'll prevent orphaned Tagging objects from hanging around.
+If that's easy, try creating a @delete@ method in your @tags_controller.rb@ and adding a delete link to the tag list. If you do this, change the association in your @tag.rb@ so that it says @has_many :taggings, :dependent => :delete@. That'll prevent orphaned Tagging objects from hanging around.
 
 With that, a long Iteration 3 is complete!

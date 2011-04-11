@@ -127,7 +127,7 @@ When we loaded the form we accessed the @new@ action, but when that form is subm
 This method says...
 
 * Create an object named @article@ and send in the parameter @params.article@
-* CFWheels makes the form data available inside the variable named @params@. If we're to look at @params@ as a data structure, it'd be a structure with only a key called @article@. The value of that pair is another structure with keys @title@ and @body@. The values for those keys are the data we entered into the text boxes on the form. So when @Article.new@ is called and the hash @params.article@ is passed in, the @new@ method looks for the value with key @title@ and puts that into the Article's @title@ attribute. Then it looks for the value for key @body@ and puts that into the article's @body@ attribute.
+* CFWheels makes the form data available inside the variable named @params@. If we're to look at @params@ as a data structure, it'd be a structure with only a key called @article@. The value of that pair is another structure with keys @title@ and @body@. The values for those keys are the data we entered into the text boxes on the form. So when @Article.new@ is called and the structure @params.article@ is passed in, the @new@ method looks for the value with key @title@ and puts that into the Article's @title@ attribute. Then it looks for the value for key @body@ and puts that into the article's @body@ attribute.
 * The line @<cfset article.save() />@ saves the object to the database, just like we did in the examples.
 * Finally, the @redirectTo@ tells CFWheels that we don't want to render a view for this action. Once the previous steps are done, we want to bounce to the list of all articles. This @renderPage(action="index")@ resolve to http://wheels.local/index.cfm/articles/.
 
@@ -168,7 +168,7 @@ Let's pause here before creating the view template.
 
 Look at the URL: @http://wheels.local/index.cfm/articles/show/1@. When we added the @linkTo@ in the index and pointed it to the @show@ for this @article@, the router created this URL. Following the RESTful convention, this URL goes to a SHOW method which would display the Article with ID number @1@. Your URL might have a different number depending on which article title you clicked in the index.
 
-So what do we want to do when the user clicks an article title?  Find the article, then display a page with it's title and body. We'll use the number on the end of the URL to find the article in the database. The router will send us this number in the variable @params[key]@. Inside the @show@ method that we just created, add this line:
+So what do we want to do when the user clicks an article title?  Find the article, then display a page with it's title and body. We'll use the number on the end of the URL to find the article in the database. The router will send us this number in the variable @params.key@. Inside the @show@ method that we just created, add this line:
 
 <pre>
  <cfset article = model("Article").findByKey(params.key)>
@@ -251,10 +251,12 @@ All the @edit@ action is really going to do is find the article to be edited, th
 
 In the ColdFusion and CFWheels communities there is a mantra of "Don't Repeat Yourself" -- but that's exactly what I've done here. This view is basically the same as the @new.cfm@ -- the only changes are the H1 and the submit button now has a value parameter. It will display in the button form control. We can abstract this form into a single file called a _partial_, then reference this partial from both @new.cfm@ and @edit.cfm@.
 
-Create a file @/views/articles/_form.cfm@ and, yes, it has to have the underscore at the beginning of the filename. Go into your @/views/articles/new.cfm@ and CUT all the text from and including the @form_for@ line all the way to it's @end@. The only thing left will be your H1 line. Then add the following code at the bottom of that view:
+Create a file @/views/articles/_form.cfm@ and, yes, it has to have the underscore at the beginning of the filename. Go into your @/views/articles/new.cfm@ and CUT all the text from and including the @cfoutput@ line all the way to it's ending @cfoutput@. The only thing left will be your H1 line. Then add the following code at the bottom of that view:
 
 <pre>
-<%= render :partial => 'form' %>
+<code>
+ <cfoutput>#includePartial("form")#</cfoutput>
+</code>
 </pre>
 
 Now go back to the @_form.cfm@ and paste the form code. Change the text on the @submit@ button to say "Save" so it makes sense both when creating a new article and editing and existing one.
@@ -266,31 +268,34 @@ Go back to your articles list and try creating a new article -- it should work j
 The router is looking for an action named @update@. Just like the @new@ action sends it's form data to the @create@ action, the @edit@ action sends it's form data to the @update@ action. In fact, within our @Articles.cfc@, the @update@ method will look very similar to @create@
 
 <pre>
-  def update
-    @article = Article.find(params[id])
-    @article.update_attributes(params[article])
-    @article.save!
-    redirect_to article_path(@article)    
-  end
+<code>
+<cffunction name="update">
+ <cfset article = model("Article").findByKey(params.key) />
+ <cfset article.update(params.article) />
+ <cfset redirectTo(action="index") />
+</cffunction>
+</code>
 </pre>
 
-The only new bit here is the @update_attributes@ method. This method works very similar to when we called the @Article.new@ method and passed in the hash of form data. When we call @update_attributes@ on the @article@ object and pass in the data from the form, it changes the values in the object to match the values submitted with the form. Then we save the object to the database and redirect to the articles list.
+The only new bit here is the @update@ method. This method works very similar to when we called the @new@ method and passed in the structure of form data. When we call @update@ on the @article@ object and pass in the data from the form, it changes the values in the object to match the values submitted with the form. Then we save the object to the database and redirect to the articles list.
 
 Now try editing and saving some of your articles.
 
-h3. Creating a Destroy Action
+h3. Creating a delete Action
 
-Next, click the REMOVE link for one article and hit OK. You can see that the router is expecting there to be a @destroy@ action. Go into @Articles.cfc@ and add a destroy method like this:
+Next, click the REMOVE link for one article and hit OK. You can see that the router is expecting there to be a @delete@ action. Go into @Articles.cfc@ and add a delete method like this:
 
 <pre>
-  def destroy
-    @article = Article.find(params[id])
-    @article.destroy
-    redirect_to articles_path
-  end
+<code>
+<cffunction name="delete">
+ <cfset article = model("Article").findByKey(params.key) />
+ <cfset article.delete() />
+ <cfset redirectTo(action="index") />
+</cffunction>
+</code>
 </pre>
 
-Here we're doing a @find@ based on @params[id]@ like we did in the @show@ action. We call that object's @destroy@ method, then redirect back to the articles list.
+Here we're doing a @findByKey@ based on @params.key@ like we did in the @show@ action. We call that object's @delete@ method, then redirect back to the articles list.
 
 Try it out in your browser.
 
@@ -314,6 +319,6 @@ Then go to your articles list, create another sample article, and when you click
 
 Here's something cool about how CFWheels handles the @flash@ -- hit your browser's REFRESH button while looking at the articles list. See how the flash disappears?  Once you display the message in a flash CFWheels clears it out. That's why it's perfect for status messages like this.
 
-Similarly, add a flash message into your @destroy@ method and confirm that it shows up when an article is removed. Then add one to your @update@ method that'll display when an article is edited.
+Similarly, add a flash message into your @delete@ method and confirm that it shows up when an article is removed. Then add one to your @update@ method that'll display when an article is edited.
 
 And, finally, you're done with I1!

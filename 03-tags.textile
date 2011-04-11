@@ -285,11 +285,11 @@ tag_names = tags_string.split(",").collect{|s| s.strip.downcase}.uniq
 
 This is a good start but it doesn't solve everything. We'd still get repeated tags each time we edit an article.
 
-If we edit an article and *remove* a tag from the list, this method as it stands now isn't going to do anything about it. Since we don't have anything valuable in the Tagging object besides the connection to the article and tag, they're disposible. We can just destroy all the taggings at the beginning of the method. Any tags that aren't in the @tags_string@ won't get re-linked. This will both avoid removed tags and prevent the "double tagging" behavior. Putting that all together, here's my final @tag_list=@ method:
+If we edit an article and *remove* a tag from the list, this method as it stands now isn't going to do anything about it. Since we don't have anything valuable in the Tagging object besides the connection to the article and tag, they're disposible. We can just delete all the taggings at the beginning of the method. Any tags that aren't in the @tags_string@ won't get re-linked. This will both avoid removed tags and prevent the "double tagging" behavior. Putting that all together, here's my final @tag_list=@ method:
 
 <pre>
   def tag_list=(tags_string)
-    self.taggings.destroy_all
+    self.taggings.delete_all
     tag_names = tags_string.split(",").collect{|s| s.strip.downcase}.uniq
     tag_names.each do |tag_name|
       tag = Tag.find_or_create_by_name(tag_name)
@@ -306,7 +306,7 @@ The links for our tags are showing up, but if you click on them you'll get our o
 
 <pre>
   def show
-    @tag = Tag.find(params[id])
+    @tag = Tag.find(params.key)
   end  
 </pre>
 
@@ -322,12 +322,12 @@ Then create a file @/app/views/tags/show.cfm@ like this:
 </ul>
 </pre>
 
-Refresh your view and you should see a list of articles with that tag. Keep in mind that there might be some abnormalities from articles we tagged before doing our fixes to the @tag_list=@ method. For any article with issues, try going to it's @edit@ screen, saving it, and things should be fixed up. If you wanted to clear out all taggings you could do @Tagging.destroy_all@ from your console.
+Refresh your view and you should see a list of articles with that tag. Keep in mind that there might be some abnormalities from articles we tagged before doing our fixes to the @tag_list=@ method. For any article with issues, try going to it's @edit@ screen, saving it, and things should be fixed up. If you wanted to clear out all taggings you could do @Tagging.delete_all@ from your console.
 
 h3. Listing All Tags
 
 We've built the @show@ action, but the reader should also be able to browse the tags available at @http://wheels.local/tags/@. I think you can do this on your own. Create an @index@ action in your @tags_controller.rb@ and an @index.cfm@ in the corresponding views folder. Look at your @Articles.cfc@ and Article @index.cfm@ if you need some clues.
 
-If that's easy, try creating a @destroy@ method in your @tags_controller.rb@ and adding a destroy link to the tag list. If you do this, change the association in your @tag.rb@ so that it says @has_many :taggings, :dependent => :destroy@. That'll prevent orphaned Tagging objects from hanging around.
+If that's easy, try creating a @delete@ method in your @tags_controller.rb@ and adding a delete link to the tag list. If you do this, change the association in your @tag.rb@ so that it says @has_many :taggings, :dependent => :delete@. That'll prevent orphaned Tagging objects from hanging around.
 
 With that, a long Iteration 3 is complete!
