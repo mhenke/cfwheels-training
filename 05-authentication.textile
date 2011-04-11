@@ -83,7 +83,7 @@ The first thing we need to do is sprinkle @before_filters@ on most of our contro
 
 Now our app is pretty secure, but we should hide all those edit, destroy, and new article links from unauthenticated users.
 
-Open @/app/views/articles/index.cfm@ and find the section where we output theActions. Wrap that whole section in an @if@ clause like this:
+Open @/views/articles/index.cfm@ and find the section where we output theActions. Wrap that whole section in an @if@ clause like this:
 
 <% if current_user %><% end %>Look at the article listing in your browser when you're logged out and make sure those links disappear. Then use the same technique to hide theCreate a New Articlelink.
 

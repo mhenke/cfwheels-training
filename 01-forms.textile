@@ -131,12 +131,22 @@ Go back in your browser so you get to the form with the sample data you entered 
 
 h3. Adding Navigation to the Index
 
-Right now our article list is very plain and we end up typing in a bunch of URLs by hand. Let's add some links. Open your @/app/views/articles/index.cfm@ and...
+Right now our article list is very plain and we end up typing in a bunch of URLs by hand. Let's add some links. Open your @/views/articles/index.cfm@ and...
 
-* Add this code at the very bottom:<br/>@<%= link_to "Create a New Article", new_article_path %>@<br/>which uses the CFWheels @link_to@ helper, tells it we want a link with the text "Create a New Article" that points to the address @new_article_path@ (which the router handles for us)
-* Find where, in the middle of the view, we output just the @article.title@. Change it so it says @link_to article.title, article_path(article)@. This creates a link with the text of the articles title which points to a page where we'll show just that article.
+* Add this code at the very bottom:
 
-Refresh your browser and you should now see a list of just the article titles that are linked somewhere and a link at the bottom to "Create a New Article". Test that this create link takes you to the new article form. Then go back to the article list and click one of the article titles.
+<pre>
+<code>
+ <cfoutput>
+  <p>#linkTo(text="Create a New Article", action="new")#</p>
+ </cfoutput>
+</code>
+</pre>
+
+It uses the CFWheels @linkTo@ helper, tells it we want a link with the text "Create a New Article" that points to the address @new@ (which the router handles for us)
+* Find where, in the middle of the view, we output just the @title@. Change it so it says @linkTo(text=title, action='show', key=id)@. This creates a link with the text of the articles title which points to a page where we'll show just that article.
+
+Refresh your browser and you should now see a list of the article titles that are linked somewhere and a link at the bottom to "Create a New Article". Test that this create link takes you to the new article form. Then go back to the article list and click one of the article titles.
 
 h3. Creating the SHOW Action
 
@@ -158,7 +168,7 @@ So what do we want to do when the user clicks an article title?  Find the articl
 @article = Article.find(params[:id])
 </pre>
 
-Now create the file @/app/views/articles/show.cfm@ and add this code:
+Now create the file @/views/articles/show.cfm@ and add this code:
 
 <pre>
 <h2><%= @article.title %></h2>
@@ -201,7 +211,7 @@ The router is expecting to find an action in @Articles.cfc@ named @edit@, so let
   end
 </pre>
 
-All the @edit@ action is really going to do is find the article to be edited, then display the editing form. If you refresh after adding that @edit@ action you'll see the template missing error. Create a file @/app/views/articles/edit.cfm@ but *hold on before you type anything*. Below is what the edit form should look like:
+All the @edit@ action is really going to do is find the article to be edited, then display the editing form. If you refresh after adding that @edit@ action you'll see the template missing error. Create a file @/views/articles/edit.cfm@ but *hold on before you type anything*. Below is what the edit form should look like:
 
 <pre>
 <h1>Edit an Article</h1>
@@ -225,7 +235,7 @@ All the @edit@ action is really going to do is find the article to be edited, th
 
 In the Ruby and CFWheels communities there is a mantra of "Don't Repeat Yourself" -- but that's exactly what I've done here. This view is basically the same as the @new.cfm@ -- the only changes are the H1 and the name of the button. We can abstract this form into a single file called a _partial_, then reference this partial from both @new.cfm@ and @edit.cfm@.
 
-Create a file @/app/views/articles/_form.cfm@ and, yes, it has to have the underscore at the beginning of the filename. Go into your @/views/articles/new.cfm@ and CUT all the text from and including the @form_for@ line all the way to it's @end@. The only thing left will be your H1 line. Then add the following code at the bottom of that view:
+Create a file @/views/articles/_form.cfm@ and, yes, it has to have the underscore at the beginning of the filename. Go into your @/views/articles/new.cfm@ and CUT all the text from and including the @form_for@ line all the way to it's @end@. The only thing left will be your H1 line. Then add the following code at the bottom of that view:
 
 <pre>
 <%= render :partial => 'form' %>

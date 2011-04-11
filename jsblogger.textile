@@ -204,7 +204,7 @@ Missing template articles/index.erb in view path app/views
 
 h3. Creating the Index View
 
-The error message is pretty helpful here. It tells us that the app is looking for a (view) template in @/app/views/articles/@ but it can't find one named @index.erb@. CFWheels has *assumed* that our @index@ action in the controller should have a corresponding @index.erb@ view template in the views folder. We didn't have to put any code in the controller to tell it what view we wanted, CFWheels just figures it out.
+The error message is pretty helpful here. It tells us that the app is looking for a (view) template in @/views/articles/@ but it can't find one named @index.erb@. CFWheels has *assumed* that our @index@ action in the controller should have a corresponding @index.erb@ view template in the views folder. We didn't have to put any code in the controller to tell it what view we wanted, CFWheels just figures it out.
 
 Let's create that view template now. In the left pane of your Eclipse window, expand the @app@ folder so you can see @views@, then expand @views@. Right-click on the @articles@ folder, select @New@ then @File@ and, in the popup, name the file @index.cfm@.
 
@@ -356,9 +356,9 @@ Go back in your browser so you get to the form with the sample data you entered 
 
 h3. Adding Navigation to the Index
 
-Right now our article list is very plain and we end up typing in a bunch of URLs by hand. Let's add some links. Open your @/app/views/articles/index.cfm@ and...
+Right now our article list is very plain and we end up typing in a bunch of URLs by hand. Let's add some links. Open your @/views/articles/index.cfm@ and...
 
-* Add this code at the very bottom:<br/>@<%= link_to "Create a New Article", new_article_path %>@<br/>which uses the CFWheels @link_to@ helper, tells it we want a link with the text "Create a New Article" that points to the address @new_article_path@ (which the router handles for us)
+* Add this code at the very bottom:<br/>@<%= link_to "Create a New Article", new %>@<br/>which uses the CFWheels @link_to@ helper, tells it we want a link with the text "Create a New Article" that points to the address @new@ (which the router handles for us)
 * Find where, in the middle of the view, we output just the @article.title@. Change it so it says @link_to article.title, article_path(article)@. This creates a link with the text of the articles title which points to a page where we'll show just that article.
 
 Refresh your browser and you should now see a list of just the article titles that are linked somewhere and a link at the bottom to "Create a New Article". Test that this create link takes you to the new article form. Then go back to the article list and click one of the article titles.
@@ -383,7 +383,7 @@ So what do we want to do when the user clicks an article title?  Find the articl
 @article = Article.find(params[:id])
 </pre>
 
-Now create the file @/app/views/articles/show.cfm@ and add this code:
+Now create the file @/views/articles/show.cfm@ and add this code:
 
 <pre>
 <h2><%= @article.title %></h2>
@@ -426,7 +426,7 @@ The router is expecting to find an action in @Articles.cfc@ named @edit@, so let
   end
 </pre>
 
-All the @edit@ action is really going to do is find the article to be edited, then display the editing form. If you refresh after adding that @edit@ action you'll see the template missing error. Create a file @/app/views/articles/edit.cfm@ but *hold on before you type anything*. Below is what the edit form should look like:
+All the @edit@ action is really going to do is find the article to be edited, then display the editing form. If you refresh after adding that @edit@ action you'll see the template missing error. Create a file @/views/articles/edit.cfm@ but *hold on before you type anything*. Below is what the edit form should look like:
 
 <pre>
 <h1>Edit an Article</h1>
@@ -450,7 +450,7 @@ All the @edit@ action is really going to do is find the article to be edited, th
 
 In the Ruby and CFWheels communities there is a mantra of "Don't Repeat Yourself" -- but that's exactly what I've done here. This view is basically the same as the @new.cfm@ -- the only changes are the H1 and the name of the button. We can abstract this form into a single file called a _partial_, then reference this partial from both @new.cfm@ and @edit.cfm@.
 
-Create a file @/app/views/articles/_form.cfm@ and, yes, it has to have the underscore at the beginning of the filename. Go into your @/views/articles/new.cfm@ and CUT all the text from and including the @form_for@ line all the way to it's @end@. The only thing left will be your H1 line. Then add the following code at the bottom of that view:
+Create a file @/views/articles/_form.cfm@ and, yes, it has to have the underscore at the beginning of the filename. Go into your @/views/articles/new.cfm@ and CUT all the text from and including the @form_for@ line all the way to it's @end@. The only thing left will be your H1 line. Then add the following code at the bottom of that view:
 
 <pre>
 <%= render :partial => 'form' %>
@@ -618,14 +618,14 @@ So you'll see that the article has comments -- great. Now we need to integrate t
 
 h3. Displaying Comments for an Article
 
-We want to display any comments underneath their parent article. Because we've setup the relationships between those models, this is very easy. Open @/app/views/articles/show.cfm@ and add the following lines right before the link to the articles list:
+We want to display any comments underneath their parent article. Because we've setup the relationships between those models, this is very easy. Open @/views/articles/show.cfm@ and add the following lines right before the link to the articles list:
 
 <pre>
 <h3>Comments</h3>
 <%= render :partial => 'comment', :collection => @article.comments %>
 </pre>
 
-This says that we want to render a partial named "comment" and that we want to do it once for each element in the collection @article.comments@. We saw in the console that when we call the @.comments@ method on an article we'll get back an array of it's associated comment objects. So this render line will pass each element of that array one at a time into the partial named "comment". Now we need to create the file @/app/views/articles/_comment.cfm@ and add this code:
+This says that we want to render a partial named "comment" and that we want to do it once for each element in the collection @article.comments@. We saw in the console that when we call the @.comments@ method on an article we'll get back an array of it's associated comment objects. So this render line will pass each element of that array one at a time into the partial named "comment". Now we need to create the file @/views/articles/_comment.cfm@ and add this code:
 
 <pre>
 <div class="comment">
@@ -646,7 +646,7 @@ Let's start with the form. The comment form should be embedded into the article'
 <%= render :partial => 'comment_form' %>
 </pre>
 
-Obviously this is expecting a file @/app/views/articles/_comment_form.cfm@, so create that and add this content for now:
+Obviously this is expecting a file @/views/articles/_comment_form.cfm@, so create that and add this content for now:
 
 <pre>
 <h3>Post a Comment</h3>
@@ -847,7 +847,7 @@ h3. An Interface for Tagging Articles
 
 The first interface we're interested in is within the article itself. When I write an article, I want to have a text box where I can enter a list of zero or more tags separated by commas. When I save the article, my app should associate my article with the tags with those names, creating them if necessary.
 
-Adding the text field will take place in the file @/app/views/articles/_form.cfm@. Add in a set of paragraph tags underneath the body fields like this:
+Adding the text field will take place in the file @/views/articles/_form.cfm@. Add in a set of paragraph tags underneath the body fields like this:
 
 <pre>
   <p>
@@ -982,7 +982,7 @@ And you'll see that this Tag is associated with just one Article.
 
 h3. Adding Tags to our Display
 
-According to our work in the console, articles can now have tags, but we haven't done anything to display them in the article pages. Let's start with @/app/views/articles/show.cfm@. Right below the line that displays the @article.title@, add this line:
+According to our work in the console, articles can now have tags, but we haven't done anything to display them in the article pages. Let's start with @/views/articles/show.cfm@. Right below the line that displays the @article.title@, add this line:
 
 <pre>
 Tags: <%= tag_links(@article.tags) %><br />
@@ -1029,7 +1029,7 @@ map.resources :tags
 
 Now refresh your view and you should see your linked tags showing up on the individual article pages.
 
-Lastly, use similar code in @/app/views/articles/index.cfm@ to display the tags on the article listing page.
+Lastly, use similar code in @/views/articles/index.cfm@ to display the tags on the article listing page.
 
 h3. Avoiding Repeated Tags
 

@@ -87,7 +87,7 @@ h3. An Interface for Tagging Articles
 
 The first interface we're interested in is within the article itself. When I write an article, I want to have a text box where I can enter a list of zero or more tags separated by commas. When I save the article, my app should associate my article with the tags with those names, creating them if necessary.
 
-Adding the text field will take place in the file @/app/views/articles/_form.cfm@. Add in a set of paragraph tags underneath the body fields like this:
+Adding the text field will take place in the file @/views/articles/_form.cfm@. Add in a set of paragraph tags underneath the body fields like this:
 
 <pre>
   <p>
@@ -222,7 +222,7 @@ And you'll see that this Tag is associated with just one Article.
 
 h3. Adding Tags to our Display
 
-According to our work in the console, articles can now have tags, but we haven't done anything to display them in the article pages. Let's start with @/app/views/articles/show.cfm@. Right below the line that displays the @article.title@, add this line:
+According to our work in the console, articles can now have tags, but we haven't done anything to display them in the article pages. Let's start with @/views/articles/show.cfm@. Right below the line that displays the @article.title@, add this line:
 
 <pre>
 Tags: <%= tag_links(@article.tags) %><br />
@@ -269,7 +269,7 @@ map.resources :tags
 
 Now refresh your view and you should see your linked tags showing up on the individual article pages.
 
-Lastly, use similar code in @/app/views/articles/index.cfm@ to display the tags on the article listing page.
+Lastly, use similar code in @/views/articles/index.cfm@ to display the tags on the article listing page.
 
 h3. Avoiding Repeated Tags
 
