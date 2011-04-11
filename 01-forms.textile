@@ -270,7 +270,7 @@ The only new bit here is the @update@ method. This method works very similar to 
 
 Now try editing and saving some of your articles.
 
-h3. Creating a delete Action
+h3. Creating a Delete Action
 
 Next, click the REMOVE link for one article and hit OK. You can see that the router is expecting there to be a @delete@ action. Go into @Articles.cfc@ and add a delete method like this:
 
