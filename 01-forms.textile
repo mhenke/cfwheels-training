@@ -203,9 +203,21 @@ Look at your @index.cfm@ and change the whole @<li>@ segment so it looks like th
     </li>
 </pre>
 
-The first link we added, for edit, is pretty similar to what we've done before -- creating a link with the text "edit" pointing to the address @edit_article_path@, which is defined by the router, and editing the thing named @article@.
+<pre>
+<code>
+<li>
+ <b>#linkTo(text=title, action="show")#</b><br/>
+ <i>Actions:
+ #linkTo(text='edit', action='edit', key=id)#,
+ #linkTo(text='remove', action='delete', key=id, confirm="Remove the article '#title#'?")# 
+ </i> 
+</i>
+</code>
+</pre>
 
-The second one is a little more complex. Web browsers don't yet properly implement all the REST conventions, so CFWheels creates a hack for destroying objects. The details aren't too important. So this link will have the text "remove", will point to the @article@, and will use the HTTP method "delete". We've also added a @confirm@ parameter. If a link has a @confirm@, then CFWheels will generate some Javascript which will popup a box when the link is clicked that contains the text in the @confirm@. Here we're setting the message to check that the user wants to remove the article and including the article's title in the message.
+The first link we added, for edit, is pretty similar to what we've done before -- creating a link with the text "edit" pointing to the address @edit@, which is defined by the router, and editing the key named @id@.
+
+The second one is a little more complex. So this link will have the text "remove", will point to the @delete@. We've also added a @confirm@ parameter. If a link has a @confirm@, then CFWheels will generate some Javascript which will popup a box when the link is clicked that contains the text in the @confirm@. Here we're setting the message to check that the user wants to remove the article and including the article's title in the message.
 
 Refresh your browser and you should see "edit" and "remove" links for each article. Click the EDIT link for your first article.
 
