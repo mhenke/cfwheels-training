@@ -59,10 +59,10 @@ What is all that?  Let's look at it piece by piece:
 
 * @startFormTag@ is a CFWheels helper instruction which takes an action parameter, in this case @create@, The first line basically says "Make an openning form tag with the name of the action included in the URL" .
 * The @textField@ helper creates a single-line text field control
-* The @textArea@ helper creates a text area field form control 
 ** The @objectName@ parameter which says for this input use the object named @article@ to build the form control
 ** The @property@ parameter create the name of the property to use in the form control
 ** The @lable@ parameter creates an HTML label for the form control, this is good usability practice and will have some other benefits for us later
+* The @textArea@ helper creates a text area field form control 
 * The @submitTag@ helper creates a submit button labeled "Save changes"
 * The @endFormTag@ helper creates the ending form tag
 
