@@ -253,7 +253,7 @@ All the @edit@ action is really going to do is find the article to be edited, th
 <% end %>
 </pre>
 
-In the Ruby and CFWheels communities there is a mantra of "Don't Repeat Yourself" -- but that's exactly what I've done here. This view is basically the same as the @new.cfm@ -- the only changes are the H1 and the name of the button. We can abstract this form into a single file called a _partial_, then reference this partial from both @new.cfm@ and @edit.cfm@.
+In the ColdFusion and CFWheels communities there is a mantra of "Don't Repeat Yourself" -- but that's exactly what I've done here. This view is basically the same as the @new.cfm@ -- the only changes are the H1 and the name of the button. We can abstract this form into a single file called a _partial_, then reference this partial from both @new.cfm@ and @edit.cfm@.
 
 Create a file @/views/articles/_form.cfm@ and, yes, it has to have the underscore at the beginning of the filename. Go into your @/views/articles/new.cfm@ and CUT all the text from and including the @form_for@ line all the way to it's @end@. The only thing left will be your H1 line. Then add the following code at the bottom of that view:
 

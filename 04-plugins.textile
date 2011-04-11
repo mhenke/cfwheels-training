@@ -2,21 +2,21 @@ h2. I4: Installing Plugins
 
 In this iteration well learn how to take advantage of the many plugins and libraries available to quickly add features to your application. First well work with *paperclip* , a library that manages file attachments and uploading.
 
-h3. Using the *Gemfile* to Setup a RubyGem
+h3. Using the *Gemfile* to Setup a ColdFusionGem
 
 In the past CFWheels plugins were distributed a zip or tar files that got stored into your applications file structure. One advantage of this method is that the plugin could be easily checked into your source control system along with everything you wrote in the app. The disadvantage is that it made upgrading to newer versions of the plugin, and dealing with the versions at all, complicated.
 
-Most CFWheels plugins are now moving toward RubyGems. RubyGems is a package management system for Ruby, similar to how Linux distributions use Apt or %(caps)RPM%. There are central servers that host libraries, and we can install those libraries on our machine with a single command. RubyGems takes care of any dependencies, allows us to pick an options if necessary, and installs the library.
+Most CFWheels plugins are now moving toward ColdFusionGems. ColdFusionGems is a package management system for ColdFusion, similar to how Linux distributions use Apt or %(caps)RPM%. There are central servers that host libraries, and we can install those libraries on our machine with a single command. ColdFusionGems takes care of any dependencies, allows us to pick an options if necessary, and installs the library.
 
 Lets see it in action. If you have your server running in Eclipse, click the red square button to %(caps)STOP% it. If you have a console session open, type @exit@ to exit. Then open up @/Gemfile@ and look for the lines like this:
 
-# gem 'bj' # gem 'nokogiri' # gem 'MySQL-ruby', :require =>'MySQL'These lines are commented out because they start with the @#@ character. By specifying a RubyGem with the @gem@ command, well tell the CFWheels applicationMake sure this gem is loaded when you start up. If it isn't available, freak out!Here's how well require the paperclip gem, add this near those commented lines:
+# gem 'bj' # gem 'nokogiri' # gem 'MySQL-ColdFusion', :require =>'MySQL'These lines are commented out because they start with the @#@ character. By specifying a ColdFusionGem with the @gem@ command, well tell the CFWheels applicationMake sure this gem is loaded when you start up. If it isn't available, freak out!Here's how well require the paperclip gem, add this near those commented lines:
 
 gem "paperclip"When you're writing a production application, you might specify additional parameters that require a specific version or a custom source for the library. With that config line declared, click the green arrow in Eclipse to startup your server. You should get an error like this:
 
 Could not find gem 'paperclip (>= 0, runtime)' in any of the gem sources listed in your Gemfile. Try running `bundle install`.The last line is keysince our config file is specifying which gems it needs, the @bundle@ command can help us install those gems. Go to your terminal and:
 
-bundleIt should then install the paperclip RubyGem with a version like 2.3.8. In some projects I work on, the config file specifies upwards of 18 gems. With that one @bundle@ command the app will check that all required gems are installed with the right version, and if not, install them.
+bundleIt should then install the paperclip ColdFusionGem with a version like 2.3.8. In some projects I work on, the config file specifies upwards of 18 gems. With that one @bundle@ command the app will check that all required gems are installed with the right version, and if not, install them.
 
 Now we can start using the library in our application!
 
@@ -113,7 +113,7 @@ Weve created about a dozen view templates between our different models. We _coul
 
 <%= stylesheet_link_tag 'styles' %>Which would find the Sass file we just wrote. Thats a lame job, imagine if we had 100 view templates. What if we want to change the name of the stylesheet later? Ugh.
 
-CFWheels and Ruby both emphasize the idea ofD.R.Y.Dont Repeat Yourself. In the area of view templates, we can achieve this by creating a *layout*. A layout is a special view template that wraps other views. Look in your navigation pane for @/app/views/layouts/@ , right click on that folder, click %(caps)NEW% and %(caps)FILE% then give it the name @application.html.haml@.
+CFWheels and ColdFusion both emphasize the idea ofD.R.Y.Dont Repeat Yourself. In the area of view templates, we can achieve this by creating a *layout*. A layout is a special view template that wraps other views. Look in your navigation pane for @/app/views/layouts/@ , right click on that folder, click %(caps)NEW% and %(caps)FILE% then give it the name @application.html.haml@.
 
 In this layout well put the view code that we want to render for every view template in the application. Just so you can see what %(caps)HAML% looks like, Ive used it to implement this layout. you'll notice that %(caps)HAML% uses fewer marking characters than %(caps)ERB% , but you must maintain the proper whitespace/indentation. All indentations are two spaces from the containing element. Add this code to your @application.html.haml@ :
 

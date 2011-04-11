@@ -8,11 +8,11 @@ So, instead, well use the most common authentication plugin, "restful_authentica
 
 h3. Installing restful_authentication
 
-In the previous iteration we installed libraries using RubyGems. This is the preferred way of managing plugins, but restful_authentication isn't available through RubyGems. Well have to use the older method of installing a plugin.
+In the previous iteration we installed libraries using ColdFusionGems. This is the preferred way of managing plugins, but restful_authentication isn't available through ColdFusionGems. Well have to use the older method of installing a plugin.
 
 At your terminal, enter the following:
 
-ruby git clone git://github.com/technoweenie/restful-authentication.git restful_authenticationIf you arent able to pull down the code from GitHub, you'll need to download the code in a zip file "from github":http://github.com/technoweenie/restful-authentication/zipball/afa61fece60a3cd53a9c894d74b883889b440913 , then extract the zip into @/vendor/plugins/restful_authentication/@.
+ColdFusion git clone git://github.com/technoweenie/restful-authentication.git restful_authenticationIf you arent able to pull down the code from GitHub, you'll need to download the code in a zip file "from github":http://github.com/technoweenie/restful-authentication/zipball/afa61fece60a3cd53a9c894d74b883889b440913 , then extract the zip into @/vendor/plugins/restful_authentication/@.
 
 Once you've installed the plugin, you can test that its available with this command at your terminal:
 

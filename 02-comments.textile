@@ -15,7 +15,7 @@ First, we need to brainstorm what a comment _is_...what kinds of data does it ha
 With that understanding, let's create a Comment model. Switch over to your terminal and enter this line:
 
 <pre>
-ruby script/generate model Comment
+ColdFusion script/generate model Comment
 </pre>
 
 We've already gone through what files this generator creates, we'll be most interested in the migration file and the @comment.rb@.
@@ -61,7 +61,7 @@ How an article "has many" comments, and a comment "belongs to" an article. We ha
 
 h3. Testing in the Console
 
-Let's use the console to test how this relationship works in code. If you don't have a console open, go to your terminal and enter @ruby script/console@ from your project directory. If you have a console open already, enter the command @reload!@ to refresh any code changes.
+Let's use the console to test how this relationship works in code. If you don't have a console open, go to your terminal and enter @ColdFusion script/console@ from your project directory. If you have a console open already, enter the command @reload!@ to refresh any code changes.
 
 Run the following commands one at a time and observe the output:
 
@@ -194,7 +194,7 @@ h3. Creating a Comments Controller
 Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @comments_controller.rb@. Switch over to your terminal to generate it with this line:
 
 <pre>
-ruby script/generate controller comments index create destroy
+ColdFusion script/generate controller comments index create destroy
 </pre>
 
 What's up with those extra parameters?  Anything after the name of the controller (in this case "comments") will cause CFWheels to create stubs for methods with those names. Now open your @/app/controllers/comments_controller.rb@ and you'll see it has the three method stubs already.

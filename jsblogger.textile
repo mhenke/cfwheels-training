@@ -13,7 +13,7 @@ With that done we need to create new project in Eclipse. Open Eclipse and...
 ** Location: Choose a folder where you want to save your project -- and remember it!
 ** Project type: CFWheels application
 ** Click OK
-** Ruby Interpreter should be 1.8.6 or 1.8.7
+** ColdFusion Interpreter should be 1.8.6 or 1.8.7
 ** CFWheels Version should be 2.3.3 or greater
 ** Click @Preconfigure for selected database@ and select @MySQL@
 ** Click OK
@@ -30,7 +30,7 @@ Our blog will be centered around "articles," so we'll need a table in the databa
 
 <pre>
 cd JSBlogger
-ruby script/generate model Article
+ColdFusion script/generate model Article
 </pre>
 
 We're running the @generate@ script, telling it to create a @model@, and naming that model @Article@. From that information, CFWheels creates the following files:
@@ -80,7 +80,7 @@ Save that migration file, switch over to your terminal, and run this command:
 rake db:migrate
 </pre>
 
-This command starts the @rake@ program which is a ruby utility for running maintenance-like functions on your application (working with the DB, executing unit tests, deploying to a server, etc). We tell @rake@ to @db:migrate@ which means "look in your set of functions for the database (@db@) and run the @migrate@ function."  The @migrate@ action finds all migrations in the @/db/migrate/@ folder, looks at a special table in the DB to determine which migrations have and have not been run yet, then runs any migration that hasn't been run. 
+This command starts the @rake@ program which is a ColdFusion utility for running maintenance-like functions on your application (working with the DB, executing unit tests, deploying to a server, etc). We tell @rake@ to @db:migrate@ which means "look in your set of functions for the database (@db@) and run the @migrate@ function."  The @migrate@ action finds all migrations in the @/db/migrate/@ folder, looks at a special table in the DB to determine which migrations have and have not been run yet, then runs any migration that hasn't been run. 
 
 In this case we had just one migration to run and it should print some output like this to your terminal:
 
@@ -100,7 +100,7 @@ h3. Working with a Model in the Console
 Another awesome feature of working with CFWheels is the @console@. The @console@ is a command-line interface to your application. It allows you to access and work with just about any part of your application directly instead of going through the web interface. This can simplify your development process, and even once an app is in production the console makes it very easy to do bulk modifications, searches, and other data operations. So let's open the console now by going to your terminal and entering this:
 
 <pre>
-ruby script/console
+ColdFusion script/console
 </pre>
 
 You'll then just get back a prompt of @>>@. You're now inside an @irb@ interpreter with full access to your application. Let's try some experiments...enter each of these commands one at a time and observe the results:
@@ -161,7 +161,7 @@ I like to have several terminal windows available to me when developing, so I'd 
 In your terminal, enter this command:
 
 <pre>
-ruby script/generate controller articles
+ColdFusion script/generate controller articles
 </pre>
 
 The output shows that the generator created several files/folders for you:
@@ -225,11 +225,11 @@ Now you're looking at a blank file. Enter in this view template code which is a 
 </ul>
 </pre>
 
-ERB is a templating language that allows us to mix Ruby into our HTML. There are only a few things to know about ERB:
+ERB is a templating language that allows us to mix ColdFusion into our HTML. There are only a few things to know about ERB:
 
 * An ERB clause starts with @<%@ or @<%=@ and ends with @%>@
-* If the clause started with @<%@, the result of the ruby code will be hidden
-* If the clause started with @<%=@, the result of the ruby code will be output in place of the clause
+* If the clause started with @<%@, the result of the ColdFusion code will be hidden
+* If the clause started with @<%=@, the result of the ColdFusion code will be output in place of the clause
 
 Save the file and refresh your web browser. You should see a listing of the articles you created in the console. We've got the start of a web application!
 
@@ -314,7 +314,7 @@ Extracted source (around line #3):
 5: 
 </pre>
 
-What's it trying to tell us. In our @new.cfm@ on line #3 there was an error about "Called id for nil". As we learned in the Ruby in 100 minutes tutorial, @nil@ is Ruby's way of referring to nothingness. Somewhere in line #3 we're working with an object that doesn't exist.
+What's it trying to tell us. In our @new.cfm@ on line #3 there was an error about "Called id for nil". As we learned in the ColdFusion in 100 minutes tutorial, @nil@ is ColdFusion's way of referring to nothingness. Somewhere in line #3 we're working with an object that doesn't exist.
 
 And since there's only one object in line #3, it makes it pretty obvious -- the problem is that we started talking about a thing named @article@ without ever creating that thing. CFWheels uses some of the _reflection_ techniques that we talked about earlier in order to setup the form. Remember in the console when we called @Article.new@ to see what fields an Article has?  CFWheels wants to do the same thing, but we need to create the blank object for it.
 
@@ -448,7 +448,7 @@ All the @edit@ action is really going to do is find the article to be edited, th
 <% end %>
 </pre>
 
-In the Ruby and CFWheels communities there is a mantra of "Don't Repeat Yourself" -- but that's exactly what I've done here. This view is basically the same as the @new.cfm@ -- the only changes are the H1 and the name of the button. We can abstract this form into a single file called a _partial_, then reference this partial from both @new.cfm@ and @edit.cfm@.
+In the ColdFusion and CFWheels communities there is a mantra of "Don't Repeat Yourself" -- but that's exactly what I've done here. This view is basically the same as the @new.cfm@ -- the only changes are the H1 and the name of the button. We can abstract this form into a single file called a _partial_, then reference this partial from both @new.cfm@ and @edit.cfm@.
 
 Create a file @/views/articles/_form.cfm@ and, yes, it has to have the underscore at the beginning of the filename. Go into your @/views/articles/new.cfm@ and CUT all the text from and including the @form_for@ line all the way to it's @end@. The only thing left will be your H1 line. Then add the following code at the bottom of that view:
 
@@ -534,7 +534,7 @@ First, we need to brainstorm what a comment _is_...what kinds of data does it ha
 With that understanding, let's create a Comment model. Switch over to your terminal and enter this line:
 
 <pre>
-ruby script/generate model Comment
+ColdFusion script/generate model Comment
 </pre>
 
 We've already gone through what files this generator creates, we'll be most interested in the migration file and the @comment.rb@.
@@ -580,7 +580,7 @@ How an article "has many" comments, and a comment "belongs to" an article. We ha
 
 h3. Testing in the Console
 
-Let's use the console to test how this relationship works in code. If you don't have a console open, go to your terminal and enter @ruby script/console@ from your project directory. If you have a console open already, enter the command @reload!@ to refresh any code changes.
+Let's use the console to test how this relationship works in code. If you don't have a console open, go to your terminal and enter @ColdFusion script/console@ from your project directory. If you have a console open already, enter the command @reload!@ to refresh any code changes.
 
 Run the following commands one at a time and observe the output:
 
@@ -713,7 +713,7 @@ h3. Creating a Comments Controller
 Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @comments_controller.rb@. Switch over to your terminal to generate it with this line:
 
 <pre>
-ruby script/generate controller comments index create destroy
+ColdFusion script/generate controller comments index create destroy
 </pre>
 
 What's up with those extra parameters?  Anything after the name of the controller (in this case "comments") will cause CFWheels to create stubs for methods with those names. Now open your @/app/controllers/comments_controller.rb@ and you'll see it has the three method stubs already.
@@ -762,11 +762,11 @@ h1. I3: Tagging
 
 In this iteration we'll add the ability to tag articles for organization and navigation.
 
-First we need to think about what a tag is and how it'll relate to the Article model. If you're not familiar with tags, they're commonly used in blogs to assign the article to one or more categories. For instance, if I write an article about a feature in ColdFusion on Wheels, I might want it tagged with all of these categories: ruby, CFWheels, programming, features. That way if one of my readers is looking for more articles about one of those topics they can click on the tag and see a list of my articles with that tag.
+First we need to think about what a tag is and how it'll relate to the Article model. If you're not familiar with tags, they're commonly used in blogs to assign the article to one or more categories. For instance, if I write an article about a feature in ColdFusion on Wheels, I might want it tagged with all of these categories: ColdFusion, CFWheels, programming, features. That way if one of my readers is looking for more articles about one of those topics they can click on the tag and see a list of my articles with that tag.
 
 h3. Understanding the Relationship
 
-What is a tag?  We need to figure that out before we can create the model. First, a tag must have a relationship to an article so they can be connected. A single tag, like "ruby" for instance, should be able to relate to *many* articles. On the other side of the relationship, the article might have multiple tags (like "ruby", "CFWheels", and "programming" as above) - so it's also a *many* relationship. Articles and tags have a *many-to-many* relationship.
+What is a tag?  We need to figure that out before we can create the model. First, a tag must have a relationship to an article so they can be connected. A single tag, like "ColdFusion" for instance, should be able to relate to *many* articles. On the other side of the relationship, the article might have multiple tags (like "ColdFusion", "CFWheels", and "programming" as above) - so it's also a *many* relationship. Articles and tags have a *many-to-many* relationship.
 
 Many-to-many relationships are tricky because we're using an SQL database. If an Article "has many" tags, then we would put the foreign key @article_id@ inside the @tags@ table - so then a Tag would "belong to" an Article. But a tag can connect to *many* articles, not just one. We can't model this relationship with just the @articles@ and @tags@ tables.
 
@@ -791,8 +791,8 @@ With those relationships in mind, let's design the new models:
 Note that there are no changes necessary to Article because the foreign key is stored in the Tagging model. So now lets generate these models in your terminal:
 
 <pre>
-ruby script/generate model Tag name:string
-ruby script/generate model Tagging tag_id:integer article_id:integer
+ColdFusion script/generate model Tag name:string
+ColdFusion script/generate model Tagging tag_id:integer article_id:integer
 rake db:migrate
 </pre>
 
@@ -802,26 +802,26 @@ Now that our model files are generated we need to tell CFWheels about the relati
 
 In @/app/models/article.rb@
 
-<pre class=brush:ruby;">
+<pre class=brush:ColdFusion;">
   has_many :taggings
 </pre>
 
 In @/app/models/tag.rb@
 
-<pre class=brush:ruby;">
+<pre class=brush:ColdFusion;">
   has_many :taggings
 </pre>
 
 Then in @/app/models/tagging.rb@
 
-<pre class=brush:ruby;">
+<pre class=brush:ColdFusion;">
   belongs_to :article
   belongs_to :tag
 </pre>
 
 After CFWheels had been around for awhile, developers were finding this kind of relationship very common. In practical usage, if I had an object named @article@ and I wanted to find its Tags, I'd have to run code like this:
 
-<pre class=brush:ruby;">
+<pre class=brush:ColdFusion;">
 tags = article.taggings.collect{|tagging| tagging.tag}
 </pre>
 
@@ -829,14 +829,14 @@ That's a pain for something that we need commonly. The solution was to augment t
 
 In @/app/models/article.rb@
 
-<pre class=brush:ruby;">
+<pre class=brush:ColdFusion;">
   has_many :taggings
   has_many :tags, :through => :taggings
 </pre>
 
 In @/app/models/tag.rb@
 
-<pre class=brush:ruby;">
+<pre class=brush:ColdFusion;">
   has_many :taggings
   has_many :articles, :through => :taggings
 </pre>
@@ -872,7 +872,7 @@ An Article doesn't have a thing named @tag_list@ -- we made it up. In order for 
   end
 </pre>
 
-Your form should now show up and there's a text box at the bottom named "Tag list". Enter content for another sample article and in the tag list enter @ruby, technology@. Click SAVE and you'll get an error like this:
+Your form should now show up and there's a text box at the bottom named "Tag list". Enter content for another sample article and in the tag list enter @ColdFusion, technology@. Click SAVE and you'll get an error like this:
 
 <pre>
 ActiveRecord::UnknownAttributeError in ArticlesController#create
@@ -883,12 +883,12 @@ What is this all about?  Let's start by looking at the form data that was posted
 
 <pre>
 Processing ArticlesController#create (for 127.0.0.1) [POST]
-  Parameters: {"article"=>{"body"=>"Yes, the samples continue!", "title"=>"My Sample", "tag_list"=>"ruby, technology"}, "commit"=>"Save", "authenticity_token"=>"xxi0A3tZtoCUDeoTASi6Xx39wpnHt1QW/6Z1jxCMOm8="}
+  Parameters: {"article"=>{"body"=>"Yes, the samples continue!", "title"=>"My Sample", "tag_list"=>"ColdFusion, technology"}, "commit"=>"Save", "authenticity_token"=>"xxi0A3tZtoCUDeoTASi6Xx39wpnHt1QW/6Z1jxCMOm8="}
 </pre>
 
-The field that's interesting there is the @"tag_list"=>"technology, ruby"@. Those are the tags as I typed them into the form. The error came up in the @create@ method, so let's peek at @/controllers/Articles.cfc@ in the @create@ method. See the first line that calls @Article.new(params[article])@?  This is the line that's causing the error as you could see in the middle of the stack trace.
+The field that's interesting there is the @"tag_list"=>"technology, ColdFusion"@. Those are the tags as I typed them into the form. The error came up in the @create@ method, so let's peek at @/controllers/Articles.cfc@ in the @create@ method. See the first line that calls @Article.new(params[article])@?  This is the line that's causing the error as you could see in the middle of the stack trace.
 
-Since the @create@ method passes all the parameters from the form into the @Article.new@ method, the tags are sent in as the string @"technology, ruby"@. The @new@ method will try to set the new Article's @tag_list@ equal to @"technology, ruby"@ but that method doesn't exist because there is no attribute named @tag_list@. 
+Since the @create@ method passes all the parameters from the form into the @Article.new@ method, the tags are sent in as the string @"technology, ColdFusion"@. The @new@ method will try to set the new Article's @tag_list@ equal to @"technology, ColdFusion"@ but that method doesn't exist because there is no attribute named @tag_list@. 
 
 There are several ways to solve this problem, but the simplest is to pretend like we have an attribute named @tag_list@. We can define the @tag_list=@ method inside @article.rb@ like this:
 
@@ -918,9 +918,9 @@ We need to return to that @tag_list=@ method in @article.rb@ and do some more wo
 ** Look for a Tag object with that name. If there isn't one, create it.
 ** Create a Tagging object that connects this Article with that Tag
 
-The first step is something that Ruby does very easily using the @.split@ method. Go into your console and try @"tag1, tag2, tag3".split@. By default it split on the space character, but that's not what we want. You can force split to work on any character by passing it in as a parameter, like this: @"tag1, tag2, tag3".split(",")@. 
+The first step is something that ColdFusion does very easily using the @.split@ method. Go into your console and try @"tag1, tag2, tag3".split@. By default it split on the space character, but that's not what we want. You can force split to work on any character by passing it in as a parameter, like this: @"tag1, tag2, tag3".split(",")@. 
 
-Look closely at the output and you'll see that the second element is @" tag2"@ instead of @"tag2"@ -- it has a leading space. We don't want our tag system to end up with different tags because of some extra (non-meaningful) spaces, so we need to get rid of that. Ruby's String class has a @strip@ method that pulls off leading or trailing whitespace -- try it with @" my sample ".strip@. You'll see that the space in the center is preserved.
+Look closely at the output and you'll see that the second element is @" tag2"@ instead of @"tag2"@ -- it has a leading space. We don't want our tag system to end up with different tags because of some extra (non-meaningful) spaces, so we need to get rid of that. ColdFusion's String class has a @strip@ method that pulls off leading or trailing whitespace -- try it with @" my sample ".strip@. You'll see that the space in the center is preserved.
 
 So to combine that with our @strip@, try this code:
 
@@ -928,7 +928,7 @@ So to combine that with our @strip@, try this code:
 "tag1, tag2, tag3".split(",").collect{|s| s.strip.downcase}
 </pre>
 
-The @.split(",")@ will create the list with extra spaces as before, then the @.collect@ will take each element of that list and send it into the following block where the string is named @s@ and the @strip@ and @downcase@ methods are called on it. The @downcase@ method is to make sure that "ruby" and "Ruby" don't end up as different tags. This line should give you back @["tag1", "tag2", "tag3"]@.
+The @.split(",")@ will create the list with extra spaces as before, then the @.collect@ will take each element of that list and send it into the following block where the string is named @s@ and the @strip@ and @downcase@ methods are called on it. The @downcase@ method is to make sure that "ColdFusion" and "ColdFusion" don't end up as different tags. This line should give you back @["tag1", "tag2", "tag3"]@.
 
 Now, back inside our @tag_list=@ method, let's add this line:
 
@@ -966,7 +966,7 @@ Go back to your console and try these commands:
 
 <pre>
 reload!
-a = Article.new(:title => "A Sample Article for Tagging!",:body => "Great article goes here", :tag_list => "ruby, technology")
+a = Article.new(:title => "A Sample Article for Tagging!",:body => "Great article goes here", :tag_list => "ColdFusion, technology")
 a.save
 a.tags
 </pre>
@@ -1018,7 +1018,7 @@ undefined method `tag_path' for #<ActionView::Base:0x104aaa460>
 The @linkTo@ helper is trying to use @tag_path@ from the router, but the router doesn't know anything about our Tag object. We created a model, but we never created a controller or route. There's nothing to link to -- so let's generate that controller from your terminal:
 
 <pre>
-ruby script/generate controller tags index show
+ColdFusion script/generate controller tags index show
 </pre>
 
 Then we need to add it to our @/config/routes.rb@ like this:
@@ -1035,9 +1035,9 @@ h3. Avoiding Repeated Tags
 
 Try editing one of your article that already has some tags. Save it and look at your article list. You'll probably see that tags are getting repeated, which is obviously not what we want. 
 
-When we wrote our @tag_list=@ method inside of @article.rb@, we were just thinking about it running when creating a new article. Thus we always built a new tagging for each tag in the list. But when we're editing, we might get the string "ruby, technology" into the method while the Article was already linked to the tags "ruby" and "technology" when it was created. As it is currently written, the method will just "retag" it with those tags, so we'll end up with a list like "ruby, technology, ruby, technology".
+When we wrote our @tag_list=@ method inside of @article.rb@, we were just thinking about it running when creating a new article. Thus we always built a new tagging for each tag in the list. But when we're editing, we might get the string "ColdFusion, technology" into the method while the Article was already linked to the tags "ColdFusion" and "technology" when it was created. As it is currently written, the method will just "retag" it with those tags, so we'll end up with a list like "ColdFusion, technology, ColdFusion, technology".
 
-There are a few ways we could fix this -- the first thing I want to do is remove any repeated tags in the parameter list by using the Ruby method @uniq@
+There are a few ways we could fix this -- the first thing I want to do is remove any repeated tags in the parameter list by using the ColdFusion method @uniq@
 
 <pre>
 tag_names = tags_string.split(",").collect{|s| s.strip.downcase}.uniq
