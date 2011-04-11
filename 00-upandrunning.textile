@@ -28,7 +28,7 @@ You should then see the @JSBloggers@ server in the Servers view. If it isn't Run
 
 We need to change the Wheels datasource convention. Wheels assumes our datasource connection is the folder name Wheels resides in but for our case it is not CF9 but JSBloggers. We could have easily named our war file that but I wanted to show how we can easily override a Wheels convention.
 
-Press Ctrl+Shift+R while in Eclipse. This is the Open Resource window. I use this alot when coding. Sometimes I highlight a file name in code and press Ctrl+Shift+R, other times I type in the file name like we will. Type in @settings.cfm@, and select @settings.cfm - /JSBloggers/config@. This will open that file for use and paste in @<cfset set(dataSourceName="JSBloggers") />@ to tell Wheels to use this as are datasource. Also paste in @<cfset set(URLRewriting="Partial")>@ to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers.
+Press Ctrl+Shift+R while in Eclipse. This is the Open Resource window. I use this alot when coding. Sometimes I highlight a file name in code and press Ctrl+Shift+R, other times I type in the file name like we will. Type in @settings.cfm@, and select @settings.cfm - /JSBloggers/config@. This will open that file for use and paste in @<cfset set(dataSourceName="JSBloggers") />@ to tell Wheels to use this as are datasource. Also paste in @<cfset set(URLRewriting="Partial") />@ to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers.
 
 h3. Creating the Article Model
 
@@ -196,11 +196,11 @@ We've created a few articles through the Examples controller, but we really don'
 
 When a CFWheels server gets a request from a web browser it first goes to the _router_. The router decides what the request is trying to do, what resources it is trying to interact with. The router dissects a request based on the address it is requesting and other HTTP parameters (like the request type of GET or PUT). Let's open the router's configuration file, @/config/routes.cfm@.
 
-Inside this file you'll see @<cfset addRoute(name="home", pattern="", controller="wheels", action="wheels")>@. This is the default route and is directs to the Congratulations page, you saw when we first loaded our application. Let's replace it with:
+Inside this file you'll see @<cfset addRoute(name="home", pattern="", controller="wheels", action="wheels") />@. This is the default route and is directs to the Congratulations page, you saw when we first loaded our application. Let's replace it with:
 
 <pre>
 <code>
- <cfset addRoute(name="home", pattern="", controller="Articles", action="index")>
+ <cfset addRoute(name="home", pattern="", controller="Articles", action="index") />
 </code>
 </pre>
 
@@ -229,7 +229,7 @@ The first action we want to talk about is the "index". This is what the app will
 <pre>
 <code>
  <cffunction name="index">
-  <cfset articles = model("Article").findAll()>
+  <cfset articles = model("Article").findAll() />
  </cffunction>
 </code>
 </pre>
