@@ -195,17 +195,6 @@ We can create articles and we can display them, but when we eventually deliver t
 Look at your @index.cfm@ and change the whole @<li>@ segment so it looks like this:
 
 <pre>
-    <li>
-      <b><%= linkTo article.title, article_path(article) %></b><br/>
-      <i>Actions:
-      <%= linkTo "edit", edit_article_path(article) %>,
-      <%= linkTo "remove", article, :method => :delete,
-                   :confirm => "Remove the article '#{article.title}'?" %>      
-      </i>
-    </li>
-</pre>
-
-<pre>
 <code>
 <li>
  <b>#linkTo(text=title, action="show")#</b><br/>
