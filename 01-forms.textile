@@ -90,7 +90,9 @@ And since there's only one object in line #4, it makes it pretty obvious -- the 
 Go into your @Articles.cfc@, and _inside_ the @new@ method, add this line:
 
 <pre>
-<cfset article = model("Article").new()>
+<code>
+ <cfset article = model("Article").new()>
+</code>
 </pre>
 
 Then refresh your browser and your form should come up. Enter in a title, some body text, and click "Save changes".
@@ -175,9 +177,9 @@ Now create the file @/views/articles/show.cfm@ and add this code:
 <pre>
 <code>
 <cfoutput>
-<h2>#article.title#</h2>
-<p>#article.body#</p>
-#linkTo(text="<< Back to Articles List", action="index")#
+ <h2>#article.title#</h2>
+ <p>#article.body#</p>
+ #linkTo(text="<< Back to Articles List", action="index")#
 </cfoutput>
 </code>
 </pre>
