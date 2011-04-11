@@ -46,6 +46,7 @@ It's not very impressive so far -- we need to add a form to the @new.cfm@ so the
 <pre>
 <code>
 <cfoutput>
+ #errorMessagesFor("article")#
  #startFormTag(action="create")#
   #textField(objectName='article', property='title', label='Title')#
   #textArea(objectName='article', property='body', label='Body')#
@@ -74,18 +75,19 @@ Wheels tried to find the model object article for the form helper, but it does n
 
 Error location
 
-Line 4 in views\articles\new.cfm
+Line 3 in views\articles\new.cfm
 
 2: <cfoutput>
-3:  #startFormTag(action="create")#
-4:   #textField(objectName='article', property='title', label='Title')#
-5:   #textArea(objectName='article', property='body', label='Body')#
-6:   #submitTag()#
+3:  #errorMessagesFor("article")#
+4:  #startFormTag(action="create")#
+5:   #textField(objectName='article', property='title', label='Title')#
+6:   #textArea(objectName='article', property='body', label='Body')#
+7:   #submitTag()#
 </pre>
 
-What's it trying to tell us. In our @new.cfm@ on line #4 there was an error about "Wheels.ObjectNotFound". Somewhere in line #4 we're working with an object that doesn't exist.
+What's it trying to tell us. In our @new.cfm@ on line #3 there was an error about "Wheels.ObjectNotFound". Somewhere in line #4 we're working with an object that doesn't exist.
 
-And since there's only one object in line #4, it makes it pretty obvious -- the problem is that we started talking about a thing named @article@ without ever creating that thing. CFWheels uses some of the _reflection_ techniques that we talked about earlier in order to setup the form. Remember in the @Examples.cfc@ when we called @Article.new@ to create a new object?  CFWheels wants to do the same thing, but we need to create the blank object for it.
+And since there's only one object in line #3, it makes it pretty obvious -- the problem is that we started talking about a thing named @article@ without ever creating that thing. CFWheels uses some of the _reflection_ techniques that we talked about earlier in order to setup the form. Remember in the @Examples.cfc@ when we called @Article.new@ to create a new object?  CFWheels wants to do the same thing, but we need to create the blank object for it.
 
 Go into your @Articles.cfc@, and _inside_ the @new@ method, add this line:
 
@@ -226,34 +228,28 @@ h3. Creating an Edit Action & View
 The router is expecting to find an action in @Articles.cfc@ named @edit@, so let's add this:
 
 <pre>
-  def edit
-    @article = Article.find(params[id])
-  end
+<cffunction name="edit">
+ <cfset article = model("Article").findByKey(params.key)>
+</cffunction>
 </pre>
 
 All the @edit@ action is really going to do is find the article to be edited, then display the editing form. If you refresh after adding that @edit@ action you'll see the template missing error. Create a file @/views/articles/edit.cfm@ but *hold on before you type anything*. Below is what the edit form should look like:
 
 <pre>
+<code>
 <h1>Edit an Article</h1>
-
-<% form_for(@article) do|f| %>
-  <%= f.error_messages %>
-
-  <p>
-    <%= f.label :title %><br />
-    <%= f.text_field :title %>
-  </p>
-  <p>
-    <%= f.label :body %><br />
-    <%= f.text_area :body %>
-  </p>
-  <p>
-    <%= f.submit 'Update' %>
-  </p>
-<% end %>
+<cfoutput>
+ #errorMessagesFor("article")#
+ #startFormTag(action="create")#
+  #textField(objectName='article', property='title', label='Title')#
+  #textArea(objectName='article', property='body', label='Body')#
+  #submitTag(value="Update")#
+ #endFormTag()#
+</cfoutput>
+<code>
 </pre>
 
-In the ColdFusion and CFWheels communities there is a mantra of "Don't Repeat Yourself" -- but that's exactly what I've done here. This view is basically the same as the @new.cfm@ -- the only changes are the H1 and the name of the button. We can abstract this form into a single file called a _partial_, then reference this partial from both @new.cfm@ and @edit.cfm@.
+In the ColdFusion and CFWheels communities there is a mantra of "Don't Repeat Yourself" -- but that's exactly what I've done here. This view is basically the same as the @new.cfm@ -- the only changes are the H1 and the submit button now has a value parameter. It will display in the button form control. We can abstract this form into a single file called a _partial_, then reference this partial from both @new.cfm@ and @edit.cfm@.
 
 Create a file @/views/articles/_form.cfm@ and, yes, it has to have the underscore at the beginning of the filename. Go into your @/views/articles/new.cfm@ and CUT all the text from and including the @form_for@ line all the way to it's @end@. The only thing left will be your H1 line. Then add the following code at the bottom of that view:
 
