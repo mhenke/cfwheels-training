@@ -210,7 +210,7 @@ Now that the router knows how to handle requests about articles, it needs a plac
 
 h3. Creating the Articles Controller
 
-We're going to use the Scaffold plugin again through the browser. In your browser, enter this url to get to the Scaffold plugin again. @http://wheels.local/index.cfm?controller=wheels&action=wheels&view=plugins&name=scaffold@:
+We're going to use the Scaffold plugin again through the browser. In your browser, enter this url to get to the Scaffold plugin again. @http://wheels.local/index.cfm?controller=wheels&action=wheels&view=plugins&name=scaffold@
 
 Then type *article* for the Object name and select *Controller* for Type. We'll leave the Template as default and click Generate. The page should refresh and "*File 'controllers/Articles.cfc' created.*" should appear.
 

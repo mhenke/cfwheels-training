@@ -23,10 +23,10 @@ h3. Making Models
 With those relationships in mind, let's design the new models:
 
 * Tag
-** @name@: A string
+** @name@ A string
 * Tagging
-** @tag_id@: Integer holding the foreign key of the related Tag
-** @article_id@: Integer holding the foreign key of the related Article
+** @tag_id@ Integer holding the foreign key of the related Tag
+** @article_id@ Integer holding the foreign key of the related Article
 
 Note that there are no changes necessary to Article because the foreign key is stored in the Tagging model. So now lets generate these models in your terminal:
 
@@ -40,19 +40,19 @@ h3. Expressing Relationships
 
 Now that our model files are generated we need to tell CFWheels about the relationships between them. For each of the files below, add these lines:
 
-In @/app/models/article.rb@:
+In @/app/models/article.rb@
 
 <pre class=brush:ruby;">
   has_many :taggings
 </pre>
 
-In @/app/models/tag.rb@:
+In @/app/models/tag.rb@
 
 <pre class=brush:ruby;">
   has_many :taggings
 </pre>
 
-Then in @/app/models/tagging.rb@:
+Then in @/app/models/tagging.rb@
 
 <pre class=brush:ruby;">
   belongs_to :article
@@ -67,14 +67,14 @@ tags = article.taggings.collect{|tagging| tagging.tag}
 
 That's a pain for something that we need commonly. The solution was to augment the relationship with "through". We'll add a second relationship now to the Article and Tag classes:
 
-In @/app/models/article.rb@:
+In @/app/models/article.rb@
 
 <pre class=brush:ruby;">
   has_many :taggings
   has_many :tags, :through => :taggings
 </pre>
 
-In @/app/models/tag.rb@:
+In @/app/models/tag.rb@
 
 <pre class=brush:ruby;">
   has_many :taggings
@@ -277,7 +277,7 @@ Try editing one of your article that already has some tags. Save it and look at 
 
 When we wrote our @tag_list=@ method inside of @article.rb@, we were just thinking about it running when creating a new article. Thus we always built a new tagging for each tag in the list. But when we're editing, we might get the string "ruby, technology" into the method while the Article was already linked to the tags "ruby" and "technology" when it was created. As it is currently written, the method will just "retag" it with those tags, so we'll end up with a list like "ruby, technology, ruby, technology".
 
-There are a few ways we could fix this -- the first thing I want to do is remove any repeated tags in the parameter list by using the Ruby method @uniq@:
+There are a few ways we could fix this -- the first thing I want to do is remove any repeated tags in the parameter list by using the Ruby method @uniq@
 
 <pre>
 tag_names = tags_string.split(",").collect{|s| s.strip.downcase}.uniq

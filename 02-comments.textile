@@ -29,7 +29,7 @@ t.integer :article_id
 t.string :author_name
 </pre>
 
-Then keep adding lines that create strings named @:author_email@, @:author_url@, and a text field named @:body@.
+Then keep adding lines that create strings named @author_email@, @author_url@, and a text field named @body@.
 
 Once that's complete, go to your terminal and run the migration with @rake db:migrate@.
 
@@ -106,7 +106,7 @@ We want to display any comments underneath their parent article. Because we've s
 <%= render :partial => 'comment', :collection => @article.comments %>
 </pre>
 
-This says that we want to render a partial named "comment" and that we want to do it once for each element in the collection @@article.comments@. We saw in the console that when we call the @.comments@ method on an article we'll get back an array of it's associated comment objects. So this render line will pass each element of that array one at a time into the partial named "comment". Now we need to create the file @/app/views/articles/_comment.cfm@ and add this code:
+This says that we want to render a partial named "comment" and that we want to do it once for each element in the collection @article.comments@. We saw in the console that when we call the @.comments@ method on an article we'll get back an array of it's associated comment objects. So this render line will pass each element of that array one at a time into the partial named "comment". Now we need to create the file @/app/views/articles/_comment.cfm@ and add this code:
 
 <pre>
 <div class="comment">
@@ -121,7 +121,7 @@ h3. Web-Based Comment Creation
 
 Good start, but our users (hopefully) can't get into the console to create their comments. We'll need to create a web interface. We'll go through some of the same steps that we did when creating the web interface for creating articles.
 
-Let's start with the form. The comment form should be embedded into the article's @show@ template. So let's add this code right above the "Back to Articles List" in the articles @show.cfm@:
+Let's start with the form. The comment form should be embedded into the article's @show@ template. So let's add this code right above the "Back to Articles List" in the articles @show.cfm@
 
 <pre>
 <%= render :partial => 'comment_form' %>

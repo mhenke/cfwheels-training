@@ -50,7 +50,7 @@ What is a migration?  Let's open @/db/migrate/(some_time_stamp)_create_articles.
 
 Migrations are meant to be _symmetric_. Whatever a migration changes inside the @self.up@ method should be _undone_ with the @self.down@ method. Frequently in development you'll think you want the database to look one way, then realize you need something different. You can create a migration to make your changes to the DB, start building, and then revert as necessary.
 
-Inside the @self.up@ method you'll see the generator has placed a call to the @create_table@ method, passed the symbol @:articles@ as a parameter, and created a block with the variable @t@ referencing the table that's created. We can tell @t@ what kind of columns we want in the @articles@ table. Well, what kind of fields does our Article need to have?  Since migrations make it easy to add or change columns later, we don't need to think of EVERYTHING right now, we just need a few to get us rolling. Here's a starter set:
+Inside the @self.up@ method you'll see the generator has placed a call to the @create_table@ method, passed the symbol @articles@ as a parameter, and created a block with the variable @t@ referencing the table that's created. We can tell @t@ what kind of columns we want in the @articles@ table. Well, what kind of fields does our Article need to have?  Since migrations make it easy to add or change columns later, we don't need to think of EVERYTHING right now, we just need a few to get us rolling. Here's a starter set:
 
 * @title@ (a string)
 * @body@ (a "text")
@@ -193,7 +193,7 @@ The router tried to call the @index@ action, but the articles controller doesn't
   end  
 </pre>
 
-What is that "at" sign doing on the front of @@articles@?  That marks this variable as an "instance level variable". We want the list of articles to be accessible from both the controller and the view that we're about to create. In order for it to be visible in both places it has to be an instance variable. If we had just named it @articles@, that local variable would only be available within the @index@ method of the controller.
+What is that "at" sign doing on the front of @articles@?  That marks this variable as an "instance level variable". We want the list of articles to be accessible from both the controller and the view that we're about to create. In order for it to be visible in both places it has to be an instance variable. If we had just named it @articles@, that local variable would only be available within the @index@ method of the controller.
 
 Now refresh your browser. The error message changed, but you've still got an error, right?  
 
@@ -293,7 +293,7 @@ It's not very impressive so far -- we need to add a form to the @new.cfm@ so the
 
 What is all that?  Let's look at it piece by piece:
 
-* @form_for@ is a CFWheels helper method which takes one parameter, in this case @@article@ and a block with the form fields. The first line basically says "Create a form for the object named @@article@, refer to the form by the name @f@ and add the following elements to the form..."
+* @form_for@ is a CFWheels helper method which takes one parameter, in this case @article@ and a block with the form fields. The first line basically says "Create a form for the object named @article@, refer to the form by the name @f@ and add the following elements to the form..."
 * The @f.label@ helper creates an HTML label for a field, this is good usability practice and will have some other benefits for us later
 * The @f.text_field@ helper creates a single-line text box named @title@
 * The @f.text_area@ helper creates a multi-line text box named @body@
@@ -316,7 +316,7 @@ Extracted source (around line #3):
 
 What's it trying to tell us. In our @new.cfm@ on line #3 there was an error about "Called id for nil". As we learned in the Ruby in 100 minutes tutorial, @nil@ is Ruby's way of referring to nothingness. Somewhere in line #3 we're working with an object that doesn't exist.
 
-And since there's only one object in line #3, it makes it pretty obvious -- the problem is that we started talking about a thing named @@article@ without ever creating that thing. CFWheels uses some of the _reflection_ techniques that we talked about earlier in order to setup the form. Remember in the console when we called @Article.new@ to see what fields an Article has?  CFWheels wants to do the same thing, but we need to create the blank object for it.
+And since there's only one object in line #3, it makes it pretty obvious -- the problem is that we started talking about a thing named @article@ without ever creating that thing. CFWheels uses some of the _reflection_ techniques that we talked about earlier in order to setup the form. Remember in the console when we called @Article.new@ to see what fields an Article has?  CFWheels wants to do the same thing, but we need to create the blank object for it.
 
 Go into your @Articles.cfc@, and _inside_ the @new@ method, add this line:
 
@@ -347,9 +347,9 @@ When we loaded the form we accessed the @new@ action, but when that form is subm
 
 This method says...
 
-* Create an object named @@article@ and send in the parameter @params[:article]@
-* CFWheels makes the form data available inside the variable named @params@. If were to look at @params@ as a data structure, it'd be a hash with only one key -- @:article@. The value of that pair is another hash with keys @:title@ and @:body@. The values for those keys are the data we entered into the text boxes on the form. So when @Article.new@ is called and the hash @params[:article]@ is passed in, the @new@ method looks for the value with key @:title@ and puts that into the Article's @title@ attribute. Then it looks for the value for key @:body@ and puts that into the article's @body@ attribute.
-* The line @@article.save!@ saves the object to the database, just like we did in the console. We've added the exclamation mark here because we haven't implemented any error checking. The normal @save@ method will "fail silently" if there's a problem saving the article, but the @save!@ method will raise errors and basically freak out.
+* Create an object named @article@ and send in the parameter @params[:article]@
+* CFWheels makes the form data available inside the variable named @params@. If were to look at @params@ as a data structure, it'd be a hash with only one key -- @article@. The value of that pair is another hash with keys @title@ and @body@. The values for those keys are the data we entered into the text boxes on the form. So when @Article.new@ is called and the hash @params[:article]@ is passed in, the @new@ method looks for the value with key @title@ and puts that into the Article's @title@ attribute. Then it looks for the value for key @body@ and puts that into the article's @body@ attribute.
+* The line @article.save!@ saves the object to the database, just like we did in the console. We've added the exclamation mark here because we haven't implemented any error checking. The normal @save@ method will "fail silently" if there's a problem saving the article, but the @save!@ method will raise errors and basically freak out.
 * Finally, the @redirect_to@ tells CFWheels that we don't want to render a view for this action. Once the previous steps are done, we want to bounce to the list of all articles. The router generates many friendly path-related variables for us just from the simple @map.resources :articles@ declaration. One of them is the @articles_path@ we use here -- it'll resolve to http://wheels.local/index.cfm/articles/.
 
 Go back in your browser so you get to the form with the sample data you entered and click CREATE. You should then bounce to the full articles list with your new article added.
@@ -412,7 +412,7 @@ Look at your @index.cfm@ and change the whole @<li>@ segment so it looks like th
 
 The first link we added, for edit, is pretty similar to what we've done before -- creating a link with the text "edit" pointing to the address @edit_article_path@, which is defined by the router, and editing the thing named @article@.
 
-The second one is a little more complex. Web browsers don't yet properly implement all the REST conventions, so CFWheels creates a hack for destroying objects. The details aren't too important. So this link will have the text "remove", will point to the @article@, and will use the HTTP method "delete". We've also added a @:confirm@ parameter. If a link has a @:confirm@, then CFWheels will generate some Javascript which will popup a box when the link is clicked that contains the text in the @:confirm@. Here we're setting the message to check that the user wants to remove the article and including the article's title in the message.
+The second one is a little more complex. Web browsers don't yet properly implement all the REST conventions, so CFWheels creates a hack for destroying objects. The details aren't too important. So this link will have the text "remove", will point to the @article@, and will use the HTTP method "delete". We've also added a @confirm@ parameter. If a link has a @confirm@, then CFWheels will generate some Javascript which will popup a box when the link is clicked that contains the text in the @confirm@. Here we're setting the message to check that the user wants to remove the article and including the article's title in the message.
 
 Refresh your browser and you should see "edit" and "remove" links for each article. Click the EDIT link for your first article.
 
@@ -462,7 +462,7 @@ Then look at your @edit.cfm@ file, write an H1 header saying "Edit an Article", 
 
 Go back to your articles list and try creating a new article -- it should work just fine. Try editing an article and you should see the form with the existing article's data -- it works OK until you click SAVE.
 
-The router is looking for an action named @update@. Just like the @new@ action sends it's form data to the @create@ action, the @edit@ action sends it's form data to the @update@ action. In fact, within our @Articles.cfc@, the @update@ method will look very similar to @create@:
+The router is looking for an action named @update@. Just like the @new@ action sends it's form data to the @create@ action, the @edit@ action sends it's form data to the @update@ action. In fact, within our @Articles.cfc@, the @update@ method will look very similar to @create@
 
 <pre>
   def update
@@ -473,7 +473,7 @@ The router is looking for an action named @update@. Just like the @new@ action s
   end
 </pre>
 
-The only new bit here is the @update_attributes@ method. This method works very similar to when we called the @Article.new@ method and passed in the hash of form data. When we call @update_attributes@ on the @@article@ object and pass in the data from the form, it changes the values in the object to match the values submitted with the form. Then we save the object to the database and redirect to the articles list.
+The only new bit here is the @update_attributes@ method. This method works very similar to when we called the @Article.new@ method and passed in the hash of form data. When we call @update_attributes@ on the @article@ object and pass in the data from the form, it changes the values in the object to match the values submitted with the form. Then we save the object to the database and redirect to the articles list.
 
 Now try editing and saving some of your articles.
 
@@ -503,7 +503,7 @@ CFWheels creates the object named @flash@, so we don't need to do anything to se
 <div class="flash"><p><%= flash[:message] %></p></div>
 </pre>
 
-This just outputs the value stored in the @flash@ object with the key @:message@. If you refresh your articles list you won't see anything because we haven't stored a message in there yet. Look at @Articles.cfc@ and add this line right after the @save!@ line in your @create@ method:
+This just outputs the value stored in the @flash@ object with the key @message@. If you refresh your articles list you won't see anything because we haven't stored a message in there yet. Look at @Articles.cfc@ and add this line right after the @save!@ line in your @create@ method:
 
 <pre>
 flash[:message] = "Article '#{@article.title}' was created."
@@ -548,7 +548,7 @@ t.integer :article_id
 t.string :author_name
 </pre>
 
-Then keep adding lines that create strings named @:author_email@, @:author_url@, and a text field named @:body@.
+Then keep adding lines that create strings named @author_email@, @author_url@, and a text field named @body@.
 
 Once that's complete, go to your terminal and run the migration with @rake db:migrate@.
 
@@ -625,7 +625,7 @@ We want to display any comments underneath their parent article. Because we've s
 <%= render :partial => 'comment', :collection => @article.comments %>
 </pre>
 
-This says that we want to render a partial named "comment" and that we want to do it once for each element in the collection @@article.comments@. We saw in the console that when we call the @.comments@ method on an article we'll get back an array of it's associated comment objects. So this render line will pass each element of that array one at a time into the partial named "comment". Now we need to create the file @/app/views/articles/_comment.cfm@ and add this code:
+This says that we want to render a partial named "comment" and that we want to do it once for each element in the collection @article.comments@. We saw in the console that when we call the @.comments@ method on an article we'll get back an array of it's associated comment objects. So this render line will pass each element of that array one at a time into the partial named "comment". Now we need to create the file @/app/views/articles/_comment.cfm@ and add this code:
 
 <pre>
 <div class="comment">
@@ -640,7 +640,7 @@ h3. Web-Based Comment Creation
 
 Good start, but our users (hopefully) can't get into the console to create their comments. We'll need to create a web interface. We'll go through some of the same steps that we did when creating the web interface for creating articles.
 
-Let's start with the form. The comment form should be embedded into the article's @show@ template. So let's add this code right above the "Back to Articles List" in the articles @show.cfm@:
+Let's start with the form. The comment form should be embedded into the article's @show@ template. So let's add this code right above the "Back to Articles List" in the articles @show.cfm@
 
 <pre>
 <%= render :partial => 'comment_form' %>
@@ -783,10 +783,10 @@ h3. Making Models
 With those relationships in mind, let's design the new models:
 
 * Tag
-** @name@: A string
+** @name@ A string
 * Tagging
-** @tag_id@: Integer holding the foreign key of the related Tag
-** @article_id@: Integer holding the foreign key of the related Article
+** @tag_id@ Integer holding the foreign key of the related Tag
+** @article_id@ Integer holding the foreign key of the related Article
 
 Note that there are no changes necessary to Article because the foreign key is stored in the Tagging model. So now lets generate these models in your terminal:
 
@@ -800,19 +800,19 @@ h3. Expressing Relationships
 
 Now that our model files are generated we need to tell CFWheels about the relationships between them. For each of the files below, add these lines:
 
-In @/app/models/article.rb@:
+In @/app/models/article.rb@
 
 <pre class=brush:ruby;">
   has_many :taggings
 </pre>
 
-In @/app/models/tag.rb@:
+In @/app/models/tag.rb@
 
 <pre class=brush:ruby;">
   has_many :taggings
 </pre>
 
-Then in @/app/models/tagging.rb@:
+Then in @/app/models/tagging.rb@
 
 <pre class=brush:ruby;">
   belongs_to :article
@@ -827,14 +827,14 @@ tags = article.taggings.collect{|tagging| tagging.tag}
 
 That's a pain for something that we need commonly. The solution was to augment the relationship with "through". We'll add a second relationship now to the Article and Tag classes:
 
-In @/app/models/article.rb@:
+In @/app/models/article.rb@
 
 <pre class=brush:ruby;">
   has_many :taggings
   has_many :tags, :through => :taggings
 </pre>
 
-In @/app/models/tag.rb@:
+In @/app/models/tag.rb@
 
 <pre class=brush:ruby;">
   has_many :taggings
@@ -1037,7 +1037,7 @@ Try editing one of your article that already has some tags. Save it and look at 
 
 When we wrote our @tag_list=@ method inside of @article.rb@, we were just thinking about it running when creating a new article. Thus we always built a new tagging for each tag in the list. But when we're editing, we might get the string "ruby, technology" into the method while the Article was already linked to the tags "ruby" and "technology" when it was created. As it is currently written, the method will just "retag" it with those tags, so we'll end up with a list like "ruby, technology, ruby, technology".
 
-There are a few ways we could fix this -- the first thing I want to do is remove any repeated tags in the parameter list by using the Ruby method @uniq@:
+There are a few ways we could fix this -- the first thing I want to do is remove any repeated tags in the parameter list by using the Ruby method @uniq@
 
 <pre>
 tag_names = tags_string.split(",").collect{|s| s.strip.downcase}.uniq
