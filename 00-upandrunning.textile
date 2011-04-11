@@ -28,7 +28,7 @@ You should then see the @JSBloggers@ server in the Servers view. If it isn't Run
 
 We need to change the Wheels datasource convention. Wheels assumes our datasource connection is the folder name Wheels resides in but for our case it is not CF9 but JSBloggers. We could have easily named our war file that but I wanted to show how we can easily override a Wheels convention.
 
-Press Ctrl+Shift+R while in Eclipse. This is the Open Resource window. I use this alot when coding. Sometimes I highlight a file name in code and press Ctrl+Shift+R, other times I type in the file name like we will. Type in @settings.cfm@, and select @settings.cfm - /JSBloggers/config@. This will open that file for use and paste in @<cfset set(dataSourceName="JSBloggers") />@ to tell Wheels to use this as are datasource. Then reload Wheels and you should see under DataSource, JSBloggers.
+Press Ctrl+Shift+R while in Eclipse. This is the Open Resource window. I use this alot when coding. Sometimes I highlight a file name in code and press Ctrl+Shift+R, other times I type in the file name like we will. Type in @settings.cfm@, and select @settings.cfm - /JSBloggers/config@. This will open that file for use and paste in @<cfset set(dataSourceName="JSBloggers") />@ to tell Wheels to use this as are datasource. Also paste in @<cfset set(URLRewriting="Partial")>@ to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers.
 
 h3. Creating the Article Model
 

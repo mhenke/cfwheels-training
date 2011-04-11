@@ -48,7 +48,7 @@ It's not very impressive so far -- we need to add a form to the @new.cfm@ so the
 <cfoutput>
  #startFormTag(action="create")#
   #textField(objectName='article', property='title', label='Title')#
-  #textField(objectName='article', property='body', label='Body')#
+  #textArea(objectName='article', property='body', label='Body')#
   #submitTag()#
  #endFormTag()#
 </cfoutput>
@@ -59,6 +59,7 @@ What is all that?  Let's look at it piece by piece:
 
 * @startFormTag@ is a CFWheels helper instruction which takes an action parameter, in this case @create@, The first line basically says "Make an openning form tag with the name of the action included in the URL" .
 * The @textField@ helper creates a single-line text field control
+* The @textArea@ helper creates a text area field form control 
 ** The @objectName@ parameter which says for this input use the object named @article@ to build the form control
 ** The @property@ parameter create the name of the property to use in the form control
 ** The @lable@ parameter creates an HTML label for the form control, this is good usability practice and will have some other benefits for us later
@@ -78,13 +79,13 @@ Line 4 in views\articles\new.cfm
 2: <cfoutput>
 3:  #startFormTag(action="create")#
 4:   #textField(objectName='article', property='title', label='Title')#
-5:   #textField(objectName='article', property='body', label='Body')#
+5:   #textArea(objectName='article', property='body', label='Body')#
 6:   #submitTag()#
 </pre>
 
 What's it trying to tell us. In our @new.cfm@ on line #4 there was an error about "Wheels.ObjectNotFound". Somewhere in line #4 we're working with an object that doesn't exist.
 
-And since there's only one object in line #4, it makes it pretty obvious -- the problem is that we started talking about a thing named @srticle@ without ever creating that thing. CFWheels uses some of the _reflection_ techniques that we talked about earlier in order to setup the form. Remember in the @Examples.cfc@ when we called @Article.new@ to create a new object?  CFWheels wants to do the same thing, but we need to create the blank object for it.
+And since there's only one object in line #4, it makes it pretty obvious -- the problem is that we started talking about a thing named @article@ without ever creating that thing. CFWheels uses some of the _reflection_ techniques that we talked about earlier in order to setup the form. Remember in the @Examples.cfc@ when we called @Article.new@ to create a new object?  CFWheels wants to do the same thing, but we need to create the blank object for it.
 
 Go into your @Articles.cfc@, and _inside_ the @new@ method, add this line:
 
@@ -114,7 +115,7 @@ When we loaded the form we accessed the @new@ action, but when that form is subm
  <cffunction name="create">
   <cfset article = model("Article").new(params.article)>
   <cfset article.save() />
-  <cfset renderPage(action="index")>
+  <cfset redirectTo(action="index")>
  </cffunction>
 </code>
 </pre>
@@ -124,7 +125,7 @@ This method says...
 * Create an object named @article@ and send in the parameter @params.article@
 * CFWheels makes the form data available inside the variable named @params@. If we're to look at @params@ as a data structure, it'd be a structure with only a key called @article@. The value of that pair is another structure with keys @title@ and @body@. The values for those keys are the data we entered into the text boxes on the form. So when @Article.new@ is called and the hash @params.article@ is passed in, the @new@ method looks for the value with key @title@ and puts that into the Article's @title@ attribute. Then it looks for the value for key @body@ and puts that into the article's @body@ attribute.
 * The line @<cfset article.save() />@ saves the object to the database, just like we did in the examples.
-* Finally, the @renderPage@ tells CFWheels that we don't want to render a view for this action. Once the previous steps are done, we want to bounce to the list of all articles. This @renderPage(action="index")@ resolve to http://wheels.local/index.cfm/articles/.
+* Finally, the @redirectTo@ tells CFWheels that we don't want to render a view for this action. Once the previous steps are done, we want to bounce to the list of all articles. This @renderPage(action="index")@ resolve to http://wheels.local/index.cfm/articles/.
 
 Go back in your browser so you get to the form with the sample data you entered and click "Save changes". You should then bounce to the full articles list with your new article added.
 
