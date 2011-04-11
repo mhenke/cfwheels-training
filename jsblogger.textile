@@ -339,7 +339,7 @@ When we loaded the form we accessed the @new@ action, but when that form is subm
 
 <pre>
   def create
-    @article = Article.new(params[:article])
+    @article = Article.new(params[article])
     @article.save!
     redirect_to articles_path
   end
@@ -347,8 +347,8 @@ When we loaded the form we accessed the @new@ action, but when that form is subm
 
 This method says...
 
-* Create an object named @article@ and send in the parameter @params[:article]@
-* CFWheels makes the form data available inside the variable named @params@. If were to look at @params@ as a data structure, it'd be a hash with only one key -- @article@. The value of that pair is another hash with keys @title@ and @body@. The values for those keys are the data we entered into the text boxes on the form. So when @Article.new@ is called and the hash @params[:article]@ is passed in, the @new@ method looks for the value with key @title@ and puts that into the Article's @title@ attribute. Then it looks for the value for key @body@ and puts that into the article's @body@ attribute.
+* Create an object named @article@ and send in the parameter @params[article]@
+* CFWheels makes the form data available inside the variable named @params@. If were to look at @params@ as a data structure, it'd be a hash with only one key -- @article@. The value of that pair is another hash with keys @title@ and @body@. The values for those keys are the data we entered into the text boxes on the form. So when @Article.new@ is called and the hash @params[article]@ is passed in, the @new@ method looks for the value with key @title@ and puts that into the Article's @title@ attribute. Then it looks for the value for key @body@ and puts that into the article's @body@ attribute.
 * The line @article.save!@ saves the object to the database, just like we did in the console. We've added the exclamation mark here because we haven't implemented any error checking. The normal @save@ method will "fail silently" if there's a problem saving the article, but the @save!@ method will raise errors and basically freak out.
 * Finally, the @redirect_to@ tells CFWheels that we don't want to render a view for this action. Once the previous steps are done, we want to bounce to the list of all articles. The router generates many friendly path-related variables for us just from the simple @map.resources :articles@ declaration. One of them is the @articles_path@ we use here -- it'll resolve to http://wheels.local/index.cfm/articles/.
 
@@ -358,8 +358,8 @@ h3. Adding Navigation to the Index
 
 Right now our article list is very plain and we end up typing in a bunch of URLs by hand. Let's add some links. Open your @/views/articles/index.cfm@ and...
 
-* Add this code at the very bottom:<br/>@<%= link_to "Create a New Article", new %>@<br/>which uses the CFWheels @link_to@ helper, tells it we want a link with the text "Create a New Article" that points to the address @new@ (which the router handles for us)
-* Find where, in the middle of the view, we output just the @article.title@. Change it so it says @link_to article.title, article_path(article)@. This creates a link with the text of the articles title which points to a page where we'll show just that article.
+* Add this code at the very bottom:<br/>@<%= linkTo "Create a New Article", new %>@<br/>which uses the CFWheels @linkTo@ helper, tells it we want a link with the text "Create a New Article" that points to the address @new@ (which the router handles for us)
+* Find where, in the middle of the view, we output just the @article.title@. Change it so it says @linkTo article.title, article_path(article)@. This creates a link with the text of the articles title which points to a page where we'll show just that article.
 
 Refresh your browser and you should now see a list of just the article titles that are linked somewhere and a link at the bottom to "Create a New Article". Test that this create link takes you to the new article form. Then go back to the article list and click one of the article titles.
 
@@ -375,12 +375,12 @@ end
 
 Refresh the browser and you'll get the "Template is Missing" error. Let's pause here before creating the view template.
 
-Look at the URL: @http://wheels.local/index.cfm/articles/1@. When we added the @link_to@ in the index and pointed it to the @article_path@ for this @article@, the router created this URL. Following the RESTful convention, this URL goes to a SHOW method which would display the Article with ID number @1@. Your URL might have a different number depending on which article title you clicked in the index.
+Look at the URL: @http://wheels.local/index.cfm/articles/1@. When we added the @linkTo@ in the index and pointed it to the @article_path@ for this @article@, the router created this URL. Following the RESTful convention, this URL goes to a SHOW method which would display the Article with ID number @1@. Your URL might have a different number depending on which article title you clicked in the index.
 
-So what do we want to do when the user clicks an article title?  Find the article, then display a page with it's title and body. We'll use the number on the end of the URL to find the article in the database. The router will send us this number in the variable @params[:id]@. Inside the @show@ method that we just created, add this line:
+So what do we want to do when the user clicks an article title?  Find the article, then display a page with it's title and body. We'll use the number on the end of the URL to find the article in the database. The router will send us this number in the variable @params[id]@. Inside the @show@ method that we just created, add this line:
 
 <pre>
-@article = Article.find(params[:id])
+@article = Article.find(params[id])
 </pre>
 
 Now create the file @/views/articles/show.cfm@ and add this code:
@@ -388,7 +388,7 @@ Now create the file @/views/articles/show.cfm@ and add this code:
 <pre>
 <h2><%= @article.title %></h2>
 <p><%= @article.body %></p>
-<%= link_to "<< Back to Articles List", articles_path %>
+<%= linkTo "<< Back to Articles List", articles_path %>
 </pre>
 
 Refresh your browser and your article should show up along with a link back to the index.
@@ -401,10 +401,10 @@ Look at your @index.cfm@ and change the whole @<li>@ segment so it looks like th
 
 <pre>
     <li>
-      <b><%= link_to article.title, article_path(article) %></b><br/>
+      <b><%= linkTo article.title, article_path(article) %></b><br/>
       <i>Actions:
-      <%= link_to "edit", edit_article_path(article) %>,
-      <%= link_to "remove", article, :method => :delete,
+      <%= linkTo "edit", edit_article_path(article) %>,
+      <%= linkTo "remove", article, :method => :delete,
                    :confirm => "Remove the article '#{article.title}'?" %>      
       </i>
     </li>
@@ -422,7 +422,7 @@ The router is expecting to find an action in @Articles.cfc@ named @edit@, so let
 
 <pre>
   def edit
-    @article = Article.find(params[:id])
+    @article = Article.find(params[id])
   end
 </pre>
 
@@ -466,8 +466,8 @@ The router is looking for an action named @update@. Just like the @new@ action s
 
 <pre>
   def update
-    @article = Article.find(params[:id])
-    @article.update_attributes(params[:article])
+    @article = Article.find(params[id])
+    @article.update_attributes(params[article])
     @article.save!
     redirect_to article_path(@article)    
   end
@@ -483,13 +483,13 @@ Next, click the REMOVE link for one article and hit OK. You can see that the rou
 
 <pre>
   def destroy
-    @article = Article.find(params[:id])
+    @article = Article.find(params[id])
     @article.destroy
     redirect_to articles_path
   end
 </pre>
 
-Here we're doing a @find@ based on @params[:id]@ like we did in the @show@ action. We call that object's @destroy@ method, then redirect back to the articles list.
+Here we're doing a @find@ based on @params[id]@ like we did in the @show@ action. We call that object's @destroy@ method, then redirect back to the articles list.
 
 Try it out in your browser.
 
@@ -500,13 +500,13 @@ It would be nice, though, if we gave the user some kind of status message about 
 CFWheels creates the object named @flash@, so we don't need to do anything to set it up. We can start by integrating it into our @index.cfm@ by adding this line at the very top:
 
 <pre>
-<div class="flash"><p><%= flash[:message] %></p></div>
+<div class="flash"><p><%= flash[message] %></p></div>
 </pre>
 
 This just outputs the value stored in the @flash@ object with the key @message@. If you refresh your articles list you won't see anything because we haven't stored a message in there yet. Look at @Articles.cfc@ and add this line right after the @save!@ line in your @create@ method:
 
 <pre>
-flash[:message] = "Article '#{@article.title}' was created."
+flash[message] = "Article '#{@article.title}' was created."
 </pre>
 
 Then go to your articles list, create another sample article, and when you click create you should see the flash message at the top of your view.
@@ -886,7 +886,7 @@ Processing ArticlesController#create (for 127.0.0.1) [POST]
   Parameters: {"article"=>{"body"=>"Yes, the samples continue!", "title"=>"My Sample", "tag_list"=>"ruby, technology"}, "commit"=>"Save", "authenticity_token"=>"xxi0A3tZtoCUDeoTASi6Xx39wpnHt1QW/6Z1jxCMOm8="}
 </pre>
 
-The field that's interesting there is the @"tag_list"=>"technology, ruby"@. Those are the tags as I typed them into the form. The error came up in the @create@ method, so let's peek at @/controllers/Articles.cfc@ in the @create@ method. See the first line that calls @Article.new(params[:article])@?  This is the line that's causing the error as you could see in the middle of the stack trace.
+The field that's interesting there is the @"tag_list"=>"technology, ruby"@. Those are the tags as I typed them into the form. The error came up in the @create@ method, so let's peek at @/controllers/Articles.cfc@ in the @create@ method. See the first line that calls @Article.new(params[article])@?  This is the line that's causing the error as you could see in the middle of the stack trace.
 
 Since the @create@ method passes all the parameters from the form into the @Article.new@ method, the tags are sent in as the string @"technology, ruby"@. The @new@ method will try to set the new Article's @tag_list@ equal to @"technology, ruby"@ but that method doesn't exist because there is no attribute named @tag_list@. 
 
@@ -998,11 +998,11 @@ end
 
 The desired outcome is a list of comma separated tags, where each one links to that tag's @show@ action -- the page where we'll list all the articles with that tag.
 
-A helper method has to return a string which will get rendered into the HTML. In this case we'll use the @collect@ method to create a list of links, one for each Tag, where the link is created by the @link_to@ helper. Then we'll @return@ back the @links@ connected by a comma and a space:
+A helper method has to return a string which will get rendered into the HTML. In this case we'll use the @collect@ method to create a list of links, one for each Tag, where the link is created by the @linkTo@ helper. Then we'll @return@ back the @links@ connected by a comma and a space:
 
 <pre>
   def tag_links(tags)
-    links = tags.collect{|tag| link_to tag.name, tag_path(tag)}
+    links = tags.collect{|tag| linkTo tag.name, tag_path(tag)}
     return links.join(", ")
   end  
 </pre>
@@ -1015,7 +1015,7 @@ Showing app/views/articles/index.cfm where line #6 raised:
 undefined method `tag_path' for #<ActionView::Base:0x104aaa460>
 </pre>
 
-The @link_to@ helper is trying to use @tag_path@ from the router, but the router doesn't know anything about our Tag object. We created a model, but we never created a controller or route. There's nothing to link to -- so let's generate that controller from your terminal:
+The @linkTo@ helper is trying to use @tag_path@ from the router, but the router doesn't know anything about our Tag object. We created a model, but we never created a controller or route. There's nothing to link to -- so let's generate that controller from your terminal:
 
 <pre>
 ruby script/generate controller tags index show
@@ -1066,7 +1066,7 @@ The links for our tags are showing up, but if you click on them you'll get our o
 
 <pre>
   def show
-    @tag = Tag.find(params[:id])
+    @tag = Tag.find(params[id])
   end  
 </pre>
 
@@ -1077,7 +1077,7 @@ Then create a file @/app/views/tags/show.cfm@ like this:
 
 <ul>
   <% @tag.articles.each do |article| %>
-    <li><%= link_to article.title, article_path(article) %></li>
+    <li><%= linkTo article.title, article_path(article) %></li>
   <% end %>
 </ul>
 </pre>

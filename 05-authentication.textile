@@ -34,7 +34,7 @@ Go ahead and create yourself an account. If you're successful it will just bounc
 
 Lets open @/app/views/layouts/application.html.haml@ and add a little footer so the whole @%body%@ chunk looks like this:
 
-%body #container #content = yield %hr %h6 - if current_user = "Logged in as #{current_user.login}" = link_to "(logout)", logout_path - else = link_to "(login)", login_pathThe go to @http://wheels.local/index.cfm/articles/@ and you'll get this error:
+%body #container #content = yield %hr %h6 - if current_user = "Logged in as #{current_user.login}" = linkTo "(logout)", logout_path - else = linkTo "(login)", login_pathThe go to @http://wheels.local/index.cfm/articles/@ and you'll get this error:
 
 NameError in Articles#index Showing app/views/layouts/application.html.haml where line #14 raised: undefined local variable or method `current_user' for #<ActionView::Base:0x103147400>We tried to use the @current_user@ helper that comes with the restful_authentication plugin, but CFWheels isn't recognizing it. We need to do one more setup step. Open @/app/controllers/application_controller.rb@ , and underneath the @protect_from_forgery@ line, add this: @include AuthenticatedSystem@.
 
@@ -63,7 +63,7 @@ That way when the app is first setup we can create an account, then new users ca
 
 We can create a @before_filter@ which will run _before_ the @new@ and @create@ actions of our @users_controller.rb@. Open that controller and on the second line you'll see @include AuthenticatedSystem@. You can remove that since we put it in the @application_controller@ and, in its place, put all this code:
 
-before_filter :zero_users_or_authenticated, :only =>[:new, :create] def zero_users_or_authenticated unless User.all.size == 0 || current_user redirect_to root_path return false end endThe first line declares that we want to run a before filter named @zero_or_authenticated@ when either the @new@ or @create@ methods are accessed. Then we define that filter, checking if there are either zero registered users OR if there is a user already logged in. If neither of those is true, we redirect to the root path (our articles list) and return false. If either one of them is true this filter wont do anything, allowing the requested user registration form to be rendered.
+before_filter :zero_users_or_authenticated, :only =>[new, :create] def zero_users_or_authenticated unless User.all.size == 0 || current_user redirect_to root_path return false end endThe first line declares that we want to run a before filter named @zero_or_authenticated@ when either the @new@ or @create@ methods are accessed. Then we define that filter, checking if there are either zero registered users OR if there is a user already logged in. If neither of those is true, we redirect to the root path (our articles list) and return false. If either one of them is true this filter wont do anything, allowing the requested user registration form to be rendered.
 
 With that in place, try accessing @/users/new@ when you logged in and when your logged out. If you want to test that it works when no users exist, try this at your console:
 
@@ -74,11 +74,11 @@ h3. Securing the Rest of the Application
 The first thing we need to do is sprinkle @before_filters@ on most of our controllers:
 
 * In @users_controller@ , add a before filter to protect the actions besides @new@ and @create@ like this:
- @before_filter :login_required, :except =>[:new, :create]@ 
+ @before_filter :login_required, :except =>[new, :create]@ 
 * In @tags_controller@ , we dont have any methods that need to be protected.
 * In @sessions_controller@ all the methods need to be accessible to allow login and logout
 * In @comments_controller@ , we never implemented @index@ and @destroy@ , but just in case we do lets allow unauthenticated users to only access @create@ :
- @before_filter :login_required, :except =>[:create]@ 
+ @before_filter :login_required, :except =>[create]@ 
 * In @Articles.cfc@ authentication should be required for @new@ , @create@ , @edit@ , @update@ and @destroy@. Figure out how to write the before filter using either @only@ or @except@ 
 
 Now our app is pretty secure, but we should hide all those edit, destroy, and new article links from unauthenticated users.

@@ -153,27 +153,33 @@ h3. Creating the SHOW Action
 Tired of this error message yet?  Go to your @Articles.cfc@ and add a method like this:
 
 <pre>
-def show
-
-end
+<code>
+ <cffunction name="show">
+	
+ </cffunction>
+</code>
 </pre>
 
-Refresh the browser and you'll get the "Template is Missing" error. Let's pause here before creating the view template.
+Let's pause here before creating the view template.
 
-Look at the URL: @http://wheels.local/index.cfm/articles/1@. When we added the @link_to@ in the index and pointed it to the @article_path@ for this @article@, the router created this URL. Following the RESTful convention, this URL goes to a SHOW method which would display the Article with ID number @1@. Your URL might have a different number depending on which article title you clicked in the index.
+Look at the URL: @http://wheels.local/index.cfm/articles/show/1@. When we added the @linkTo@ in the index and pointed it to the @show@ for this @article@, the router created this URL. Following the RESTful convention, this URL goes to a SHOW method which would display the Article with ID number @1@. Your URL might have a different number depending on which article title you clicked in the index.
 
-So what do we want to do when the user clicks an article title?  Find the article, then display a page with it's title and body. We'll use the number on the end of the URL to find the article in the database. The router will send us this number in the variable @params[:id]@. Inside the @show@ method that we just created, add this line:
+So what do we want to do when the user clicks an article title?  Find the article, then display a page with it's title and body. We'll use the number on the end of the URL to find the article in the database. The router will send us this number in the variable @params[key]@. Inside the @show@ method that we just created, add this line:
 
 <pre>
-@article = Article.find(params[:id])
+ <cfset article = model("Article").findByKey(params.key)>
 </pre>
 
 Now create the file @/views/articles/show.cfm@ and add this code:
 
 <pre>
-<h2><%= @article.title %></h2>
-<p><%= @article.body %></p>
-<%= link_to "<< Back to Articles List", articles_path %>
+<code>
+<cfoutput>
+<h2>#article.title#</h2>
+<p>#article.body#</p>
+#linkTo(text="<< Back to Articles List", action="index")#
+</cfoutput>
+</code>
 </pre>
 
 Refresh your browser and your article should show up along with a link back to the index.
@@ -186,10 +192,10 @@ Look at your @index.cfm@ and change the whole @<li>@ segment so it looks like th
 
 <pre>
     <li>
-      <b><%= link_to article.title, article_path(article) %></b><br/>
+      <b><%= linkTo article.title, article_path(article) %></b><br/>
       <i>Actions:
-      <%= link_to "edit", edit_article_path(article) %>,
-      <%= link_to "remove", article, :method => :delete,
+      <%= linkTo "edit", edit_article_path(article) %>,
+      <%= linkTo "remove", article, :method => :delete,
                    :confirm => "Remove the article '#{article.title}'?" %>      
       </i>
     </li>
@@ -207,7 +213,7 @@ The router is expecting to find an action in @Articles.cfc@ named @edit@, so let
 
 <pre>
   def edit
-    @article = Article.find(params[:id])
+    @article = Article.find(params[id])
   end
 </pre>
 
@@ -251,8 +257,8 @@ The router is looking for an action named @update@. Just like the @new@ action s
 
 <pre>
   def update
-    @article = Article.find(params[:id])
-    @article.update_attributes(params[:article])
+    @article = Article.find(params[id])
+    @article.update_attributes(params[article])
     @article.save!
     redirect_to article_path(@article)    
   end
@@ -268,13 +274,13 @@ Next, click the REMOVE link for one article and hit OK. You can see that the rou
 
 <pre>
   def destroy
-    @article = Article.find(params[:id])
+    @article = Article.find(params[id])
     @article.destroy
     redirect_to articles_path
   end
 </pre>
 
-Here we're doing a @find@ based on @params[:id]@ like we did in the @show@ action. We call that object's @destroy@ method, then redirect back to the articles list.
+Here we're doing a @find@ based on @params[id]@ like we did in the @show@ action. We call that object's @destroy@ method, then redirect back to the articles list.
 
 Try it out in your browser.
 
@@ -285,13 +291,13 @@ It would be nice, though, if we gave the user some kind of status message about 
 CFWheels creates the object named @flash@, so we don't need to do anything to set it up. We can start by integrating it into our @index.cfm@ by adding this line at the very top:
 
 <pre>
-<div class="flash"><p><%= flash[:message] %></p></div>
+<div class="flash"><p><%= flash[message] %></p></div>
 </pre>
 
 This just outputs the value stored in the @flash@ object with the key @message@. If you refresh your articles list you won't see anything because we haven't stored a message in there yet. Look at @Articles.cfc@ and add this line right after the @save!@ line in your @create@ method:
 
 <pre>
-flash[:message] = "Article '#{@article.title}' was created."
+flash[message] = "Article '#{@article.title}' was created."
 </pre>
 
 Then go to your articles list, create another sample article, and when you click create you should see the flash message at the top of your view.
