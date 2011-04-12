@@ -12,7 +12,7 @@ First, we need to brainstorm what a comment _is_...what kinds of data does it ha
 * It usually has an optional URL
 * It has a body
 
-With that understanding, let's create a Comment model. Switch over to Eclipse and right click on the models folder, then select New --> File and enter "Comment.cfc" for File name:
+With that understanding, let's create a Comment model. Switch over to Eclipse and right click on the models folder, then select New --> File and enter "Comment.cfc" for File name. The file will be created and automatically open, then you can add this code to it:
 
 <pre>
 <code>
@@ -94,7 +94,7 @@ Let's use the @/controllers/Examples.cfc@ to test how this relationship works in
 </code>
 </pre>
 
-When you called the @comments@ method on object @a@, it gave you back a blank array because that article doesn't have any comments. When you executed @model("comment").new()@ it gave you back a blank Comment object. But, if you look closely, when you did @a.newComment()@ the comment object you got back wasn't quite blank -- it has the @article_id@ field already filled in with the ID number of article @a@.
+When you called the @comments@ method on object @a@, it gave you back a blank array because that article doesn't have any comments. When you executed @model("comment").new()@ it gave you back a blank Comment object. But, if you look closely, when you did @a.newComment()@ the comment object you got back wasn't quite blank -- it has the @articleid@ field already filled in with the ID number of article @a@.
 
 Try creating a few comments for that article like this:
 
@@ -188,7 +188,7 @@ This is just like we did it in the Examples. Now we can create a form inside our
 <h3>Post a Comment</h3>
 
 <% form_for @comment do |f| %>
-  <%= f.hidden_field :article_id, :value => @article.id %>
+  <%= f.hidden_field :articleid, :value => @article.id %>
   <p>
     <%= f.label :author_name %><br/>
     <%= f.text_field :author_name %>

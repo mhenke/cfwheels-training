@@ -304,7 +304,7 @@ Refresh your browser and you'll see this:
 <pre>
 RuntimeError in Articles#new
 Showing app/views/articles/new.cfm where line #3 raised:
-Called id for nil, which would mistakenly be 4 -- if you really wanted the id of nil, use object_id
+Called id for nil, which would mistakenly be 4 -- if you really wanted the id of nil, use objectid
 
 Extracted source (around line #3):
 1: <h1>Create a New Article</h1>
@@ -544,7 +544,7 @@ h3. Setting up the Migration
 Open the migration file that the generator created, @/db/migrate/some-timestamp_create_comments.rb@. Inside the @self.up@ you need to add one line for each of the pieces of data we just brainstormed. It'll start off with these...
 
 <pre>
-t.integer :article_id
+t.integer :articleid
 t.string :author_name
 </pre>
 
@@ -558,7 +558,7 @@ The power of SQL databases is the ability to express relationships between eleme
 
 Foreign keys are a way of marking one-to-one and one-to-many relationships. An article might have zero, five, or one hundred comments. But a comment only belongs to one article. These objects have a one-to-many relationship -- one article connects to many comments.
 
-Part of the big deal with CFWheels is that it makes working with these relationships very easy. When we created the migration for comments we started with an @integer@ field named @article_id@. The CFWheels convention is that, for a one-to-many relationship, the objects on the "many" end should have a foreign key referencing the "one" object. And that foreign key should be titled with the name of the "one" object, then an underscore, then "id". So in this case one article has many comments, so each comment has a field named @article_id@ which tracks which article they belong to. Similarly, a store's customer might have many orders, so each order would have a @customer_id@ specifying which customer they belong to.
+Part of the big deal with CFWheels is that it makes working with these relationships very easy. When we created the migration for comments we started with an @integer@ field named @articleid@. The CFWheels convention is that, for a one-to-many relationship, the objects on the "many" end should have a foreign key referencing the "one" object. And that foreign key should be titled with the name of the "one" object, then an underscore, then "id". So in this case one article has many comments, so each comment has a field named @articleid@ which tracks which article they belong to. Similarly, a store's customer might have many orders, so each order would have a @customerid@ specifying which customer they belong to.
 
 Following this convention will get us a lot of functionality "for free."  Open your @/app/models/comment.rb@ and add the middle line so it looks like this:
 
@@ -591,7 +591,7 @@ Comment.new
 a.comments.new
 </pre>
 
-When you called the @comments@ method on object @a@, it gave you back a blank array because that article doesn't have any comments. When you executed @Comment.new@ it gave you back a blank Comment object with those fields we defined in the migration. But, if you look closely, when you did @a.comments.new@ the comment object you got back wasn't quite blank -- it has the @article_id@ field already filled in with the ID number of article @a@.
+When you called the @comments@ method on object @a@, it gave you back a blank array because that article doesn't have any comments. When you executed @Comment.new@ it gave you back a blank Comment object with those fields we defined in the migration. But, if you look closely, when you did @a.comments.new@ the comment object you got back wasn't quite blank -- it has the @articleid@ field already filled in with the ID number of article @a@.
 
 Try creating a few comments for that article like this:
 
@@ -667,7 +667,7 @@ This is just like we did it in the Examples. Now we can create a form inside our
 <h3>Post a Comment</h3>
 
 <% form_for @comment do |f| %>
-  <%= f.hidden_field :article_id, :value => @article.id %>
+  <%= f.hidden_field :articleid, :value => @article.id %>
   <p>
     <%= f.label :author_name %><br/>
     <%= f.text_field :author_name %>
@@ -768,7 +768,7 @@ h3. Understanding the Relationship
 
 What is a tag?  We need to figure that out before we can create the model. First, a tag must have a relationship to an article so they can be connected. A single tag, like "ColdFusion" for instance, should be able to relate to *many* articles. On the other side of the relationship, the article might have multiple tags (like "ColdFusion", "CFWheels", and "programming" as above) - so it's also a *many* relationship. Articles and tags have a *many-to-many* relationship.
 
-Many-to-many relationships are tricky because we're using an SQL database. If an Article "has many" tags, then we would put the foreign key @article_id@ inside the @tags@ table - so then a Tag would "belong to" an Article. But a tag can connect to *many* articles, not just one. We can't model this relationship with just the @articles@ and @tags@ tables.
+Many-to-many relationships are tricky because we're using an SQL database. If an Article "has many" tags, then we would put the foreign key @articleid@ inside the @tags@ table - so then a Tag would "belong to" an Article. But a tag can connect to *many* articles, not just one. We can't model this relationship with just the @articles@ and @tags@ tables.
 
 When we start thinking about the database modeling, there are a few ways to achieve this setup. One way is to create a "join table" that just tracks which tags are connected to which articles. Traditionally this table would be named @articles_tags@ and CFWheels would express the relationships by saying that the Article model @has_and_belongs_to_many@ Tags, while the Tag model @has_and_belongs_to_many@ Articles.
 
@@ -785,14 +785,14 @@ With those relationships in mind, let's design the new models:
 * Tag
 ** @name@ A string
 * Tagging
-** @tag_id@ Integer holding the foreign key of the related Tag
-** @article_id@ Integer holding the foreign key of the related Article
+** @tagid@ Integer holding the foreign key of the related Tag
+** @articleid@ Integer holding the foreign key of the related Article
 
 Note that there are no changes necessary to Article because the foreign key is stored in the Tagging model. So now lets generate these models in your terminal:
 
 <pre>
 ColdFusion script/generate model Tag name:string
-ColdFusion script/generate model Tagging tag_id:integer article_id:integer
+ColdFusion script/generate model Tagging tagid:integer articleid:integer
 rake db:migrate
 </pre>
 
