@@ -196,7 +196,7 @@ This is just like we did it in the Examples. Now we can create a form inside our
 <h3>Post a Comment</h3>
 <cfoutput>
  #errorMessagesFor("comment")#
- #startFormTag(action="create")#
+ #startFormTag(controller="comments",action="create")#
   #hiddenField(objectName='comment', property='articleid')#
   <p>
 	#textField(objectName='comment', property='authorname')#
@@ -223,18 +223,15 @@ The only new thing here is the hidden field helper. This hidden field will hold 
 Save then refresh in your web browser and...well...you'll get an error like this:
 
 <pre>
-NoMethodError in Articles#show
-Showing app/views/articles/_comment_form.cfm where line #3 raised:
-undefined method `comments_path' for #<ActionView::Base:0x10446e510>
+Wheels.ViewNotFound
+Could not find the view page for the create action in the Comments controller.
+
+Suggested action
+
+Create a file named create.cfm in the views/comments directory (create the directory as well if it doesn't already exist).
 </pre>
 
-The @startFormTag@ helper is trying to build the form so that it submits to @comments_path@, but we haven't told the router anything about Comments yet. Open @/config/routes.rb@ and add this line at the top:
-
-<pre>
-map.resources :comments
-</pre>
-
-Then refresh your browser and your form should show up. Try filling out the comments form and click SUBMIT -- you'll get an error about @uninitialized constant CommentsController@.
+The @startFormTag@ helper is trying to build the form so that it submits to @/comments/create@, but we haven't created the Comments controller yet.
 
 h3. Creating a Comments Controller
 
