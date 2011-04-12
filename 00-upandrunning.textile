@@ -30,17 +30,7 @@ We need to change the Wheels datasource convention. Wheels assumes our datasourc
 
 Press Ctrl+Shift+R while in Eclipse. This is the Open Resource window. I use this alot when coding. Sometimes I highlight a file name in code and press Ctrl+Shift+R, other times I type in the file name like we will. Type in @settings.cfm@, and select @settings.cfm - /JSBloggers/config@. This will open that file for use and paste in @<cfset set(dataSourceName="JSBloggers") />@ to tell Wheels to use this as are datasource. Also paste in @<cfset set(URLRewriting="Partial") />@ to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers.
 
-h3. Creating the Article Model
-
-Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our CFWheels app to work with that data. We'll use one of CFWheels' plugins called Scaffolding to create the required file. Click the Scaffold link in the Wheels debugging section. Then type *article* for the Object name and select *Model* for Type. We'll leave the Template as default and click Generate. The page should refresh and "*File 'models/Article.cfc*' created." should appear.
-
-* TODO: Should a mapping be created called cf9 to "C:\JRun4\servers\cfwheels101"
-
-We used the @scaffold@ plugin, telling it to create a @model@, and naming that model @Article@. From that information, the plugin creates the following files:
-
-* @/models/Article.cfc@ : The file that will hold the model code
-
-With this file in place we can start developing!
+Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our CFWheels app to work with that data. 
 
 h3. Working with the Database
 
@@ -136,6 +126,18 @@ Created table articles
 It tells you that it ran the migration. As I said before, DBMigrate keeps track of which migrations have and have not been run. Try running @All non-migrated@ again now, and see what happens.
 
 We've now created the @articles@ table in the database and can start working on our @Article@ model.
+
+h3. Creating the Article Model
+
+We'll use one of CFWheels' plugins called Scaffolding to create the required file. Click the Scaffold link in the Wheels debugging section. Then type *article* for the Object name and select *Model* for Type. We'll leave the Template as default and click Generate. The page should refresh and "*File 'models/Article.cfc*' created." should appear.
+
+* TODO: Should a mapping be created called cf9 to "C:\JRun4\servers\cfwheels101"
+
+We used the @scaffold@ plugin, telling it to create a @model@, and naming that model @Article@. From that information, the plugin creates the following files:
+
+* @/models/Article.cfc@ : The file that will hold the model code
+
+With this file in place we can start developing!
 
 h3. Working with a Model
 
