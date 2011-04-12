@@ -80,18 +80,21 @@ How an article "has many" comments, and a comment "belongs to" an article. We ha
 
 h3. Testing in Examples
 
-Let's use the console to test how this relationship works in code. If you don't have a console open, go to your terminal and enter @ColdFusion script/console@ from your project directory. If you have a console open already, enter the command @reload!@ to refresh any code changes.
-
-Run the following commands one at a time and observe the output:
+Let's use the @/controllers/Examples.cfc@ to test how this relationship works in code. Open the @Examples.cfc@ file and paste in the following instructions and observe the output at at "http://wheels.local/index.cfm/Examples/three":http://wheels.local/index.cfm/Examples/three :
 
 <pre>
-a = Article.first
-a.comments
-Comment.new
-a.comments.new
+<code>
+  <cffunction name="three">
+	<cfset a = model("article").findByKey(key=3,include="comments") />
+    <cfdump var="#a.comments#">
+	<cfdump var="#model("comment").new()#" />
+	<cfdump var="#a.newComment()#" />
+  <cfabort>
+ </cffunction>
+</code>
 </pre>
 
-When you called the @comments@ method on object @a@, it gave you back a blank array because that article doesn't have any comments. When you executed @Comment.new@ it gave you back a blank Comment object with those fields we defined in the migration. But, if you look closely, when you did @a.comments.new@ the comment object you got back wasn't quite blank -- it has the @article_id@ field already filled in with the ID number of article @a@.
+When you called the @comments@ method on object @a@, it gave you back a blank array because that article doesn't have any comments. When you executed @model("comment").new()@ it gave you back a blank Comment object. But, if you look closely, when you did @a.newComment()@ the comment object you got back wasn't quite blank -- it has the @article_id@ field already filled in with the ID number of article @a@.
 
 Try creating a few comments for that article like this:
 
