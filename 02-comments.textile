@@ -84,13 +84,13 @@ Let's use the @/controllers/Examples.cfc@ to test how this relationship works in
 
 <pre>
 <code>
-  <cffunction name="three">
-	<cfset a = model("article").findByKey(key=3,include="comments") />
-    <cfdump var="#a.comments#">
-	<cfdump var="#model("comment").new()#" />
-	<cfdump var="#a.newComment()#" />
-  <cfabort>
- </cffunction>
+<cffunction name="three">
+ <cfset a = model("article").findByKey(key=3,include="comments") />
+ <cfdump var="#a.comments#">
+ <cfdump var="#model("comment").new()#" />
+ <cfdump var="#a.newComment()#" />
+ <cfabort>
+</cffunction>
 </code>
 </pre>
 
