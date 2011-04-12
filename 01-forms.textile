@@ -197,7 +197,7 @@ Look at your @index.cfm@ and change the whole @<li>@ segment so it looks like th
 <pre>
 <code>
 <li>
- <b>#linkTo(text=title, action="show")#</b><br/>
+ <b>#linkTo(text=title, action="show", key=id)#</b><br/>
  <i>Actions:
  #linkTo(text='edit', action='edit', key=id)#,
  #linkTo(text='remove', action='delete', key=id, confirm="Remove the article '#title#'?")# 
