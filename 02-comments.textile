@@ -86,7 +86,7 @@ Let's use the @/controllers/Examples.cfc@ to test how this relationship works in
 <code>
 <cffunction name="three">
  <cfset a = model("article").findByKey(key=3,include="comments") />
- <cfdump var="#a.comments#">
+ <cfdump var="#a.comments#" />
  <cfdump var="#model("comment").new()#" />
  <cfdump var="#a.newComment()#" />
  <cfabort>
@@ -123,7 +123,7 @@ Now that you've created a few comments, try executing @a.comments@ again.
 <code>
 <cffunction name="five">
  <cfset a = model("article").findByKey(key=3,include="comments") />
- <cfdump var="#a.comments#">
+ <cfdump var="#a.comments#" />
  <cfabort>
 </cffunction>
 </code>

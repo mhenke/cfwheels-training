@@ -156,11 +156,11 @@ Our new component opened automatically and we'll add some code in between the @c
 <code>
  <cffunction name="one">
   <cfset time = now() />
-  <cfdump var="#now()#">
+  <cfdump var="#now()#" />
   <cfset articles = model("article").findAll() />
-  <cfdump var="#articles#">
+  <cfdump var="#articles#" />
   <cfset article = model("article").new() />
-  <cfdump var="#article#">
+  <cfdump var="#article#" />
   <cfabort>
  </cffunction>
 </code>
@@ -184,7 +184,7 @@ Back to the @<cfset article = model("article").new() />@ instruction. The @new()
   <cfset article = model("article").new(a) />
   <cfset article.save() />
   <cfset articles = model("article").findAll() />
-  <cfdump var="#articles#">
+  <cfdump var="#articles#" />
   <cfabort>
  </cffunction>
 </code>
