@@ -95,12 +95,12 @@ It tells you that it is running the migration named @CreateArticles@. And the "m
 
 We've now created the @articles@ table in the database and can start working on our @Article@ model.
 
-h3. Working with a Model in the Console
+h3. Working with a Model in the Examples
 
-Another awesome feature of working with CFWheels is the @console@. The @console@ is a command-line interface to your application. It allows you to access and work with just about any part of your application directly instead of going through the web interface. This can simplify your development process, and even once an app is in production the console makes it very easy to do bulk modifications, searches, and other data operations. So let's open the console now by going to your terminal and entering this:
+Another awesome feature of working with CFWheels is the @Examples@. The @Examples@ is a command-line interface to your application. It allows you to access and work with just about any part of your application directly instead of going through the web interface. This can simplify your development process, and even once an app is in production the Examples makes it very easy to do bulk modifications, searches, and other data operations. So let's open the Examples now by going to your terminal and entering this:
 
 <pre>
-ColdFusion script/console
+ColdFusion script/Examples
 </pre>
 
 You'll then just get back a prompt of @>>@. You're now inside an @irb@ interpreter with full access to your application. Let's try some experiments...enter each of these commands one at a time and observe the results:
@@ -111,7 +111,7 @@ Article.all
 Article.new
 </pre>
 
-The first line was just to demonstrate that we can do anything we previously did inside @irb@ now inside of our @console@. The second like referenced the @Article@ model and called the @all@ method which returns an array of all articles in the database -- so far an empty array. The third line created a new article object. You can see that this new object had attributes @id@, @title@, @body@, @created_at@, and @updated_at@.
+The first line was just to demonstrate that we can do anything we previously did inside @irb@ now inside of our @Examples@. The second like referenced the @Article@ model and called the @all@ method which returns an array of all articles in the database -- so far an empty array. The third line created a new article object. You can see that this new object had attributes @id@, @title@, @body@, @created_at@, and @updated_at@.
 
 All the information about the @Article@ model is in the file @/app/models/article.rb@, so let's open that now.
 
@@ -119,7 +119,7 @@ Not very impressive, right?  There are no attributes defined inside the model, s
 
 You created most of those in your migration file, but what about @id@?  Every table you create with a migration will automatically have an @id@ column which serves as the table's primary key. When you want to find a specific article, you'll look it up in the articles table by it's unique ID number. CFWheels and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
 
-In your console, try entering @Article.all@ again. Do you see the blank article that we created with the @Article.new@ command?  No?  The console doesn't change values in the database (in most cases) until we explicitly call the @.save@ method on an object. Let's create a sample article and you'll see how it works. Enter each of the following lines one at a time:
+In your Examples, try entering @Article.all@ again. Do you see the blank article that we created with the @Article.new@ command?  No?  The Examples doesn't change values in the database (in most cases) until we explicitly call the @.save@ method on an object. Let's create a sample article and you'll see how it works. Enter each of the following lines one at a time:
 
 <pre>
 a = Article.new
@@ -133,7 +133,7 @@ Now you'll see that the @Article.all@ command gave you back an array holding the
 
 h3. Moving Towards a Web Interface - Setting up the Router
 
-We've created a few articles through the console, but we really don't have a web application until we have a web interface. Let's get that started. We said that CFWheels uses an "MVC" architecture and we've worked with the Model, now we need a Controller and View. 
+We've created a few articles through the Examples, but we really don't have a web application until we have a web interface. Let's get that started. We said that CFWheels uses an "MVC" architecture and we've worked with the Model, now we need a Controller and View. 
 
 When a CFWheels server gets a request from a web browser it first goes to the _router_. The router decides what the request is trying to do, what resources it is trying to interact with. The router dissects a request based on the address it is requesting and other HTTP parameters (like the request type of GET or PUT). Let's open the router's configuration file, @/config/routes.rb@.
 
@@ -151,10 +151,10 @@ Now that the router knows how to handle requests about articles, it needs a plac
 
 h3. Creating the Articles Controller
 
-We're going to use another CFWheels generator but your terminal has the console currently running. You have two options:
+We're going to use another CFWheels generator but your terminal has the Examples currently running. You have two options:
 
 * Open a second terminal window (Cmd-T on OS X, open Command Prompt on Win) then CD to your project directory or...
-* Close the console with the command @exit@
+* Close the Examples with the command @exit@
 
 I like to have several terminal windows available to me when developing, so I'd always choose the first option.
 
@@ -231,11 +231,11 @@ ERB is a templating language that allows us to mix ColdFusion into our HTML. The
 * If the clause started with @<%@, the result of the ColdFusion code will be hidden
 * If the clause started with @<%=@, the result of the ColdFusion code will be output in place of the clause
 
-Save the file and refresh your web browser. You should see a listing of the articles you created in the console. We've got the start of a web application!
+Save the file and refresh your web browser. You should see a listing of the articles you created in the Examples. We've got the start of a web application!
 
 h1. I1: Form-Based Workflow
 
-We've created articles from the console, but that isn't a viable long-term solution. The users of our app will expect to add content through a web interface. In this iteration we'll create an HTML form to submit the article, then all the backend processing to get it into the database.
+We've created articles from the Examples, but that isn't a viable long-term solution. The users of our app will expect to add content through a web interface. In this iteration we'll create an HTML form to submit the article, then all the backend processing to get it into the database.
 
 h3. Creating the NEW Action and View
 
@@ -316,7 +316,7 @@ Extracted source (around line #3):
 
 What's it trying to tell us. In our @new.cfm@ on line #3 there was an error about "Called id for nil". As we learned in the ColdFusion in 100 minutes tutorial, @nil@ is ColdFusion's way of referring to nothingness. Somewhere in line #3 we're working with an object that doesn't exist.
 
-And since there's only one object in line #3, it makes it pretty obvious -- the problem is that we started talking about a thing named @article@ without ever creating that thing. CFWheels uses some of the _reflection_ techniques that we talked about earlier in order to setup the form. Remember in the console when we called @Article.new@ to see what fields an Article has?  CFWheels wants to do the same thing, but we need to create the blank object for it.
+And since there's only one object in line #3, it makes it pretty obvious -- the problem is that we started talking about a thing named @article@ without ever creating that thing. CFWheels uses some of the _reflection_ techniques that we talked about earlier in order to setup the form. Remember in the Examples when we called @Article.new@ to see what fields an Article has?  CFWheels wants to do the same thing, but we need to create the blank object for it.
 
 Go into your @Articles.cfc@, and _inside_ the @new@ method, add this line:
 
@@ -349,7 +349,7 @@ This method says...
 
 * Create an object named @article@ and send in the parameter @params[article]@
 * CFWheels makes the form data available inside the variable named @params@. If were to look at @params@ as a data structure, it'd be a structure with only one key -- @article@. The value of that pair is another structure with keys @title@ and @body@. The values for those keys are the data we entered into the text boxes on the form. So when @Article.new@ is called and the structure @params[article]@ is passed in, the @new@ method looks for the value with key @title@ and puts that into the Article's @title@ attribute. Then it looks for the value for key @body@ and puts that into the article's @body@ attribute.
-* The line @article.save!@ saves the object to the database, just like we did in the console. We've added the exclamation mark here because we haven't implemented any error checking. The normal @save@ method will "fail silently" if there's a problem saving the article, but the @save!@ method will raise errors and basically freak out.
+* The line @article.save!@ saves the object to the database, just like we did in the Examples. We've added the exclamation mark here because we haven't implemented any error checking. The normal @save@ method will "fail silently" if there's a problem saving the article, but the @save!@ method will raise errors and basically freak out.
 * Finally, the @redirect_to@ tells CFWheels that we don't want to render a view for this action. Once the previous steps are done, we want to bounce to the list of all articles. The router generates many friendly path-related variables for us just from the simple @map.resources :articles@ declaration. One of them is the @articles_path@ we use here -- it'll resolve to http://wheels.local/index.cfm/articles/.
 
 Go back in your browser so you get to the form with the sample data you entered and click CREATE. You should then bounce to the full articles list with your new article added.
@@ -578,9 +578,9 @@ end
 
 How an article "has many" comments, and a comment "belongs to" an article. We have explained to CFWheels that these objects have a one-to-many relationship.
 
-h3. Testing in the Console
+h3. Testing in the Examples
 
-Let's use the console to test how this relationship works in code. If you don't have a console open, go to your terminal and enter @ColdFusion script/console@ from your project directory. If you have a console open already, enter the command @reload!@ to refresh any code changes.
+Let's use the Examples to test how this relationship works in code. If you don't have a Examples open, go to your terminal and enter @ColdFusion script/Examples@ from your project directory. If you have a Examples open already, enter the command @reload!@ to refresh any code changes.
 
 Run the following commands one at a time and observe the output:
 
@@ -606,7 +606,7 @@ d = a.comments.create(:author_name => "Chewbacca", :body => "RAWR!")
 
 For the first comment, @c@, I used a series of commands like we've done before. For the second comment, @d@, I used the @create@ method. When you use @new@ it doesn't go to the database until you call @save@. With @create@ you usually pass in the attributes then the object is created, those attributes set, and the object saved to the database all in one step.
 
-Now that you've created a few comments, try executing @a.comments@ again. Did your comments all show up?  When I did it, only one comment came back. The console tries to minimize the number of times it talks to the database, so sometimes if you ask it to do something it's already done, it'll get the information from the cache instead of really asking the database -- giving you the same answer it gave the first time. That can be annoying. To force it to clear the cache and lookup the accurate information, try this:
+Now that you've created a few comments, try executing @a.comments@ again. Did your comments all show up?  When I did it, only one comment came back. The Examples tries to minimize the number of times it talks to the database, so sometimes if you ask it to do something it's already done, it'll get the information from the cache instead of really asking the database -- giving you the same answer it gave the first time. That can be annoying. To force it to clear the cache and lookup the accurate information, try this:
 
 <pre>
 reload!
@@ -625,7 +625,7 @@ We want to display any comments underneath their parent article. Because we've s
 <%= render :partial => 'comment', :collection => @article.comments %>
 </pre>
 
-This says that we want to render a partial named "comment" and that we want to do it once for each element in the collection @article.comments@. We saw in the console that when we call the @.comments@ method on an article we'll get back an array of it's associated comment objects. So this render line will pass each element of that array one at a time into the partial named "comment". Now we need to create the file @/views/articles/_comment.cfm@ and add this code:
+This says that we want to render a partial named "comment" and that we want to do it once for each element in the collection @article.comments@. We saw in the Examples that when we call the @.comments@ method on an article we'll get back an array of it's associated comment objects. So this render line will pass each element of that array one at a time into the partial named "comment". Now we need to create the file @/views/articles/_comment.cfm@ and add this code:
 
 <pre>
 <div class="comment">
@@ -638,7 +638,7 @@ With that in place, try clicking on your articles and find the one where you cre
 
 h3. Web-Based Comment Creation
 
-Good start, but our users (hopefully) can't get into the console to create their comments. We'll need to create a web interface. We'll go through some of the same steps that we did when creating the web interface for creating articles.
+Good start, but our users (hopefully) can't get into the Examples to create their comments. We'll need to create a web interface. We'll go through some of the same steps that we did when creating the web interface for creating articles.
 
 Let's start with the form. The comment form should be embedded into the article's @show@ template. So let's add this code right above the "Back to Articles List" in the articles @show.cfm@
 
@@ -661,7 +661,7 @@ Ok, now look at your @Articles.cfc@ in the @new@ method. Remember how we had to 
 @comment = @article.comments.new
 </pre>
 
-This is just like we did it in the console. Now we can create a form inside our @_comment_form.cfm@ partial like this:
+This is just like we did it in the Examples. Now we can create a form inside our @_comment_form.cfm@ partial like this:
 
 <pre>
 <h3>Post a Comment</h3>
@@ -879,7 +879,7 @@ ActiveRecord::UnknownAttributeError in ArticlesController#create
 unknown attribute: tag_list
 </pre>
 
-What is this all about?  Let's start by looking at the form data that was posted when we clicked SAVE. This data is in the production.log file which should be in the "Console" frame at the bottom of the Eclipse window. Look for the line that starts "Processing ArticlesController#create", here's what mine looks like:
+What is this all about?  Let's start by looking at the form data that was posted when we clicked SAVE. This data is in the production.log file which should be in the "Examples" frame at the bottom of the Eclipse window. Look for the line that starts "Processing ArticlesController#create", here's what mine looks like:
 
 <pre>
 Processing ArticlesController#create (for 127.0.0.1) [POST]
@@ -902,14 +902,14 @@ Just leave it blank for now and try to resubmit your sample article with tags. I
 
 h3. Not So Fast
 
-Did it really work?  It's hard to tell. Let's jump into the console and have a look.
+Did it really work?  It's hard to tell. Let's jump into the Examples and have a look.
 
 <pre>
 a = Article.last
 a.tags
 </pre>
 
-I bet the console reported that @a@ had @[]@ tags -- an empty list. So we didn't generate an error, but we didn't create any tags either.
+I bet the Examples reported that @a@ had @[]@ tags -- an empty list. So we didn't generate an error, but we didn't create any tags either.
 
 We need to return to that @tag_list=@ method in @article.rb@ and do some more work. We're taking in a parameter, a string like @"tag1, tag2, tag3"@ and we need to associate the article with tags that have those names. The pseudo-code would look like this:
 
@@ -918,7 +918,7 @@ We need to return to that @tag_list=@ method in @article.rb@ and do some more wo
 ** Look for a Tag object with that name. If there isn't one, create it.
 ** Create a Tagging object that connects this Article with that Tag
 
-The first step is something that ColdFusion does very easily using the @.split@ method. Go into your console and try @"tag1, tag2, tag3".split@. By default it split on the space character, but that's not what we want. You can force split to work on any character by passing it in as a parameter, like this: @"tag1, tag2, tag3".split(",")@. 
+The first step is something that ColdFusion does very easily using the @.split@ method. Go into your Examples and try @"tag1, tag2, tag3".split@. By default it split on the space character, but that's not what we want. You can force split to work on any character by passing it in as a parameter, like this: @"tag1, tag2, tag3".split(",")@. 
 
 Look closely at the output and you'll see that the second element is @" tag2"@ instead of @"tag2"@ -- it has a leading space. We don't want our tag system to end up with different tags because of some extra (non-meaningful) spaces, so we need to get rid of that. ColdFusion's String class has a @strip@ method that pulls off leading or trailing whitespace -- try it with @" my sample ".strip@. You'll see that the space in the center is preserved.
 
@@ -960,9 +960,9 @@ The @build@ method is a special creation method. It doesn't need an explicit sav
   end
 </pre>
 
-h3. Testing in the Console
+h3. Testing in the Examples
 
-Go back to your console and try these commands:
+Go back to your Examples and try these commands:
 
 <pre>
 reload!
@@ -982,7 +982,7 @@ And you'll see that this Tag is associated with just one Article.
 
 h3. Adding Tags to our Display
 
-According to our work in the console, articles can now have tags, but we haven't done anything to display them in the article pages. Let's start with @/views/articles/show.cfm@. Right below the line that displays the @article.title@, add this line:
+According to our work in the Examples, articles can now have tags, but we haven't done anything to display them in the article pages. Let's start with @/views/articles/show.cfm@. Right below the line that displays the @article.title@, add this line:
 
 <pre>
 Tags: <%= tag_links(@article.tags) %><br />
@@ -1082,7 +1082,7 @@ Then create a file @/app/views/tags/show.cfm@ like this:
 </ul>
 </pre>
 
-Refresh your view and you should see a list of articles with that tag. Keep in mind that there might be some abnormalities from articles we tagged before doing our fixes to the @tag_list=@ method. For any article with issues, try going to it's @edit@ screen, saving it, and things should be fixed up. If you wanted to clear out all taggings you could do @Tagging.delete_all@ from your console.
+Refresh your view and you should see a list of articles with that tag. Keep in mind that there might be some abnormalities from articles we tagged before doing our fixes to the @tag_list=@ method. For any article with issues, try going to it's @edit@ screen, saving it, and things should be fixed up. If you wanted to clear out all taggings you could do @Tagging.delete_all@ from your Examples.
 
 h3. Listing All Tags
 

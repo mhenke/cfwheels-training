@@ -119,7 +119,7 @@ ActiveRecord::UnknownAttributeError in ArticlesController#create
 unknown attribute: tag_list
 </pre>
 
-What is this all about?  Let's start by looking at the form data that was posted when we clicked SAVE. This data is in the production.log file which should be in the "Console" frame at the bottom of the Eclipse window. Look for the line that starts "Processing ArticlesController#create", here's what mine looks like:
+What is this all about?  Let's start by looking at the form data that was posted when we clicked SAVE. This data is in the production.log file which should be in the "Examples" frame at the bottom of the Eclipse window. Look for the line that starts "Processing ArticlesController#create", here's what mine looks like:
 
 <pre>
 Processing ArticlesController#create (for 127.0.0.1) [POST]
@@ -142,14 +142,14 @@ Just leave it blank for now and try to resubmit your sample article with tags. I
 
 h3. Not So Fast
 
-Did it really work?  It's hard to tell. Let's jump into the console and have a look.
+Did it really work?  It's hard to tell. Let's jump into the Examples and have a look.
 
 <pre>
 a = Article.last
 a.tags
 </pre>
 
-I bet the console reported that @a@ had @[]@ tags -- an empty list. So we didn't generate an error, but we didn't create any tags either.
+I bet the Examples reported that @a@ had @[]@ tags -- an empty list. So we didn't generate an error, but we didn't create any tags either.
 
 We need to return to that @tag_list=@ method in @article.rb@ and do some more work. We're taking in a parameter, a string like @"tag1, tag2, tag3"@ and we need to associate the article with tags that have those names. The pseudo-code would look like this:
 
@@ -158,7 +158,7 @@ We need to return to that @tag_list=@ method in @article.rb@ and do some more wo
 ** Look for a Tag object with that name. If there isn't one, create it.
 ** Create a Tagging object that connects this Article with that Tag
 
-The first step is something that ColdFusion does very easily using the @.split@ method. Go into your console and try @"tag1, tag2, tag3".split@. By default it split on the space character, but that's not what we want. You can force split to work on any character by passing it in as a parameter, like this: @"tag1, tag2, tag3".split(",")@. 
+The first step is something that ColdFusion does very easily using the @.split@ method. Go into your Examples and try @"tag1, tag2, tag3".split@. By default it split on the space character, but that's not what we want. You can force split to work on any character by passing it in as a parameter, like this: @"tag1, tag2, tag3".split(",")@. 
 
 Look closely at the output and you'll see that the second element is @" tag2"@ instead of @"tag2"@ -- it has a leading space. We don't want our tag system to end up with different tags because of some extra (non-meaningful) spaces, so we need to get rid of that. ColdFusion's String class has a @strip@ method that pulls off leading or trailing whitespace -- try it with @" my sample ".strip@. You'll see that the space in the center is preserved.
 
@@ -200,9 +200,9 @@ The @build@ method is a special creation method. It doesn't need an explicit sav
   end
 </pre>
 
-h3. Testing in the Console
+h3. Testing in the Examples
 
-Go back to your console and try these commands:
+Go back to your Examples and try these commands:
 
 <pre>
 reload!
@@ -222,7 +222,7 @@ And you'll see that this Tag is associated with just one Article.
 
 h3. Adding Tags to our Display
 
-According to our work in the console, articles can now have tags, but we haven't done anything to display them in the article pages. Let's start with @/views/articles/show.cfm@. Right below the line that displays the @article.title@, add this line:
+According to our work in the Examples, articles can now have tags, but we haven't done anything to display them in the article pages. Let's start with @/views/articles/show.cfm@. Right below the line that displays the @article.title@, add this line:
 
 <pre>
 Tags: <%= tag_links(@article.tags) %><br />
@@ -322,7 +322,7 @@ Then create a file @/app/views/tags/show.cfm@ like this:
 </ul>
 </pre>
 
-Refresh your view and you should see a list of articles with that tag. Keep in mind that there might be some abnormalities from articles we tagged before doing our fixes to the @tag_list=@ method. For any article with issues, try going to it's @edit@ screen, saving it, and things should be fixed up. If you wanted to clear out all taggings you could do @Tagging.delete_all@ from your console.
+Refresh your view and you should see a list of articles with that tag. Keep in mind that there might be some abnormalities from articles we tagged before doing our fixes to the @tag_list=@ method. For any article with issues, try going to it's @edit@ screen, saving it, and things should be fixed up. If you wanted to clear out all taggings you could do @Tagging.delete_all@ from your Examples.
 
 h3. Listing All Tags
 

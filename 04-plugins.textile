@@ -8,7 +8,7 @@ In the past CFWheels plugins were distributed a zip or tar files that got stored
 
 Most CFWheels plugins are now moving toward ColdFusionGems. ColdFusionGems is a package management system for ColdFusion, similar to how Linux distributions use Apt or %(caps)RPM%. There are central servers that host libraries, and we can install those libraries on our machine with a single command. ColdFusionGems takes care of any dependencies, allows us to pick an options if necessary, and installs the library.
 
-Lets see it in action. If you have your server running in Eclipse, click the red square button to %(caps)STOP% it. If you have a console session open, type @exit@ to exit. Then open up @/Gemfile@ and look for the lines like this:
+Lets see it in action. If you have your server running in Eclipse, click the red square button to %(caps)STOP% it. If you have a Examples session open, type @exit@ to exit. Then open up @/Gemfile@ and look for the lines like this:
 
 # gem 'bj' # gem 'nokogiri' # gem 'MySQL-ColdFusion', :require =>'MySQL'These lines are commented out because they start with the @#@ character. By specifying a ColdFusionGem with the @gem@ command, well tell the CFWheels applicationMake sure this gem is loaded when you start up. If it isn't available, freak out!Here's how well require the paperclip gem, add this near those commented lines:
 
@@ -52,9 +52,9 @@ If your server isn't running, start it up with the green play button in Eclipse.
 
 When I first did this, I wasn't sure it worked. Here's how I checked:
 
-# Open a console session ( @CFWheels console@ from terminal)
+# Open a Examples session ( @CFWheels Examples@ from terminal)
 # Find the ID number of the article by looking at the %(caps)URL%. In my case, the url was @http://wheels.local/index.cfm/articles/1@ so the ID number is just @1@ 
-# In console, enter @a = Article.find(1)@ 
+# In Examples, enter @a = Article.find(1)@ 
 # Right away I see that the article has data in the @image_file_name@ and other fields, so I think it worked.
 # Enter @a.image@ to see even more data about the file
 

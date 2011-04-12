@@ -136,24 +136,30 @@ h3. Displaying Comments for an Article
 We want to display any comments underneath their parent article. Because we've setup the relationships between those models, this is very easy. Open @/views/articles/show.cfm@ and add the following lines right before the link to the articles list:
 
 <pre>
+<code>
 <h3>Comments</h3>
-<%= render :partial => 'comment', :collection => @article.comments %>
+<cfoutput>#includePartial(article.comments)#</cfoutput>
+</code>
 </pre>
 
-This says that we want to render a partial named "comment" and that we want to do it once for each element in the collection @article.comments@. We saw in the console that when we call the @.comments@ method on an article we'll get back an array of it's associated comment objects. So this render line will pass each element of that array one at a time into the partial named "comment". Now we need to create the file @/views/articles/_comment.cfm@ and add this code:
+This says that we want to render a partial named "comment" and that we want to do it once for each element in the collection @article.comments@. We saw in the Examples that when we call the @comments@ method on an article we'll get back an array of it's associated comment objects. So this render line will pass each element of that array one at a time into the partial named "comment". Now we need to create the file @/views/articles/_comment.cfm@ and add this code:
 
 <pre>
+<code>
+<cfoutput>
 <div class="comment">
-  <h4>Comment by <%=h comment.author_name %></h4>
-  <p><%=h comment.body %></p>
+  <h4>Comment by #arguments.comment.authorname#</h4>
+  <p>#arguments.comment.body#</p>
 </div>
+</cfoutput>
+</code>
 </pre>
 
 With that in place, try clicking on your articles and find the one where you created the comments. Did they show up?  What happens when an article doesn't have any comments?
 
 h3. Web-Based Comment Creation
 
-Good start, but our users (hopefully) can't get into the console to create their comments. We'll need to create a web interface. We'll go through some of the same steps that we did when creating the web interface for creating articles.
+Good start, but our users (hopefully) can't get into the Examples code to create their comments. We'll need to create a web interface. We'll go through some of the same steps that we did when creating the web interface for creating articles.
 
 Let's start with the form. The comment form should be embedded into the article's @show@ template. So let's add this code right above the "Back to Articles List" in the articles @show.cfm@
 
@@ -176,7 +182,7 @@ Ok, now look at your @Articles.cfc@ in the @new@ method. Remember how we had to 
 @comment = @article.comments.new
 </pre>
 
-This is just like we did it in the console. Now we can create a form inside our @_comment_form.cfm@ partial like this:
+This is just like we did it in the Examples. Now we can create a form inside our @_comment_form.cfm@ partial like this:
 
 <pre>
 <h3>Post a Comment</h3>
