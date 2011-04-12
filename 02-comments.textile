@@ -59,7 +59,7 @@ Following this convention will get us a lot of functionality "for free."  Open y
 <cfcomponent extends="Model" output="false">
 
  <cffunction name="init">
-  <cfset belongsTo("article")>
+  <cfset belongsTo("article") />
  </cffunction>
 
 </cfcomponent>
@@ -71,7 +71,7 @@ A comment relates to a single article, it "belongs to" an article. We then want 
 <pre>
 <code>
  <cffunction name="init">
-  <cfset hasMany("comments")>
+  <cfset hasMany("comments") />
  </cffunction>
 </code>
 </pre>
