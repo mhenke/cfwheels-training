@@ -99,25 +99,37 @@ When you called the @comments@ method on object @a@, it gave you back a blank ar
 Try creating a few comments for that article like this:
 
 <pre>
-c = a.comments.new
-c.author_name = "Daffy Duck"
-c.author_url = "http://daffyduck.com"
-c.body = "I think this article is thhh-thhh-thupid!"
-c.save
-d = a.comments.create(:author_name => "Chewbacca", :body => "RAWR!")
+<code>
+<cffunction name="four">
+ <cfset a = model("article").findByKey(key=3,include="comments") />
+ 
+ <cfset c = a.newComment() />
+ <cfset c.authorname = "Daffy Duck" />
+ <cfset c.authorurl = "http://daffyduck.com" />
+ <cfset c.body = "I think this article is thhh-thhh-thupid!" />
+ <cfset c.save() />
+
+ <cfset d = a.createComment(authorname = "Chewbacca", body = "RAWR!") />
+ <cfabort>
+</cffunction>
+</code>
 </pre>
 
 For the first comment, @c@, I used a series of commands like we've done before. For the second comment, @d@, I used the @create@ method. When you use @new@ it doesn't go to the database until you call @save@. With @create@ you usually pass in the attributes then the object is created, those attributes set, and the object saved to the database all in one step.
 
-Now that you've created a few comments, try executing @a.comments@ again. Did your comments all show up?  When I did it, only one comment came back. The console tries to minimize the number of times it talks to the database, so sometimes if you ask it to do something it's already done, it'll get the information from the cache instead of really asking the database -- giving you the same answer it gave the first time. That can be annoying. To force it to clear the cache and lookup the accurate information, try this:
+Now that you've created a few comments, try executing @a.comments@ again. 
 
 <pre>
-reload!
-a = Article.first
-a.comments
+<code>
+<cffunction name="five">
+ <cfset a = model("article").findByKey(key=3,include="comments") />
+ <cfdump var="#a.comments#">
+ <cfabort>
+</cffunction>
+</code>
 </pre>
 
-So you'll see that the article has comments -- great. Now we need to integrate them into the article display.
+Did your comments all show up? Great. Now we need to integrate them into the article display.
 
 h3. Displaying Comments for an Article
 
