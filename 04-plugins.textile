@@ -34,7 +34,7 @@ class AddPaperclipFieldsToArticle<ActiveRecord::Migration def self.up add_column
 
 h3. Adding to the Model
 
-The gem is loaded, the database is ready, but we need to tell our CFWheels application about the image attachment we want to add. Open @/app/models/article.rb@ and just below the existing @has_many@ lines, add this line:
+The gem is loaded, the database is ready, but we need to tell our CFWheels application about the image attachment we want to add. Open @/models/article.rb@ and just below the existing @has_many@ lines, add this line:
 
 has_attached_file :imageThis @has_attached_file@ method is part of the paperclip library. With that declaration, paperclip will understand that this model should accept a file attachment and that there are fields to store information about that file which start with @image_@ in this models database table.
 
@@ -44,7 +44,7 @@ First well add the ability to upload the file when editing the article, then wel
 
 In the very first line, we need to specify that this form needs to acceptmultipartdata. This is an instruction to the browser about how to submit the form. Change your top line so it looks like this:
 
-<% form_for(@article, :html =>{:multipart =>true}) do |f| %>Then further down the form, right before the paragraph with the save button, lets add a label and field for the file uploading:
+<% startFormTag(@article, :html =>{:multipart =>true}) do |f| %>Then further down the form, right before the paragraph with the save button, lets add a label and field for the file uploading:
 
 <p><%= f.label :image, "Attach an Image" %><br /><%= f.file_field :image %></p>h3. Trying it Out
 
@@ -113,7 +113,7 @@ Weve created about a dozen view templates between our different models. We _coul
 
 <%= stylesheet_link_tag 'styles' %>Which would find the Sass file we just wrote. Thats a lame job, imagine if we had 100 view templates. What if we want to change the name of the stylesheet later? Ugh.
 
-CFWheels and ColdFusion both emphasize the idea ofD.R.Y.Dont Repeat Yourself. In the area of view templates, we can achieve this by creating a *layout*. A layout is a special view template that wraps other views. Look in your navigation pane for @/app/views/layouts/@ , right click on that folder, click %(caps)NEW% and %(caps)FILE% then give it the name @application.html.haml@.
+CFWheels and ColdFusion both emphasize the idea ofD.R.Y.Dont Repeat Yourself. In the area of view templates, we can achieve this by creating a *layout*. A layout is a special view template that wraps other views. Look in your navigation pane for @/views/layouts/@ , right click on that folder, click %(caps)NEW% and %(caps)FILE% then give it the name @application.html.haml@.
 
 In this layout well put the view code that we want to render for every view template in the application. Just so you can see what %(caps)HAML% looks like, Ive used it to implement this layout. you'll notice that %(caps)HAML% uses fewer marking characters than %(caps)ERB% , but you must maintain the proper whitespace/indentation. All indentations are two spaces from the containing element. Add this code to your @application.html.haml@ :
 

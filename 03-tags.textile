@@ -40,19 +40,19 @@ h3. Expressing Relationships
 
 Now that our model files are generated we need to tell CFWheels about the relationships between them. For each of the files below, add these lines:
 
-In @/app/models/article.rb@
+In @/models/article.rb@
 
 <pre class=brush:ColdFusion;">
   has_many :taggings
 </pre>
 
-In @/app/models/tag.rb@
+In @/models/tag.rb@
 
 <pre class=brush:ColdFusion;">
   has_many :taggings
 </pre>
 
-Then in @/app/models/tagging.rb@
+Then in @/models/tagging.rb@
 
 <pre class=brush:ColdFusion;">
   belongs_to :article
@@ -67,14 +67,14 @@ tags = article.taggings.collect{|tagging| tagging.tag}
 
 That's a pain for something that we need commonly. The solution was to augment the relationship with "through". We'll add a second relationship now to the Article and Tag classes:
 
-In @/app/models/article.rb@
+In @/models/article.rb@
 
 <pre class=brush:ColdFusion;">
   has_many :taggings
   has_many :tags, :through => :taggings
 </pre>
 
-In @/app/models/tag.rb@
+In @/models/tag.rb@
 
 <pre class=brush:ColdFusion;">
   has_many :taggings
@@ -228,7 +228,7 @@ According to our work in the Examples, articles can now have tags, but we haven'
 Tags: <%= tag_links(@article.tags) %><br />
 </pre>
 
-This line calls a helper named @tag_links@ and sends the @article.tags@ array as a parameter. We need to then create the @tag_links@ helper. Open up @/app/helpers/articles_helper.rb@ and add this method inside the @module@/@end@ keywords:
+This line calls a helper named @tag_links@ and sends the @article.tags@ array as a parameter. We need to then create the @tag_links@ helper. Open up @/helpers/articles_helper.rb@ and add this method inside the @module@/@end@ keywords:
 
 <pre>
 def tag_links(tags)
@@ -302,7 +302,7 @@ It prevents duplicates and allows you to remove tags from the edit form. Test it
 
 h3. Listing Articles by Tag
 
-The links for our tags are showing up, but if you click on them you'll get our old friend, the "No action responded to show. Actions:" error. Open up your @/app/controllers/tags_controller.rb@ and add a a @show@ method like this:
+The links for our tags are showing up, but if you click on them you'll get our old friend, the "No action responded to show. Actions:" error. Open up your @/controllers/tags_controller.rb@ and add a a @show@ method like this:
 
 <pre>
   def show
@@ -310,7 +310,7 @@ The links for our tags are showing up, but if you click on them you'll get our o
   end  
 </pre>
 
-Then create a file @/app/views/tags/show.cfm@ like this:
+Then create a file @/views/tags/show.cfm@ like this:
 
 <pre>
 <h1>Articles Tagged with <%= @tag.name %></h1>

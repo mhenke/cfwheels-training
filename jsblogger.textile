@@ -35,7 +35,7 @@ ColdFusion script/generate model Article
 
 We're running the @generate@ script, telling it to create a @model@, and naming that model @Article@. From that information, CFWheels creates the following files:
 
-* @/app/models/article.rb@ : The file that will hold the model code
+* @/models/article.rb@ : The file that will hold the model code
 * @/test/unit/article_test.rb@ : A file to hold unit tests for @Article@
 * @/test/fixtures/articles.yml@ : A fixtures file to assist with unit testing
 * @/db/migrate/(some_time_stamp)_create_articles.rb@ : A database migration to create the @articles@ table
@@ -113,7 +113,7 @@ Article.new
 
 The first line was just to demonstrate that we can do anything we previously did inside @irb@ now inside of our @Examples@. The second like referenced the @Article@ model and called the @all@ method which returns an array of all articles in the database -- so far an empty array. The third line created a new article object. You can see that this new object had attributes @id@, @title@, @body@, @created_at@, and @updated_at@.
 
-All the information about the @Article@ model is in the file @/app/models/article.rb@, so let's open that now.
+All the information about the @Article@ model is in the file @/models/article.rb@, so let's open that now.
 
 Not very impressive, right?  There are no attributes defined inside the model, so how does CFWheels know that an Article should have a @title@, a @body@, etc?  It queries the database, looks at the articles table, and assumes that whatever columns that table has should probably be the attributes accessible through the model. 
 
@@ -276,7 +276,7 @@ h3. Writing a Form
 It's not very impressive so far -- we need to add a form to the @new.cfm@ so the user can enter in the article title and body. Because we're following the RESTful conventions, CFWheels can take care of many of the details. Inside that @erb@ file, enter this code below your header:
 
 <pre>
-<% form_for(@article) do |f| %>
+<% startFormTag(@article) do |f| %>
   <p>
     <%= f.label :title %><br />
     <%= f.text_field :title %>
@@ -293,7 +293,7 @@ It's not very impressive so far -- we need to add a form to the @new.cfm@ so the
 
 What is all that?  Let's look at it piece by piece:
 
-* @form_for@ is a CFWheels helper method which takes one parameter, in this case @article@ and a block with the form fields. The first line basically says "Create a form for the object named @article@, refer to the form by the name @f@ and add the following elements to the form..."
+* @startFormTag@ is a CFWheels helper method which takes one parameter, in this case @article@ and a block with the form fields. The first line basically says "Create a form for the object named @article@, refer to the form by the name @f@ and add the following elements to the form..."
 * The @f.label@ helper creates an HTML label for a field, this is good usability practice and will have some other benefits for us later
 * The @f.text_field@ helper creates a single-line text box named @title@
 * The @f.text_area@ helper creates a multi-line text box named @body@
@@ -309,7 +309,7 @@ Called id for nil, which would mistakenly be 4 -- if you really wanted the id of
 Extracted source (around line #3):
 1: <h1>Create a New Article</h1>
 2: 
-3: <% form_for(@article) do |f| %>
+3: <% startFormTag(@article) do |f| %>
 4:   <%= f.error_messages %>
 5: 
 </pre>
@@ -431,7 +431,7 @@ All the @edit@ action is really going to do is find the article to be edited, th
 <pre>
 <h1>Edit an Article</h1>
 
-<% form_for(@article) do|f| %>
+<% startFormTag(@article) do|f| %>
   <%= f.error_messages %>
 
   <p>
@@ -450,7 +450,7 @@ All the @edit@ action is really going to do is find the article to be edited, th
 
 In the ColdFusion and CFWheels communities there is a mantra of "Don't Repeat Yourself" -- but that's exactly what I've done here. This view is basically the same as the @new.cfm@ -- the only changes are the H1 and the name of the button. We can abstract this form into a single file called a _partial_, then reference this partial from both @new.cfm@ and @edit.cfm@.
 
-Create a file @/views/articles/_form.cfm@ and, yes, it has to have the underscore at the beginning of the filename. Go into your @/views/articles/new.cfm@ and CUT all the text from and including the @form_for@ line all the way to it's @end@. The only thing left will be your H1 line. Then add the following code at the bottom of that view:
+Create a file @/views/articles/_form.cfm@ and, yes, it has to have the underscore at the beginning of the filename. Go into your @/views/articles/new.cfm@ and CUT all the text from and including the @startFormTag@ line all the way to it's @end@. The only thing left will be your H1 line. Then add the following code at the bottom of that view:
 
 <pre>
 <%= render :partial => 'form' %>
@@ -560,7 +560,7 @@ Foreign keys are a way of marking one-to-one and one-to-many relationships. An a
 
 Part of the big deal with CFWheels is that it makes working with these relationships very easy. When we created the migration for comments we started with an @integer@ field named @articleid@. The CFWheels convention is that, for a one-to-many relationship, the objects on the "many" end should have a foreign key referencing the "one" object. And that foreign key should be titled with the name of the "one" object, then an underscore, then "id". So in this case one article has many comments, so each comment has a field named @articleid@ which tracks which article they belong to. Similarly, a store's customer might have many orders, so each order would have a @customerid@ specifying which customer they belong to.
 
-Following this convention will get us a lot of functionality "for free."  Open your @/app/models/comment.rb@ and add the middle line so it looks like this:
+Following this convention will get us a lot of functionality "for free."  Open your @/models/comment.rb@ and add the middle line so it looks like this:
 
 <pre>
 class Comment < ActiveRecord::Base
@@ -568,7 +568,7 @@ class Comment < ActiveRecord::Base
 end
 </pre>
 
-A comment relates to a single article, it "belongs to" an article. We then want to declare the other side of the relationship inside @/app/models/article.rb@ like this:
+A comment relates to a single article, it "belongs to" an article. We then want to declare the other side of the relationship inside @/models/article.rb@ like this:
 
 <pre>
 class Article < ActiveRecord::Base
@@ -666,7 +666,7 @@ This is just like we did it in the Examples. Now we can create a form inside our
 <pre>
 <h3>Post a Comment</h3>
 
-<% form_for @comment do |f| %>
+<% startFormTag @comment do |f| %>
   <%= f.hidden_field :articleid, :value => @article.id %>
   <p>
     <%= f.label :author_name %><br/>
@@ -700,7 +700,7 @@ Showing app/views/articles/_comment_form.cfm where line #3 raised:
 undefined method `comments_path' for #<ActionView::Base:0x10446e510>
 </pre>
 
-The @form_for@ helper is trying to build the form so that it submits to @comments_path@, but we haven't told the router anything about Comments yet. Open @/config/routes.rb@ and add this line at the top:
+The @startFormTag@ helper is trying to build the form so that it submits to @comments_path@, but we haven't told the router anything about Comments yet. Open @/config/routes.rb@ and add this line at the top:
 
 <pre>
 map.resources :comments
@@ -710,15 +710,15 @@ Then refresh your browser and your form should show up. Try filling out the comm
 
 h3. Creating a Comments Controller
 
-Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @comments_controller.rb@. Switch over to your terminal to generate it with this line:
+Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @Comments.cfc@. Switch over to your terminal to generate it with this line:
 
 <pre>
 ColdFusion script/generate controller comments index create delete
 </pre>
 
-What's up with those extra parameters?  Anything after the name of the controller (in this case "comments") will cause CFWheels to create stubs for methods with those names. Now open your @/app/controllers/comments_controller.rb@ and you'll see it has the three method stubs already.
+What's up with those extra parameters?  Anything after the name of the controller (in this case "comments") will cause CFWheels to create stubs for methods with those names. Now open your @/controllers/Comments.cfc@ and you'll see it has the three method stubs already.
 
-The one we're interested in first is @create@. You can cheat by looking at the @create@ method in your @Articles.cfc@. For your @comments_controller.rb@, everything should be the same just replace article with comment. Then the redirect is a little different, use this:
+The one we're interested in first is @create@. You can cheat by looking at the @create@ method in your @Articles.cfc@. For your @Comments.cfc@, everything should be the same just replace article with comment. Then the redirect is a little different, use this:
 
 <pre>
 redirect_to article_path(@comment.article)
@@ -800,19 +800,19 @@ h3. Expressing Relationships
 
 Now that our model files are generated we need to tell CFWheels about the relationships between them. For each of the files below, add these lines:
 
-In @/app/models/article.rb@
+In @/models/article.rb@
 
 <pre class=brush:ColdFusion;">
   has_many :taggings
 </pre>
 
-In @/app/models/tag.rb@
+In @/models/tag.rb@
 
 <pre class=brush:ColdFusion;">
   has_many :taggings
 </pre>
 
-Then in @/app/models/tagging.rb@
+Then in @/models/tagging.rb@
 
 <pre class=brush:ColdFusion;">
   belongs_to :article
@@ -827,14 +827,14 @@ tags = article.taggings.collect{|tagging| tagging.tag}
 
 That's a pain for something that we need commonly. The solution was to augment the relationship with "through". We'll add a second relationship now to the Article and Tag classes:
 
-In @/app/models/article.rb@
+In @/models/article.rb@
 
 <pre class=brush:ColdFusion;">
   has_many :taggings
   has_many :tags, :through => :taggings
 </pre>
 
-In @/app/models/tag.rb@
+In @/models/tag.rb@
 
 <pre class=brush:ColdFusion;">
   has_many :taggings
@@ -988,7 +988,7 @@ According to our work in the Examples, articles can now have tags, but we haven'
 Tags: <%= tag_links(@article.tags) %><br />
 </pre>
 
-This line calls a helper named @tag_links@ and sends the @article.tags@ array as a parameter. We need to then create the @tag_links@ helper. Open up @/app/helpers/articles_helper.rb@ and add this method inside the @module@/@end@ keywords:
+This line calls a helper named @tag_links@ and sends the @article.tags@ array as a parameter. We need to then create the @tag_links@ helper. Open up @/helpers/articles_helper.rb@ and add this method inside the @module@/@end@ keywords:
 
 <pre>
 def tag_links(tags)
@@ -1062,7 +1062,7 @@ It prevents duplicates and allows you to remove tags from the edit form. Test it
 
 h3. Listing Articles by Tag
 
-The links for our tags are showing up, but if you click on them you'll get our old friend, the "No action responded to show. Actions:" error. Open up your @/app/controllers/tags_controller.rb@ and add a a @show@ method like this:
+The links for our tags are showing up, but if you click on them you'll get our old friend, the "No action responded to show. Actions:" error. Open up your @/controllers/tags_controller.rb@ and add a a @show@ method like this:
 
 <pre>
   def show
@@ -1070,7 +1070,7 @@ The links for our tags are showing up, but if you click on them you'll get our o
   end  
 </pre>
 
-Then create a file @/app/views/tags/show.cfm@ like this:
+Then create a file @/views/tags/show.cfm@ like this:
 
 <pre>
 <h1>Articles Tagged with <%= @tag.name %></h1>

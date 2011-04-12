@@ -32,11 +32,11 @@ First, stop then restart your server in Eclipse to make sure its picked up the p
 
 Go ahead and create yourself an account. If you're successful it will just bounce you to the @http://wheels.local/@ root page. There isn't any information about our login status in our views, though, so its hard to tell if were really logged in.
 
-Lets open @/app/views/layouts/application.html.haml@ and add a little footer so the whole @%body%@ chunk looks like this:
+Lets open @/views/layouts/application.html.haml@ and add a little footer so the whole @%body%@ chunk looks like this:
 
 %body #container #content = yield %hr %h6 - if current_user = "Logged in as #{current_user.login}" = linkTo "(logout)", logout_path - else = linkTo "(login)", login_pathThe go to @http://wheels.local/index.cfm/articles/@ and you'll get this error:
 
-NameError in Articles#index Showing app/views/layouts/application.html.haml where line #14 raised: undefined local variable or method `current_user' for #<ActionView::Base:0x103147400>We tried to use the @current_user@ helper that comes with the restful_authentication plugin, but CFWheels isn't recognizing it. We need to do one more setup step. Open @/app/controllers/application_controller.rb@ , and underneath the @protect_from_forgery@ line, add this: @include AuthenticatedSystem@.
+NameError in Articles#index Showing app/views/layouts/application.html.haml where line #14 raised: undefined local variable or method `current_user' for #<ActionView::Base:0x103147400>We tried to use the @current_user@ helper that comes with the restful_authentication plugin, but CFWheels isn't recognizing it. We need to do one more setup step. Open @/controllers/application_controller.rb@ , and underneath the @protect_from_forgery@ line, add this: @include AuthenticatedSystem@.
 
 Now refresh your browser and your articles list should come up along with the new footer at the bottom.
 

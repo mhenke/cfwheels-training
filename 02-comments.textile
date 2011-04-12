@@ -161,17 +161,21 @@ h3. Web-Based Comment Creation
 
 Good start, but our users (hopefully) can't get into the Examples code to create their comments. We'll need to create a web interface. We'll go through some of the same steps that we did when creating the web interface for creating articles.
 
-Let's start with the form. The comment form should be embedded into the article's @show@ template. So let's add this code right above the "Back to Articles List" in the articles @show.cfm@
+Let's start with the form. The comment form should be embedded into the article's @show@ template. So let's add this code right above the "<< Back to Articles List" in the articles @show.cfm@
 
 <pre>
-<%= render :partial => 'comment_form' %>
+<code>
+#includePartial("comment_form")#
+</code>
 </pre>
 
 Obviously this is expecting a file @/views/articles/_comment_form.cfm@, so create that and add this content for now:
 
 <pre>
+<code>
 <h3>Post a Comment</h3>
 <p>(Comment form will go here)</p>
+</code>
 </pre>
 
 Look at an article in your browser to make sure that partial is showing up. Then we can start figuring out the details of the form.
@@ -179,36 +183,39 @@ Look at an article in your browser to make sure that partial is showing up. Then
 Ok, now look at your @Articles.cfc@ in the @new@ method. Remember how we had to create a blank Article object so CFWheels could figure out which fields an article has?  We need to do the same thing before we create a form for the comment. But when we view the article and display the comment form we're not running the article's @new@ method, we're running the @show@ method. So we'll need to create a blank Comment object inside that @show@ method like this:
 
 <pre>
-@comment = @article.comments.new
+<code>
+<cfset comment = article.newComments() />
+</code>
 </pre>
 
 This is just like we did it in the Examples. Now we can create a form inside our @_comment_form.cfm@ partial like this:
 
 <pre>
+<code>
 <h3>Post a Comment</h3>
-
-<% form_for @comment do |f| %>
-  <%= f.hidden_field :articleid, :value => @article.id %>
+<h3>Post a Comment</h3>
+<cfoutput>
+ #errorMessagesFor("comment")#
+ #startFormTag(action="create")#
+  #hiddenField(objectName='comment', property='articleid')#
   <p>
-    <%= f.label :author_name %><br/>
-    <%= f.text_field :author_name %>
+	#textField(objectName='comment', property='authorname')#
   </p>
   <p>
-    <%= f.label :author_email %><br/>
-    <%= f.text_field :author_email %>
+	#textField(objectName='comment', property='authoremail')#
   </p>
   <p>
-    <%= f.label :author_url %><br/>
-    <%= f.text_field :author_url %>
+	#textField(objectName='comment', property='authorurl')#
   </p>
   <p>
-    <%= f.label :body %><br/>
-    <%= f.text_area :body %>
+     #textArea(objectName='comment', property='body')#
   </p>
   <p>
-    <%= f.submit 'Submit' %>
+     #submitTag()#
   </p>
-<% end %>
+ #endFormTag()#
+</cfoutput>
+</code>
 </pre>
 
 The only new thing here is the hidden field helper. This hidden field will hold the ID of the article to help when creating the comment object.
@@ -221,7 +228,7 @@ Showing app/views/articles/_comment_form.cfm where line #3 raised:
 undefined method `comments_path' for #<ActionView::Base:0x10446e510>
 </pre>
 
-The @form_for@ helper is trying to build the form so that it submits to @comments_path@, but we haven't told the router anything about Comments yet. Open @/config/routes.rb@ and add this line at the top:
+The @startFormTag@ helper is trying to build the form so that it submits to @comments_path@, but we haven't told the router anything about Comments yet. Open @/config/routes.rb@ and add this line at the top:
 
 <pre>
 map.resources :comments
@@ -231,15 +238,15 @@ Then refresh your browser and your form should show up. Try filling out the comm
 
 h3. Creating a Comments Controller
 
-Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @comments_controller.rb@. Switch over to your terminal to generate it with this line:
+Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @Comments.cfc@. Switch over to your terminal to generate it with this line:
 
 <pre>
 ColdFusion script/generate controller comments index create delete
 </pre>
 
-What's up with those extra parameters?  Anything after the name of the controller (in this case "comments") will cause CFWheels to create stubs for methods with those names. Now open your @/app/controllers/comments_controller.rb@ and you'll see it has the three method stubs already.
+What's up with those extra parameters?  Anything after the name of the controller (in this case "comments") will cause CFWheels to create stubs for methods with those names. Now open your @/controllers/Comments.cfc@ and you'll see it has the three method stubs already.
 
-The one we're interested in first is @create@. You can cheat by looking at the @create@ method in your @Articles.cfc@. For your @comments_controller.rb@, everything should be the same just replace article with comment. Then the redirect is a little different, use this:
+The one we're interested in first is @create@. You can cheat by looking at the @create@ method in your @Articles.cfc@. For your @Comments.cfc@, everything should be the same just replace article with comment. Then the redirect is a little different, use this:
 
 <pre>
 redirect_to article_path(@comment.article)
@@ -253,10 +260,12 @@ We've got some decent comment functionality, but there are a few things we shoul
 
 h4. Comments Count
 
-Let's make it so where the view template has the "Comments" header it displays how many comments there are, like "Comments (3)". Open up your article's @show.cfm@ and change the comments header so it looks like this:
+Let's make it so where the view template has the "Comments" header it displays how many comments there are, like "Comments ( 3 )". Open up your article's @show.cfm@ and change the comments header so it looks like this:
 
 <pre>
-<h3>Comments (<%= @article.comments.size %>)</h3>
+<code>
+<h3>Comments ( #article.commentCount()# )</h3>
+</code>
 </pre>
 
 h4. Form Labels
@@ -264,17 +273,19 @@ h4. Form Labels
 The comments form looks a little silly with "Author Name" and "Author URL" and such. It should probably say "Your Name" and "Your URL (optional)", right?  To change the text that the label helper prints out, you just pass in the desired text as a second parameter, like this:
 
 <pre>
-<%= f.label :author_name, "Your Name"  %>
+ #textArea(objectName='comment', property='authorname', label='Your Name')#
 </pre>
 
 Change your @_comment_form.cfm@ so it prints out "Your Name", "Your Email Address", "Your URL (optional)", and "Your Comment".
 
 h4. Add Timestamp to the Comment Display
 
-We should add something about when the comment was posted. CFWheels has a really neat helper named @distance_of_time_in_words@ which takes two dates and creates a text description of their difference like "32 minutes later", "3 months later", and so on. You can use it in your @_comment.cfm@ partial like this:
+We should add something about when the comment was posted. CFWheels has a really neat helper named @distanceOfTimeInWords@ which takes two dates and creates a text description of their difference like "32 minutes later", "3 months later", and so on. You can use it in your @_comment.cfm@ partial like this:
 
 <pre>
-<p>Posted <%= distance_of_time_in_words(comment.article.created_at, comment.created_at) %> later</p>
+<code>
+ <p>Posted #distanceOfTimeInWords(arguments.comment.createdat, now())# later</p>
+</code>
 </pre>
 
 With that, you're done with I2!
