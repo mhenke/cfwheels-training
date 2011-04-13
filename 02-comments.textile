@@ -224,18 +224,34 @@ The @startFormTag@ helper is trying to build the form so that it submits to @/co
 
 h3. Creating a Comments Controller
 
-Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @Comments.cfc@. Switch over to your terminal to generate it with this line:
+Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @Comments.cfc@. Create it to add this code:
 
 <pre>
-ColdFusion script/generate controller comments index create delete
+<code>
+<cfcomponent extends="Controller" output="false">
+
+ <cffunction name="index">
+
+ </cffunction>
+
+ <cffunction name="create">
+
+ </cffunction>
+
+ <cffunction name="delete">
+
+ </cffunction>
+
+</cfcomponenet>
+</code>
 </pre>
 
-What's up with those extra parameters?  Anything after the name of the controller (in this case "comments") will cause CFWheels to create stubs for methods with those names. Now open your @/controllers/Comments.cfc@ and you'll see it has the three method stubs already.
-
-The one we're interested in first is @create@. You can cheat by looking at the @create@ method in your @Articles.cfc@. For your @Comments.cfc@, everything should be the same just replace article with comment. Then the redirect is a little different, use this:
+The first action we're interested in first is @create@. You can cheat by looking at the @create@ method in your @Articles.cfc@. For your @Comments.cfc@, everything should be the same just replace article with comment. Then the @redirectTo@ is a little different, use this:
 
 <pre>
-redirect_to article_path(@comment.article)
+<code>
+<cfset redirectTo(controller="article",action="index")>
+</code>
 </pre>
 
 Test out your form to create another comment now -- and it should work!
