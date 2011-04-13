@@ -95,27 +95,11 @@ as_attached_file :image, :styles =>{ :medium =>"300x300>", :thumb =>"100x100>" }
 
 <%= image_tag @article.image.url(:medium) %>If its so easy, why dont we do it right now? The catch is that paperclip doesnt do the image manipulation itself, it relies on a package called *imagemagick*. Image processing libraries like this are notoriously difficult to install. If you're on Linux, it might be as simple as @sudo apt-get install imagemagick@. On OS X, if you have Mac Ports installed, it'd just be @sudo port install imagemagick@. On windows you need to download an copy some EXEs and DLLs. It can be a hassle, which is why we wont do it during this class.
 
-h3. Installing %(caps)HAML% / %(caps)SASS% 
-
-Another plugin that I use in every project is actually two libraries in one. %(caps)HAML% is an alternative templating style to the default %(caps)ERB% (which you've been using, hence all the view templates ending in @.erb@ ). %(caps)SASS% is a library for writing %(caps)CSS% and it makes %(caps)CSS% much, much easier to work with.
-
-Open your @Gemfile@ and add a @gem@ line for the gem @haml@. Go to your terminal and @bundle@ and it should pull down the gem library for you. Stop (with the red square) then restart (green play button) your server within Eclipse. Both %(caps)HAML% and %(caps)SASS% are installed and ready to use.
-
-Look in Eclipses left navigation pane for the folder @/public/stylesheets/@. Right click on this folder, click %(caps)NEW% , then %(caps)DIRECTORY% , and name it @sass@. Then right click on the @sass@ folder, click %(caps)NEW% , %(caps)FILE% , then enter the name @styles.sass@ 
-
-h3. A Few Sass Examples
-
-All the details about Sass can be found here: "http://sass-lang.com/":http://sass-lang.com/ 
-
-Were not focusing on %(caps)CSS% development, so here are a few styles that you can copy&paste and modify to your hearts content:
-
-!primary_color = #AAA body :background-color = !primary_color :font :family Verdana, Helvetica, Arial :size 14px a :color #0000FF img :border none.clear :clear both :height 0 :overflow hidden #container :width 75% :margin 0 auto :background #fff :padding 20px 40px :border solid 1px black :margin-top 20px #content :clear both :padding-top 20pxBut our application isn't setup to load that stylesheet yet. We need to make a change to our view templates.
-
 h3. Working with Layouts
 
 We've created about a dozen view templates between our different models. We _could_ go into each of those templates and add a line like this at the top:
 
-<%= stylesheet_link_tag 'styles' %>Which would find the Sass file we just wrote. Thats a lame job, imagine if we had 100 view templates. What if we want to change the name of the stylesheet later? Ugh.
+<%= stylesheet_link_tag 'styles' %>Which would find the LESS file we just wrote. Thats a lame job, imagine if we had 100 view templates. What if we want to change the name of the stylesheet later? Ugh.
 
 CFWheels and ColdFusion both emphasize the idea ofD.R.Y.Dont Repeat Yourself. In the area of view templates, we can achieve this by creating a *layout*. A layout is a special view template that wraps other views. Look in your navigation pane for @/views/layouts/@ , right click on that folder, click %(caps)NEW% and %(caps)FILE% then give it the name @application.html.haml@.
 
@@ -124,3 +108,19 @@ In this layout well put the view code that we want to render for every view temp
 !!! Strict %html %head %title JSBlogger = stylesheet_link_tag 'styles' %body #container #content = yieldNow refresh your article listing page and you should see the styles take effect. Whatever code is in the individual view template gets inserted into the layout where you see the @yield@. Using layouts makes it easy to add site-wide elements like navigation, sidebars, and so forth.
 
  * %(caps)NOTE% * : If you dont see any change, look at your server log in Eclipse to see if there were any errors. At first I had a typo in one of the filenames so it wasn't being picked up properly. You might also need to stop&restart your server if you didnt do that after installing the @haml@ gem.
+ 
+h3. Installing %(caps)LESS%
+
+Another plugin that I use in every project is actually two libraries in one. %(caps)HAML% is an alternative templating style to the default %(caps)ERB% (which you've been using, hence all the view templates ending in @.erb@ ). %(caps)LESS% is a library for writing %(caps)CSS% and it makes %(caps)CSS% much, much easier to work with.
+
+Open your @Gemfile@ and add a @gem@ line for the gem @haml@. Go to your terminal and @bundle@ and it should pull down the gem library for you. Stop (with the red square) then restart (green play button) your server within Eclipse. Both %(caps)HAML% and %(caps)LESS% are installed and ready to use.
+
+Look in Eclipses left navigation pane for the folder @/public/stylesheets/@. Right click on this folder, click %(caps)NEW% , then %(caps)DIRECTORY% , and name it @LESS@. Then right click on the @LESS@ folder, click %(caps)NEW% , %(caps)FILE% , then enter the name @styles.LESS@ 
+
+h3. A Few LESS Examples
+
+All the details about LESS can be found here: "http://LESS-lang.com/":http://LESS-lang.com/ 
+
+Were not focusing on %(caps)CSS% development, so here are a few styles that you can copy&paste and modify to your hearts content:
+
+!primary_color = #AAA body :background-color = !primary_color :font :family Verdana, Helvetica, Arial :size 14px a :color #0000FF img :border none.clear :clear both :height 0 :overflow hidden #container :width 75% :margin 0 auto :background #fff :padding 20px 40px :border solid 1px black :margin-top 20px #content :clear both :padding-top 20pxBut our application isn't setup to load that stylesheet yet. We need to make a change to our view templates.
