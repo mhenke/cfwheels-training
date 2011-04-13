@@ -224,7 +224,7 @@ The @startFormTag@ helper is trying to build the form so that it submits to @/co
 
 h3. Creating a Comments Controller
 
-Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @Comments.cfc@. Create it to add this code:
+Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @Comments.cfc@ to manipulate our Comments. Create it to add this code:
 
 <pre>
 <code>
