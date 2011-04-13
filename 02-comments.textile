@@ -70,9 +70,9 @@ A comment relates to a single article, it "belongs to" an article. We then want 
 
 <pre>
 <code>
- <cffunction name="init">
-  <cfset hasMany("comments") />
- </cffunction>
+<cffunction name="init">
+ <cfset hasMany("comments") />
+</cffunction>
 </code>
 </pre>
 
@@ -148,12 +148,11 @@ This says that we want to render a partial named "comment" and that we want to d
 <code>
 <cfoutput>
 <div class="comment">
-  <h4>Comment by #arguments.comment.authorname#</h4>
-  <p>#arguments.comment.body#</p>
+ <h4>Comment by #arguments.comment.authorname#</h4>
+ <p>#arguments.comment.body#</p>
 </div>
 </cfoutput>
 </code>
-</pre>
 
 With that in place, try clicking on your articles and find the one where you created the comments. Did they show up?  What happens when an article doesn't have any comments?
 
@@ -224,7 +223,7 @@ The @startFormTag@ helper is trying to build the form so that it submits to @/co
 
 h3. Creating a Comments Controller
 
-Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @Comments.cfc@ to manipulate our Comments. Create it to add this code:
+Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @Comments.cfc@ to manipulate our Comments. Create it then add this code:
 
 <pre>
 <code>
@@ -272,7 +271,9 @@ h4. Form Labels
 The comments form looks a little silly will all the inputs on one line and with "Authorname" and "Authorurl" and such. It should probably say "Your Name" and "Your URL (optional)", right?  To change the text that the label helper prints out, you just pass in the desired text as a second parameter, like this:
 
 <pre>
- #textArea(objectName='comment', property='authorname', label='Your Name')#
+<code>
+#textArea(objectName='comment', property='authorname', label='Your Name')#
+</code>
 </pre>
 
 Change your @_comment_form.cfm@ so it prints out "Your Name", "Your Email Address", "Your URL (optional)", and "Your Comment". Then refresh the page and look at the html generated. It should look like this:
@@ -298,10 +299,10 @@ Refresh, and you should see html source like this:
 
 <pre>
 <code>
- <p>
-  <label for="comment-authorname">Authorname</label><br>
-  <input type="text" value="" name="comment[authorname]" maxlength="255" id="comment-authorname">
- </p>
+<p>
+ <label for="comment-authorname">Authorname</label><br>
+ <input type="text" value="" name="comment[authorname]" maxlength="255" id="comment-authorname">
+</p>
 </code>
 </pre>
 
@@ -311,7 +312,7 @@ We should add something about when the comment was posted. CFWheels has a really
 
 <pre>
 <code>
- <p>Posted #distanceOfTimeInWords(arguments.comment.createdat, now())# later</p>
+<p>Posted #distanceOfTimeInWords(arguments.comment.createdat, now())# later</p>
 </code>
 </pre>
 
