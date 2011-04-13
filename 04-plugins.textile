@@ -68,7 +68,7 @@ Ok, its in there, but we need it to actually show up in the article. Open the @/
 
 h3. Improving the Form
 
-When first working with the edit form I wasn't sure the upload was working because I expected the @file_field@ to display the name of the file that I had already uploaded. Go back to the edit screen in your browser for the article you've been working with. See how it just saysChoose File, no file selectednothing tells the user that a file already exists for this article. Lets add that information in now.
+When first working with the edit form I wasn't sure the upload was working because I expected the @file_field@ to display the name of the file that I had already uploaded. Go back to the edit screen in your browser for the article you've been working with. See how it just saysChoose File, no file selected nothing tells the user that a file already exists for this article. Lets add that information in now.
 
 So open that @/views/articles/_form.cfm@ and look at the paragraph where we added the image upload field. Well add in some new logic that works like this:
 
@@ -76,7 +76,7 @@ So open that @/views/articles/_form.cfm@ and look at the paragraph where we adde
 
 
 
-* Then display the @file_field@ button with the labelAttach a New Image
+* Then display the @file_field@ button with the label Attach a New Image
 So, turning that into code
 
 <p><% if @article.image_file_name %><%= image_tag @article.image.url %><br/><% end %><%= f.label :image, "Attach a New Image" %><br /><%= f.file_field :image %></p>Test how that looks both for articles that already have an image and ones that dont.
