@@ -36,7 +36,7 @@ Lets open @/views/layouts/application.html.haml@ and add a little footer so the 
 
 %body #container #content = yield %hr %h6 - if current_user = "Logged in as #{current_user.login}" = linkTo "(logout)", logout_path - else = linkTo "(login)", login_pathThe go to @http://wheels.local/index.cfm/articles/@ and you'll get this error:
 
-NameError in Articles#index Showing app/views/layouts/application.html.haml where line #14 raised: undefined local variable or method `current_user' for #<ActionView::Base:0x103147400>We tried to use the @current_user@ helper that comes with the restful_authentication plugin, but CFWheels isn't recognizing it. We need to do one more setup step. Open @/controllers/application_controller.cfc@ , and underneath the @protect_from_forgery@ line, add this: @include AuthenticatedSystem@.
+NameError in Articles#index Showing app/views/layouts/application.html.haml where line #14 raised: undefined local variable or method `current_user' for #<ActionView::Base:0x103147400>We tried to use the @current_user@ helper that comes with the restful_authentication plugin, but CFWheels isn't recognizing it. We need to do one more setup step. Open @/controllers/application.cfc@ , and underneath the @protect_from_forgery@ line, add this: @include AuthenticatedSystem@.
 
 Now refresh your browser and your articles list should come up along with the new footer at the bottom.
 
@@ -61,7 +61,7 @@ Lets add in a protection scheme like this to the new users form:
 
 That way when the app is first setup we can create an account, then new users can only be created by a logged in user.
 
-We can create a @before_filter@ which will run _before_ the @new@ and @create@ actions of our @users_controller.cfc@. Open that controller and on the second line you'll see @include AuthenticatedSystem@. You can remove that since we put it in the @application_controller@ and, in its place, put all this code:
+We can create a @before_filter@ which will run _before_ the @new@ and @create@ actions of our @users.cfc@. Open that controller and on the second line you'll see @include AuthenticatedSystem@. You can remove that since we put it in the @application_controller@ and, in its place, put all this code:
 
 before_filter :zero_users_or_authenticated, :only =>[new, :create] def zero_users_or_authenticated unless User.all.size == 0 || current_user redirect_to root_path return false end endThe first line declares that we want to run a before filter named @zero_or_authenticated@ when either the @new@ or @create@ methods are accessed. Then we define that filter, checking if there are either zero registered users OR if there is a user already logged in. If neither of those is true, we redirect to the root path (our articles list) and return false. If either one of them is true this filter wont do anything, allowing the requested user registration form to be rendered.
 

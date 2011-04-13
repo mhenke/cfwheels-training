@@ -770,7 +770,7 @@ What is a tag?  We need to figure that out before we can create the model. First
 
 Many-to-many relationships are tricky because we're using an SQL database. If an Article "has many" tags, then we would put the foreign key @articleid@ inside the @tags@ table - so then a Tag would "belong to" an Article. But a tag can connect to *many* articles, not just one. We can't model this relationship with just the @articles@ and @tags@ tables.
 
-When we start thinking about the database modeling, there are a few ways to achieve this setup. One way is to create a "join table" that just tracks which tags are connected to which articles. Traditionally this table would be named @articles_tags@ and CFWheels would express the relationships by saying that the Article model @has_and_belongsTo_many@ Tags, while the Tag model @has_and_belongsTo_many@ Articles.
+When we start thinking about the database modeling, there are a few ways to achieve this setup. One way is to create a "join table" that just tracks which tags are connected to which articles. Traditionally this table would be named @articlestags@ and CFWheels would express the relationships by saying that the Article model @has_and_belongsTo_many@ Tags, while the Tag model @has_and_belongsTo_many@ Articles.
 
 Most of the time this isn't the best way to really model the relationship. The connection between the two models usually has value of its own, so we should promote it to a real model. For our purposes, we'll introduce a model named "Tagging" which is the connection between Articles and Tags. The relationships will setup like this:
 
@@ -1062,7 +1062,7 @@ It prevents duplicates and allows you to remove tags from the edit form. Test it
 
 h3. Listing Articles by Tag
 
-The links for our tags are showing up, but if you click on them you'll get our old friend, the "No action responded to show. Actions:" error. Open up your @/controllers/tags_controller.cfc@ and add a a @show@ method like this:
+The links for our tags are showing up, but if you click on them you'll get our old friend, the "No action responded to show. Actions:" error. Open up your @/controllers/tags.cfc@ and add a a @show@ method like this:
 
 <pre>
   def show
@@ -1086,8 +1086,8 @@ Refresh your view and you should see a list of articles with that tag. Keep in m
 
 h3. Listing All Tags
 
-We've built the @show@ action, but the reader should also be able to browse the tags available at @http://wheels.local/tags/@. I think you can do this on your own. Create an @index@ action in your @tags_controller.cfc@ and an @index.cfm@ in the corresponding views folder. Look at your @Articles.cfc@ and Article @index.cfm@ if you need some clues.
+We've built the @show@ action, but the reader should also be able to browse the tags available at @http://wheels.local/tags/@. I think you can do this on your own. Create an @index@ action in your @tags.cfc@ and an @index.cfm@ in the corresponding views folder. Look at your @Articles.cfc@ and Article @index.cfm@ if you need some clues.
 
-If that's easy, try creating a @delete@ method in your @tags_controller.cfc@ and adding a delete link to the tag list. If you do this, change the association in your @tag.cfc@ so that it says @hasMany :taggings, :dependent => :delete@. That'll prevent orphaned Tagging objects from hanging around.
+If that's easy, try creating a @delete@ method in your @tags.cfc@ and adding a delete link to the tag list. If you do this, change the association in your @tag.cfc@ so that it says @hasMany :taggings, :dependent => :delete@. That'll prevent orphaned Tagging objects from hanging around.
 
 With that, a long Iteration 3 is complete!
