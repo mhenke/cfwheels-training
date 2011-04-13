@@ -7,14 +7,12 @@ h3. Creating the New Action and View
 Previously we setup the @<cfset addRoute(name="home", pattern="", controller="Articles", action="index") />@ route in @/config/routes.cfm@, and that told CFWheels that we were going to follow the RESTful conventions for this model named Article. Following this convention, the URL for creating a new article would be @http://wheels.local/index.cfm/articles/new@. Enter that into your browser and see what comes up.
 
 <pre>
-<code>
 Wheels.ViewNotFound
 Could not find the view page for the new action in the Articles controller.
 
 Suggested action
 
 Create a file named new.cfm in the views/articles directory (create the directory as well if it doesn't already exist).
-</code>
 </pre>
 
 This is an error message we've seen before. The router went looking for an action named @new@ inside the @Articles.cfc@ and didn't find it.
@@ -171,7 +169,9 @@ Look at the URL: @http://wheels.local/index.cfm/articles/show/1@. When we added 
 So what do we want to do when the user clicks an article title?  Find the article, then display a page with it's title and body. We'll use the number on the end of the URL to find the article in the database. The router will send us this number in the variable @params.key@. Inside the @show@ method that we just created, add this line:
 
 <pre>
- <cfset article = model("Article").findByKey(params.key) />
+<code>
+<cfset article = model("Article").findByKey(params.key) />
+</code>
 </pre>
 
 Now create the file @/views/articles/show.cfm@ and add this code:
@@ -217,9 +217,11 @@ h3. Creating an Edit Action & View
 The router is expecting to find an action in @Articles.cfc@ named @edit@, so let's add this:
 
 <pre>
+<code>
 <cffunction name="edit">
  <cfset article = model("Article").findByKey(params.key) />
 </cffunction>
+</code>
 </pre>
 
 All the @edit@ action is really going to do is find the article to be edited, then display the editing form. If you refresh after adding that @edit@ action you'll see the template missing error. Create a file @/views/articles/edit.cfm@ but *hold on before you type anything*. Below is what the edit form should look like:
