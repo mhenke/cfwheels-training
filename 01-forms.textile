@@ -93,7 +93,7 @@ Go into your @Articles.cfc@, and _inside_ the @new@ method, add this line:
 
 <pre>
 <code>
- <cfset article = model("Article").new() />
+<cfset article = model("Article").new() />
 </code>
 </pre>
 
@@ -116,11 +116,11 @@ When we loaded the form we accessed the @new@ action, but when that form is subm
 
 <pre>
 <code>
- <cffunction name="create">
-  <cfset article = model("Article").new(params.article) />
-  <cfset article.save() />
-  <cfset redirectTo(action="index") />
- </cffunction>
+<cffunction name="create">
+ <cfset article = model("Article").new(params.article) />
+ <cfset article.save() />
+ <cfset redirectTo(action="index") />
+</cffunction>
 </code>
 </pre>
 
@@ -141,9 +141,9 @@ Right now our article list is very plain and we end up typing in a bunch of URLs
 
 <pre>
 <code>
- <cfoutput>
-  <p>#linkTo(text="Create a New Article", action="new")#</p>
- </cfoutput>
+<cfoutput>
+ <p>#linkTo(text="Create a New Article", action="new")#</p>
+</cfoutput>
 </code>
 </pre>
 
@@ -158,9 +158,9 @@ Tired of this error message yet?  Go to your @Articles.cfc@ and add a method lik
 
 <pre>
 <code>
- <cffunction name="show">
+<cffunction name="show">
 	
- </cffunction>
+</cffunction>
 </code>
 </pre>
 
@@ -244,7 +244,7 @@ Create a file @/views/articles/_form.cfm@ and, yes, it has to have the underscor
 
 <pre>
 <code>
- <cfoutput>#includePartial("form")#</cfoutput>
+<cfoutput>#includePartial("form")#</cfoutput>
 </code>
 </pre>
 
