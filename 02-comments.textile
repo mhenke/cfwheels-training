@@ -36,8 +36,10 @@ Open the DBMigrate plugin and fill it out with the following and click "create":
 Open the file that the generator created, @/db/migrate/some-timestamp_creates_comments_table.cfc@. Inside the @self.up@ you need to add one line for each of the pieces of data we just brainstormed. It'll start off with these...
 
 <pre>
+<code>
 t.integer('articleid');
 t.string('authorname');
+</code>
 </pre>
 
 Then keep adding lines that create strings named @authoremail@, @authorurl@, and a text field named @body@.
@@ -272,7 +274,9 @@ h4. Form Labels
 The comments form looks a little silly will all the inputs on one line and with "Authorname" and "Authorurl" and such. It should probably say "Your Name" and "Your URL (optional)", right?  To change the text that the label helper prints out, you just pass in the desired text as a second parameter, like this:
 
 <pre>
- #textArea(objectName='comment', property='authorname', label='Your Name')#
+<code>
+#textArea(objectName='comment', property='authorname', label='Your Name')#
+</code>
 </pre>
 
 Change your @_comment_form.cfm@ so it prints out "Your Name", "Your Email Address", "Your URL (optional)", and "Your Comment". Then refresh the page and look at the html generated. It should look like this:
