@@ -34,7 +34,7 @@ class AddPaperclipFieldsToArticle<ActiveRecord::Migration def self.up add_column
 
 h3. Adding to the Model
 
-The gem is loaded, the database is ready, but we need to tell our CFWheels application about the image attachment we want to add. Open @/models/article.rb@ and just below the existing @has_many@ lines, add this line:
+The gem is loaded, the database is ready, but we need to tell our CFWheels application about the image attachment we want to add. Open @/models/article.rb@ and just below the existing @hasMany@ lines, add this line:
 
 has_attached_file :imageThis @has_attached_file@ method is part of the paperclip library. With that declaration, paperclip will understand that this model should accept a file attachment and that there are fields to store information about that file which start with @image_@ in this models database table.
 

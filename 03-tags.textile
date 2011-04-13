@@ -1,4 +1,4 @@
-h1. I3: Tagging
+h1. I3: Tagging (Posted Under)
 
 In this iteration we'll add the ability to tag articles for organization and navigation.
 
@@ -10,13 +10,13 @@ What is a tag?  We need to figure that out before we can create the model. First
 
 Many-to-many relationships are tricky because we're using an SQL database. If an Article "has many" tags, then we would put the foreign key @articleid@ inside the @tags@ table - so then a Tag would "belong to" an Article. But a tag can connect to *many* articles, not just one. We can't model this relationship with just the @articles@ and @tags@ tables.
 
-When we start thinking about the database modeling, there are a few ways to achieve this setup. One way is to create a "join table" that just tracks which tags are connected to which articles. Traditionally this table would be named @articles_tags@ and CFWheels would express the relationships by saying that the Article model @has_and_belongs_to_many@ Tags, while the Tag model @has_and_belongs_to_many@ Articles.
+When we start thinking about the database modeling, there are a few ways to achieve this setup. One way is to create a "join table" that just tracks which tags are connected to which articles. Traditionally this table would be named @articles_tags@ and CFWheels would express the relationships by saying that the Article model @has_and_belongsTo_many@ Tags, while the Tag model @has_and_belongsTo_many@ Articles.
 
 Most of the time this isn't the best way to really model the relationship. The connection between the two models usually has value of its own, so we should promote it to a real model. For our purposes, we'll introduce a model named "Tagging" which is the connection between Articles and Tags. The relationships will setup like this:
 
-* An Article @has_many@ Taggings
-* A Tag @has_many@ Taggings
-* A Tagging @belongs_to@ an Article and @belongs_to@ a Tag
+* An Article @hasMany@ Taggings
+* A Tag @hasMany@ Taggings
+* A Tagging @belongsTo@ an Article and @belongsTo@ a Tag
 
 h3. Making Models
 
@@ -43,20 +43,20 @@ Now that our model files are generated we need to tell CFWheels about the relati
 In @/models/article.rb@
 
 <pre class=brush:ColdFusion;">
-  has_many :taggings
+  hasMany :taggings
 </pre>
 
 In @/models/tag.rb@
 
 <pre class=brush:ColdFusion;">
-  has_many :taggings
+  hasMany :taggings
 </pre>
 
 Then in @/models/tagging.rb@
 
 <pre class=brush:ColdFusion;">
-  belongs_to :article
-  belongs_to :tag
+  belongsTo :article
+  belongsTo :tag
 </pre>
 
 After CFWheels had been around for awhile, developers were finding this kind of relationship very common. In practical usage, if I had an object named @article@ and I wanted to find its Tags, I'd have to run code like this:
@@ -70,15 +70,15 @@ That's a pain for something that we need commonly. The solution was to augment t
 In @/models/article.rb@
 
 <pre class=brush:ColdFusion;">
-  has_many :taggings
-  has_many :tags, :through => :taggings
+  hasMany :taggings
+  hasMany :tags, :through => :taggings
 </pre>
 
 In @/models/tag.rb@
 
 <pre class=brush:ColdFusion;">
-  has_many :taggings
-  has_many :articles, :through => :taggings
+  hasMany :taggings
+  hasMany :articles, :through => :taggings
 </pre>
 
 Now if we have an object like @article@ we can just ask for @article.tags@ or, conversely, if we have an object named @tag@ we can ask for @tag.articles@.
@@ -328,6 +328,6 @@ h3. Listing All Tags
 
 We've built the @show@ action, but the reader should also be able to browse the tags available at @http://wheels.local/tags/@. I think you can do this on your own. Create an @index@ action in your @tags_controller.rb@ and an @index.cfm@ in the corresponding views folder. Look at your @Articles.cfc@ and Article @index.cfm@ if you need some clues.
 
-If that's easy, try creating a @delete@ method in your @tags_controller.rb@ and adding a delete link to the tag list. If you do this, change the association in your @tag.rb@ so that it says @has_many :taggings, :dependent => :delete@. That'll prevent orphaned Tagging objects from hanging around.
+If that's easy, try creating a @delete@ method in your @tags_controller.rb@ and adding a delete link to the tag list. If you do this, change the association in your @tag.rb@ so that it says @hasMany :taggings, :dependent => :delete@. That'll prevent orphaned Tagging objects from hanging around.
 
 With that, a long Iteration 3 is complete!
