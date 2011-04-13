@@ -1,6 +1,10 @@
 h2. I4: Installing Plugins
 
-In this iteration well learn how to take advantage of the many plugins and libraries available to quickly add features to your application. First well work with *paperclip* , a library that manages file attachments and uploading.
+In this iteration well learn how to take advantage of the many plugins available to quickly add features to your application. First well work with *Asset Bundler* , a plugin that manages migrations.
+
+Asset Bundler
+
+A plugin that combines and minifies your javascript and css code.
 
 h3. Using the *Gemfile* to Setup a ColdFusionGem
 
@@ -109,7 +113,7 @@ Were not focusing on %(caps)CSS% development, so here are a few styles that you 
 
 h3. Working with Layouts
 
-Weve created about a dozen view templates between our different models. We _could_ go into each of those templates and add a line like this at the top:
+We've created about a dozen view templates between our different models. We _could_ go into each of those templates and add a line like this at the top:
 
 <%= stylesheet_link_tag 'styles' %>Which would find the Sass file we just wrote. Thats a lame job, imagine if we had 100 view templates. What if we want to change the name of the stylesheet later? Ugh.
 

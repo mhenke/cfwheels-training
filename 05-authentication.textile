@@ -61,7 +61,7 @@ Lets add in a protection scheme like this to the new users form:
 
 That way when the app is first setup we can create an account, then new users can only be created by a logged in user.
 
-We can create a @before_filter@ which will run _before_ the @new@ and @create@ actions of our @users.cfc@. Open that controller and on the second line you'll see @include AuthenticatedSystem@. You can remove that since we put it in the @application_controller@ and, in its place, put all this code:
+We can create a @before_filter@ which will run _before_ the @new@ and @create@ actions of our @users.cfc@. Open that controller and on the second line you'll see @include AuthenticatedSystem@. You can remove that since we put it in the @application.cfc@ and, in its place, put all this code:
 
 before_filter :zero_users_or_authenticated, :only =>[new, :create] def zero_users_or_authenticated unless User.all.size == 0 || current_user redirect_to root_path return false end endThe first line declares that we want to run a before filter named @zero_or_authenticated@ when either the @new@ or @create@ methods are accessed. Then we define that filter, checking if there are either zero registered users OR if there is a user already logged in. If neither of those is true, we redirect to the root path (our articles list) and return false. If either one of them is true this filter wont do anything, allowing the requested user registration form to be rendered.
 
@@ -73,11 +73,11 @@ h3. Securing the Rest of the Application
 
 The first thing we need to do is sprinkle @before_filters@ on most of our controllers:
 
-* In @users_controller@ , add a before filter to protect the actions besides @new@ and @create@ like this:
+* In @users.cfc@ , add a before filter to protect the actions besides @new@ and @create@ like this:
  @before_filter :login_required, :except =>[new, :create]@ 
-* In @tags_controller@ , we dont have any methods that need to be protected.
-* In @sessions_controller@ all the methods need to be accessible to allow login and logout
-* In @comments_controller@ , we never implemented @index@ and @delete@ , but just in case we do lets allow unauthenticated users to only access @create@ :
+* In @tags.cfc@ , we dont have any methods that need to be protected.
+* In @sessions.cfc@ all the methods need to be accessible to allow login and logout
+* In @comments.cfc@ , we never implemented @index@ and @delete@ , but just in case we do lets allow unauthenticated users to only access @create@ :
  @before_filter :login_required, :except =>[create]@ 
 * In @Articles.cfc@ authentication should be required for @new@ , @create@ , @edit@ , @update@ and @delete@. Figure out how to write the before filter using either @only@ or @except@ 
 
