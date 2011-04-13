@@ -22,7 +22,7 @@ h3. Running the Generator
 
 This plugin makes it easy to get up an running because one generator creates most of the code you'll need. Run this from your terminal:
 
-CFWheels generate authenticated user sessionsTake a look at the output and you'll see it created about 16 files and added a few routes to the @routes.rb@ file. The generator has a note that you shouldnt forget to add the routes to @routes.rb@ , but its already done that for you.
+CFWheels generate authenticated user sessionsTake a look at the output and you'll see it created about 16 files and added a few routes to the @routes.cfc@ file. The generator has a note that you shouldnt forget to add the routes to @routes.cfc@ , but its already done that for you.
 
 Lets look at the CreateUsers migration that the generator created before we migrate the database. If you wanted your User models to have any additional information (likedeparment_nameorfavorite_color) you could add columns for that. For our purposes these fields look alright and, thanks to the flexibility of migrations, if we want to add columns later its easy. So go to your terminal and enter:
 
@@ -36,7 +36,7 @@ Lets open @/views/layouts/application.html.haml@ and add a little footer so the 
 
 %body #container #content = yield %hr %h6 - if current_user = "Logged in as #{current_user.login}" = linkTo "(logout)", logout_path - else = linkTo "(login)", login_pathThe go to @http://wheels.local/index.cfm/articles/@ and you'll get this error:
 
-NameError in Articles#index Showing app/views/layouts/application.html.haml where line #14 raised: undefined local variable or method `current_user' for #<ActionView::Base:0x103147400>We tried to use the @current_user@ helper that comes with the restful_authentication plugin, but CFWheels isn't recognizing it. We need to do one more setup step. Open @/controllers/application_controller.rb@ , and underneath the @protect_from_forgery@ line, add this: @include AuthenticatedSystem@.
+NameError in Articles#index Showing app/views/layouts/application.html.haml where line #14 raised: undefined local variable or method `current_user' for #<ActionView::Base:0x103147400>We tried to use the @current_user@ helper that comes with the restful_authentication plugin, but CFWheels isn't recognizing it. We need to do one more setup step. Open @/controllers/application_controller.cfc@ , and underneath the @protect_from_forgery@ line, add this: @include AuthenticatedSystem@.
 
 Now refresh your browser and your articles list should come up along with the new footer at the bottom.
 
@@ -46,7 +46,7 @@ Its annoying me that we keep going to @http://wheels.local/@ and seeing the CFWh
 
 First, delete the file @/public/index.html@. Files in the public directory will take precedence over routes in our application, so as long as that file exists we can't route the root address anywhere.
 
-Second, open @/config/routes.rb@ and right above the other routes add in this one:
+Second, open @/config/routes.cfc@ and right above the other routes add in this one:
 
 match '/' =>'articles#index'Now visit @http://wheels.local@ and you should see your article list.
 
@@ -61,7 +61,7 @@ Lets add in a protection scheme like this to the new users form:
 
 That way when the app is first setup we can create an account, then new users can only be created by a logged in user.
 
-We can create a @before_filter@ which will run _before_ the @new@ and @create@ actions of our @users_controller.rb@. Open that controller and on the second line you'll see @include AuthenticatedSystem@. You can remove that since we put it in the @application_controller@ and, in its place, put all this code:
+We can create a @before_filter@ which will run _before_ the @new@ and @create@ actions of our @users_controller.cfc@. Open that controller and on the second line you'll see @include AuthenticatedSystem@. You can remove that since we put it in the @application_controller@ and, in its place, put all this code:
 
 before_filter :zero_users_or_authenticated, :only =>[new, :create] def zero_users_or_authenticated unless User.all.size == 0 || current_user redirect_to root_path return false end endThe first line declares that we want to run a before filter named @zero_or_authenticated@ when either the @new@ or @create@ methods are accessed. Then we define that filter, checking if there are either zero registered users OR if there is a user already logged in. If neither of those is true, we redirect to the root path (our articles list) and return false. If either one of them is true this filter wont do anything, allowing the requested user registration form to be rendered.
 

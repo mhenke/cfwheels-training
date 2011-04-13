@@ -35,10 +35,10 @@ ColdFusion script/generate model Article
 
 We're running the @generate@ script, telling it to create a @model@, and naming that model @Article@. From that information, CFWheels creates the following files:
 
-* @/models/article.rb@ : The file that will hold the model code
-* @/test/unit/article_test.rb@ : A file to hold unit tests for @Article@
+* @/models/article.cfc@ : The file that will hold the model code
+* @/test/unit/article_test.cfc@ : A file to hold unit tests for @Article@
 * @/test/fixtures/articles.yml@ : A fixtures file to assist with unit testing
-* @/db/migrate/(some_time_stamp)_create_articles.rb@ : A database migration to create the @articles@ table
+* @/db/migrate/(some_time_stamp)_create_articles.cfc@ : A database migration to create the @articles@ table
 
 With those files in place we can start developing!
 
@@ -46,7 +46,7 @@ h3. Working with the Database
 
 CFWheels uses migration files to perform modifications to the database. Almost any modification you can make to a DB can be done through a migration. The killer feature about CFWheels migrations is that they're generally database agnostic. When developing applications I usually use MySQL as we are in this tutorial, but when I deploy to my server it is running PostgreSQL. Many others choose MySQL. It doesn't matter -- the same migrations will work on all of them!  This is an example of how CFWheels takes some of the painful work off your hands. You write your migrations once, then run them against almost any database.
 
-What is a migration?  Let's open @/db/migrate/(some_time_stamp)_create_articles.rb@ and take a look. First you'll notice that the filename begins with a mish-mash of numbers which is a timestamp of when the migration was created. Migrations need to be ordered, so the timestamp serves to keep them in chronologic order. Inside the file, you'll see two methods: @self.up@ and @self.down@.
+What is a migration?  Let's open @/db/migrate/(some_time_stamp)_create_articles.cfc@ and take a look. First you'll notice that the filename begins with a mish-mash of numbers which is a timestamp of when the migration was created. Migrations need to be ordered, so the timestamp serves to keep them in chronologic order. Inside the file, you'll see two methods: @self.up@ and @self.down@.
 
 Migrations are meant to be _symmetric_. Whatever a migration changes inside the @self.up@ method should be _undone_ with the @self.down@ method. Frequently in development you'll think you want the database to look one way, then realize you need something different. You can create a migration to make your changes to the DB, start building, and then revert as necessary.
 
@@ -113,7 +113,7 @@ Article.new
 
 The first line was just to demonstrate that we can do anything we previously did inside @irb@ now inside of our @Examples@. The second like referenced the @Article@ model and called the @all@ method which returns an array of all articles in the database -- so far an empty array. The third line created a new article object. You can see that this new object had attributes @id@, @title@, @body@, @created_at@, and @updated_at@.
 
-All the information about the @Article@ model is in the file @/models/article.rb@, so let's open that now.
+All the information about the @Article@ model is in the file @/models/article.cfc@, so let's open that now.
 
 Not very impressive, right?  There are no attributes defined inside the model, so how does CFWheels know that an Article should have a @title@, a @body@, etc?  It queries the database, looks at the articles table, and assumes that whatever columns that table has should probably be the attributes accessible through the model. 
 
@@ -135,7 +135,7 @@ h3. Moving Towards a Web Interface - Setting up the Router
 
 We've created a few articles through the Examples, but we really don't have a web application until we have a web interface. Let's get that started. We said that CFWheels uses an "MVC" architecture and we've worked with the Model, now we need a Controller and View. 
 
-When a CFWheels server gets a request from a web browser it first goes to the _router_. The router decides what the request is trying to do, what resources it is trying to interact with. The router dissects a request based on the address it is requesting and other HTTP parameters (like the request type of GET or PUT). Let's open the router's configuration file, @/config/routes.rb@.
+When a CFWheels server gets a request from a web browser it first goes to the _router_. The router decides what the request is trying to do, what resources it is trying to interact with. The router dissects a request based on the address it is requesting and other HTTP parameters (like the request type of GET or PUT). Let's open the router's configuration file, @/config/routes.cfc@.
 
 Inside this file you'll see a LOT of comments that show you different options for routing requests. Let's remove everything _except_ the first line (@ActionController...@) and the final @end@. Then, in between those two lines, add @map.resources :articles@ so your file looks like this:
 
@@ -168,9 +168,9 @@ The output shows that the generator created several files/folders for you:
 
 * @app/views/articles@ : The directory to contain the controller's view templates
 * @app/controllers/Articles.cfc@ : The controller file itself
-* @test/functional/Articles.cfc_test.rb@ : The controller's unit tests file
-* @app/helpers/articles_helper.rb@ : A helper file to assist with the views (discussed later)
-* @test/unit/helpers/articles_helper_test.rb@ : The helper's unit test file
+* @test/functional/Articles.cfc_test.cfc@ : The controller's unit tests file
+* @app/helpers/articles_helper.cfc@ : A helper file to assist with the views (discussed later)
+* @test/unit/helpers/articles_helper_test.cfc@ : The helper's unit test file
 
 Let's open up the controller file, @/controllers/Articles.cfc@. You'll see that this is basically a blank class, beginning with the @class@ keyword and ending with the @end@ keyword. Any code we add to the controller must go _between_ these two lines, so I like to insert a bunch of blank lines between them so I have room work work and push that final @end@ farther down the page.
 
@@ -239,7 +239,7 @@ We've created articles from the Examples, but that isn't a viable long-term solu
 
 h3. Creating the NEW Action and View
 
-Previously we setup the @map.resources :articles@ route in @routes.rb@, and that told CFWheels that we were going to follow the RESTful conventions for this model named Article. Following this convention, the URL for creating a new article would be @http://wheels.local/index.cfm/articles/new@. Enter that into your browser and see what comes up.
+Previously we setup the @map.resources :articles@ route in @routes.cfc@, and that told CFWheels that we were going to follow the RESTful conventions for this model named Article. Following this convention, the URL for creating a new article would be @http://wheels.local/index.cfm/articles/new@. Enter that into your browser and see what comes up.
 
 <pre>
 Unknown action
@@ -537,11 +537,11 @@ With that understanding, let's create a Comment model. Switch over to your termi
 ColdFusion script/generate model Comment
 </pre>
 
-We've already gone through what files this generator creates, we'll be most interested in the migration file and the @comment.rb@.
+We've already gone through what files this generator creates, we'll be most interested in the migration file and the @comment.cfc@.
 
 h3. Setting up the Migration
 
-Open the migration file that the generator created, @/db/migrate/some-timestamp_create_comments.rb@. Inside the @self.up@ you need to add one line for each of the pieces of data we just brainstormed. It'll start off with these...
+Open the migration file that the generator created, @/db/migrate/some-timestamp_create_comments.cfc@. Inside the @self.up@ you need to add one line for each of the pieces of data we just brainstormed. It'll start off with these...
 
 <pre>
 t.integer :articleid
@@ -560,7 +560,7 @@ Foreign keys are a way of marking one-to-one and one-to-many relationships. An a
 
 Part of the big deal with CFWheels is that it makes working with these relationships very easy. When we created the migration for comments we started with an @integer@ field named @articleid@. The CFWheels convention is that, for a one-to-many relationship, the objects on the "many" end should have a foreign key referencing the "one" object. And that foreign key should be titled with the name of the "one" object, then an underscore, then "id". So in this case one article has many comments, so each comment has a field named @articleid@ which tracks which article they belong to. Similarly, a store's customer might have many orders, so each order would have a @customerid@ specifying which customer they belong to.
 
-Following this convention will get us a lot of functionality "for free."  Open your @/models/comment.rb@ and add the middle line so it looks like this:
+Following this convention will get us a lot of functionality "for free."  Open your @/models/comment.cfc@ and add the middle line so it looks like this:
 
 <pre>
 class Comment < ActiveRecord::Base
@@ -568,7 +568,7 @@ class Comment < ActiveRecord::Base
 end
 </pre>
 
-A comment relates to a single article, it "belongs to" an article. We then want to declare the other side of the relationship inside @/models/article.rb@ like this:
+A comment relates to a single article, it "belongs to" an article. We then want to declare the other side of the relationship inside @/models/article.cfc@ like this:
 
 <pre>
 class Article < ActiveRecord::Base
@@ -700,7 +700,7 @@ Showing app/views/articles/_comment_form.cfm where line #3 raised:
 undefined method `comments_path' for #<ActionView::Base:0x10446e510>
 </pre>
 
-The @startFormTag@ helper is trying to build the form so that it submits to @comments_path@, but we haven't told the router anything about Comments yet. Open @/config/routes.rb@ and add this line at the top:
+The @startFormTag@ helper is trying to build the form so that it submits to @comments_path@, but we haven't told the router anything about Comments yet. Open @/config/routes.cfc@ and add this line at the top:
 
 <pre>
 map.resources :comments
@@ -800,43 +800,43 @@ h3. Expressing Relationships
 
 Now that our model files are generated we need to tell CFWheels about the relationships between them. For each of the files below, add these lines:
 
-In @/models/article.rb@
+In @/models/article.cfc@
 
-<pre class=brush:ColdFusion;">
+<pre>
   hasMany :taggings
 </pre>
 
-In @/models/tag.rb@
+In @/models/tag.cfc@
 
-<pre class=brush:ColdFusion;">
+<pre>
   hasMany :taggings
 </pre>
 
-Then in @/models/tagging.rb@
+Then in @/models/tagging.cfc@
 
-<pre class=brush:ColdFusion;">
+<pre>
   belongsTo :article
   belongsTo :tag
 </pre>
 
 After CFWheels had been around for awhile, developers were finding this kind of relationship very common. In practical usage, if I had an object named @article@ and I wanted to find its Tags, I'd have to run code like this:
 
-<pre class=brush:ColdFusion;">
+<pre>
 tags = article.taggings.collect{|tagging| tagging.tag}
 </pre>
 
 That's a pain for something that we need commonly. The solution was to augment the relationship with "through". We'll add a second relationship now to the Article and Tag classes:
 
-In @/models/article.rb@
+In @/models/article.cfc@
 
-<pre class=brush:ColdFusion;">
+<pre>
   hasMany :taggings
   hasMany :tags, :through => :taggings
 </pre>
 
-In @/models/tag.rb@
+In @/models/tag.cfc@
 
-<pre class=brush:ColdFusion;">
+<pre>
   hasMany :taggings
   hasMany :articles, :through => :taggings
 </pre>
@@ -864,7 +864,7 @@ Showing app/views/articles/_form.cfm where line #14 raised:
 undefined method `tag_list' for #<Article:0x10499bab0>
 </pre>
 
-An Article doesn't have a thing named @tag_list@ -- we made it up. In order for the form to display, we need to add a method to the @article.rb@ file like this:
+An Article doesn't have a thing named @tag_list@ -- we made it up. In order for the form to display, we need to add a method to the @article.cfc@ file like this:
 
 <pre>
   def tag_list
@@ -890,7 +890,7 @@ The field that's interesting there is the @"tag_list"=>"technology, ColdFusion"@
 
 Since the @create@ method passes all the parameters from the form into the @Article.new@ method, the tags are sent in as the string @"technology, ColdFusion"@. The @new@ method will try to set the new Article's @tag_list@ equal to @"technology, ColdFusion"@ but that method doesn't exist because there is no attribute named @tag_list@. 
 
-There are several ways to solve this problem, but the simplest is to pretend like we have an attribute named @tag_list@. We can define the @tag_list=@ method inside @article.rb@ like this:
+There are several ways to solve this problem, but the simplest is to pretend like we have an attribute named @tag_list@. We can define the @tag_list=@ method inside @article.cfc@ like this:
 
 <pre>
   def tag_list=(tags_string)
@@ -911,7 +911,7 @@ a.tags
 
 I bet the Examples reported that @a@ had @[]@ tags -- an empty list. So we didn't generate an error, but we didn't create any tags either.
 
-We need to return to that @tag_list=@ method in @article.rb@ and do some more work. We're taking in a parameter, a string like @"tag1, tag2, tag3"@ and we need to associate the article with tags that have those names. The pseudo-code would look like this:
+We need to return to that @tag_list=@ method in @article.cfc@ and do some more work. We're taking in a parameter, a string like @"tag1, tag2, tag3"@ and we need to associate the article with tags that have those names. The pseudo-code would look like this:
 
 * Cut the parameter into a list of strings with leading and trailing whitespace removed (so @"tag1, tag2, tag3"@ would become @["tag1","tag2","tag3"]@
 * For each of those strings...
@@ -988,7 +988,7 @@ According to our work in the Examples, articles can now have tags, but we haven'
 Tags: <%= tag_links(@article.tags) %><br />
 </pre>
 
-This line calls a helper named @tag_links@ and sends the @article.tags@ array as a parameter. We need to then create the @tag_links@ helper. Open up @/helpers/articles_helper.rb@ and add this method inside the @module@/@end@ keywords:
+This line calls a helper named @tag_links@ and sends the @article.tags@ array as a parameter. We need to then create the @tag_links@ helper. Open up @/helpers/articles_helper.cfc@ and add this method inside the @module@/@end@ keywords:
 
 <pre>
 def tag_links(tags)
@@ -1021,7 +1021,7 @@ The @linkTo@ helper is trying to use @tag_path@ from the router, but the router 
 ColdFusion script/generate controller tags index show
 </pre>
 
-Then we need to add it to our @/config/routes.rb@ like this:
+Then we need to add it to our @/config/routes.cfc@ like this:
 
 <pre>
 map.resources :tags
@@ -1035,7 +1035,7 @@ h3. Avoiding Repeated Tags
 
 Try editing one of your article that already has some tags. Save it and look at your article list. You'll probably see that tags are getting repeated, which is obviously not what we want. 
 
-When we wrote our @tag_list=@ method inside of @article.rb@, we were just thinking about it running when creating a new article. Thus we always built a new tagging for each tag in the list. But when we're editing, we might get the string "ColdFusion, technology" into the method while the Article was already linked to the tags "ColdFusion" and "technology" when it was created. As it is currently written, the method will just "retag" it with those tags, so we'll end up with a list like "ColdFusion, technology, ColdFusion, technology".
+When we wrote our @tag_list=@ method inside of @article.cfc@, we were just thinking about it running when creating a new article. Thus we always built a new tagging for each tag in the list. But when we're editing, we might get the string "ColdFusion, technology" into the method while the Article was already linked to the tags "ColdFusion" and "technology" when it was created. As it is currently written, the method will just "retag" it with those tags, so we'll end up with a list like "ColdFusion, technology, ColdFusion, technology".
 
 There are a few ways we could fix this -- the first thing I want to do is remove any repeated tags in the parameter list by using the ColdFusion method @uniq@
 
@@ -1062,7 +1062,7 @@ It prevents duplicates and allows you to remove tags from the edit form. Test it
 
 h3. Listing Articles by Tag
 
-The links for our tags are showing up, but if you click on them you'll get our old friend, the "No action responded to show. Actions:" error. Open up your @/controllers/tags_controller.rb@ and add a a @show@ method like this:
+The links for our tags are showing up, but if you click on them you'll get our old friend, the "No action responded to show. Actions:" error. Open up your @/controllers/tags_controller.cfc@ and add a a @show@ method like this:
 
 <pre>
   def show
@@ -1086,8 +1086,8 @@ Refresh your view and you should see a list of articles with that tag. Keep in m
 
 h3. Listing All Tags
 
-We've built the @show@ action, but the reader should also be able to browse the tags available at @http://wheels.local/tags/@. I think you can do this on your own. Create an @index@ action in your @tags_controller.rb@ and an @index.cfm@ in the corresponding views folder. Look at your @Articles.cfc@ and Article @index.cfm@ if you need some clues.
+We've built the @show@ action, but the reader should also be able to browse the tags available at @http://wheels.local/tags/@. I think you can do this on your own. Create an @index@ action in your @tags_controller.cfc@ and an @index.cfm@ in the corresponding views folder. Look at your @Articles.cfc@ and Article @index.cfm@ if you need some clues.
 
-If that's easy, try creating a @delete@ method in your @tags_controller.rb@ and adding a delete link to the tag list. If you do this, change the association in your @tag.rb@ so that it says @hasMany :taggings, :dependent => :delete@. That'll prevent orphaned Tagging objects from hanging around.
+If that's easy, try creating a @delete@ method in your @tags_controller.cfc@ and adding a delete link to the tag list. If you do this, change the association in your @tag.cfc@ so that it says @hasMany :taggings, :dependent => :delete@. That'll prevent orphaned Tagging objects from hanging around.
 
 With that, a long Iteration 3 is complete!

@@ -26,7 +26,7 @@ We want to add images to our articles. To keep it simple, well say that a single
 
 First we need to add some fields to the Article model that will hold the information about the uploaded image. Any time we want to make a change to the database well need a migration. Go to your terminal and execute this:
 
-CFWheels generate migration add_paperclip_fields_to_articleThat will create a file in your @/db/migrate/@ folder that ends in @_add_paperclip_fields_to_article.rb@. Open that file now.
+CFWheels generate migration add_paperclip_fields_to_articleThat will create a file in your @/db/migrate/@ folder that ends in @_add_paperclip_fields_to_article.cfc@. Open that file now.
 
 Remember that the code inside the @self.up@ method is to migrate the database forward, while the @self.down@ should undo those changes. Well use the @add_column@ and @remove_column@ methods to setup the fields paperclip is expecting:
 
@@ -34,7 +34,7 @@ class AddPaperclipFieldsToArticle<ActiveRecord::Migration def self.up add_column
 
 h3. Adding to the Model
 
-The gem is loaded, the database is ready, but we need to tell our CFWheels application about the image attachment we want to add. Open @/models/article.rb@ and just below the existing @hasMany@ lines, add this line:
+The gem is loaded, the database is ready, but we need to tell our CFWheels application about the image attachment we want to add. Open @/models/article.cfc@ and just below the existing @hasMany@ lines, add this line:
 
 has_attached_file :imageThis @has_attached_file@ method is part of the paperclip library. With that declaration, paperclip will understand that this model should accept a file attachment and that there are fields to store information about that file which start with @image_@ in this models database table.
 
