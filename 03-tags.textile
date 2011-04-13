@@ -1,4 +1,4 @@
-h1. I3: Tagging (Posted Under)
+h1. I3: Tagging 
 
 In this iteration we'll add the ability to tag articles for organization and navigation.
 
