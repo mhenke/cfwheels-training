@@ -24,7 +24,7 @@ bundleIt should then install the paperclip ColdFusionGem with a version like 2.3
 
 Now we can start using the library in our application!
 
-h3. Setting up the Database for Paperclip
+h3. Provides
 
 We want to add images to our articles. To keep it simple, well say that a single article could have zero or one images. In later versions of the app maybe wed add the ability to upload multiple images and appear at different places in the article, but for now the one will show us how to work with paperclip.
 
