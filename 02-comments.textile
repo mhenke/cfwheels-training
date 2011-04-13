@@ -267,13 +267,41 @@ Let's make it so where the view template has the "Comments" header it displays h
 
 h4. Form Labels
 
-The comments form looks a little silly with "Author Name" and "Author URL" and such. It should probably say "Your Name" and "Your URL (optional)", right?  To change the text that the label helper prints out, you just pass in the desired text as a second parameter, like this:
+The comments form looks a little silly will all the inputs on one line and with "Authorname" and "Authorurl" and such. It should probably say "Your Name" and "Your URL (optional)", right?  To change the text that the label helper prints out, you just pass in the desired text as a second parameter, like this:
 
 <pre>
  #textArea(objectName='comment', property='authorname', label='Your Name')#
 </pre>
 
-Change your @_comment_form.cfm@ so it prints out "Your Name", "Your Email Address", "Your URL (optional)", and "Your Comment".
+Change your @_comment_form.cfm@ so it prints out "Your Name", "Your Email Address", "Your URL (optional)", and "Your Comment". Then refresh the page and look at the html generated. It should look like this:
+
+<pre>
+<code>
+<label for="comment-authorname">Your Name<input type="text" value="" name="comment[authorname]" maxlength="255" id="comment-authorname"></label>
+</code>
+</pre>
+
+Nicer, shouldn't the label be around "Author Name"? And we are still missing the wrapping @<p>@ tag along with a @<br>@ between the label and input. To accomplish this we will set some defaults for a our helper functions in @config/settings.cfm@. Open the file and add these lines:
+
+<pre>
+<code>
+ <cfset set(functionName="textField", labelPlacement='before', prependToLabel="<p>", prepend="<br>", append="</p>") />
+ <cfset set(functionName="textArea", labelPlacement='before', prependToLabel="<p>", prepend="<br>", append="</p>") />
+</code>
+</pre>
+
+We are saying place the label before the input, and prepend @<p>@ to the label, then prepend @<br>@ to the input, and finally append @</p>@ to the input. Confused? Hopefully, not :-)
+
+Refresh, and you should see html source like this:
+
+<pre>
+<code>
+ <p>
+  <label for="comment-authorname">Authorname</label><br>
+  <input type="text" value="" name="comment[authorname]" maxlength="255" id="comment-authorname">
+ </p>
+</code>
+</pre>
 
 h4. Add Timestamp to the Comment Display
 
