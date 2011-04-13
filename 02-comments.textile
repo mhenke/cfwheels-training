@@ -148,11 +148,12 @@ This says that we want to render a partial named "comment" and that we want to d
 <code>
 <cfoutput>
 <div class="comment">
- <h4>Comment by #arguments.comment.authorname#</h4>
- <p>#arguments.comment.body#</p>
+  <h4>Comment by #arguments.comment.authorname#</h4>
+  <p>#arguments.comment.body#</p>
 </div>
 </cfoutput>
 </code>
+</pre>
 
 With that in place, try clicking on your articles and find the one where you created the comments. Did they show up?  What happens when an article doesn't have any comments?
 
@@ -223,7 +224,7 @@ The @startFormTag@ helper is trying to build the form so that it submits to @/co
 
 h3. Creating a Comments Controller
 
-Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @Comments.cfc@ to manipulate our Comments. Create it then add this code:
+Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @Comments.cfc@ to manipulate our Comments. Create it to add this code:
 
 <pre>
 <code>
@@ -271,9 +272,7 @@ h4. Form Labels
 The comments form looks a little silly will all the inputs on one line and with "Authorname" and "Authorurl" and such. It should probably say "Your Name" and "Your URL (optional)", right?  To change the text that the label helper prints out, you just pass in the desired text as a second parameter, like this:
 
 <pre>
-<code>
-#textArea(objectName='comment', property='authorname', label='Your Name')#
-</code>
+ #textArea(objectName='comment', property='authorname', label='Your Name')#
 </pre>
 
 Change your @_comment_form.cfm@ so it prints out "Your Name", "Your Email Address", "Your URL (optional)", and "Your Comment". Then refresh the page and look at the html generated. It should look like this:
@@ -288,8 +287,8 @@ Nicer, shouldn't the label be around "Author Name"? And we are still missing the
 
 <pre>
 <code>
- <cfset set(functionName="textField", labelPlacement='before', prependToLabel="<p>", prepend="<br>", append="</p>") />
- <cfset set(functionName="textArea", labelPlacement='before', prependToLabel="<p>", prepend="<br>", append="</p>") />
+<cfset set(functionName="textField", labelPlacement='before', prependToLabel="<p>", prepend="<br>", append="</p>") />
+<cfset set(functionName="textArea", labelPlacement='before', prependToLabel="<p>", prepend="<br>", append="</p>") />
 </code>
 </pre>
 
