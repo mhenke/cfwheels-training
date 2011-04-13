@@ -231,15 +231,12 @@ Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @
 <cfcomponent extends="Controller" output="false">
 
  <cffunction name="index">
-
  </cffunction>
 
  <cffunction name="create">
-
  </cffunction>
 
  <cffunction name="delete">
-
  </cffunction>
 
 </cfcomponenet>
