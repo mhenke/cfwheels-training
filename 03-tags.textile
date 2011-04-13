@@ -308,7 +308,7 @@ It prevents duplicates and allows you to remove tags from the edit form. Test it
 
 h3. Listing Articles by Tag
 
-The links for our tags are showing up, but if you click on them you'll get our old friend, the "No action responded to show. Actions:" error. Open up your @/controllers/tags.cfc@ and add a a @show@ method like this:
+The links for our tags are showing up, but if you click on them you'll get our old friend, the "No action responded to show. Actions:" error. Open up your @/controllers/Tags.cfc@ and add a a @show@ method like this:
 
 <pre>
   def show
