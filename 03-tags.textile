@@ -42,6 +42,7 @@ The tags migration should look like this:
    t.create();
    </cfscript>
  </cffunction>
+ 
  <cffunction name="down">
   <cfscript>
   dropTable('tags');
