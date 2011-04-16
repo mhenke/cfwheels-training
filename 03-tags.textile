@@ -122,7 +122,7 @@ After CFWheels had been around for awhile, developers were finding this kind of 
 </code>
 </pre>
 
-That's a pain for since we don't have the @tags.name@ yet. The solution was to augment the relationship with "shortcut". We'll update our relationship now to the Article and Tag classes:
+That's a pain for since we don't have @tags@ yet. The solution was to augment the relationship with "shortcut". We'll update our relationship now to the Article and Tag classes:
 
 In @/models/article.cfc@
 
