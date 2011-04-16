@@ -104,20 +104,31 @@ In @/models/Tag.cfc@
 </code>
 </pre>
 
+
+Now we can get the many-to-many association that we set up above. Here is how we will include the related tables from the tagging:
+
+<pre>
+<code>
+<cfset data = model("tagging").findAll(include="article,tag",where="articleid=3") />
+</code>
+</pre
+
 After CFWheels had been around for awhile, developers were finding this kind of relationship very common. In practical usage, if I had an object named @article@ and I wanted to find its Tags, I'd have to run code like this:
 
 <pre>
-tags = article.taggings.collect{|tagging| tagging.tag}
+<code>
+ <cfset article = model("article").findByKey(key=3,include="taggings") />
+ <cfdump var="#article.taggings#">
+</code>
 </pre>
 
-That's a pain for something that we need commonly. The solution was to augment the relationship with "through". We'll add a second relationship now to the Article and Tag classes:
+That's a pain for since we don't have the @tags.name@ yet. The solution was to augment the relationship with "shortcut". We'll update our relationship now to the Article and Tag classes:
 
 In @/models/article.cfc@
 
 <pre>
 <code>
-<cfset hasMany("taggings") />
-<cfset hasMany(name="tags",shortcut="taggings") />
+<cfset hasMany(name="taggings",shortcut="tags") />
 </code>
 </pre>
 
@@ -125,12 +136,20 @@ In @/models/tag.cfc@
 
 <pre>
 <code>
-<cfset hasMany("taggings" />
-<cfset hasMany(name="articles",shortcut="taggings") />
+<cfset hasMany(name="taggings",shortcut="articles") />
 </code>
 </pre>
 
-Now if we have an object like @article@ we can just ask for @article.tags@ or, conversely, if we have an object named @tag@ we can ask for @tag.articles@.
+Now we can get the many-to-many association that we set up above. How we will include the related tables from the tagging is still the same @<cfset article = model("article").findByKey(key=3,include="taggings") />@.
+
+Now if we have an object like @article@ we can just ask for @article.tags()@ or, conversely, if we have an object named @tag@ we can ask for @tag.articles()@.
+
+<pre>
+<code>
+<cfset article = model("article").findByKey(key=3,include="taggings") />
+<cfset tag = model("tag").findByKey(key=1,include="taggings") />
+</code>
+</pre>
 
 h3. An Interface for Tagging Articles
 
