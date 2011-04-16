@@ -31,27 +31,29 @@ With those relationships in mind, let's design the new models:
 Note that there are no changes necessary to Article because the foreign key is stored in the Tagging model. So now lets generate these two models with the DBMigrations plugin:
 
 The tags migration should look like this:
+
 <pre>
 <code>
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="creates tags tables">
- <cffunction name="up">
-   <cfscript>
+ <cffunction name="up" >
+   <cfscript >
    t = createTable('tags');
    t = t.string('name');
    t.timestamps();
    t.create();
-   </cfscript>
- </cffunction>
- <cffunction name="down">
-  <cfscript>
+   </cfscript >
+ </cffunction >
+ <cffunction name="down" >
+  <cfscript >
   dropTable('tags');
-  </cfscript>
- </cffunction>
-</cfcomponent>
+  </cfscript >
+ </cffunction >
+</cfcomponent >
 </code>
 </pre>
 
 The taggings migration should look like this:
+
 <pre>
 <code>
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="creates taggings table">
