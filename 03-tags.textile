@@ -1,6 +1,6 @@
 h1. I3: Tagging 
 
-In this iteration we'll add the ability to tag articles for organization and navigation. Tagging is similar to some blogs' " Posted Under" feature. For example, if I wrote a blog post about our training, I might tag it as "CFWheels", "Training", and "ColdFusion".
+In this iteration we'll add the ability to tag articles for organization and navigation. Tagging is similar to some blogs having a "Posted Under" feature. For example, if I wrote a blog post about our training, I might tag it as "CFWheels", "Training", and "ColdFusion".
 
 First we need to think more about what a tag is and how it'll relate to the Article model. If you're not familiar with tags, they're commonly used in blogs to assign the article to one or more categories. For instance, if I write an article about a feature in ColdFusion on Wheels, I might want it tagged with all of these categories: ColdFusion, CFWheels, programming, and features. That way if one of my readers is looking for more articles about one of those topics they can click on the tag and see a list of my articles with that tag.
 
