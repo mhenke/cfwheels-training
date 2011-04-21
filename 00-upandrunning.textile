@@ -51,7 +51,7 @@ On the page, you should see text like @The migration 20110406195353_create_artic
 
 Let's open @/db/migrate/(some_time_stamp)__create_articles_table.cfc@ and take a look. First you'll notice that the filename is our comment with a underlines instead of spaces and a timestamp of when the migration was created. Migrations need to be ordered, so the timestamp serves to keep them in chronologic order. Inside the file, you'll see two methods: @up@ and @down@.
 
-<pre>
+<pre lang="cfm">
 <code>
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="create articles table">
   <cffunction name="up">
@@ -84,7 +84,7 @@ That's it! You might be wondering, what is the "text" type?  This is an example 
 
 So add these into your @up@ so it looks like this:
 
-<pre>
+<pre lang="cfm">
 <code>
  <cffunction name="up">
    <cfscript>
@@ -100,7 +100,7 @@ So add these into your @up@ so it looks like this:
 
 Now our migration is done. You might wonder, what about the @down@?  Didn't I say migrations need to be symmetric?  If we added something to the @up@ it is _generally_ the case that we need to undo that same change in the @down@. However, when the migration is creating a table, the @down@ can just drop that table regardless of what columns are inside of it. That's what the generator has setup for us here, where it just says @dropTable('[tableName]');@ just replace @[tableName]@ with @articles@.
 
-<pre>
+<pre lang="cfm">
 <code>
   <cffunction name="down">
     <cfscript>
@@ -116,7 +116,7 @@ The @All non-migrated@ option finds all migrations in the @/db/migrate/@ folder,
 
 In this case we had just one migration to run and it should print some output like this to your browser under *Migration Results*:
 
-<pre>
+<pre lang="cfm">
 Migrating from 0 up to 20110406195353.
 
 -------- 20110406195353_create_articles_table --------------
@@ -152,7 +152,7 @@ Another awesome feature of working with CFWheels is the @ORM@. The @ORM@ stands 
 
 Our new component opened automatically and we'll add some code in between the @cfcomponent@ tags. Let's try some experiments... Enter each of these instructions and observe the results:
 
-<pre>
+<pre lang="cfm">
 <code>
  <cffunction name="one">
   <cfset time = now() />
@@ -176,7 +176,7 @@ You created most of those columns in your migration file, but what about @id@?  
 
 Back to the @<cfset article = model("article").new() />@ instruction. The @new()@ method doesn't change values in the database until we explicitly call the @save@ method on an object but in our example the @article@ object didn't have the  attributes @id@, @title@, @body@, @createdat@, and @updatedat@. Let's create a sample article and you'll see how it to add these. Enter each of the following lines one at a time:
 
-<pre>
+<pre lang="cfm">
 <code>
  <cffunction name="two">
   <cfset a.title = "Sample Article Title" />
@@ -200,7 +200,7 @@ When a CFWheels server gets a request from a web browser it first goes to the _r
 
 Inside this file you'll see @<cfset addRoute(name="home", pattern="", controller="wheels", action="wheels") />@. This is the default route and is directs to the Congratulations page, you saw when we first loaded our application. Let's replace it with:
 
-<pre>
+<pre lang="cfm">
 <code>
  <cfset addRoute(name="home", pattern="", controller="Articles", action="index") />
 </code>
@@ -228,7 +228,7 @@ h3. Defining the Index Action
 
 The first action we want to talk about is the "index". This is what the app will send back when a user requests @http://wheels.local/index.cfm/Articles/@ -- following the RESTful conventions, this should be a list of the articles. So when the router sees this request come in, it tries to call the @index@ action inside @Articles@ controller. It goes to the @index@ action which gets all our articles:
 
-<pre>
+<pre lang="cfm">
 <code>
  <cffunction name="index">
   <cfset articles = model("Article").findAll() />
@@ -240,7 +240,7 @@ What scope is @articles@? Usually in a @cfc@ we will @var@ scope variables to st
 
 Let's load @http://wheels.local/@. You'll notice our updated default route is mapping the code to the @index@ action of the @Articles@ controller but we are getting ann error since the view doesn't exist.
 
-<pre>
+<pre lang="cfm">
 Wheels.ViewNotFound
 Could not find the view page for the index action in the Examples controller.
 
@@ -257,7 +257,7 @@ Let's create that view template now. In the left pane of your Eclipse window, ex
 
 Now you're looking at a blank file. Enter in this view template code which is a mix of HTML and what are called CFML tags:
 
-<pre>
+<pre lang="cfm">
 <code>
 <h1>Listing articles</h1>
 

@@ -14,7 +14,7 @@ First, we need to brainstorm what a comment _is_...what kinds of data does it ha
 
 With that understanding, let's create a Comment model. Switch over to Eclipse and right click on the models folder, then select New --> File and enter "Comment.cfc" for File name. The file will be created and automatically open, then you can add this code to it:
 
-<pre>
+<pre lang="cfm">
 <code>
 <cfcomponent extends="Model" output="false">
  <cffunction name="init">
@@ -35,7 +35,7 @@ Open the DBMigrate plugin and fill it out with the following and click "create":
 
 Open the file that the generator created, @/db/migrate/some-timestamp_creates_comments_table.cfc@. Inside the @self.up@ you need to add one line for each of the pieces of data we just brainstormed. It'll start off with these...
 
-<pre>
+<pre lang="cfm">
 <code>
 t.integer('articleid');
 t.string('authorname');
@@ -56,7 +56,7 @@ Part of the big deal with CFWheels is that it makes working with these relations
 
 Following this convention will get us a lot of functionality "for free."  Open your @/models/comment.cfc@ and add the middle line so it looks like this:
 
-<pre>
+<pre lang="cfm">
 <code>
 <cfcomponent extends="Model" output="false">
 
@@ -70,7 +70,7 @@ Following this convention will get us a lot of functionality "for free."  Open y
 
 A comment relates to a single article, it "belongs to" an article. We then want to declare the other side of the relationship inside @/models/article.cfc@ like this:
 
-<pre>
+<pre lang="cfm">
 <code>
 <cffunction name="init">
  <cfset hasMany("comments") />
@@ -84,7 +84,7 @@ h3. Testing in Examples
 
 Let's use the @/controllers/Examples.cfc@ to test how this relationship works in code. Open the @Examples.cfc@ file and paste in the following instructions and observe the output at at "http://wheels.local/index.cfm/Examples/three":http://wheels.local/index.cfm/Examples/three :
 
-<pre>
+<pre lang="cfm">
 <code>
 <cffunction name="three">
  <cfset a = model("article").findByKey(key=3,include="comments") />
@@ -100,7 +100,7 @@ When you called the @comments@ method on object @a@, it gave you back a blank ar
 
 Try creating a few comments for that article like this:
 
-<pre>
+<pre lang="cfm">
 <code>
 <cffunction name="four">
  <cfset a = model("article").findByKey(key=3,include="comments") />
@@ -121,7 +121,7 @@ For the first comment, @c@, I used a series of commands like we've done before. 
 
 Now that you've created a few comments, try executing @a.comments@ again. 
 
-<pre>
+<pre lang="cfm">
 <code>
 <cffunction name="five">
  <cfset a = model("article").findByKey(key=3,include="comments") />
@@ -137,7 +137,7 @@ h3. Displaying Comments for an Article
 
 We want to display any comments underneath their parent article. Because we've setup the relationships between those models, this is very easy. Open @/views/articles/show.cfm@ and add the following lines right before the link to the articles list:
 
-<pre>
+<pre lang="cfm">
 <code>
 <h3>Comments</h3>
 <cfoutput>#includePartial(article.comments)#</cfoutput>
@@ -146,7 +146,7 @@ We want to display any comments underneath their parent article. Because we've s
 
 This says that we want to render a partial named "comment" and that we want to do it once for each element in the collection @article.comments@. We saw in the Examples that when we call the @comments@ method on an article we'll get back an array of it's associated comment objects. So this render line will pass each element of that array one at a time into the partial named "comment". Now we need to create the file @/views/articles/_comment.cfm@ and add this code:
 
-<pre>
+<pre lang="cfm">
 <code>
 <cfoutput>
 <div class="comment">
@@ -165,7 +165,7 @@ Good start, but our users (hopefully) can't get into the Examples code to create
 
 Let's start with the form. The comment form should be embedded into the article's @show@ template. So let's add this code right above the "<< Back to Articles List" in the articles @show.cfm@
 
-<pre>
+<pre lang="cfm">
 <code>
 #includePartial("comment_form")#
 </code>
@@ -173,7 +173,7 @@ Let's start with the form. The comment form should be embedded into the article'
 
 Obviously this is expecting a file @/views/articles/_comment_form.cfm@, so create that and add this content for now:
 
-<pre>
+<pre lang="cfm">
 <code>
 <h3>Post a Comment</h3>
 <p>(Comment form will go here)</p>
@@ -184,7 +184,7 @@ Look at an article in your browser to make sure that partial is showing up. Then
 
 Ok, now look at your @Articles.cfc@ in the @new@ method. Remember how we had to create a blank Article object so CFWheels could figure out which fields an article has?  We need to do the same thing before we create a form for the comment. But when we view the article and display the comment form we're not running the article's @new@ method, we're running the @show@ method. So we'll need to create a blank Comment object inside that @show@ method like this:
 
-<pre>
+<pre lang="cfm">
 <code>
 <cfset comment = article.newComments() />
 </code>
@@ -192,7 +192,7 @@ Ok, now look at your @Articles.cfc@ in the @new@ method. Remember how we had to 
 
 This is just like we did it in the Examples. Now we can create a form inside our @_comment_form.cfm@ partial like this:
 
-<pre>
+<pre lang="cfm">
 <code>
 <h3>Post a Comment</h3>
 <cfoutput>
@@ -213,7 +213,7 @@ The only new thing here is the hidden field helper. This hidden field will hold 
 
 Save then refresh in your web browser and...well...you'll get an error like this:
 
-<pre>
+<pre lang="cfm">
 Wheels.ViewNotFound
 Could not find the view page for the create action in the Comments controller.
 
@@ -228,7 +228,7 @@ h3. Creating a Comments Controller
 
 Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @Comments.cfc@ to manipulate our Comments. Create it to add this code:
 
-<pre>
+<pre lang="cfm">
 <code>
 <cfcomponent extends="Controller" output="false">
 
@@ -247,7 +247,7 @@ Just like we needed an @Articles.cfc@ to manipulate our Articles, we'll need a @
 
 The first action we're interested in first is @create@. You can cheat by looking at the @create@ method in your @Articles.cfc@. For your @Comments.cfc@, everything should be the same just replace article with comment. Then the @redirectTo@ is a little different, use this:
 
-<pre>
+<pre lang="cfm">
 <code>
 <cfset redirectTo(controller="article",action="index")>
 </code>
@@ -263,7 +263,7 @@ h4. Comments Count
 
 Let's make it so where the view template has the "Comments" header it displays how many comments there are, like "Comments ( 3 )". Open up your article's @show.cfm@ and change the comments header so it looks like this:
 
-<pre>
+<pre lang="cfm">
 <code>
 <h3>Comments ( #article.commentCount()# )</h3>
 </code>
@@ -273,7 +273,7 @@ h4. Form Labels
 
 The comments form looks a little silly will all the inputs on one line and with "Authorname" and "Authorurl" and such. It should probably say "Your Name" and "Your URL (optional)", right?  To change the text that the label helper prints out, you just pass in the desired text as a second parameter, like this:
 
-<pre>
+<pre lang="cfm">
 <code>
 #textArea(objectName='comment', property='authorname', label='Your Name')#
 </code>
@@ -281,7 +281,7 @@ The comments form looks a little silly will all the inputs on one line and with 
 
 Change your @_comment_form.cfm@ so it prints out "Your Name", "Your Email Address", "Your URL (optional)", and "Your Comment". Then refresh the page and look at the html generated. It should look like this:
 
-<pre>
+<pre lang="cfm">
 <code>
 <label for="comment-authorname">Your Name<input type="text" value="" name="comment[authorname]" maxlength="255" id="comment-authorname"></label>
 </code>
@@ -289,7 +289,7 @@ Change your @_comment_form.cfm@ so it prints out "Your Name", "Your Email Addres
 
 Nicer, shouldn't the label be around "Author Name"? And we are still missing the wrapping @<p>@ tag along with a @<br>@ between the label and input. To accomplish this we will set some defaults for a our helper functions in @config/settings.cfm@. Open the file and add these lines:
 
-<pre>
+<pre lang="cfm">
 <code>
 <cfset set(functionName="textField", labelPlacement='before', prependToLabel="<p>", prepend="<br>", append="</p>") />
 <cfset set(functionName="textArea", labelPlacement='before', prependToLabel="<p>", prepend="<br>", append="</p>") />
@@ -300,7 +300,7 @@ We are saying place the label before the input, and prepend @<p>@ to the label, 
 
 Refresh, and you should see html source like this:
 
-<pre>
+<pre lang="cfm">
 <code>
 <p>
  <label for="comment-authorname">Authorname</label><br>
@@ -313,7 +313,7 @@ h4. Add Timestamp to the Comment Display
 
 We should add something about when the comment was posted. CFWheels has a really neat helper named @distanceOfTimeInWords@ which takes two dates and creates a text description of their difference like "32 minutes later", "3 months later", and so on. You can use it in your @_comment.cfm@ partial like this:
 
-<pre>
+<pre lang="cfm">
 <code>
 <p>Posted #distanceOfTimeInWords(arguments.comment.createdat, now())# later</p>
 </code>

@@ -32,7 +32,7 @@ Note that there are no changes necessary to Article because the foreign key is s
 
 The tags migration should look like this:
 
-<pre>
+<pre lang="cfm">
 <code>
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="creates tags tables">
  <cffunction name="up" >
@@ -54,7 +54,7 @@ The tags migration should look like this:
 
 The taggings migration should look like this:
 
-<pre>
+<pre lang="cfm">
 <code>
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="creates taggings table">
  <cffunction name="up">
@@ -83,7 +83,7 @@ Now that we created our tables we will need to create our models and tell CFWhee
 
 In @/models/Article.cfc@
 
-<pre>
+<pre lang="cfm">
 <code>
 <cfset hasMany("taggings") />
 </code>
@@ -91,7 +91,7 @@ In @/models/Article.cfc@
 
 Then in @/models/Tagging.cfc@
 
-<pre>
+<pre lang="cfm">
 <code>
 <cfset belongsTo("article") />
 <cfset belongsTo("tag") />
@@ -100,7 +100,7 @@ Then in @/models/Tagging.cfc@
 
 In @/models/Tag.cfc@
 
-<pre>
+<pre lang="cfm">
 <code>
 <cfset hasMany("taggings") />
 </code>
@@ -109,7 +109,7 @@ In @/models/Tag.cfc@
 
 Now we can get the many-to-many association that we set up above. Here is how we will include the related tables from the tagging:
 
-<pre>
+<pre lang="cfm">
 <code>
 <cfset data = model("tagging").findAll(include="article,tag",where="articleid=3") />
 </code>
@@ -117,7 +117,7 @@ Now we can get the many-to-many association that we set up above. Here is how we
 
 After CFWheels had been around for awhile, developers were finding this kind of relationship very common. In practical usage, if I had an object named @article@ and I wanted to find its Tags, I'd have to run code like this:
 
-<pre>
+<pre lang="cfm">
 <code>
  <cfset article = model("article").findByKey(key=3,include="taggings") />
  <cfdump var="#article.taggings#">
@@ -129,7 +129,7 @@ That's a pain for since we don't have @tags@ yet. The solution was to augment th
 
 In @/models/article.cfc@
 
-<pre>
+<pre lang="cfm">
 <code>
 <cfset hasMany(name="taggings",shortcut="tags") />
 </code>
@@ -137,7 +137,7 @@ In @/models/article.cfc@
 
 In @/models/tag.cfc@
 
-<pre>
+<pre lang="cfm">
 <code>
 <cfset hasMany(name="taggings",shortcut="articles") />
 </code>
@@ -147,7 +147,7 @@ Now we can get the many-to-many association that we set up above. How we will in
 
 Now if we have an object like @article@ we can just ask for @article.tags()@ or, conversely, if we have an object named @tag@ we can ask for @tag.articles()@.
 
-<pre>
+<pre lang="cfm">
 <code>
 <cfset article = model("article").findByKey(key=3,include="taggings") />
 <cfdump var="#article.tags()#">
@@ -163,7 +163,7 @@ The first interface we're interested in is within the article itself. When I wri
 
 Adding the text field will take place in the file @/views/articles/_form.cfm@. Add in a set of paragraph tags underneath the body text area like this:
 
-<pre>
+<pre lang="cfm">
 <code>
 #textField(objectName='article', property='taggings', label='Tags')#
 </code>
@@ -171,7 +171,7 @@ Adding the text field will take place in the file @/views/articles/_form.cfm@. A
 
 With that added, try to create an new article in your browser and your should see this error:
 
-<pre>
+<pre lang="cfm">
 NoMethodError in Articles#new
 Showing app/views/articles/_form.cfm where line #14 raised:
 undefined method `tag_list' for #<Article:0x10499bab0>
@@ -179,7 +179,7 @@ undefined method `tag_list' for #<Article:0x10499bab0>
 
 An Article doesn't have a thing named @tag_list@ -- we made it up. In order for the form to display, we need to add a method to the @article.cfc@ file like this:
 
-<pre>
+<pre lang="cfm">
 <code>
   def tag_list
     return self.tags.join(", ")
@@ -189,14 +189,14 @@ An Article doesn't have a thing named @tag_list@ -- we made it up. In order for 
 
 Your form should now show up and there's a text box at the bottom named "Tag list". Enter content for another sample article and in the tag list enter @ColdFusion, technology@. Click SAVE and you'll get an error like this:
 
-<pre>
+<pre lang="cfm">
 ActiveRecord::UnknownAttributeError in ArticlesController#create
 unknown attribute: tag_list
 </pre>
 
 What is this all about?  Let's start by looking at the form data that was posted when we clicked SAVE. This data is in the production.log file which should be in the "Examples" frame at the bottom of the Eclipse window. Look for the line that starts "Processing ArticlesController#create", here's what mine looks like:
 
-<pre>
+<pre lang="cfm">
 Processing ArticlesController#create (for 127.0.0.1) [POST]
   Parameters: {"article"=>{"body"=>"Yes, the samples continue!", "title"=>"My Sample", "tag_list"=>"ColdFusion, technology"}, "commit"=>"Save", "authenticity_token"=>"xxi0A3tZtoCUDeoTASi6Xx39wpnHt1QW/6Z1jxCMOm8="}
 </pre>
@@ -207,7 +207,7 @@ Since the @create@ method passes all the parameters from the form into the @Arti
 
 There are several ways to solve this problem, but the simplest is to pretend like we have an attribute named @tag_list@. We can define the @tag_list=@ method inside @article.cfc@ like this:
 
-<pre>
+<pre lang="cfm">
 <code>
   def tag_list=(tags_string)
     
@@ -221,7 +221,7 @@ h3. Not So Fast
 
 Did it really work?  It's hard to tell. Let's jump into the Examples and have a look.
 
-<pre>
+<pre lang="cfm">
 <code>
 a = Article.last
 a.tags
@@ -243,7 +243,7 @@ Look closely at the output and you'll see that the second element is @" tag2"@ i
 
 So to combine that with our @strip@, try this code:
 
-<pre>
+<pre lang="cfm">
 <code>
 "tag1, tag2, tag3".split(",").collect{|s| s.strip.downcase}
 </code>
@@ -253,7 +253,7 @@ The @.split(",")@ will create the list with extra spaces as before, then the @.c
 
 Now, back inside our @tag_list=@ method, let's add this line:
 
-<pre>
+<pre lang="cfm">
 <code>
 tag_names = tags_string.split(",").collect{|s| s.strip}
 </code>
@@ -261,7 +261,7 @@ tag_names = tags_string.split(",").collect{|s| s.strip}
 
 So looking at our pseudo-code, the next step is to go through @each@ of those @tag_names@ and find or create a tag with that name. CFWheels has a built in method to do just that, like this:
 
-<pre>
+<pre lang="cfm">
 <code>
 tag = Tag.find_or_create_by_name(tag_name)
 </code>
@@ -269,7 +269,7 @@ tag = Tag.find_or_create_by_name(tag_name)
 
 Once we find or create the @tag@, we need to create a @tagging@ which connects this article (here @self@) to the tag like this:
 
-<pre>
+<pre lang="cfm">
 <code>
 self.taggings.build(:tag => tag)
 </code>
@@ -277,7 +277,7 @@ self.taggings.build(:tag => tag)
 
 The @build@ method is a special creation method. It doesn't need an explicit save, CFWheels will wait to save the Tagging until the Article itself it saved. So, putting these pieces together, your @tag_list=@ method should look like this:
 
-<pre>
+<pre lang="cfm">
 <code>
   def tag_list=(tags_string)
     tag_names = tags_string.split(",").collect{|s| s.strip.downcase}
@@ -293,7 +293,7 @@ h3. Testing in the Examples
 
 Go back to your Examples and try these commands:
 
-<pre>
+<pre lang="cfm">
 <code>
 reload!
 a = Article.new(:title => "A Sample Article for Tagging!",:body => "Great article goes here", :tag_list => "ColdFusion, technology")
@@ -304,7 +304,7 @@ a.tags
 
 You should get back a list of the two tags. If you'd like to check the other side of the Article-Tagging-Tag relationship, try this:
 
-<pre>
+<pre lang="cfm">
 <code>
 t = a.tags.first
 t.articles
@@ -317,7 +317,7 @@ h3. Adding Tags to our Display
 
 According to our work in the Examples, articles can now have tags, but we haven't done anything to display them in the article pages. Let's start with @/views/articles/show.cfm@. Right below the line that displays the @article.title@, add this line:
 
-<pre>
+<pre lang="cfm">
 <code>
 Tags: <%= tag_links(@article.tags) %><br />
 </code>
@@ -325,7 +325,7 @@ Tags: <%= tag_links(@article.tags) %><br />
 
 This line calls a helper named @tag_links@ and sends the @article.tags@ array as a parameter. We need to then create the @tag_links@ helper. Open up @/helpers/articles_helper.cfc@ and add this method inside the @module@/@end@ keywords:
 
-<pre>
+<pre lang="cfm">
 <code>
 def tag_links(tags)
 
@@ -337,7 +337,7 @@ The desired outcome is a list of comma separated tags, where each one links to t
 
 A helper method has to return a string which will get rendered into the HTML. In this case we'll use the @collect@ method to create a list of links, one for each Tag, where the link is created by the @linkTo@ helper. Then we'll @return@ back the @links@ connected by a comma and a space:
 
-<pre>
+<pre lang="cfm">
 <code>
   def tag_links(tags)
     links = tags.collect{|tag| linkTo tag.name, tag_path(tag)}
@@ -348,7 +348,7 @@ A helper method has to return a string which will get rendered into the HTML. In
 
 Refresh your view and...BOOM:
 
-<pre>
+<pre lang="cfm">
 NoMethodError in Articles#show
 Showing app/views/articles/index.cfm where line #6 raised:
 undefined method `tag_path' for #<ActionView::Base:0x104aaa460>
@@ -356,13 +356,13 @@ undefined method `tag_path' for #<ActionView::Base:0x104aaa460>
 
 The @linkTo@ helper is trying to use @tag_path@ from the router, but the router doesn't know anything about our Tag object. We created a model, but we never created a controller or route. There's nothing to link to -- so let's generate that controller from your terminal:
 
-<pre>
+<pre lang="cfm">
 ColdFusion script/generate controller tags index show
 </pre>
 
 Then we need to add it to our @/config/routes.cfc@ like this:
 
-<pre>
+<pre lang="cfm">
 <code>
 map.resources :tags
 </code>
@@ -380,7 +380,7 @@ When we wrote our @tag_list=@ method inside of @article.cfc@, we were just think
 
 There are a few ways we could fix this -- the first thing I want to do is remove any repeated tags in the parameter list by using the ColdFusion method @uniq@
 
-<pre>
+<pre lang="cfm">
 <code>
 tag_names = tags_string.split(",").collect{|s| s.strip.downcase}.uniq
 </code>
@@ -390,7 +390,7 @@ This is a good start but it doesn't solve everything. We'd still get repeated ta
 
 If we edit an article and *remove* a tag from the list, this method as it stands now isn't going to do anything about it. Since we don't have anything valuable in the Tagging object besides the connection to the article and tag, they're disposible. We can just delete all the taggings at the beginning of the method. Any tags that aren't in the @tags_string@ won't get re-linked. This will both avoid removed tags and prevent the "double tagging" behavior. Putting that all together, here's my final @tag_list=@ method:
 
-<pre>
+<pre lang="cfm">
 <code>
   def tag_list=(tags_string)
     self.taggings.delete_all
@@ -409,7 +409,7 @@ h3. Listing Articles by Tag
 
 The links for our tags are showing up, but if you click on them you'll get our old friend, the "No action responded to show. Actions:" error. Open up your @/controllers/Tags.cfc@ and add a a @show@ method like this:
 
-<pre>
+<pre lang="cfm">
 <code>
   def show
     @tag = Tag.find(params.key)
@@ -419,7 +419,7 @@ The links for our tags are showing up, but if you click on them you'll get our o
 
 Then create a file @/views/tags/show.cfm@ like this:
 
-<pre>
+<pre lang="cfm">
 <code>
 <h1>Articles Tagged with <%= @tag.name %></h1>
 

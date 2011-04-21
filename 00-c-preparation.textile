@@ -21,7 +21,7 @@ First uncomment these lines by deleting the structure in front of the line and s
 
 * C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\httpd.conf
 
-<pre>
+<pre lang="cfm">
 <code>
 LoadModule proxy_module modules/mod_proxy.so
 LoadModule proxy_http_module modules/mod_proxy_http.so
@@ -33,7 +33,7 @@ Next add this code to the bottom the the next file.
 
 * C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\extra\httpd-vhosts.conf
 
-<pre>
+<pre lang="cfm">
 <code>
 <VirtualHost *:80>
  ServerName wheels.local
@@ -54,7 +54,7 @@ Finally, open this file and add this line.
 
 * C:\Windows\System32\drivers\etc\hosts add this:
 
-<pre>
+<pre lang="cfm">
 <code>
 127.0.0.1 	wheels.local
 </code>
