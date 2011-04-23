@@ -18,9 +18,9 @@ h3. Install Apache ( optional )
 
 * Apache
 ** Download and install the "Win32 Binary without crypto (no mod_ssl) (MSI Installer)":http://apache.tradebit.com/pub//httpd/binaries/win32/httpd-2.2.17-win32-x86-no_ssl.msi
-** We will modify three files ( httpd.conf, httpd-vhosts.conf, and hosts ).
+** We will modify three files: httpd.conf, httpd-vhosts.conf, and hosts
 
-First uncomment these lines by deleting the structure in front of the line and save the file.
+First uncomment these lines by deleting the hash (@#@) in front of the line and save the file.
 
 * C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\httpd.conf
 
@@ -32,7 +32,7 @@ Include conf/extra/httpd-vhosts.conf
 </code>
 </pre>
 
-Next add this code to the bottom the the next file.
+Next add this code to the bottom the the next file, httpd-vhosts.conf.
 
 * C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\extra\httpd-vhosts.conf
 
@@ -53,7 +53,7 @@ Next add this code to the bottom the the next file.
 </code>
 </pre>
 
-Finally, open this file and add this line.
+Finally, open the host file and add this line at the top.
 
 * C:\Windows\System32\drivers\etc\hosts add this:
 
@@ -63,14 +63,14 @@ Finally, open this file and add this line.
 </code>
 </pre>
 
-Now instead of you should get to our ColdFusion server via "http://wheels.local/":http://wheels.local/ .
+Now instead of "http://localhost:8301/":http://localhost:8301/ to go to our ColdFusion server instance, we can use "http://wheels.local/":http://wheels.local/ .
 
 h3. Install ColdFusion on Wheels
 
 * ColdFusion on Wheels
 ** Download "http://cfwheels.org/download/latest-version":http://cfwheels.org/download/latest-version
-** Extract and copy the file to "C:\JRun4\servers\cfwheels101"
-** Test at "http://wheels.local/":http://wheels.local/
+** Extract and copy the files to "C:\JRun4\servers\cfwheels101"
+** Test at "http://wheels.local/":http://wheels.local and you shoudl see a Congradulations page
 
 h4. Install DBMigrate Plugin
 
@@ -115,6 +115,8 @@ h4. Install MySQL driver
 
 ** Edit MySql driver http://www.sqlexplorer.org/drivers.php
 http://eclipsesql.sourceforge.net/
+
+TODO: Write down steps
 
 Extra Class Path tab - Add JARs button
 Driver Class Name:
