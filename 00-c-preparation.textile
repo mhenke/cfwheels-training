@@ -8,8 +8,11 @@ h3. Install Adobe ColdFusion 9
 
 * Adobe ColdFusion 9
 ** Download and install "http://www.adobe.com/products/coldfusion/":http://www.adobe.com/products/coldfusion/ as multiple instances
+*** http://www.carehart.org/blog/client/index.cfm/2007/7/5/getting_into_multi_instance_implmentation_of_CF:http://www.carehart.org/blog/client/index.cfm/2007/7/5/getting_into_multi_instance_implmentation_of_CF
+*** http://www.cfgothchic.com/blog/post.cfm/presentation-installing-multiple-versions-of-coldfusion-together:http://www.cfgothchic.com/blog/post.cfm/presentation-installing-multiple-versions-of-coldfusion-together
 ** Name the instance **cfwheels101**
 ** Test at "http://localhost:8301/":http://localhost:8301/
+** Our web root is "C:\JRun4\servers\cfwheels101\"
 
 h3. Install Apache ( optional )
 
