@@ -10,7 +10,7 @@ In this project you'll create a simple blog system and learn the basics of ColdF
 * RESTful design
 * Using CFWheels plugins
 
-The project will be developed in five iterations below. The last page, Completed Iterations, has zip files of the complete project after each iteration:
+The project will be developed in five iterations below. , https://github.com/mhenke/cfwheels-training-source/:https://github.com/mhenke/cfwheels-training-source/ has zip files of the complete project after each iteration:
 
 "I0: Up and Running":https://github.com/mhenke/cfwheels-training/blob/master/00-upandrunning.textile
 
