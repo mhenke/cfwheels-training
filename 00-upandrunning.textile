@@ -1,10 +1,10 @@
 h2. I0: Up and Running
 
-Part of the reason ColdFusion on Wheels became popular quickly is that it takes a lot of the hard work off your hands, and that's especially true in starting up a project. CFWheels practices the idea of "sensible defaults" and tries to, with a couple simple actions, create a working application ready for your customization.
+Part of the reason ColdFusion on Wheels became popular quickly is it takes a lot of the hard work off your hands, and that's especially true in starting up a project. Wheels practices the idea of "sensible defaults" and tries to, with a couple simple actions, create a working application ready for your customization.
 
 h3. Setting the Stage
 
-First we need to make sure everything is setup and installed. See the "Preparation for CFWheels Projects":/resources/CFWheels-jumpstart/preparation/ page for instructions on setting up and verifying your ColdFusion, CFWheels, and add-ons.
+First we need to make sure everything is setup and installed. See the "Preparation for Wheels Projects":/resources/CFWheels-jumpstart/preparation/ page for instructions on setting up and verifying your ColdFusion, Wheels, and add-ons.
 
 With that done, we need to create new project in Eclipse. Open Eclipse and...
 
@@ -24,17 +24,17 @@ Using ColdFusion Builder's Server view, we can add the our ColdFusion server. Op
 *WebServer Port: 80 
 *Click Finish
 
-You should then see the @JSBloggers@ server in the Servers view. If it isn't Running, please start it. Once it's started, try loading the address "http://wheels.local/":http://wheels.local/. You should see CFWheels' "Congratulations!" page. Scroll down and the Wheels debugging section displays the Wheels version, CFML Engine version along with other useful information.
+You should then see the @JSBloggers@ server in the Servers view. If it isn't Running, please start it. Once it's started, try loading the address "http://wheels.local/":http://wheels.local/. You should see Wheels' "Congratulations!" page. Scroll down and the Wheels debugging section displays the Wheels version, CFML Engine version along with other useful information.
 
 We need to change the Wheels datasource convention. Wheels assumes our datasource connection is the folder name Wheels resides in but for our case it is not CF9 but JSBloggers. We could have easily named our war file that but I wanted to show how we can easily override a Wheels convention.
 
 Press Ctrl+Shift+R while in Eclipse. This is the Open Resource window. I use this alot when coding. Sometimes I highlight a file name in code and press Ctrl+Shift+R, other times I type in the file name like we will. Type in @settings.cfm@, and select @settings.cfm - /JSBloggers/config@. This will open that file for use and paste in @<cfset set(dataSourceName="JSBloggers") />@ to tell Wheels to use this as are datasource. Also paste in @<cfset set(URLRewriting="Partial") />@ to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers.
 
-Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our CFWheels app to work with that data. 
+Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our Wheels app to work with that data. 
 
 h3. Working with the Database
 
-CFWheels can uses migration files to perform modifications to the database with the DBMigrate plugin. Almost any modification you can make to a DB can be done through a migration. The killer feature about CFWheels migrations is that they're generally database agnostic. When developing applications a person might usually use MySQL as we are in this tutorial, but when deploying to their production server it is running PostgreSQL. Many others choose SQL Server. It doesn't matter -- the same migrations will work on all of them!  This is an example of how CFWheels takes some of the painful work off your hands. You write your migrations once, then run them against almost any database.
+Wheels can uses migration files to perform modifications to the database with the DBMigrate plugin. Almost any modification you can make to a DB can be done through a migration. The killer feature about Wheels migrations is that they're generally database agnostic. When developing applications a person might usually use MySQL as we are in this tutorial, but when deploying to their production server it is running PostgreSQL. Many others choose SQL Server. It doesn't matter -- the same migrations will work on all of them!  This is an example of how Wheels takes some of the painful work off your hands. You write your migrations once, then run them against almost any database.
 
 h4. What is a migration?
 
@@ -73,14 +73,14 @@ Let's open @/db/migrate/(some_time_stamp)__create_articles_table.cfc@ and take a
 
 Inside the @up@ method you'll see the generator has placed a call to the @createTable@ method, passed @[tableName]@ as a parameter, and created a block with the variable @t@ referencing the table that's created. Let's change @[tableName]@ to @[articles]@. We can tell @t@ what kind of columns we want in the @articles@ table. 
 
-But first you might be wondering "What is that @t.timestamps@ doing there?".  The generator inserted that line. It will create three columns inside our table titled @createdat@ for when created, @updatedat@ for last updated, and @deletedat@ for soft deletes. CFWheels will manage these columns for us, so when an article is created it's @createdat@ and @updatedat@ are automatically set. Each time we make a change to the article, the @updatedat@ will automatically be...uhhh...updated. Very handy.
+But first you might be wondering "What is that @t.timestamps@ doing there?".  The generator inserted that line. It will create three columns inside our table titled @createdat@ for when created, @updatedat@ for last updated, and @deletedat@ for soft deletes. Wheels will manage these columns for us, so when an article is created it's @createdat@ and @updatedat@ are automatically set. Each time we make a change to the article, the @updatedat@ will automatically be...uhhh...updated. Very handy.
 
 Well, what kind of fields does our Article need to have?  Since migrations make it easy to add or change columns later, we don't need to think of EVERYTHING right now, we just need a few to get us rolling. Here's a starter set:
 
 * @title@ (a string)
 * @body@ (a "text")
 
-That's it! You might be wondering, what is the "text" type?  This is an example of relying on the CFWheels database adapters to make the right call. For some DBs, large text fields are stored as @varchar@, while other's like Postgres use a @text@ type. The database adapter will figure out the best choice for us depending on the configured database -- we don't have to worry about it.
+That's it! You might be wondering, what is the "text" type?  This is an example of relying on the Wheels database adapters to make the right call. For some DBs, large text fields are stored as @varchar@, while other's like Postgres use a @text@ type. The database adapter will figure out the best choice for us depending on the configured database -- we don't have to worry about it.
 
 So add these into your @up@ so it looks like this:
 
@@ -129,7 +129,7 @@ We've now created the @articles@ table in the database and can start working on 
 
 h3. Creating the Article Model
 
-We'll use one of CFWheels' plugins called Scaffolding to create the required file. Click the Scaffold link in the Wheels debugging section. Then type *article* for the Object name and select *Model* for Type. We'll leave the Template as default and click Generate. The page should refresh and "*File 'models/Article.cfc*' created." should appear.
+We'll use one of Wheels' plugins called Scaffolding to create the required file. Click the Scaffold link in the Wheels debugging section. Then type *article* for the Object name and select *Model* for Type. We'll leave the Template as default and click Generate. The page should refresh and "*File 'models/Article.cfc*' created." should appear.
 
 * TODO: Should a mapping be created called cf9 to "C:\JRun4\servers\cfwheels101"
 
@@ -141,7 +141,7 @@ With this file in place we can start developing!
 
 h3. Working with a Model
 
-Another awesome feature of working with CFWheels is the @ORM@. The @ORM@ stands for Object-relational mapping. It allows you to mapping objects in your application to records in your database tables. This can simplify your development process, and even once an app is in production the @ORM@ makes it very easy to do modifications, searches, and other data operations. So let's create a controller cfc to do some simple interactions with our model. 
+Another awesome feature of working with Wheels is the @ORM@. The @ORM@ stands for Object-relational mapping. It allows you to mapping objects in your application to records in your database tables. This can simplify your development process, and even once an app is in production the @ORM@ makes it very easy to do modifications, searches, and other data operations. So let's create a controller cfc to do some simple interactions with our model. 
 
 * File --> New (Alt+Shift+N) --> ColdFusion Component
 * Source Location: /JSBloggers/controllers
@@ -170,9 +170,9 @@ The first line was just to demonstrate that we can do anything we previously did
 
 All the information about the @Article@ model is in the file @/models/Article.cfc@, so let's open that now.
 
-Not very impressive, right?  There are no attributes defined inside the model, so how does CFWheels know that an Article should have a @title@, a @body@, etc?  It queries the database, looks at the articles table, and assumes that whatever columns that table has should probably be the attributes accessible through the model. Let's look at what our migration file created.
+Not very impressive, right?  There are no attributes defined inside the model, so how does Wheels know that an Article should have a @title@, a @body@, etc?  It queries the database, looks at the articles table, and assumes that whatever columns that table has should probably be the attributes accessible through the model. Let's look at what our migration file created.
 
-You created most of those columns in your migration file, but what about @id@?  Every table you create with a migration will automatically have an @id@ column which serves as the table's primary key. When you want to find a specific article, you'll look it up in the articles table by it's unique ID number. CFWheels and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
+You created most of those columns in your migration file, but what about @id@?  Every table you create with a migration will automatically have an @id@ column which serves as the table's primary key. When you want to find a specific article, you'll look it up in the articles table by it's unique ID number. Wheels and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
 
 Back to the @<cfset article = model("article").new() />@ instruction. The @new()@ method doesn't change values in the database until we explicitly call the @save@ method on an object but in our example the @article@ object didn't have the  attributes @id@, @title@, @body@, @createdat@, and @updatedat@. Let's create a sample article and you'll see how it to add these. Enter each of the following lines one at a time:
 
@@ -194,9 +194,9 @@ Now you'll see that the @findAll()@ command gave you back an query object holdin
 
 h3. Moving Towards a Web Interface - Setting up the Router
 
-We've created a few articles through the Examples controller, but we really don't have a web application until we have a better web interface. Let's get that started. We said that CFWheels uses an "MVC" architecture and we've worked with the Model, now we need a Controller and View. 
+We've created a few articles through the Examples controller, but we really don't have a web application until we have a better web interface. Let's get that started. We said that Wheels uses an "MVC" architecture and we've worked with the Model, now we need a Controller and View. 
 
-When a CFWheels server gets a request from a web browser it first goes to the _router_. The router decides what the request is trying to do, what resources it is trying to interact with. The router dissects a request based on the address it is requesting and other HTTP parameters (like the request type of GET or PUT). Let's open the router's configuration file, @/config/routes.cfm@.
+When a Wheels server gets a request from a web browser it first goes to the _router_. The router decides what the request is trying to do, what resources it is trying to interact with. The router dissects a request based on the address it is requesting and other HTTP parameters (like the request type of GET or PUT). Let's open the router's configuration file, @/config/routes.cfm@.
 
 Inside this file you'll see @<cfset addRoute(name="home", pattern="", controller="wheels", action="wheels") />@. This is the default route and is directs to the Congratulations page, you saw when we first loaded our application. Let's replace it with:
 
@@ -206,7 +206,7 @@ Inside this file you'll see @<cfset addRoute(name="home", pattern="", controller
 </code>
 </pre>
 
-This line tells CFWheels to do a lot of work. It declares that we have a resource named @home@ and the router should expect requests to follow the *RESTful* model of web interaction (REpresentational State Transfer). The details don't matter to you right now, but just know that when you make a request like @http://wheels.local/@ and the router will know you're looking for a @index action@ of the @Articles controller@.
+This line tells Wheels to do a lot of work. It declares that we have a resource named @home@ and the router should expect requests to follow the *RESTful* model of web interaction (REpresentational State Transfer). The details don't matter to you right now, but just know that when you make a request like @http://wheels.local/@ and the router will know you're looking for a @index action@ of the @Articles controller@.
 
 Now that the router knows how to handle requests about articles, it needs a place to actually send those requests, the *Controller*.
 
@@ -251,7 +251,7 @@ Create a file named index.cfm in the views/examples directory (create the direct
 
 h3. Creating the Index View
 
-The error message is pretty helpful here. It tells us that the app is looking for a (view) template in @/views/Articles/@ but it can't find one named @index.cfm@. CFWheels has *assumed* that our @index@ action in the controller should have a corresponding @index.cfm@ view template in the views folder. We didn't have to put any code in the controller to tell it what view we wanted, CFWheels just figures it out.
+The error message is pretty helpful here. It tells us that the app is looking for a (view) template in @/views/Articles/@ but it can't find one named @index.cfm@. Wheels has *assumed* that our @index@ action in the controller should have a corresponding @index.cfm@ view template in the views folder. We didn't have to put any code in the controller to tell it what view we wanted, Wheels just figures it out.
 
 Let's create that view template now. In the left pane of your Eclipse window, expand the @JSBloggers@ project so you can see @views@, then expand @views@. Right-click on the @views@ folder, select @New@ then @Folder@ and, in the popup, name the folder @Articles@. Next repeat the process, but select @File@ and, in the popup, name the file @index.cfm@
 
