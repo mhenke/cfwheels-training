@@ -8,16 +8,19 @@ h3. Install Adobe ColdFusion 9
 
 * Adobe ColdFusion 9
 ** Download and install "http://www.adobe.com/products/coldfusion/":http://www.adobe.com/products/coldfusion/ as multiple instances
+** Follow the instructions in the installation wizard and let it run to completion. Ensure that you select Multiserver configuration.
+*** Presentation / Slides for "Installing Multiple Versions of ColdFusion Together":http://www.cfgothchic.com/blog/post.cfm/my-cfmeetup-presentation-installing-multiple-versions-of-coldfusion
 ** Name the instance **cfwheels101**
-** Test at "http://localhost:8301/":http://localhost:8301/
+** Test at "http://localhost:8301/cfide/administrator/":http://localhost:8301/cfide/administrator/
+** Path should be C:\JRun4\servers\cfwheels101\
 
 h3. Install Apache ( optional )
 
 * Apache
 ** Download and install the "Win32 Binary without crypto (no mod_ssl) (MSI Installer)":http://apache.tradebit.com/pub//httpd/binaries/win32/httpd-2.2.17-win32-x86-no_ssl.msi
-** We will modify three files ( httpd.conf, httpd-vhosts.conf, and hosts ).
+** We will modify three files: httpd.conf, httpd-vhosts.conf, and hosts
 
-First uncomment these lines by deleting the structure in front of the line and save the file.
+First uncomment these lines by deleting the hash @#@ in front of the line and save the file.
 
 * C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\httpd.conf
 
@@ -29,7 +32,7 @@ Include conf/extra/httpd-vhosts.conf
 </code>
 </pre>
 
-Next add this code to the bottom the the next file.
+Next add this code to the bottom the the next file, @httpd-vhosts.conf@.
 
 * C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\extra\httpd-vhosts.conf
 
@@ -50,7 +53,7 @@ Next add this code to the bottom the the next file.
 </code>
 </pre>
 
-Finally, open this file and add this line.
+Finally, open the last file, @hosts@, and add this line at the top.
 
 * C:\Windows\System32\drivers\etc\hosts add this:
 
@@ -60,14 +63,14 @@ Finally, open this file and add this line.
 </code>
 </pre>
 
-Now instead of you should get to our ColdFusion server via "http://wheels.local/":http://wheels.local/ .
+Now instead of going to "http://localhost:8301/":http://localhost:8301/, you can get to our ColdFusion server instance via "http://wheels.local/":http://wheels.local/ .
 
 h3. Install ColdFusion on Wheels
 
 * ColdFusion on Wheels
 ** Download "http://cfwheels.org/download/latest-version":http://cfwheels.org/download/latest-version
-** Extract and copy the file to "C:\JRun4\servers\cfwheels101"
-** Test at "http://wheels.local/":http://wheels.local/
+** Extract and copy the files to "C:\JRun4\servers\cfwheels101"
+** Test at "http://wheels.local/":http://wheels.local/ and you should see a Congratulations page
 
 h4. Install DBMigrate Plugin
 
