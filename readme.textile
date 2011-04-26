@@ -34,4 +34,4 @@ Mike Henke (henke.mike@gmail.com) - "https://github.com/mhenke/":https://github.
 
 h2. Git Workflow for Contributors
 
-This project uses the excellent "Git Workflow series":http://www.silverwareconsulting.com/index.cfm/Git-Workflow/ by "Bob Silverburg":https://github.com/bobsilverberg/ for contributions.
+This project uses the excellent "Git Workflow series":http://www.silverwareconsulting.com/index.cfm/Git-Workflow by "Bob Silverburg":https://github.com/bobsilverberg/ for contributions.
