@@ -172,7 +172,7 @@ All the information about the @Article@ model is in the file @/models/Article.cf
 
 Not very impressive, right?  There are no attributes defined inside the model, so how does Wheels know an Article should have a @title@, a @body@, etc?  It queries the database, looks at the articles table, and assumes whatever columns the table has should probably be the attributes accessible through the model. Let's look at the table our migration file created.
 
-You created most of those columns in your migration file, but what about @id@?  Every table you create with a migration will automatically have an @id@ column which serves as the table's primary key. When you want to find a specific article, you'll look it up in the articles table by it's unique ID number. Wheels and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
+You created most of those columns in your migration file, but what about the @id@?  Every table you create with a migration will automatically have an @id@ column which serves as the table's primary key. When you want to find a specific article, you'll look it up in the articles table by it's unique ID number. Wheels and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
 
 Back to the @<cfset article = model("article").new() />@ instruction. The @new()@ method doesn't change values in the database until we explicitly call the @save@ method on an object but in our example the @article@ object didn't have the  attributes @id@, @title@, @body@, @createdat@, and @updatedat@. Let's create a sample article and you'll see how it to add these. Enter each of the following lines one at a time:
 
