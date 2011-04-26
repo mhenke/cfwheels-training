@@ -54,7 +54,7 @@ It's not very impressive so far -- we need to add a form to the @new.cfm@ so the
 </code>
 </pre>
 
-What is all that?  Let's look at it piece by piece:
+What is all that? Let's look at it piece by piece:
 
 * @startFormTag@ is a CFWheels helper instruction which takes an action parameter, in this case @create@, The first line basically says "Make an openning form tag with the name of the action included in the URL" .
 * The @textField@ helper creates a single-line text field control
@@ -76,16 +76,16 @@ Error location
 Line 3 in views\articles\new.cfm
 
 2: <cfoutput>
-3:  #errorMessagesFor("article")#
-4:  #startFormTag(action="create")#
-5:   #textField(objectName='article', property='title', label='Title')#
-6:   #textArea(objectName='article', property='body', label='Body')#
-7:   #submitTag()#
+3? #errorMessagesFor("article")#
+4? #startFormTag(action="create")#
+5?  #textField(objectName='article', property='title', label='Title')#
+6?  #textArea(objectName='article', property='body', label='Body')#
+7?  #submitTag()#
 </pre>
 
 What's it trying to tell us. In our @new.cfm@ on line #3 there was an error about "Wheels.ObjectNotFound". Somewhere in line #4 we're working with an object that doesn't exist.
 
-And since there's only one object in line #3, it makes it pretty obvious -- the problem is that we started talking about a thing named @article@ without ever creating that thing. CFWheels uses some of the _reflection_ techniques that we talked about earlier in order to setup the form. Remember in the @Examples.cfc@ when we called @Article.new@ to create a new object?  CFWheels wants to do the same thing, but we need to create the blank object for it.
+And since there's only one object in line #3, it makes it pretty obvious -- the problem is that we started talking about a thing named @article@ without ever creating that thing. CFWheels uses some of the _reflection_ techniques that we talked about earlier in order to setup the form. Remember in the @Examples.cfc@ when we called @Article.new@ to create a new object? CFWheels wants to do the same thing, but we need to create the blank object for it.
 
 Go into your @Articles.cfc@, and _inside_ the @new@ method, add this line:
 
@@ -152,7 +152,7 @@ Refresh your browser and you should now see a list of the article titles that ar
 
 h3. Creating the Show Action
 
-Tired of this error message yet?  Go to your @Articles.cfc@ and add a method like this:
+Tired of this error message yet? Go to your @Articles.cfc@ and add a method like this:
 
 <pre lang="cfm">
 <code>
@@ -166,7 +166,7 @@ Let's pause here before creating the view template.
 
 Look at the URL: @http://wheels.local/index.cfm/articles/show/1@. When we added the @linkTo@ in the index and pointed it to the @show@ for this @article@, the router created this URL. Following the RESTful convention, this URL goes to a SHOW method which would display the Article with ID number @1@. Your URL might have a different number depending on which article title you clicked in the index.
 
-So what do we want to do when the user clicks an article title?  Find the article, then display a page with it's title and body. We'll use the number on the end of the URL to find the article in the database. The router will send us this number in the variable @params.key@. Inside the @show@ method that we just created, add this line:
+So what do we want to do when the user clicks an article title? Find the article, then display a page with it's title and body. We'll use the number on the end of the URL to find the article in the database. The router will send us this number in the variable @params.key@. Inside the @show@ method that we just created, add this line:
 
 <pre lang="cfm">
 <code>
@@ -312,7 +312,7 @@ This just outputs the value stored in the @flash@ object with the key @message@.
 
 Then go to your articles list, create another sample article, and when you click create you should see the flash message at the top of your view.
 
-Here's something cool about how CFWheels handles the @flash@ -- hit your browser's REFRESH button while looking at the articles list. See how the flash disappears?  Once you display the message in a flash CFWheels clears it out. That's why it's perfect for status messages like this.
+Here's something cool about how CFWheels handles the @flash@ -- hit your browser's REFRESH button while looking at the articles list. See how the flash disappears? Once you display the message in a flash CFWheels clears it out. That's why it's perfect for status messages like this.
 
 Similarly, add a flash message into your @delete@ method and confirm that it shows up when an article is removed. Then add one to your @update@ method that'll display when an article is edited.
 

@@ -6,7 +6,7 @@ First we need to think more about what a tag is and how it'll relate to the Arti
 
 h3. Understanding the Relationship
 
-What is a tag?  We need to figure that out before we can create the model. First, a tag must have a relationship to an article so they can be connected. A single tag, like "ColdFusion" for instance, should be able to relate to *many* articles. On the other side of the relationship, the article might have multiple tags (like "ColdFusion", "CFWheels", and "programming" as above) - so it's also a *many* relationship. Articles and tags have a *many-to-many* relationship.
+What is a tag? We need to figure that out before we can create the model. First, a tag must have a relationship to an article so they can be connected. A single tag, like "ColdFusion" for instance, should be able to relate to *many* articles. On the other side of the relationship, the article might have multiple tags (like "ColdFusion", "CFWheels", and "programming" as above) - so it's also a *many* relationship. Articles and tags have a *many-to-many* relationship.
 
 Many-to-many relationships are tricky because we're using an SQL database. If an Article "has many" tags, then we would put the foreign key @articleid@ inside the @tags@ table - so then a Tag would "belong to" an Article. But a tag can connect to *many* articles, not just one. We can't model this relationship with just the @articles@ and @tags@ tables.
 
@@ -36,12 +36,12 @@ The tags migration should look like this:
 <code>
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="creates tags tables">
  <cffunction name="up" >
-   <cfscript >
-   t = createTable('tags');
-   t = t.string('name');
-   t.timestamps();
-   t.create();
-   </cfscript >
+? <cfscript >
+? t = createTable('tags');
+? t = t.string('name');
+? t.timestamps();
+? t.create();
+? </cfscript >
  </cffunction >
  <cffunction name="down" >
   <cfscript >
@@ -182,7 +182,7 @@ An Article doesn't have a thing named @tag_list@ -- we made it up. In order for 
 <pre lang="cfm">
 <code>
   def tag_list
-    return self.tags.join(", ")
+? return self.tags.join(", ")
   end
 </code>
 </pre>
@@ -194,14 +194,14 @@ ActiveRecord::UnknownAttributeError in ArticlesController#create
 unknown attribute: tag_list
 </pre>
 
-What is this all about?  Let's start by looking at the form data that was posted when we clicked SAVE. This data is in the production.log file which should be in the "Examples" frame at the bottom of the Eclipse window. Look for the line that starts "Processing ArticlesController#create", here's what mine looks like:
+What is this all about? Let's start by looking at the form data that was posted when we clicked SAVE. This data is in the production.log file which should be in the "Examples" frame at the bottom of the Eclipse window. Look for the line that starts "Processing ArticlesController#create", here's what mine looks like:
 
 <pre lang="cfm">
 Processing ArticlesController#create (for 127.0.0.1) [POST]
   Parameters: {"article"=>{"body"=>"Yes, the samples continue!", "title"=>"My Sample", "tag_list"=>"ColdFusion, technology"}, "commit"=>"Save", "authenticity_token"=>"xxi0A3tZtoCUDeoTASi6Xx39wpnHt1QW/6Z1jxCMOm8="}
 </pre>
 
-The field that's interesting there is the @"tag_list"=>"technology, ColdFusion"@. Those are the tags as I typed them into the form. The error came up in the @create@ method, so let's peek at @/controllers/Articles.cfc@ in the @create@ method. See the first line that calls @Article.new(params[article])@?  This is the line that's causing the error as you could see in the middle of the stack trace.
+The field that's interesting there is the @"tag_list"=>"technology, ColdFusion"@. Those are the tags as I typed them into the form. The error came up in the @create@ method, so let's peek at @/controllers/Articles.cfc@ in the @create@ method. See the first line that calls @Article.new(params[article])? This is the line that's causing the error as you could see in the middle of the stack trace.
 
 Since the @create@ method passes all the parameters from the form into the @Article.new@ method, the tags are sent in as the string @"technology, ColdFusion"@. The @new@ method will try to set the new Article's @tag_list@ equal to @"technology, ColdFusion"@ but that method doesn't exist because there is no attribute named @tag_list@. 
 
@@ -210,7 +210,7 @@ There are several ways to solve this problem, but the simplest is to pretend lik
 <pre lang="cfm">
 <code>
   def tag_list=(tags_string)
-    
+?  
   end
 </code>
 </pre>
@@ -219,7 +219,7 @@ Just leave it blank for now and try to resubmit your sample article with tags. I
 
 h3. Not So Fast
 
-Did it really work?  It's hard to tell. Let's jump into the Examples and have a look.
+Did it really wor? It's hard to tell. Let's jump into the Examples and have a look.
 
 <pre lang="cfm">
 <code>
@@ -280,11 +280,11 @@ The @build@ method is a special creation method. It doesn't need an explicit sav
 <pre lang="cfm">
 <code>
   def tag_list=(tags_string)
-    tag_names = tags_string.split(",").collect{|s| s.strip.downcase}
-    tag_names.each do |tag_name|
-      tag = Tag.find_or_create_by_name(tag_name)
-      self.taggings.build(:tag => tag)
-    end
+?  tag_names = tags_string.split(",").collect{|s| s.strip.downcase}
+?  tag_names.each do |tag_name|
+? ? tag = Tag.find_or_create_by_name(tag_name)
+? ? self.taggings.build(:tag => tag)
+?  end
   end
 </code>
 </pre>
@@ -340,8 +340,8 @@ A helper method has to return a string which will get rendered into the HTML. In
 <pre lang="cfm">
 <code>
   def tag_links(tags)
-    links = tags.collect{|tag| linkTo tag.name, tag_path(tag)}
-    return links.join(", ")
+?  links = tags.collect{|tag| linkTo tag.name, tag_path(tag)}
+?  return links.join(", ")
   end
 </code>
 </pre>
@@ -393,12 +393,12 @@ If we edit an article and *remove* a tag from the list, this method as it stands
 <pre lang="cfm">
 <code>
   def tag_list=(tags_string)
-    self.taggings.delete_all
-    tag_names = tags_string.split(",").collect{|s| s.strip.downcase}.uniq
-    tag_names.each do |tag_name|
-      tag = Tag.find_or_create_by_name(tag_name)
-      self.taggings.build(:tag => tag)
-    end
+?  self.taggings.delete_all
+?  tag_names = tags_string.split(",").collect{|s| s.strip.downcase}.uniq
+?  tag_names.each do |tag_name|
+? ? tag = Tag.find_or_create_by_name(tag_name)
+? ? self.taggings.build(:tag => tag)
+?  end
   end
 </code>
 </pre>
@@ -412,7 +412,7 @@ The links for our tags are showing up, but if you click on them you'll get our o
 <pre lang="cfm">
 <code>
   def show
-    @tag = Tag.find(params.key)
+?  @tag = Tag.find(params.key)
   end
 </code>
 </pre>
@@ -425,7 +425,7 @@ Then create a file @/views/tags/show.cfm@ like this:
 
 <ul>
   <% @tag.articles.each do |article| %>
-    <li><%= linkTo article.title, article_path(article) %></li>
+  ?  <li><%= linkTo article.title, article_path(article) %></li>
   <% end %>
 </ul>
 </code>
