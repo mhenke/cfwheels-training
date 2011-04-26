@@ -1,6 +1,6 @@
 h2. I0: Up and Running
 
-Part of the reason ColdFusion on Wheels became popular quickly is it takes a lot of the hard work off your hands, and that's especially true in starting up a project. Wheels practices the idea of "sensible defaults" and tries to, with a couple simple actions, create a working application ready for your customization.
+Part of the reason ColdFusion on Wheels became popular quickly is it takes a lot of the hard work off your hands, and it's especially true in starting up a project. Wheels practices the idea of "sensible defaults" and tries to, with a couple simple actions, create a working application ready for your customization.
 
 h3. Setting the Stage
 
@@ -112,7 +112,7 @@ Now our @up@ migration is done. You might wonder, what about the @down@? Didn't 
 
 Save that migration cfc file, switch over to your browser, and click @go@ under the *Migrate* section:
 
-The @All non-migrated@ option finds all migrations in the @/db/migrate/@ folder, determines which migrations have and have not been run yet, then runs them. Pretty much it says "look in your set of cfcs for the database in @/db/migrate/@ and run the migrations not yet ran.? 
+The @All non-migrated@ option finds all migrations in the @/db/migrate/@ folder, determines which migrations have and have not been run yet, then runs them. Pretty much it says "look in your set of cfcs for the database in @/db/migrate/@ and run the migrations not yet ran."
 
 In this case we had just one migration to run and it should print some output like this to your browser under *Migration Results*:
 
@@ -174,7 +174,7 @@ Not very impressive, right? There are no attributes defined inside the model, so
 
 You created most of those columns in your migration file, but what about the @id@? Every table you create with a migration will automatically have an @id@ column which serves as the table's primary key. When you want to find a specific article, you'll look it up in the articles table by it's unique ID number. Wheels and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
 
-Back to the @<cfset article = model("article").new() />@ instruction. The @new()@ method doesn't change values in the database until we explicitly call the @save@ method on an object but in our example the @article@ object didn't have th? attributes @id@, @title@, @body@, @createdat@, and @updatedat@. Let's create a sample article and you'll see how it to add these. Enter each of the following lines one at a time:
+Back to the @<cfset article = model("article").new() />@ instruction. The @new()@ method doesn't change values in the database until we explicitly call the @save@ method on an object in our example the @article@ object didn't have th? attributes @id@, @title@, @body@, @createdat@, and @updatedat@. Let's create a sample article and you'll see how it to add these. Enter each of the following lines:
 
 <pre lang="cfm">
 <code>
@@ -190,15 +190,15 @@ Back to the @<cfset article = model("article").new() />@ instruction. The @new()
 </code>
 </pre>
 
-Now you'll see that the @findAll()@ command gave you back an query object holding the one article we created and saved. Go ahead and *create 3 more sample articles* in one request.
+Now you'll see that the @findAll()@ command gave you back an query object holding the one article we created and saved. Go ahead and *create 3 more sample articles* in one request under a method called "moreSamples"wwww.
 
 h3. Moving Towards a Web Interface - Setting up the Router
 
 We've created a few articles through the Examples controller, but we really don't have a web application until we have a better web interface. Let's get that started. We said that Wheels uses an "MVC" architecture and we've worked with the Model, now we need a Controller and View. 
 
-When a Wheels server gets a request from a web browser it first goes to the _router_. The router decides what the request is trying to do, what resources it is trying to interact with. The router dissects a request based on the address it is requesting and other HTTP parameters (like the request type of GET or PUT). Let's open the router's configuration file, @/config/routes.cfm@.
+When a Wheels application gets a request from a web browser it first goes to the _router_. The router decides what the request is trying to do and what resources it is trying to interact with. The router dissects a request based on the address it is requesting. Let's open the router's configuration file, @/config/routes.cfm@.
 
-Inside this file you'll see @<cfset addRoute(name="home", pattern="", controller="wheels", action="wheels") />@. This is the default route and is directs to the Congratulations page, you saw when we first loaded our application. Let's replace it with:
+Inside this file you'll see @<cfset addRoute(name="home", pattern="", controller="wheels", action="wheels") />@. This is the default route and it directs to the Congratulations page, you saw when we first loaded our application. Let's replace it with:
 
 <pre lang="cfm">
 <code>
@@ -208,21 +208,23 @@ Inside this file you'll see @<cfset addRoute(name="home", pattern="", controller
 
 This line tells Wheels to do a lot of work. It declares that we have a resource named @home@ and the router should expect requests to follow the *RESTful* model of web interaction (REpresentational State Transfer). The details don't matter to you right now, but just know that when you make a request like @http://wheels.local/@ and the router will know you're looking for a @index action@ of the @Articles controller@.
 
-Now that the router knows how to handle requests about articles, it needs a place to actually send those requests, the *Controller*.
+Now the router knows how to handle requests about articles, it needs a place to actually send those requests, the @Controller@.
 
 h3. Creating the Articles Controller
 
-We're going to use the Scaffold plugin again through the browser. In your browser, enter this url to get to the Scaffold plugin again. @http://wheels.local/index.cfm?controller=wheels&action=wheels&view=plugins&name=scaffold@
+We're going to use the Scaffold plugin again. In your browser, enter this url to get to the Scaffold plugin: @http://wheels.local/index.cfm?controller=wheels&action=wheels&view=plugins&name=scaffold@
 
-Then type *article* for the Object name and select *Controller* for Type. We'll leave the Template as default and click Generate. The page should refresh and "*File 'controllers/Articles.cfc' created.*" should appear.
+Type *article* for the Object name and select *Controller* for Type. We'll leave the Template as default and click Generate. The page should refresh and "*File 'controllers/Articles.cfc' created.*" should appear.
 
 The output shows that the generator created this file for you:
 
 * @/controllers/Articles.cfc.cfc@ : The controller file itself
 
-Let's open up the controller file, @/controllers/Articles.cfc@. You'll see that the @Scaffold@ plugin generated a lot of code. It created these actions for us: @index@, @show@, @new@, @edit@, @create@, @update@, @delete@.
+Let's open up the controller file, @/controllers/Articles.cfc@. You'll see the @Scaffold@ plugin generated a lot of code. It created these actions for us: @index@, @show@, @new@, @edit@, @create@, @update@, and @delete@.
 
-Any additional code we add to the controller must go _between_ the beginning and ending @cfcomponent@ instructions, so I like to insert a bunch of blank lines between them so I have room work work and push that final @end@ farther down the page.
+Any additional code we add to the controller must go _between_ the beginning and ending @cfcomponent@ instructions, outside any @cffunction@ instructions.
+
+We have a working controller for CRUD (create, read, update, and delete) but we didn't learn anything so let's comment out everything between the the beginning and ending @cfcomponent@ instructions. We can review this generated code later if you want.
 
 h3. Defining the Index Action
 
@@ -236,26 +238,28 @@ The first action we want to talk about is the "index". This is what the app will
 </code>
 </pre>
 
-What scope is @articles@? Usually in a @cfc@ we will @var@ scope variables to stop data issues. That marks the variable as a "local variable". We want the list of articles to be accessible from both the controller and the view that we're about to create. In order for it to be visible in both places it has to be in the variable scope. If we had just named it @var articles@, that local variable would only be available within the @index@ method of the controller.
+What scope is @articles@? Usually in a @cfc@ we will @var@ scope variables to stop data issues. The @var@ instruction marks the variable as a "local variable". We want the list of articles to be accessible from both the controller and the view we're about to create so in order for @articles@ to be visible in both places it has to be in the variable scope. If we had named it @var articles@, that local variable would only be available within the @index@ method of the controller.
 
 Let's load @http://wheels.local/@. You'll notice our updated default route is mapping the code to the @index@ action of the @Articles@ controller but we are getting ann error since the view doesn't exist.
 
 <pre lang="cfm">
 Wheels.ViewNotFound
-Could not find the view page for the index action in the Examples controller.
+Could not find the view page for the index action in the Articles controller.
 
 Suggested action
 
-Create a file named index.cfm in the views/examples directory (create the directory as well if it doesn't already exist).
+Create a file named index.cfm in the views/articles directory (create the directory as well if it doesn't already exist).
 </pre>
 
 h3. Creating the Index View
 
-The error message is pretty helpful here. It tells us that the app is looking for a (view) template in @/views/Articles/@ but it can't find one named @index.cfm@. Wheels has *assumed* that our @index@ action in the controller should have a corresponding @index.cfm@ view template in the views folder. We didn't have to put any code in the controller to tell it what view we wanted, Wheels just figures it out.
+The error message is pretty helpful. It tells us Wheels is looking for a template in @/views/Articles/@ but it can't find one named @index.cfm@. Wheels has *assumed* our @index@ action in the controller should have a corresponding @index.cfm@ view template in the views folder. We didn't have to put any code in the controller to tell it what view we wanted, Wheels figures it out.
 
 Let's create that view template now. In the left pane of your Eclipse window, expand the @JSBloggers@ project so you can see @views@, then expand @views@. Right-click on the @views@ folder, select @New@ then @Folder@ and, in the popup, name the folder @Articles@. Next repeat the process, but select @File@ and, in the popup, name the file @index.cfm@
 
 Now you're looking at a blank file. Enter in this view template code which is a mix of HTML and what are called CFML tags:
+
+TODO: REDO INTO TABLE TABLE UL/UI
 
 <pre lang="cfm">
 <code>

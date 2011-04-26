@@ -42,9 +42,9 @@ t.string('authorname');
 </code>
 </pre>
 
-Then keep adding lines that create strings named @authoremail@, @authorurl@, and a text field named @body@.
+Then keep adding lines creating strings named @authoremail@, @authorurl@, and a text field named @body@.
 
-Once that's complete, go to the DBMigrate plugin and run the migration by clicking go.
+Once that's complete, go to the DBMigrate plugin and run the migration by clicking @go@.
 
 h3. Relationships
 
@@ -52,9 +52,9 @@ The power of SQL databases is the ability to express relationships between eleme
 
 Foreign keys are a way of marking one-to-one and one-to-many relationships. An article might have zero, five, or one hundred comments. But a comment only belongs to one article. These objects have a one-to-many relationship -- one article connects to many comments.
 
-Part of the big deal with CFWheels is that it makes working with these relationships very easy. When we created the migration for comments we started with an @integer@ field named @articleid@. The CFWheels convention is that, for a one-to-many relationship, the objects on the "many" end should have a foreign key referencing the "one" object. And that foreign key should be titled with the name of the "one" object, then "id". So in this case one article has many comments, so each comment has a field named @articleid@ which tracks which article they belong to. Similarly, a store's customer might have many orders, so each order would have a @customerid@ specifying which customer they belong to.
+Part of the big deal with Wheels is that it makes working with these relationships very easy. When we created the migration for comments we started with an @integer@ field named @articleid@. The Wheels convention is that, for a one-to-many relationship, the objects on the "many" end should have a foreign key referencing the "one" object. And the foreign key should be titled with the name of the "one" object, then "id". So in this case one article has many comments, so each comment has a field named @articleid@ which tracks which article they belong to. Similarly, a store's customer might have many orders, so each order would have a @customerid@ specifying which customer they belong to.
 
-Following this convention will get us a lot of functionality "for free.? Open your @/models/comment.cfc@ and add the middle line so it looks like this:
+Following this convention will get us a lot of functionality "for free." Open your @/models/comment.cfc@ and add the middle line so it looks like this:
 
 <pre lang="cfm">
 <code>
@@ -78,7 +78,7 @@ A comment relates to a single article, it "belongs to" an article. We then want 
 </code>
 </pre>
 
-How an article "has many" comments, and a comment "belongs to" an article. We have explained to CFWheels that these objects have a one-to-many relationship.
+Wheels now know an article "has many" comments, and a comment "belongs to" an article. We have explained to Wheels these objects have a one-to-many relationship.
 
 h3. Testing in Examples
 
@@ -87,7 +87,8 @@ Let's use the @/controllers/Examples.cfc@ to test how this relationship works in
 <pre lang="cfm">
 <code>
 <cffunction name="three">
- <cfset a = model("article").findByKey(key=3,include="comments") />
+ <cfset a = model("article").findByKey(key=3,
+  include="comments") />
  <cfdump var="#a.comments#" />
  <cfdump var="#model("comment").new()#" />
  <cfdump var="#a.newComment()#" />
@@ -144,7 +145,7 @@ We want to display any comments underneath their parent article. Because we've s
 </code>
 </pre>
 
-This says that we want to render a partial named "comment" and that we want to do it once for each element in the collection @article.comments@. We saw in the Examples that when we call the @comments@ method on an article we'll get back an array of it's associated comment objects. So this render line will pass each element of that array one at a time into the partial named "comment". Now we need to create the file @/views/articles/_comment.cfm@ and add this code:
+This says we want to render a partial named "comment" and we want to do it once for each element in the collection @article.comments@. We saw in the Examples that when we call the @comments@ method on an article we'll get back an array of it's associated comment objects. So this render line will pass each element of that array one at a time into the partial named "comment". Now we need to create the partial @/views/articles/_comment.cfm@ and add this code:
 
 <pre lang="cfm">
 <code>
@@ -157,11 +158,11 @@ This says that we want to render a partial named "comment" and that we want to d
 </code>
 </pre>
 
-With that in place, try clicking on your articles and find the one where you created the comments. Did they show up? What happens when an article doesn't have any comments?
+With that in place, try clicking on the articles and find the one where you created the comments. Did they show up? What happens when an article doesn't have any comments?
 
 h3. Web-Based Comment Creation
 
-Good start, but our users (hopefully) can't get into the Examples code to create their comments. We'll need to create a web interface. We'll go through some of the same steps that we did when creating the web interface for creating articles.
+Good start, but our users (hopefully) can't get into the Examples code to create their comments. We'll need to create a web interface. We'll go through some of the same steps we did when creating the web interface for creating articles.
 
 Let's start with the form. The comment form should be embedded into the article's @show@ template. So let's add this code right above the "<< Back to Articles List" in the articles @show.cfm@
 
@@ -171,7 +172,7 @@ Let's start with the form. The comment form should be embedded into the article'
 </code>
 </pre>
 
-Obviously this is expecting a file @/views/articles/_comment_form.cfm@, so create that and add this content for now:
+Obviously this is expecting a file @/views/articles/_comment_form.cfm@, so create the file and add this content for now:
 
 <pre lang="cfm">
 <code>
@@ -180,9 +181,9 @@ Obviously this is expecting a file @/views/articles/_comment_form.cfm@, so creat
 </code>
 </pre>
 
-Look at an article in your browser to make sure that partial is showing up. Then we can start figuring out the details of the form.
+Look at an article in your browser to make sure the partial is showing up. Then we can start figuring out the details of the form.
 
-Ok, now look at your @Articles.cfc@ in the @new@ method. Remember how we had to create a blank Article object so CFWheels could figure out which fields an article has? We need to do the same thing before we create a form for the comment. But when we view the article and display the comment form we're not running the article's @new@ method, we're running the @show@ method. So we'll need to create a blank Comment object inside that @show@ method like this:
+Ok, now look at your @Articles.cfc@ in the @new@ method. Remember how we had to create a blank Article object so Wheels could figure out which fields an article has? We need to do the same thing before we create a form for the comment. But when we view the article and display the comment form we're not running the article's @new@ method, we're running the @show@ method. So we'll need to create a blank Comment object inside that @show@ method like this:
 
 <pre lang="cfm">
 <code>
@@ -211,7 +212,7 @@ This is just like we did it in the Examples. Now we can create a form inside our
 
 The only new thing here is the hidden field helper. This hidden field will hold the ID of the article to help when creating the comment object.
 
-Save then refresh in your web browser and...well...you'll get an error like this:
+Save then refresh in your web browser and... well... you'll get an error like this:
 
 <pre lang="cfm">
 Wheels.ViewNotFound
@@ -311,7 +312,7 @@ Refresh, and you should see html source like this:
 
 h4. Add Timestamp to the Comment Display
 
-We should add something about when the comment was posted. CFWheels has a really neat helper named @distanceOfTimeInWords@ which takes two dates and creates a text description of their difference like "32 minutes later", "3 months later", and so on. You can use it in your @_comment.cfm@ partial like this:
+We should add something about when the comment was posted. Wheels has a really neat helper named @distanceOfTimeInWords@ which takes two dates and creates a text description of their difference like "32 minutes later", "3 months later", and so on. You can use it in your @_comment.cfm@ partial like this:
 
 <pre lang="cfm">
 <code>

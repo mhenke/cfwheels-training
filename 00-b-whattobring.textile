@@ -14,4 +14,4 @@ Bring a pen, marker, highlighter, and a few sheets of paper for making notes, sk
 
 h3. Prepare your Computer
 
-Check out the "Preparation for CFWheels Projects":https://github.com/mhenke/cfwheels-training/blob/develop/00-c-preparation.textile for details on configuring the software you'll need.
+Check out the "Preparation for Wheels Projects":https://github.com/mhenke/cfwheels-training/blob/develop/00-c-preparation.textile for details on configuring the software you'll need.

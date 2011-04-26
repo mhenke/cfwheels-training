@@ -1,16 +1,16 @@
 h1. I3: Tagging 
 
-In this iteration we'll add the ability to tag articles for organization and navigation. Tagging is similar to some blogs having a "Posted Under" feature. For example, if I wrote a blog post about our training, I might tag it as "CFWheels", "Training", and "ColdFusion".
+In this iteration we'll add the ability to tag articles for organization and navigation. Tagging is similar to some blogs having a "Posted Under" feature. For example, if I wrote a blog post about our training, I might tag it as "Wheels", "Training", and "ColdFusion".
 
-First we need to think more about what a tag is and how it'll relate to the Article model. If you're not familiar with tags, they're commonly used in blogs to assign the article to one or more categories. For instance, if I write an article about a feature in ColdFusion on Wheels, I might want it tagged with all of these categories: ColdFusion, CFWheels, programming, and features. That way if one of my readers is looking for more articles about one of those topics they can click on the tag and see a list of my articles with that tag.
+First we need to think more about what a tag is and how it'll relate to the Article model. If you're not familiar with tags, they're commonly used in blogs to assign the article to one or more categories. For instance, if I write an article about a feature in ColdFusion on Wheels, I might want it tagged with all of these categories: ColdFusion, Wheels, programming, and features. That way if one of my readers is looking for more articles about one of those topics they can click on the tag and see a list of my articles with that tag.
 
 h3. Understanding the Relationship
 
-What is a tag? We need to figure that out before we can create the model. First, a tag must have a relationship to an article so they can be connected. A single tag, like "ColdFusion" for instance, should be able to relate to *many* articles. On the other side of the relationship, the article might have multiple tags (like "ColdFusion", "CFWheels", and "programming" as above) - so it's also a *many* relationship. Articles and tags have a *many-to-many* relationship.
+What is a tag? We need to figure that out before we can create the model. First, a tag must have a relationship to an article so they can be connected. A single tag, like "ColdFusion" for instance, should be able to relate to *many* articles. On the other side of the relationship, the article might have multiple tags (like "ColdFusion", "Wheels", and "programming" as above) - so it's also a *many* relationship. Articles and tags have a *many-to-many* relationship.
 
 Many-to-many relationships are tricky because we're using an SQL database. If an Article "has many" tags, then we would put the foreign key @articleid@ inside the @tags@ table - so then a Tag would "belong to" an Article. But a tag can connect to *many* articles, not just one. We can't model this relationship with just the @articles@ and @tags@ tables.
 
-When we start thinking about the database modeling, there are a few ways to achieve this setup. One way is to create a "join table" that just tracks which tags are connected to which articles. Traditionally this table would be named @articlestags@ and CFWheels would express the relationships by saying that the Article model @hasAndBelongsToMany@ Tags, while the Tag model @hasAndBelongsToMany@ Articles but Wheels doesn't have this relationship yet.
+When we start thinking about the database modeling, there are a few ways to achieve this setup. One way is to create a "join table" that just tracks which tags are connected to which articles. Traditionally this table would be named @articlestags@ and Rails would express the relationships by saying that the Article model @hasAndBelongsToMany@ Tags, while the Tag model @hasAndBelongsToMany@ Articles but Wheels doesn't have this relationship yet.
 
 Even if Wheels did have @hasAndBelongsToMany@, most of the time this isn't the best way to really model the relationship. The connection between the two models usually has value of its own, so we should promote it to a real model. For our purposes, we'll introduce a model named "Tagging" which is the connection between Articles and Tags. The relationships will setup like this:
 
@@ -79,7 +79,7 @@ Now run both migrations.
 
 h3. Expressing Relationships
 
-Now that we created our tables we will need to create our models and tell CFWheels about the relationships between them. For each of the files below, create in if not already then add these lines:
+Now that we created our tables we will need to create our models and tell Wheels about the relationships between them. For each of the files below, create in if not already then add these lines:
 
 In @/models/Article.cfc@
 
@@ -115,7 +115,7 @@ Now we can get the many-to-many association that we set up above. Here is how we
 </code>
 </pre>
 
-After CFWheels had been around for awhile, developers were finding this kind of relationship very common. In practical usage, if I had an object named @article@ and I wanted to find its Tags, I'd have to run code like this:
+After Wheels had been around for awhile, developers were finding this kind of relationship very common. In practical usage, if I had an object named @article@ and I wanted to find its Tags, I'd have to run code like this:
 
 <pre lang="cfm">
 <code>
@@ -259,7 +259,7 @@ tag_names = tags_string.split(",").collect{|s| s.strip}
 </code>
 </pre>
 
-So looking at our pseudo-code, the next step is to go through @each@ of those @tag_names@ and find or create a tag with that name. CFWheels has a built in method to do just that, like this:
+So looking at our pseudo-code, the next step is to go through @each@ of those @tag_names@ and find or create a tag with that name. Wheels has a built in method to do just that, like this:
 
 <pre lang="cfm">
 <code>
@@ -275,7 +275,7 @@ self.taggings.build(:tag => tag)
 </code>
 </pre>
 
-The @build@ method is a special creation method. It doesn't need an explicit save, CFWheels will wait to save the Tagging until the Article itself it saved. So, putting these pieces together, your @tag_list=@ method should look like this:
+The @build@ method is a special creation method. It doesn't need an explicit save, Wheels will wait to save the Tagging until the Article itself it saved. So, putting these pieces together, your @tag_list=@ method should look like this:
 
 <pre lang="cfm">
 <code>
@@ -311,7 +311,7 @@ t.articles
 </code>
 </pre>
 
-And you'll see that this Tag is associated with just one Article.
+And you'll see the Tag is associated with just one Article.
 
 h3. Adding Tags to our Display
 
