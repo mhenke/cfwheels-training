@@ -21,20 +21,20 @@ Using ColdFusion Builder's Server view, we can add the our ColdFusion server. Op
 * Application Server: Jrun
 * Host Name: wheels.local
 ** Select Is Local
-*WebServer Port: 80 
-*Click Finish
+* WebServer Port: 80 
+* Click Finish
 
-You should then see the @JSBloggers@ server in the Servers view. If it isn't Running, please start it. Once it's started, try loading the address "http://wheels.local/":http://wheels.local/. You should see Wheels' "Congratulations!" page. Scroll down and the Wheels debugging section displays the Wheels version, CFML Engine version along with other useful information.
+You should then see the @JSBloggers@ server in the Servers view. If it isn't Running, please start it. Once it's started, try loading the address "http://wheels.local/":http://wheels.local/. You should see Wheels' "Congratulations" page. Scroll down and the Wheels debugging section displays the Wheels version, CFML Engine version along with other useful information.
 
-We need to change the Wheels datasource convention. Wheels assumes our datasource connection is the folder name Wheels resides in but for our case it is not CF9 but JSBloggers. We could have easily named our war file that but I wanted to show how we can easily override a Wheels convention.
+We need to change the Wheels datasource convention. Wheels assumes our datasource connection is the folder name Wheels resides in but for our case it is not @cfwheels101@ but @JSBloggers@. We could have easily named our ColdFusion server instance that but I wanted to show how we can easily override a Wheels convention.
 
-Press Ctrl+Shift+R while in Eclipse. This is the Open Resource window. I use this alot when coding. Sometimes I highlight a file name in code and press Ctrl+Shift+R, other times I type in the file name like we will. Type in @settings.cfm@, and select @settings.cfm - /JSBloggers/config@. This will open that file for use and paste in @<cfset set(dataSourceName="JSBloggers") />@ to tell Wheels to use this as are datasource. Also paste in @<cfset set(URLRewriting="Partial") />@ to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers.
+Press Ctrl+Shift+R while in Eclipse. This is the Open Resource window. I use this a lot when coding in Eclipse. Sometimes I highlight a file name in code and press Ctrl+Shift+R, other times I type in the file name like we will do next. Type in @settings.cfm@, and select @settings.cfm - /JSBloggers/config@. This will open that file for use and type in @<cfset set(dataSourceName="JSBloggers") />@ to tell Wheels to use this as are datasource. Also add in @<cfset set(URLRewriting="Partial") />@ to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers. To reload Wheels, you can add @?reload=true@ to the url or click on the @Reload@ link in the Wheels debug section.
 
 Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our Wheels app to work with that data. 
 
 h3. Working with the Database
 
-Wheels can uses migration files to perform modifications to the database with the DBMigrate plugin. Almost any modification you can make to a DB can be done through a migration. The killer feature about Wheels migrations is that they're generally database agnostic. When developing applications a person might usually use MySQL as we are in this tutorial, but when deploying to their production server it is running PostgreSQL. Many others choose SQL Server. It doesn't matter -- the same migrations will work on all of them!  This is an example of how Wheels takes some of the painful work off your hands. You write your migrations once, then run them against almost any database.
+Wheels can uses migration files to perform modifications to the database with the DBMigrate plugin. Almost any modification you can make to a DB can be done through a migration. The killer feature about Wheels migrations is that they're generally database agnostic. When developing applications a person might usually use MySQL as we are in this tutorial, but when deploying to their production server it is running PostgreSQL. Many others choose Microsoft SQL Server. It doesn't matter -- the same migrations will work on all of them!  This is an example of how Wheels takes some of the painful work off your hands. You write your migrations once, then run them against almost any database.
 
 h4. What is a migration?
 
@@ -49,7 +49,7 @@ Let's generate a "Create table" migration for our articles. In the browser selec
 
 On the page, you should see text like @The migration 20110406195353_create_articles_table.cfc file was created@ showing the create was successful. Two new sections appear also on the page: *Migrate* and *Available migrations*. Under *Available migrations* you should see something like @20110406195353 - create_articles_table (create articles table) - not migrated@. This is saying a migration script exists but hasn't been ran.
 
-Let's open @/db/migrate/(some_time_stamp)__create_articles_table.cfc@ and take a look. First you'll notice that the filename is our comment with a underlines instead of spaces and a timestamp of when the migration was created. Migrations need to be ordered, so the timestamp serves to keep them in chronologic order. Inside the file, you'll see two methods: @up@ and @down@.
+Let's open @/db/migrate/(some_time_stamp)__create_articles_table.cfc@ and take a look. Press @ctrl-shift-r@ again, and type @*create_@ and select our newly created migration file. First please note the filename is our comment with underlines instead of spaces and a timestamp of when the migration was created. Migrations need to be ordered, so the timestamp serves to keep them in chronologic order. Inside the file, you'll see two methods: @up@ and @down@.
 
 <pre lang="cfm">
 <code>
@@ -80,8 +80,6 @@ Well, what kind of fields does our Article need to have?  Since migrations make 
 * @title@ (a string)
 * @body@ (a "text")
 
-That's it! You might be wondering, what is the "text" type?  This is an example of relying on the Wheels database adapters to make the right call. For some DBs, large text fields are stored as @varchar@, while other's like Postgres use a @text@ type. The database adapter will figure out the best choice for us depending on the configured database -- we don't have to worry about it.
-
 So add these into your @up@ so it looks like this:
 
 <pre lang="cfm">
@@ -98,7 +96,9 @@ So add these into your @up@ so it looks like this:
 </code>
 </pre>
 
-Now our migration is done. You might wonder, what about the @down@?  Didn't I say migrations need to be symmetric?  If we added something to the @up@ it is _generally_ the case that we need to undo that same change in the @down@. However, when the migration is creating a table, the @down@ can just drop that table regardless of what columns are inside of it. That's what the generator has setup for us here, where it just says @dropTable('[tableName]');@ just replace @[tableName]@ with @articles@.
+That's it! You might be wondering, what is the "text" type?  This is an example of relying on the Wheels database adapters to make the right call. For some DBs, large text fields are stored as @varchar@, while other's like Postgres use a @text@ type. The database adapter will figure out the best choice for us depending on the configured database -- we don't have to worry about it.
+
+Now our @up@ migration is done. You might wonder, what about the @down@?  Didn't I say migrations need to be symmetric?  If we added something to the @up@ it is _generally_ the case we need to undo the same change in the @down@. However, when the migration is creating a table, the @down@ can just drop that table regardless of what columns are inside of it. That's what the generator has setup for us here, where it says @dropTable('[tableName]');@ replace @[tableName]@ with @articles@.
 
 <pre lang="cfm">
 <code>
@@ -110,9 +110,9 @@ Now our migration is done. You might wonder, what about the @down@?  Didn't I sa
 </code>
 </pre>
 
-Save that migration cfc file, switch over to your browser, and click go under the *Migrate* section:
+Save that migration cfc file, switch over to your browser, and click @go@ under the *Migrate* section:
 
-The @All non-migrated@ option finds all migrations in the @/db/migrate/@ folder, determines which migrations have and have not been run yet, then runs any migration that hasn't been run.  Pretty much it says "look in your set of cfcs for the database in @/db/migrate/@ and run the migrations not yet ran."  
+The @All non-migrated@ option finds all migrations in the @/db/migrate/@ folder, determines which migrations have and have not been run yet, then runs them.  Pretty much it says "look in your set of cfcs for the database in @/db/migrate/@ and run the migrations not yet ran."  
 
 In this case we had just one migration to run and it should print some output like this to your browser under *Migration Results*:
 
@@ -123,25 +123,25 @@ Migrating from 0 up to 20110406195353.
 Created table articles
 </pre>
 
-It tells you that it ran the migration. As I said before, DBMigrate keeps track of which migrations have and have not been run. Try running @All non-migrated@ again now, and see what happens.
+It tells you that it ran the migration. As I said before, DBMigrate keeps track of which migrations _have_ and _have not_ been run. Try running @All non-migrated@ again now, and see what happens.
 
 We've now created the @articles@ table in the database and can start working on our @Article@ model.
 
 h3. Creating the Article Model
 
-We'll use one of Wheels' plugins called Scaffolding to create the required file. Click the Scaffold link in the Wheels debugging section. Then type *article* for the Object name and select *Model* for Type. We'll leave the Template as default and click Generate. The page should refresh and "*File 'models/Article.cfc*' created." should appear.
+We'll use one of Wheels' plugins called Scaffolding to create the required file. Click the Scaffold link in the Wheels debugging section. Then type *article* for the Object name and select *Model* for Type. We'll leave the Template as default and click Generate. The page should refresh and "*File 'models/Article.cfc' created.*" should appear.
 
 * TODO: Should a mapping be created called cf9 to "C:\JRun4\servers\cfwheels101"
 
 We used the @scaffold@ plugin, telling it to create a @model@, and naming that model @Article@. From that information, the plugin creates the following files:
 
-* @/models/Article.cfc@ : The file that will hold the model code
+* @/models/Article.cfc@ : The file will hold the model code
 
 With this file in place we can start developing!
 
 h3. Working with a Model
 
-Another awesome feature of working with Wheels is the @ORM@. The @ORM@ stands for Object-relational mapping. It allows you to mapping objects in your application to records in your database tables. This can simplify your development process, and even once an app is in production the @ORM@ makes it very easy to do modifications, searches, and other data operations. So let's create a controller cfc to do some simple interactions with our model. 
+Another awesome feature of working with Wheels is the @ORM@. The @ORM@ stands for Object-relational mapping. It allows you to map objects in your application to records in your database tables. This can simplify your development process and even once an app is in production the @ORM@ makes it very easy to do modifications, searches, and other data operations. So let's create a @controller@ to do some simple interactions with our @model@. 
 
 * File --> New (Alt+Shift+N) --> ColdFusion Component
 * Source Location: /JSBloggers/controllers
@@ -150,7 +150,7 @@ Another awesome feature of working with Wheels is the @ORM@. The @ORM@ stands fo
 * Extends: Controller
 * Click Finish
 
-Our new component opened automatically and we'll add some code in between the @cfcomponent@ tags. Let's try some experiments... Enter each of these instructions and observe the results:
+Our new component opened automatically and we'll add some code in between the @cfcomponent@ tags. Let's try some experiments... To view our first experiment, we'll go to http://wheels.local/index.cfm/examples/one:http://wheels.local/index.cfm/examples/one.Enter each of these instructions and observe the results:
 
 <pre lang="cfm">
 <code>
@@ -166,13 +166,13 @@ Our new component opened automatically and we'll add some code in between the @c
 </code>
 </pre>
 
-The first line was just to demonstrate that we can do anything we previously did during @CFML in 100 minutes@ and now inside our @controller@. The second line referenced the @Article@ model and called the @findAll@ method which returns a query of all articles in the database -- so far an empty result. The third line created a new article object and returns it. The object is not saved to the database; it only exists in memory. Property names and values can be passed in either using named arguments or as a struct to the properties argument.
+The first line was just to demonstrate we can do anything in our @controller@ we previously did during @CFML in 100 minutes@. The third line referenced the @Article@ model and called the @findAll@ method which returns a query of all articles in the database -- so far an empty result. The fifth line created a new article object and returns it. The object is not saved to the database; it only exists in memory. Property names and values can be passed in either using named arguments or as a struct to the properties argument.
 
 All the information about the @Article@ model is in the file @/models/Article.cfc@, so let's open that now.
 
-Not very impressive, right?  There are no attributes defined inside the model, so how does Wheels know that an Article should have a @title@, a @body@, etc?  It queries the database, looks at the articles table, and assumes that whatever columns that table has should probably be the attributes accessible through the model. Let's look at what our migration file created.
+Not very impressive, right?  There are no attributes defined inside the model, so how does Wheels know an Article should have a @title@, a @body@, etc?  It queries the database, looks at the articles table, and assumes whatever columns the table has should probably be the attributes accessible through the model. Let's look at the table our migration file created.
 
-You created most of those columns in your migration file, but what about @id@?  Every table you create with a migration will automatically have an @id@ column which serves as the table's primary key. When you want to find a specific article, you'll look it up in the articles table by it's unique ID number. Wheels and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
+You created most of those columns in your migration file, but what about the @id@?  Every table you create with a migration will automatically have an @id@ column which serves as the table's primary key. When you want to find a specific article, you'll look it up in the articles table by it's unique ID number. Wheels and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
 
 Back to the @<cfset article = model("article").new() />@ instruction. The @new()@ method doesn't change values in the database until we explicitly call the @save@ method on an object but in our example the @article@ object didn't have the  attributes @id@, @title@, @body@, @createdat@, and @updatedat@. Let's create a sample article and you'll see how it to add these. Enter each of the following lines one at a time:
 
