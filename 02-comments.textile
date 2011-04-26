@@ -30,7 +30,7 @@ h3. Setting up the Migration
 
 Open the DBMigrate plugin and fill it out with the following and click "create":
 
-* Select template:  Create table
+* Select template? Create table
 * Migration description: creates comments table
 
 Open the file that the generator created, @/db/migrate/some-timestamp_creates_comments_table.cfc@. Inside the @self.up@ you need to add one line for each of the pieces of data we just brainstormed. It'll start off with these...
@@ -54,7 +54,7 @@ Foreign keys are a way of marking one-to-one and one-to-many relationships. An a
 
 Part of the big deal with CFWheels is that it makes working with these relationships very easy. When we created the migration for comments we started with an @integer@ field named @articleid@. The CFWheels convention is that, for a one-to-many relationship, the objects on the "many" end should have a foreign key referencing the "one" object. And that foreign key should be titled with the name of the "one" object, then "id". So in this case one article has many comments, so each comment has a field named @articleid@ which tracks which article they belong to. Similarly, a store's customer might have many orders, so each order would have a @customerid@ specifying which customer they belong to.
 
-Following this convention will get us a lot of functionality "for free."  Open your @/models/comment.cfc@ and add the middle line so it looks like this:
+Following this convention will get us a lot of functionality "for free.? Open your @/models/comment.cfc@ and add the middle line so it looks like this:
 
 <pre lang="cfm">
 <code>
@@ -157,7 +157,7 @@ This says that we want to render a partial named "comment" and that we want to d
 </code>
 </pre>
 
-With that in place, try clicking on your articles and find the one where you created the comments. Did they show up?  What happens when an article doesn't have any comments?
+With that in place, try clicking on your articles and find the one where you created the comments. Did they show up? What happens when an article doesn't have any comments?
 
 h3. Web-Based Comment Creation
 
@@ -182,7 +182,7 @@ Obviously this is expecting a file @/views/articles/_comment_form.cfm@, so creat
 
 Look at an article in your browser to make sure that partial is showing up. Then we can start figuring out the details of the form.
 
-Ok, now look at your @Articles.cfc@ in the @new@ method. Remember how we had to create a blank Article object so CFWheels could figure out which fields an article has?  We need to do the same thing before we create a form for the comment. But when we view the article and display the comment form we're not running the article's @new@ method, we're running the @show@ method. So we'll need to create a blank Comment object inside that @show@ method like this:
+Ok, now look at your @Articles.cfc@ in the @new@ method. Remember how we had to create a blank Article object so CFWheels could figure out which fields an article has? We need to do the same thing before we create a form for the comment. But when we view the article and display the comment form we're not running the article's @new@ method, we're running the @show@ method. So we'll need to create a blank Comment object inside that @show@ method like this:
 
 <pre lang="cfm">
 <code>
@@ -271,7 +271,7 @@ Let's make it so where the view template has the "Comments" header it displays h
 
 h4. Form Labels
 
-The comments form looks a little silly will all the inputs on one line and with "Authorname" and "Authorurl" and such. It should probably say "Your Name" and "Your URL (optional)", right?  To change the text that the label helper prints out, you just pass in the desired text as a second parameter, like this:
+The comments form looks a little silly will all the inputs on one line and with "Authorname" and "Authorurl" and such. It should probably say "Your Name" and "Your URL (optional)", right? To change the text that the label helper prints out, you just pass in the desired text as a second parameter, like this:
 
 <pre lang="cfm">
 <code>

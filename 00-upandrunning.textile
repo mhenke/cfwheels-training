@@ -34,7 +34,7 @@ Our blog will be centered around "articles," so we'll need a table in the databa
 
 h3. Working with the Database
 
-Wheels can uses migration files to perform modifications to the database with the DBMigrate plugin. Almost any modification you can make to a DB can be done through a migration. The killer feature about Wheels migrations is that they're generally database agnostic. When developing applications a person might usually use MySQL as we are in this tutorial, but when deploying to their production server it is running PostgreSQL. Many others choose Microsoft SQL Server. It doesn't matter -- the same migrations will work on all of them!  This is an example of how Wheels takes some of the painful work off your hands. You write your migrations once, then run them against almost any database.
+Wheels can uses migration files to perform modifications to the database with the DBMigrate plugin. Almost any modification you can make to a DB can be done through a migration. The killer feature about Wheels migrations is that they're generally database agnostic. When developing applications a person might usually use MySQL as we are in this tutorial, but when deploying to their production server it is running PostgreSQL. Many others choose Microsoft SQL Server. It doesn't matter -- the same migrations will work on all of them! This is an example of how Wheels takes some of the painful work off your hands. You write your migrations once, then run them against almost any database.
 
 h4. What is a migration?
 
@@ -55,17 +55,17 @@ Let's open @/db/migrate/(some_time_stamp)__create_articles_table.cfc@ and take a
 <code>
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="create articles table">
   <cffunction name="up">
-    <cfscript>
-    t = createTable('[tableName]');
-   
-    t.timestamps();
-    t.create();
-    </cfscript>
+?  <cfscript>
+?  t = createTable('[tableName]');
+? 
+?  t.timestamps();
+?  t.create();
+?  </cfscript>
   </cffunction>
   <cffunction name="down">
-    <cfscript>
-    dropTable('[tableName]');
-    </cfscript>
+?  <cfscript>
+?  dropTable('[tableName]');
+?  </cfscript>
   </cffunction>
 </cfcomponent>
 </code>
@@ -73,9 +73,9 @@ Let's open @/db/migrate/(some_time_stamp)__create_articles_table.cfc@ and take a
 
 Inside the @up@ method you'll see the generator has placed a call to the @createTable@ method, passed @[tableName]@ as a parameter, and created a block with the variable @t@ referencing the table that's created. Let's change @[tableName]@ to @[articles]@. We can tell @t@ what kind of columns we want in the @articles@ table. 
 
-But first you might be wondering "What is that @t.timestamps@ doing there?".  The generator inserted that line. It will create three columns inside our table titled @createdat@ for when created, @updatedat@ for last updated, and @deletedat@ for soft deletes. Wheels will manage these columns for us, so when an article is created it's @createdat@ and @updatedat@ are automatically set. Each time we make a change to the article, the @updatedat@ will automatically be...uhhh...updated. Very handy.
+But first you might be wondering "What is that @t.timestamps@ doing there?". The generator inserted that line. It will create three columns inside our table titled @createdat@ for when created, @updatedat@ for last updated, and @deletedat@ for soft deletes. Wheels will manage these columns for us, so when an article is created it's @createdat@ and @updatedat@ are automatically set. Each time we make a change to the article, the @updatedat@ will automatically be...uhhh...updated. Very handy.
 
-Well, what kind of fields does our Article need to have?  Since migrations make it easy to add or change columns later, we don't need to think of EVERYTHING right now, we just need a few to get us rolling. Here's a starter set:
+Well, what kind of fields does our Article need to have? Since migrations make it easy to add or change columns later, we don't need to think of EVERYTHING right now, we just need a few to get us rolling. Here's a starter set:
 
 * @title@ (a string)
 * @body@ (a "text")
@@ -85,34 +85,34 @@ So add these into your @up@ so it looks like this:
 <pre lang="cfm">
 <code>
  <cffunction name="up">
-   <cfscript>
-   t = createTable('articles');
-   t.string('title');
-   t.text('body');
-   t.timestamps();
-   t.create();
-   </cfscript>
+? <cfscript>
+? t = createTable('articles');
+? t.string('title');
+? t.text('body');
+? t.timestamps();
+? t.create();
+? </cfscript>
  </cffunction>
 </code>
 </pre>
 
-That's it! You might be wondering, what is the "text" type?  This is an example of relying on the Wheels database adapters to make the right call. For some DBs, large text fields are stored as @varchar@, while other's like Postgres use a @text@ type. The database adapter will figure out the best choice for us depending on the configured database -- we don't have to worry about it.
+That's it! You might be wondering, what is the "text" type? This is an example of relying on the Wheels database adapters to make the right call. For some DBs, large text fields are stored as @varchar@, while other's like Postgres use a @text@ type. The database adapter will figure out the best choice for us depending on the configured database -- we don't have to worry about it.
 
-Now our @up@ migration is done. You might wonder, what about the @down@?  Didn't I say migrations need to be symmetric?  If we added something to the @up@ it is _generally_ the case we need to undo the same change in the @down@. However, when the migration is creating a table, the @down@ can just drop that table regardless of what columns are inside of it. That's what the generator has setup for us here, where it says @dropTable('[tableName]');@ replace @[tableName]@ with @articles@.
+Now our @up@ migration is done. You might wonder, what about the @down@? Didn't I say migrations need to be symmetric? If we added something to the @up@ it is _generally_ the case we need to undo the same change in the @down@. However, when the migration is creating a table, the @down@ can just drop that table regardless of what columns are inside of it. That's what the generator has setup for us here, where it says @dropTable('[tableName]');@ replace @[tableName]@ with @articles@.
 
 <pre lang="cfm">
 <code>
   <cffunction name="down">
-    <cfscript>
-    dropTable('articles');
-    </cfscript>
+?  <cfscript>
+?  dropTable('articles');
+?  </cfscript>
   </cffunction>
 </code>
 </pre>
 
 Save that migration cfc file, switch over to your browser, and click @go@ under the *Migrate* section:
 
-The @All non-migrated@ option finds all migrations in the @/db/migrate/@ folder, determines which migrations have and have not been run yet, then runs them.  Pretty much it says "look in your set of cfcs for the database in @/db/migrate/@ and run the migrations not yet ran."  
+The @All non-migrated@ option finds all migrations in the @/db/migrate/@ folder, determines which migrations have and have not been run yet, then runs them. Pretty much it says "look in your set of cfcs for the database in @/db/migrate/@ and run the migrations not yet ran.? 
 
 In this case we had just one migration to run and it should print some output like this to your browser under *Migration Results*:
 
@@ -166,15 +166,15 @@ Our new component opened automatically and we'll add some code in between the @c
 </code>
 </pre>
 
-The first line was just to demonstrate we can do anything in our @controller@ we previously did during @CFML in 100 minutes@. The third line referenced the @Article@ model and called the @findAll@ method which returns a query of all articles in the database -- so far an empty result. The fifth line created a new article object and returns it. The object is not saved to the database; it only exists in memory. Property names and values can be passed in either using named arguments or as a struct to the properties argument.
+The first line was to demonstrate we can do anything in our @controller@ we previously did during @CFML in 100 minutes@. The third line referenced the @Article@ model and called the @findAll@ method which returns a query of all articles in the database -- so far an empty result. The fifth line created a new article object and returns it. The object is not saved to the database; it only exists in memory. Property names and values can be passed in either using named arguments or as a struct to the properties argument.
 
 All the information about the @Article@ model is in the file @/models/Article.cfc@, so let's open that now.
 
-Not very impressive, right?  There are no attributes defined inside the model, so how does Wheels know an Article should have a @title@, a @body@, etc?  It queries the database, looks at the articles table, and assumes whatever columns the table has should probably be the attributes accessible through the model. Let's look at the table our migration file created.
+Not very impressive, right? There are no attributes defined inside the model, so how does Wheels know an Article should have a @title@, a @body@, etc? It queries the database, looks at the articles table, and assumes whatever columns the table has should probably be the attributes accessible through the model. Let's look at the table our migration file created.
 
-You created most of those columns in your migration file, but what about the @id@?  Every table you create with a migration will automatically have an @id@ column which serves as the table's primary key. When you want to find a specific article, you'll look it up in the articles table by it's unique ID number. Wheels and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
+You created most of those columns in your migration file, but what about the @id@? Every table you create with a migration will automatically have an @id@ column which serves as the table's primary key. When you want to find a specific article, you'll look it up in the articles table by it's unique ID number. Wheels and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
 
-Back to the @<cfset article = model("article").new() />@ instruction. The @new()@ method doesn't change values in the database until we explicitly call the @save@ method on an object but in our example the @article@ object didn't have the  attributes @id@, @title@, @body@, @createdat@, and @updatedat@. Let's create a sample article and you'll see how it to add these. Enter each of the following lines one at a time:
+Back to the @<cfset article = model("article").new() />@ instruction. The @new()@ method doesn't change values in the database until we explicitly call the @save@ method on an object but in our example the @article@ object didn't have th? attributes @id@, @title@, @body@, @createdat@, and @updatedat@. Let's create a sample article and you'll see how it to add these. Enter each of the following lines one at a time:
 
 <pre lang="cfm">
 <code>
