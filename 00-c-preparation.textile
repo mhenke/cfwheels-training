@@ -1,6 +1,6 @@
 h1. Preparation for JSBloggers Project
 
-There are a few extra steps of preparation when working with CFWheels projects:
+There are a few extra steps of preparation when working with Wheels projects:
 
 h2. Installing Servers
 
@@ -63,7 +63,7 @@ Finally, open the last file, @hosts@, and add this line at the top.
 </code>
 </pre>
 
-Now instead of going to "http://localhost:8301/":http://localhost:8301/, you can get to our ColdFusion server instance via "http://wheels.local/":http://wheels.local/ .
+Now instead of going to "http://localhost:8301/":http://localhost:8301/, you can get to our ColdFusion server instance via "http://wheels.local/":http://wheels.local/.
 
 h3. Install ColdFusion on Wheels
 
@@ -85,7 +85,7 @@ h4. Install Scaffold Plugin
 * Scaffold
 ** Download "http://cfwheels.org/plugins/listing/9":http://cfwheels.org/plugins/listing/9
 ** Move the downloaded zip into "C:\JRun4\servers\cfwheels101\plugins"
-** Reload CFWheels "http://wheels.local/":http://wheels.local/
+** Reload Wheels "http://wheels.local/":http://wheels.local/
 ** You should see Scaffold under Plugins
 
 h3. Install MySQL Server

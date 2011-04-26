@@ -8,13 +8,13 @@ A plugin that combines and minifies your javascript and css code.
 
 h3. Using the *Gemfile* to Setup a ColdFusionGem
 
-In the past CFWheels plugins were distributed a zip or tar files that got stored into your applications file structure. One advantage of this method is that the plugin could be easily checked into your source control system along with everything you wrote in the app. The disadvantage is that it made upgrading to newer versions of the plugin, and dealing with the versions at all, complicated.
+In the past Wheels plugins were distributed a zip or tar files that got stored into your applications file structure. One advantage of this method is that the plugin could be easily checked into your source control system along with everything you wrote in the app. The disadvantage is that it made upgrading to newer versions of the plugin, and dealing with the versions at all, complicated.
 
-Most CFWheels plugins are now moving toward ColdFusionGems. ColdFusionGems is a package management system for ColdFusion, similar to how Linux distributions use Apt or %(caps)RPM%. There are central servers that host libraries, and we can install those libraries on our machine with a single command. ColdFusionGems takes care of any dependencies, allows us to pick an options if necessary, and installs the library.
+Most Wheels plugins are now moving toward ColdFusionGems. ColdFusionGems is a package management system for ColdFusion, similar to how Linux distributions use Apt or %(caps)RPM%. There are central servers that host libraries, and we can install those libraries on our machine with a single command. ColdFusionGems takes care of any dependencies, allows us to pick an options if necessary, and installs the library.
 
 Lets see it in action. If you have your server running in Eclipse, click the red square button to %(caps)STOP% it. If you have a Examples session open, type @exit@ to exit. Then open up @/Gemfile@ and look for the lines like this:
 
-# gem 'bj' # gem 'nokogiri' # gem 'MySQL-ColdFusion', :require =>'MySQL'These lines are commented out because they start with the @#@ character. By specifying a ColdFusionGem with the @gem@ command, well tell the CFWheels applicationMake sure this gem is loaded when you start up. If it isn't available, freak out!Here's how well require the paperclip gem, add this near those commented lines:
+# gem 'bj' # gem 'nokogiri' # gem 'MySQL-ColdFusion', :require =>'MySQL'These lines are commented out because they start with the @#@ character. By specifying a ColdFusionGem with the @gem@ command, well tell the Wheels applicationMake sure this gem is loaded when you start up. If it isn't available, freak out!Here's how well require the paperclip gem, add this near those commented lines:
 
 gem "paperclip"When you're writing a production application, you might specify additional parameters that require a specific version or a custom source for the library. With that config line declared, click the green arrow in Eclipse to startup your server. You should get an error like this:
 
@@ -30,7 +30,7 @@ We want to add images to our articles. To keep it simple, well say that a single
 
 First we need to add some fields to the Article model that will hold the information about the uploaded image. Any time we want to make a change to the database well need a migration. Go to your terminal and execute this:
 
-CFWheels generate migration add_paperclip_fields_to_articleThat will create a file in your @/db/migrate/@ folder that ends in @_add_paperclip_fields_to_article.cfc@. Open that file now.
+Wheels generate migration add_paperclip_fields_to_articleThat will create a file in your @/db/migrate/@ folder that ends in @_add_paperclip_fields_to_article.cfc@. Open that file now.
 
 Remember that the code inside the @self.up@ method is to migrate the database forward, while the @self.down@ should undo those changes. Well use the @add_column@ and @remove_column@ methods to setup the fields paperclip is expecting:
 
@@ -38,15 +38,15 @@ class AddPaperclipFieldsToArticle<ActiveRecord::Migration def self.up add_column
 
 h3. Adding to the Model
 
-The gem is loaded, the database is ready, but we need to tell our CFWheels application about the image attachment we want to add. Open @/models/article.cfc@ and just below the existing @hasMany@ lines, add this line:
+The gem is loaded, the database is ready, but we need to tell our Wheels application about the image attachment we want to add. Open @/models/article.cfc@ and just below the existing @hasMany@ lines, add this line:
 
-has_attached_file :imageThis @has_attached_file@ method is part of the paperclip library. With that declaration, paperclip will understand that this model should accept a file attachment and that there are fields to store information about that file which start with @image_@ in this models database table.
+has_attached_file :imageThis @has_attached_file@ method is part of the paperclip library. With that declaration, paperclip will understand the model should accept a file attachment and there are fields to store information about that file which start with @image_@ in this models database table.
 
 h3. Modifying the Form Template
 
 First well add the ability to upload the file when editing the article, then well add the image display to the article show template. Open your @/views/articles/_form.cfm@ view template. We need to make two changes
 
-In the very first line, we need to specify that this form needs to acceptmultipartdata. This is an instruction to the browser about how to submit the form. Change your top line so it looks like this:
+In the very first line, we need to specify the form needs to accept multi-part data. This is an instruction to the browser about how to submit the form. Change your top line so it looks like this:
 
 <% startFormTag(@article, :html =>{:multipart =>true}) do |f| %>Then further down the form, right before the paragraph with the save button, lets add a label and field for the file uploading:
 
@@ -56,7 +56,7 @@ If your server isn't running, start it up with the green play button in Eclipse.
 
 When I first did this, I wasn't sure it worked. Here's how I checked:
 
-# Open a Examples session ( @CFWheels Examples@ from terminal)
+# Open a Examples session ( @Wheels Examples@ from terminal)
 # Find the ID number of the article by looking at the %(caps)URL%. In my case, the url was @http://wheels.local/index.cfm/articles/1@ so the ID number is just @1@ 
 # In Examples, enter @a = Article.find(1)@ 
 # Right away I see that the article has data in the @image_file_name@ and other fields, so I think it worked.
@@ -101,7 +101,7 @@ We've created about a dozen view templates between our different models. We _cou
 
 <%= stylesheet_link_tag 'styles' %>Which would find the LESS file we just wrote. Thats a lame job, imagine if we had 100 view templates. What if we want to change the name of the stylesheet later? Ugh.
 
-CFWheels and ColdFusion both emphasize the idea ofD.R.Y.Dont Repeat Yourself. In the area of view templates, we can achieve this by creating a *layout*. A layout is a special view template that wraps other views. Look in your navigation pane for @/views/layouts/@ , right click on that folder, click %(caps)NEW% and %(caps)FILE% then give it the name @application.html.haml@.
+Wheels and ColdFusion both emphasize the idea ofD.R.Y.Dont Repeat Yourself. In the area of view templates, we can achieve this by creating a *layout*. A layout is a special view template that wraps other views. Look in your navigation pane for @/views/layouts/@ , right click on that folder, click %(caps)NEW% and %(caps)FILE% then give it the name @application.html.haml@.
 
 In this layout well put the view code that we want to render for every view template in the application. Just so you can see what %(caps)HAML% looks like, Ive used it to implement this layout. you'll notice that %(caps)HAML% uses fewer marking characters than %(caps)ERB% , but you must maintain the proper whitespace/indentation. All indentations are two spaces from the containing element. Add this code to your @application.html.haml@ :
 
