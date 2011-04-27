@@ -13,6 +13,7 @@ h3. Install Adobe ColdFusion 9
 ** Name the instance **cfwheels101**
 ** Test at "http://localhost:8301/cfide/administrator/":http://localhost:8301/cfide/administrator/
 ** Path should be C:\JRun4\servers\cfwheels101\
+** Our web root is "C:\JRun4\servers\cfwheels101\"
 
 h3. Install Apache ( optional )
 
@@ -20,7 +21,7 @@ h3. Install Apache ( optional )
 ** Download and install the "Win32 Binary without crypto (no mod_ssl) (MSI Installer)":http://apache.tradebit.com/pub//httpd/binaries/win32/httpd-2.2.17-win32-x86-no_ssl.msi
 ** We will modify three files: httpd.conf, httpd-vhosts.conf, and hosts
 
-First uncomment these lines by deleting the hash @#@ in front of the line and save the file.
+First uncomment these lines by deleting the hash (@#@) in front of the line and save the file.
 
 * C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\httpd.conf
 
@@ -105,16 +106,24 @@ h3. Install SQL Explorer
 * SQL Explorer
 ** Open CFBuilder
 ** Select Help --> Install New Software...
-** Paste in Work With: "http://eclipsesql.sourceforge.net/":http://eclipsesql.sourceforge.net/
-** Click Add...
-** Type in Name: SQL Explorer
-** Once loaded, check SQL Explorer
-** Click Finish
+** Click the "Add..." button
+** In the "Add Repository" dialog, set the following:
+*** Name: "SQL Explorer"
+*** Location: http://eclipsesql.sourceforge.net/
+*** Click the "OK"
+** Click on the checkbox next to "SQL Explorer"
+** Click the "Next" button
+** On the "Install Details" window, click the "Next >" button
+** On the "Review Licenses" window, select "I accept the terms of the license agreement" and then click the "Finish >" button
+** When you're prompted with a "Security Warning" about the software having unsigned content, click the "OK" button to continue.
+** When prompted to restart Eclipse, click the "Restart Now" button
 
 h4. Install MySQL driver
 
 ** Edit MySql driver http://www.sqlexplorer.org/drivers.php
 http://eclipsesql.sourceforge.net/
+
+TODO: Write down steps
 
 Extra Class Path tab - Add JARs button
 Driver Class Name:
