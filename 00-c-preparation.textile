@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 h1. Preparation for JSBloggers Project
 
 There are a few extra steps of preparation when working with Wheels projects:
@@ -135,4 +136,149 @@ URL: jdbc:mysql://localhost:3306/
 h4. Create JSBloggers Database
 
 * do this
+=======
+h1. Preparation for JSBloggers Project
+
+There are a few extra steps of preparation when working with Wheels projects:
+
+h2. Installing Servers
+
+h3. Install Adobe ColdFusion 9
+
+* Adobe ColdFusion 9
+** Download and install "http://www.adobe.com/products/coldfusion/":http://www.adobe.com/products/coldfusion/ as multiple instances
+** Follow the instructions in the installation wizard and let it run to completion. Ensure that you select Multiserver configuration.
+*** Presentation / Slides for "Installing Multiple Versions of ColdFusion Together":http://www.cfgothchic.com/blog/post.cfm/my-cfmeetup-presentation-installing-multiple-versions-of-coldfusion
+** Name the instance **cfwheels101**
+** Test at "http://localhost:8301/cfide/administrator/":http://localhost:8301/cfide/administrator/
+** Path should be C:\JRun4\servers\cfwheels101\
+** Our web root is "C:\JRun4\servers\cfwheels101\"
+
+h3. Install Apache ( optional )
+
+* Apache
+** Download and install the "Win32 Binary without crypto (no mod_ssl) (MSI Installer)":http://apache.tradebit.com/pub//httpd/binaries/win32/httpd-2.2.17-win32-x86-no_ssl.msi
+** We will modify three files: httpd.conf, httpd-vhosts.conf, and hosts
+
+First uncomment these lines by deleting the hash (@#@) in front of the line and save the file.
+
+* C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\httpd.conf
+
+<pre lang="cfm">
+<code>
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
+Include conf/extra/httpd-vhosts.conf
+</code>
+</pre>
+
+Next add this code to the bottom the the next file, @httpd-vhosts.conf@.
+
+* C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\extra\httpd-vhosts.conf
+
+<pre lang="cfm">
+<code>
+<VirtualHost *:80>
+ ServerName wheels.local
+
+ ProxyRequests Off
+  <Proxy *>
+  Order deny,allow
+  Allow from all
+  </Proxy>
+
+ ProxyPass / http://wheels.local:8301/
+ ProxyPassReverse / http://wheels.local:8301/
+</VirtualHost>
+</code>
+</pre>
+
+Finally, open the last file, @hosts@, and add this line at the top.
+
+* C:\Windows\System32\drivers\etc\hosts add this:
+
+<pre lang="cfm">
+<code>
+127.0.0.1 	wheels.local
+</code>
+</pre>
+
+Now instead of going to "http://localhost:8301/":http://localhost:8301/, you can get to our ColdFusion server instance via "http://wheels.local/":http://wheels.local/.
+
+h3. Install ColdFusion on Wheels
+
+* ColdFusion on Wheels
+** Download "http://cfwheels.org/download/latest-version":http://cfwheels.org/download/latest-version
+** Extract and copy the files to "C:\JRun4\servers\cfwheels101"
+** Test at "http://wheels.local/":http://wheels.local/ and you should see a Congratulations page
+
+h4. Install DBMigrate Plugin
+
+* DBMigrate
+** Download "http://code.google.com/p/cfwheels-dbmigrate/":http://code.google.com/p/cfwheels-dbmigrate/
+** Move the downloaded zip into "C:\JRun4\servers\cfwheels101\plugins"
+** Reload CFWheels "http://wheels.local/":http://wheels.local/
+** You should see DBMigrate under Plugins
+
+h4. Install Scaffold Plugin
+
+* Scaffold
+** Download "http://cfwheels.org/plugins/listing/9":http://cfwheels.org/plugins/listing/9
+** Move the downloaded zip into "C:\JRun4\servers\cfwheels101\plugins"
+** Reload Wheels "http://wheels.local/":http://wheels.local/
+** You should see Scaffold under Plugins
+
+h3. Install MySQL Server
+
+* Windows
+** Download and install "http://dev.mysql.com/downloads/mirror.php?id=401202":http://dev.mysql.com/downloads/mirror.php?id=401202 
+
+h2. Client Tools
+
+h3. Install ColdFusion Builder
+
+* Windows
+** Download and install as standalone "http://www.adobe.com/products/coldfusion/cfbuilder/features/":http://www.adobe.com/products/coldfusion/cfbuilder/features/
+
+h3. Install SQL Explorer
+
+* SQL Explorer
+** Open CFBuilder
+** Select Help --> Install New Software...
+** Click the "Add..." button
+** In the "Add Repository" dialog, set the following:
+*** Name: "SQL Explorer"
+*** Location: http://eclipsesql.sourceforge.net/
+*** Click the "OK"
+** Click on the checkbox next to "SQL Explorer"
+** Click the "Next" button
+** On the "Install Details" window, click the "Next >" button
+** On the "Review Licenses" window, select "I accept the terms of the license agreement" and then click the "Finish >" button
+** When you're prompted with a "Security Warning" about the software having unsigned content, click the "OK" button to continue.
+** When prompted to restart Eclipse, click the "Restart Now" button
+
+h4. Install MySQL driver
+
+** Edit MySql driver http://www.sqlexplorer.org/drivers.php
+http://eclipsesql.sourceforge.net/
+
+TODO: Write down steps
+
+Extra Class Path tab - Add JARs button
+Driver Class Name:
+
+** "JDBC Driver for MySQL (Connector/J)":http://www.mysql.com/downloads/connector/j/
+
+h4. Add JSBloggers connection
+
+** Add connection
+
+NameL JSBloggers
+Driver: MySQL
+URL: jdbc:mysql://localhost:3306/
+
+h4. Create JSBloggers Database
+
+* do this
+>>>>>>> develop
 * and this
