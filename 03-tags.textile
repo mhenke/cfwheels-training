@@ -36,12 +36,12 @@ The tags migration should look like this:
 <code>
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="creates tags tables">
  <cffunction name="up" >
-? <cfscript >
-? t = createTable('tags');
-? t = t.string('name');
-? t.timestamps();
-? t.create();
-? </cfscript >
+  <cfscript >
+  t = createTable('tags');
+  t = t.string('name');
+  t.timestamps();
+  t.create();
+  </cfscript >
  </cffunction >
  <cffunction name="down" >
   <cfscript >
@@ -106,7 +106,6 @@ In @/models/Tag.cfc@
 </code>
 </pre>
 
-
 Now we can get the many-to-many association that we set up above. Here is how we will include the related tables from the tagging:
 
 <pre lang="cfm">
@@ -121,11 +120,11 @@ After Wheels had been around for awhile, developers were finding this kind of re
 <code>
  <cfset article = model("article").findByKey(key=3,include="taggings") />
  <cfdump var="#article.taggings#">
- <cfabor>
+ <cfabort>
 </code>
 </pre>
 
-That's a pain for since we don't have @tags@ yet. The solution was to augment the relationship with "shortcut". We'll update our relationship now to the Article and Tag classes:
+That's a pain since we don't have @tags@ yet. The solution was to augment the relationship with "shortcut". We'll update our relationship now to the Article and Tag classes:
 
 In @/models/article.cfc@
 
@@ -147,15 +146,22 @@ Now we can get the many-to-many association that we set up above. How we will in
 
 Now if we have an object like @article@ we can just ask for @article.tags()@ or, conversely, if we have an object named @tag@ we can ask for @tag.articles()@.
 
+Lets create an example to test our relationship with the "shortcut":
+
 <pre lang="cfm">
 <code>
-<cfset article = model("article").findByKey(key=3,include="taggings") />
-<cfdump var="#article.tags()#">
-<cfset tag = model("tag").findByKey(key=1,include="taggings") />
-<cfdump var="#tag.articles()#">
-<cfabort>
+<cffunction name="six">
+ <cfset article = model("article").findByKey(key=3,include="taggings") />
+ <cfdump var="#article.tags()#">
+
+ <cfset tag = model("tag").findByKey(key=1,include="taggings") />
+ <cfdump var="#tag.articles()#">
+ <cfabort>
+</cffunction>
 </code>
 </pre>
+
+You should see in the articles with their tags in the first dump and tags with their articles.
 
 h3. An Interface for Tagging Articles
 
