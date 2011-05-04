@@ -165,13 +165,13 @@ You should see in the articles with their tags in the first dump and tags with t
 
 h3. An Interface for Tagging Articles
 
-The first interface we're interested in is within the article itself. When I write an article, I want to have a text box where I can enter a list of zero or more tags separated by commas. When I save the article, my app should associate my article with the tags with those names, creating them if necessary.
+The first interface we're interested in is within the article itself. When I write an article, I want to have a text box where I can enter a new tag. When I save the article, my app should associate my article with the tags with the tag, creating them if necessary.
 
-Adding the text field will take place in the file @/views/articles/_form.cfm@. Add in a set of paragraph tags underneath the body text area like this:
+Adding the text field will take place in the file @/views/articles/_form.cfm@. Add underneath the body text area like this:
 
 <pre lang="cfm">
 <code>
-#textField(objectName='article', property='taggings', label='New Tag')#
+#textFieldTag(name='newTag', label='New Tag')#
 </code>
 </pre>
 
