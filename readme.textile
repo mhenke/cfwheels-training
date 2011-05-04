@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 h1. readme
 
 ColdFusion On Wheels Training was modified from "JSBlogger":http://jumpstartlab.com/resources/rails-jumpstart/jsblogger/
@@ -75,4 +74,3 @@ Mike Henke (henke.mike@gmail.com) - "https://github.com/mhenke/":https://github.
 h2. Git Workflow for Contributors
 
 This project uses the excellent "Git Workflow series":http://www.silverwareconsulting.com/index.cfm/Git-Workflow by "Bob Silverburg":https://github.com/bobsilverberg/ for contributions.
->>>>>>> e20406ab8fb995f84434a41c5c169cc3153b2898
