@@ -199,39 +199,13 @@ This is the first time we used @textFieldTag@, it builds and returns a string co
 </code>
 </pre>
 
-Your form should now show up and there's a text box at the bottom named "New Tag". Enter content for a new article and in the tag enter @ColdFusion@. Click SAVE and you'll get an error like this:
+We will also need to call this new method within our @create@ and @update@ actions by adding @<cfset newTag()/>@. Your form should now show up and there's a text box at the bottom named "New Tag". Enter content for a new article and in the tag enter @ColdFusion@. Click SAVE and you'll get an successful massage.
 
-<pre lang="cfm">
-ActiveRecord::UnknownAttributeError in ArticlesController#create
-unknown attribute: tag_list
-</pre>
-
-What is this all about? Let's start by looking at the form data that was posted when we clicked SAVE. This data is in the production.log file which should be in the "Examples" frame at the bottom of the Eclipse window. Look for the line that starts "Processing ArticlesController#create", here's what mine looks like:
-
-<pre lang="cfm">
-Processing ArticlesController#create (for 127.0.0.1) [POST]
-  Parameters: {"article"=>{"body"=>"Yes, the samples continue!", "title"=>"My Sample", "tag_list"=>"ColdFusion, technology"}, "commit"=>"Save", "authenticity_token"=>"xxi0A3tZtoCUDeoTASi6Xx39wpnHt1QW/6Z1jxCMOm8="}
-</pre>
-
-The field that's interesting there is the @"tag_list"=>"technology, ColdFusion"@. Those are the tags as I typed them into the form. The error came up in the @create@ method, so let's peek at @/controllers/Articles.cfc@ in the @create@ method. See the first line that calls @Article.new(params[article])? This is the line that's causing the error as you could see in the middle of the stack trace.
-
-Since the @create@ method passes all the parameters from the form into the @Article.new@ method, the tags are sent in as the string @"technology, ColdFusion"@. The @new@ method will try to set the new Article's @tag_list@ equal to @"technology, ColdFusion"@ but that method doesn't exist because there is no attribute named @tag_list@. 
-
-There are several ways to solve this problem, but the simplest is to pretend like we have an attribute named @tag_list@. We can define the @tag_list=@ method inside @article.cfc@ like this:
-
-<pre lang="cfm">
-<code>
-  def tag_list=(tags_string)
-?  
-  end
-</code>
-</pre>
-
-Just leave it blank for now and try to resubmit your sample article with tags. It goes through!
+Check to make sure your new tag is present and checked in the new article. Let's test adding an already existing tag in the new tag field along with leaving it blank with your sample article.
 
 h3. Not So Fast
 
-Did it really wor? It's hard to tell. Let's jump into the Examples and have a look.
+Did it really work? It's hard to tell. Let's jump into the Examples and have a look.
 
 <pre lang="cfm">
 <code>
