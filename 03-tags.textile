@@ -62,7 +62,6 @@ The taggings migration should look like this:
   t = createTable('taggings');
   t.integer('tagid');
   t.integer('articleid');
-  t.timestamps();
   t.create();
   </cfscript>
  </cffunction>
@@ -75,7 +74,13 @@ The taggings migration should look like this:
 </code>
 </pre>
 
-Now run both migrations.
+Now run both migrations. Currently DBMigrations plugin doesn't have a command for composite keys, so we will have to run this sql command seperately.
+
+<pre lang="sql">
+<code>
+ALTER TABLE jsbloggers.taggings ADD PRIMARY KEY (tagid,articleid);
+</code>
+</pre>
 
 h3. Expressing Relationships
 
@@ -167,33 +172,34 @@ h3. An Interface for Tagging Articles
 
 The first interface we're interested in is within the article itself. When I write an article, I want to have a text box where I can enter a new tag. When I save the article, my app should associate my article with the tags with the tag, creating them if necessary.
 
-Adding the text field will take place in the file @/views/articles/_form.cfm@. Add underneath the body text area like this:
+Adding the text field will take place in the file @/views/articles/_form.cfm@. Add this code underneath the body text area like this:
 
 <pre lang="cfm">
 <code>
+<h3>Tag this post under:</h3>
 #textFieldTag(name='newTag', label='New Tag')#
 </code>
 </pre>
 
-With that added, try to create an new article in your browser and your should see this error:
-
-<pre lang="cfm">
-NoMethodError in Articles#new
-Showing app/views/articles/_form.cfm where line #14 raised:
-undefined method `tag_list' for #<Article:0x10499bab0>
-</pre>
-
-An Article doesn't have a thing named @tag_list@ -- we made it up. In order for the form to display, we need to add a method to the @article.cfc@ file like this:
+This is the first time we used @textFieldTag@, it builds and returns a string containing a text field form control based on the supplied name. An Article doesn't have a property named @newTag@ -- we made it up. In order for us to add a new tag, we need to add a method to the @article.cfc@ file like this:
 
 <pre lang="cfm">
 <code>
-  def tag_list
-? return self.tags.join(", ")
-  end
+<cffunction name="newTag">
+ <cfif len(trim(params.newTag))>
+  <cfset Tag = model("Tag").findOne(tagid=Tag.id,articleid=article.id)/>
+
+  <cfif not isObject(Tag)>
+   <cfset Tag = model("Tag").create(name=params.newTag)/>
+  </cfif>
+
+  <cfset Tagging = model("Tagging").create(tagid=Tag.id,articleid=article.id) />
+ </cfif>
+</cffunction>
 </code>
 </pre>
 
-Your form should now show up and there's a text box at the bottom named "Tag list". Enter content for another sample article and in the tag list enter @ColdFusion, technology@. Click SAVE and you'll get an error like this:
+Your form should now show up and there's a text box at the bottom named "New Tag". Enter content for a new article and in the tag enter @ColdFusion@. Click SAVE and you'll get an error like this:
 
 <pre lang="cfm">
 ActiveRecord::UnknownAttributeError in ArticlesController#create
