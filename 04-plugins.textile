@@ -18,23 +18,50 @@ h3.  Using the *Plugin Manager* (For Real)
 
 Now we can reload Wheels, and should see a list of all the Wheels plugins. First will be plugins we are currently using. If an upgrade exists, you will see "Version X.X.X Available: @More Info@ @Auto Upgrade@ @Download@". We can select @Auto Upgrade@ so we won't have to worry about updates to plugins. @Download@ will download the plugin into our @/plugins/@ folder.
 
-h3. Provides
+h3. Responding with Multiple Formats
 
-We want to add images to our articles. To keep it simple, well say that a single article could have zero or one images. In later versions of the app maybe wed add the ability to upload multiple images and appear at different places in the article, but for now the one will show us how to work with paperclip.
+Changing gears, Wheels controllers provide some powerful mechanisms for responding to requests for content in XML, JSON, and other formats. We want to provide our articles in html (default), pdf, json, and word. First we will add this code to @/controllers/Articles.cfc@. This code will tell the Wheels controller to be ready to provide content in these formats:
 
-First we need to add some fields to the Article model that will hold the information about the uploaded image. Any time we want to make a change to the database well need a migration. Go to your terminal and execute this:
+<pre lang="cfm">
+<code>
+<cffunction name="init">
+ <cfset provides("html,json,pdf")>
+</cffunction>
+</code>
+</pre>
 
-Wheels generate migration add_paperclip_fields_to_articleThat will create a file in your @/db/migrate/@ folder that ends in @_add_paperclip_fields_to_article.cfc@. Open that file now.
+In our @index@ action of @/controllers/Articles.cfc@ add this line @<cfset renderWith(articles)>@. Wheels can handle HTML, XML, JSON, CSV, PDF, and XLS. XML and JSON Formats can be automatic generated. Let's test the JSON response. Add @?format=json@ to the end of our index page's url. It should return a JSON file. Try @?format=pdf@.
 
-Remember that the code inside the @self.up@ method is to migrate the database forward, while the @self.down@ should undo those changes. Well use the @add_column@ and @remove_column@ methods to setup the fields paperclip is expecting:
+<pre>
+Element TEMPLATE is undefined in LOC.
 
-class AddPaperclipFieldsToArticle<ActiveRecord::Migration def self.up add_column :articles, :image_file_name, :string add_column :articles, :image_content_type, :string add_column :articles, :image_file_size, :integer add_column :articles, :image_updated_at, :datetime end def self.down remove_column :articles, :image_file_name remove_column :articles, :image_content_type remove_column :articles, :image_file_size remove_column :articles, :image_updated_at end endThe go to your terminal and run @rake db:migrate@. The rake command should show you that the migration ran and added columns to the database.
+The error occurred in C:\JRun4\servers\cfwheels\cfusion.ear\cfusion.war\wheels\controller\provides.cfm: line 123
+<pre>
 
-h3. Adding to the Model
+Not to helpful, huh. Well, we mentioned XML and JSON can be automatically generated so we'll need to provide our own custom responses for PDF. Create @/views/articles/index.pdf.cfm@ and place this in it.
 
-The gem is loaded, the database is ready, but we need to tell our Wheels application about the image attachment we want to add. Open @/models/article.cfc@ and just below the existing @hasMany@ lines, add this line:
+<pre lang="cfm">
+<code>
+<cfdocument format="pdf">
+<h1>Listing articles</h1>
+<ul>
+ <cfoutput query="articles">
+  <li>
+  <b>#articles.title#</b><br/>
+  </li>
+ </cfoutput>
+</ul>
+</cfdocument>
+</code>
+</pre>
 
-has_attached_file :imageThis @has_attached_file@ method is part of the paperclip library. With that declaration, paperclip will understand the model should accept a file attachment and there are fields to store information about that file which start with @image_@ in this models database table.
+Reload the page with the error and you should see a pdf with our custom content.
+
+h3. Adding a Word format
+
+In @config/settings.cfm@ add @<cfset addFormat(extension="doc", mimeType="application/msword")/>@. Don't forget to add @doc@ to the @provides@ instruction in @/controllers/Articles.cfc@.
+
+Copy @/views/articles/index.pdf.cfm@ and delete the starting and ending @cfdocument@ instructions. This isn't very DRY but you can fix that later. Refresh and you should get a word document.
 
 h3. Modifying the Form Template
 
