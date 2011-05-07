@@ -61,58 +61,9 @@ h3. Adding a Word format
 
 In @config/settings.cfm@ add @<cfset addFormat(extension="doc", mimeType="application/msword")/>@. Don't forget to add @doc@ to the @provides@ instruction in @/controllers/Articles.cfc@.
 
-Copy @/views/articles/index.pdf.cfm@ and delete the starting and ending @cfdocument@ instructions. This isn't very DRY but you can fix that later. Refresh and you should get a word document.
-
-h3. Modifying the Form Template
-
-First well add the ability to upload the file when editing the article, then well add the image display to the article show template. Open your @/views/articles/_form.cfm@ view template. We need to make two changes
-
-In the very first line, we need to specify the form needs to accept multi-part data. This is an instruction to the browser about how to submit the form. Change your top line so it looks like this:
-
-<% startFormTag(@article, :html =>{:multipart =>true}) do |f| %>Then further down the form, right before the paragraph with the save button, lets add a label and field for the file uploading:
-
-<p><%= f.label :image, "Attach an Image" %><br /><%= f.file_field :image %></p>h3. Trying it Out
-
-If your server isn't running, start it up with the green play button in Eclipse. Then go to @http://wheels.local/index.cfm/articles/@ and click %(caps)EDIT% for your first article. The file field should show up towards the bottom. Click the @Choose a File@ and select one of the small images that Ive distributed to you. Click %(caps)SAVE% and you'll return to the article index. Click the title of the article you just modified. What do you see? Did the image attach to the article?
-
-When I first did this, I wasn't sure it worked. Here's how I checked:
-
-# Open a Examples session ( @Wheels Examples@ from terminal)
-# Find the ID number of the article by looking at the %(caps)URL%. In my case, the url was @http://wheels.local/index.cfm/articles/1@ so the ID number is just @1@ 
-# In Examples, enter @a = Article.find(1)@ 
-# Right away I see that the article has data in the @image_file_name@ and other fields, so I think it worked.
-# Enter @a.image@ to see even more data about the file
-
-Ok, its in there, but we need it to actually show up in the article. Open the @/views/articles/show.cfm@ view template. In between the line that displays the title and the one that displays the body, lets add this line:
-
-<%= image_tag @article.image.url %>Then refresh the article in your browser. Tada!
+Copy @/views/articles/index.pdf.cfm@ and delete the starting and ending @cfdocument@ instructions. This isn't very DRY but you can fix that later. Then refresh the article list in your browser. Tada!
 
 h3. Improving the Form
-
-When first working with the edit form I wasn't sure the upload was working because I expected the @file_field@ to display the name of the file that I had already uploaded. Go back to the edit screen in your browser for the article you've been working with. See how it just saysChoose File, no file selected nothing tells the user that a file already exists for this article. Lets add that information in now.
-
-So open that @/views/articles/_form.cfm@ and look at the paragraph where we added the image upload field. Well add in some new logic that works like this:
-
-* If the article has an image filename* Display the image
-
-* Then display the @file_field@ button with the label Attach a New Image
-So, turning that into code
-
-<p><% if @article.image_file_name %><%= image_tag @article.image.url %><br/><% end %><%= f.label :image, "Attach a New Image" %><br /><%= f.file_field :image %></p>Test how that looks both for articles that already have an image and ones that dont.
-
-When youshowan article that doesn't have an image attached it'll have an ugly broken link. Go into your @/views/articles/show.cfm@ and add a condition like we did in the form so the image is only displayed if it actually exists.
-
-Now our articles can have an image and all the hard work was handled by paperclip!
-
-h3. Further Notes about Paperclip
-
-Yes, a model (in our case an article) could have many attachments instead of just one. To accomplish this you'd create a new model, lets call itAttachment, where each instance of the model can have one file using the same fields we put into Article above as well as an @articleid@ field. The Attachment would then @belong_to@ an article, and an article would @have_many@ attachments.
-
-Paperclip supports automatic image resizing and its easy. In your model, you'd add an option like this:
-
-as_attached_file :image, :styles =>{ :medium =>"300x300>", :thumb =>"100x100>" }This would automatically create amediumsize where the largest dimension is 300 pixels and athumbsize where the largest dimension is 100 pixels. Then in your view, to display a specific version, you just pass in an extra parameter like this:
-
-<%= image_tag @article.image.url(:medium) %>If its so easy, why dont we do it right now? The catch is that paperclip doesn't do the image manipulation itself, it relies on a package called *imagemagick*. Image processing libraries like this are notoriously difficult to install. If you're on Linux, it might be as simple as @sudo apt-get install imagemagick@. On OS X, if you have Mac Ports installed, it'd just be @sudo port install imagemagick@. On windows you need to download an copy some EXEs and DLLs. It can be a hassle, which is why we wont do it during this class.
 
 h3. Working with Layouts
 
