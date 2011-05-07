@@ -1,8 +1,6 @@
 h2. I4: Installing Plugins
 
-In this iteration well learn how to take advantage of the many plugins available to quickly add features to your application. First well work with *Asset Bundler* , a plugin that manages migrations.
-
-Asset Bundler
+In this iteration well learn how to take advantage of the many plugins available to quickly add features to your application. First we have already worked with several plugins like *DBMigrations* and *Scaffolding*.
 
 A plugin that combines and minifies your javascript and css code.
 
