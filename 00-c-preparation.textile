@@ -259,26 +259,27 @@ h3. Install SQL Explorer
 
 h4. Install MySQL driver
 
-** Edit MySql driver http://www.sqlexplorer.org/drivers.php
-http://eclipsesql.sourceforge.net/
+* Download and extract "JDBC Driver for MySQL (Connector/J)":http://www.mysql.com/downloads/connector/j/
+* Follow instructions to "add MySql driver":http://www.sqlexplorer.org/drivers.php
+** Driver Class Name: com.mysql.jdbc.Driver
 
-TODO: Write down steps
+h4. Create Connection
 
-Extra Class Path tab - Add JARs button
-Driver Class Name:
+* Follow instructions to "create a connection":http://eclipsesql.sourceforge.net/connections.php
+**Name: JSBlogger
+**Driver: MySQL
+**URL: jdbc:mysql://localhost:3306
+**Check AutoLogin
+**User and Password
 
-** "JDBC Driver for MySQL (Connector/J)":http://www.mysql.com/downloads/connector/j/
+h3. Create JSBloggers Database
 
-h4. Add JSBloggers connection
+* Right-click on the JSBloggers connections and select "New SQL Editor" and run this command
+** create database jsbloggers;
 
-** Add connection
+h2. Add JSBloggers connection
 
-NameL JSBloggers
-Driver: MySQL
-URL: jdbc:mysql://localhost:3306/
-
-h4. Create JSBloggers Database
-
-* do this
->>>>>>> develop
-* and this
+* Add DataSource through the ColdFusion Administrator
+** Name: JSBloggers
+** Driver: MySQL
+** URL: jdbc:mysql://localhost:3306/
