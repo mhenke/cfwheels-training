@@ -1,26 +1,22 @@
 h2. I4: Installing Plugins
 
-In this iteration well learn how to take advantage of the many plugins available to quickly add features to your application. First we have already worked with several plugins like *DBMigrations* and *Scaffolding*.
+In this iteration we'll learn more about plugins and how to take advantage of the many plugins available to quickly add features to your application. We have already worked with several plugins like *DBMigrations* and *Scaffolding*. We will also cover several other topics like Provides, Layouts, Better Forms, and LESS.
 
-A plugin that combines and minifies your javascript and css code.
+h3. Using the *Plugin Manager*
 
-h3. Using the *Gemfile* to Setup a ColdFusionGem
+Wheels plugins are distributed in a zip that get stored into your applications file structure. One advantage of this method is that the plugin could be easily checked into your source control system along with everything you wrote in the app. The disadvantage is that it made upgrading to newer versions of the plugin, and dealing with the versions at all, complicated. The *Plugin Manager* will help us with some some of these disadvantages.
 
-In the past Wheels plugins were distributed a zip or tar files that got stored into your applications file structure. One advantage of this method is that the plugin could be easily checked into your source control system along with everything you wrote in the app. The disadvantage is that it made upgrading to newer versions of the plugin, and dealing with the versions at all, complicated.
+Download and drop the *Plugin Manager* in the @/plugins@ folder. Reload the application and we can start using the *Plugin Manager* in our application!
 
-Most Wheels plugins are now moving toward ColdFusionGems. ColdFusionGems is a package management system for ColdFusion, similar to how Linux distributions use Apt or %(caps)RPM%. There are central servers that host libraries, and we can install those libraries on our machine with a single command. ColdFusionGems takes care of any dependencies, allows us to pick an options if necessary, and installs the library.
+h3. Event Handlers
 
-Lets see it in action. If you have your server running in Eclipse, click the red square button to %(caps)STOP% it. If you have a Examples session open, type @exit@ to exit. Then open up @/Gemfile@ and look for the lines like this:
+Once loaded, the *Plugin Manager* notices we haven't set a reloadPassword yet. For security on production we would probably have a password set so not everyone can reload our application. Most likely, we would set this in @/config/production/settings.cfm@ but this instruction @<cfset set(reloadPassword="y0urPassw0rdShouldNotBeThis")>@. We will add @<cfset application.pluginManager.requirePassword = false>@ to @/events/onapplicationstart.cfm@.
 
-# gem 'bj' # gem 'nokogiri' # gem 'MySQL-ColdFusion', :require =>'MySQL'These lines are commented out because they start with the @#@ character. By specifying a ColdFusionGem with the @gem@ command, well tell the Wheels applicationMake sure this gem is loaded when you start up. If it isn't available, freak out!Here's how well require the paperclip gem, add this near those commented lines:
+Events folder? Well, our @Application.cfc@ in Wheels include @wheels/functions.cfm@ which has a lot of framework code. As a general recommendation We never touch any files in the wheels folder. So how do we using the @Application.cfc@ events then? The answer is to use the events folder. There is a file in there for every single event that @Application.cfc@ can trigger plus some special events for Wheels like "On Error".
 
-gem "paperclip"When you're writing a production application, you might specify additional parameters that require a specific version or a custom source for the library. With that config line declared, click the green arrow in Eclipse to startup your server. You should get an error like this:
+h3.  Using the *Plugin Manager* (For Real)
 
-Could not find gem 'paperclip (>= 0, runtime)' in any of the gem sources listed in your Gemfile. Try running `bundle install`.The last line is keysince our config file is specifying which gems it needs, the @bundle@ command can help us install those gems. Go to your terminal and:
-
-bundleIt should then install the paperclip ColdFusionGem with a version like 2.3.8. In some projects I work on, the config file specifies upwards of 18 gems. With that one @bundle@ command the app will check that all required gems are installed with the right version, and if not, install them.
-
-Now we can start using the library in our application!
+Now we can reload Wheels, and should see a list of all the Wheels plugins. First will be plugins we are currently using. If an upgrade exists, you will see "Version X.X.X Available: @More Info@ @Auto Upgrade@ @Download@". We can select @Auto Upgrade@ so we won't have to worry about updates to plugins. @Download@ will download the plugin into our @/plugins/@ folder.
 
 h3. Provides
 
@@ -72,14 +68,12 @@ So open that @/views/articles/_form.cfm@ and look at the paragraph where we adde
 
 * If the article has an image filename* Display the image
 
-
-
 * Then display the @file_field@ button with the label Attach a New Image
 So, turning that into code
 
 <p><% if @article.image_file_name %><%= image_tag @article.image.url %><br/><% end %><%= f.label :image, "Attach a New Image" %><br /><%= f.file_field :image %></p>Test how that looks both for articles that already have an image and ones that dont.
 
-When youshowan article that doesnt have an image attached it'll have an ugly broken link. Go into your @/views/articles/show.cfm@ and add a condition like we did in the form so the image is only displayed if it actually exists.
+When youshowan article that doesn't have an image attached it'll have an ugly broken link. Go into your @/views/articles/show.cfm@ and add a condition like we did in the form so the image is only displayed if it actually exists.
 
 Now our articles can have an image and all the hard work was handled by paperclip!
 
@@ -91,7 +85,7 @@ Paperclip supports automatic image resizing and its easy. In your model, you'd a
 
 as_attached_file :image, :styles =>{ :medium =>"300x300>", :thumb =>"100x100>" }This would automatically create amediumsize where the largest dimension is 300 pixels and athumbsize where the largest dimension is 100 pixels. Then in your view, to display a specific version, you just pass in an extra parameter like this:
 
-<%= image_tag @article.image.url(:medium) %>If its so easy, why dont we do it right now? The catch is that paperclip doesnt do the image manipulation itself, it relies on a package called *imagemagick*. Image processing libraries like this are notoriously difficult to install. If you're on Linux, it might be as simple as @sudo apt-get install imagemagick@. On OS X, if you have Mac Ports installed, it'd just be @sudo port install imagemagick@. On windows you need to download an copy some EXEs and DLLs. It can be a hassle, which is why we wont do it during this class.
+<%= image_tag @article.image.url(:medium) %>If its so easy, why dont we do it right now? The catch is that paperclip doesn't do the image manipulation itself, it relies on a package called *imagemagick*. Image processing libraries like this are notoriously difficult to install. If you're on Linux, it might be as simple as @sudo apt-get install imagemagick@. On OS X, if you have Mac Ports installed, it'd just be @sudo port install imagemagick@. On windows you need to download an copy some EXEs and DLLs. It can be a hassle, which is why we wont do it during this class.
 
 h3. Working with Layouts
 
