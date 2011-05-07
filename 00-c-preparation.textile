@@ -127,11 +127,11 @@ h4. Install MySQL driver
 h4. Create Connection
 
 * Follow instructions to "create a connection":http://eclipsesql.sourceforge.net/connections.php
-**Name: JSBlogger
-**Driver: MySQL
-**URL: jdbc:mysql://localhost:3306
-**Check AutoLogin
-**User and Password
+** Name: JSBlogger
+** Driver: MySQL
+** URL: jdbc:mysql://localhost:3306
+** Check AutoLogin
+** User and Password
 
 h3. Create JSBloggers Database
 
