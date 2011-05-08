@@ -120,7 +120,7 @@ Try creating a few comments for that article like this:
 
 For the first comment, @c@, I used a series of commands like we've done before. For the second comment, @d@, I used the @create@ method. When you use @new@ it doesn't go to the database until you call @save@. With @create@ you usually pass in the attributes then the object is created, those attributes set, and the object saved to the database all in one step.
 
-Now that you've created a few comments, try executing @a.comments@ again. 
+Now you've created a few comments, try executing @a.comments@ again. 
 
 <pre lang="cfm">
 <code>

@@ -63,20 +63,6 @@ In @config/settings.cfm@ add @<cfset addFormat(extension="doc", mimeType="applic
 
 Copy @/views/articles/index.pdf.cfm@ and delete the starting and ending @cfdocument@ instructions. This isn't very DRY but you can fix that later. Then refresh the article list in your browser. Tada!
 
-h3. Working with Layouts
-
-We've created about a dozen view templates between our different models. We _could_ go into each of those templates and add a line like this at the top:
-
-<%= stylesheet_link_tag 'styles' %>Which would find the LESS file we just wrote. Thats a lame job, imagine if we had 100 view templates. What if we want to change the name of the stylesheet later? Ugh.
-
-Wheels and ColdFusion both emphasize the idea ofD.R.Y.Dont Repeat Yourself. In the area of view templates, we can achieve this by creating a *layout*. A layout is a special view template that wraps other views. Look in your navigation pane for @/views/layouts/@ , right click on that folder, click %(caps)NEW% and %(caps)FILE% then give it the name @application.html.haml@.
-
-In this layout well put the view code that we want to render for every view template in the application. Just so you can see what %(caps)HAML% looks like, Ive used it to implement this layout. you'll notice that %(caps)HAML% uses fewer marking characters than %(caps)ERB% , but you must maintain the proper whitespace/indentation. All indentations are two spaces from the containing element. Add this code to your @application.html.haml@ :
-
-!!! Strict %html %head %title JSBlogger = stylesheet_link_tag 'styles' %body #container #content = yieldNow refresh your article listing page and you should see the styles take effect. Whatever code is in the individual view template gets inserted into the layout where you see the @yield@. Using layouts makes it easy to add site-wide elements like navigation, sidebars, and so forth.
-
- * %(caps)NOTE% * : If you dont see any change, look at your server log in Eclipse to see if there were any errors. At first I had a typo in one of the filenames so it wasn't being picked up properly. You might also need to stop&restart your server if you didnt do that after installing the @haml@ gem.
- 
 h3. SASS and Compass
 
 Sass makes CSS fun again. Sass is an extension of CSS3, adding nested rules, variables, mixins, selector inheritance, and more. Compass is an open-source CSS Authoring Framework. Compass takes the CSS supplied Blueprint and the other supported frameworks and transforms them into SASS files. These will make writing %(caps)CSS% and using %(caps)CSS% much, much easier to work with.
@@ -103,7 +89,7 @@ Here are the steps in detail:
 1) In the webroot create a folder called SASS and create a file called @config.rb@ in it. Paste in this code in the @config.rb@ file:
 
 <pre>
-<code>
+<code lang="ruby">
 http_path = '/'
 sass_dir = 'src'
 css_dir = '../stylesheets'
@@ -129,6 +115,8 @@ Check your editor, you will need to refresh in Eclipse. You should see a @/sass/
 
 In @/sass/src/@ you'll see a @partials@ folder. This is exactly like Wheels partials with even the naming convention beginning with underscore @_@.
 
+h4. Installing Aptana plugin (Optional)
+
 We'll install an Eclipse plugin for sytax highlighting.
 
 Help --> Install New Software
@@ -138,11 +126,99 @@ Help --> Install New Software
 
 RadRails is now included as part of Aptana Studio 3. No extra download required--now integrated into a single editor.
 
-
 h3. A Few SASS Examples
 
-Were not focusing on %(caps)CSS% development, so here are a few styles that you can copy&paste and modify to your hearts content:
+Were not focusing on %(caps)CSS% development, so here are a few styles you can copy & paste and modify to your hearts content:
 
-!primary_color = #AAA body :background-color = !primary_color :font :family Verdana, Helvetica, Arial :size 14px a :color #0000FF img :border none.clear :clear both :height 0 :overflow hidden #container :width 75% :margin 0 auto :background #fff :padding 20px 40px :border solid 1px black :margin-top 20px #content :clear both :padding-top 20px
+<pre lang="scss">
+<code>
+$bgColor: #AAA;
+$fgColor: #0000FF;
+$navbar-color: #ce4dd6;
+
+body {
+  background-color: $bgColor;
+  color: $fgColor;
+  font-size: 14px; 
+  font-family: Verdana, Helvetica, Arial;
+  line-height: 24px;
+}
+
+select, input, textarea {
+  color: $fgColor;
+}
+
+label { color: darken($bgColor,20); 
+        font-weight: bold;
+}
+
+table { border-collapse:collapse; border-spacing:0; }
+
+label, input[type=button], input[type=submit], button { cursor: pointer; }
+button, input, select, textarea { margin: 0; }
+
+a {
+  color: lighten($fgColor,10);
+  &:hover { color: darken($fgColor,10);
+            text-decoration: none }
+  &:visited { color: darken($fgColor,10); }
+}
+
+h1, h2, h3, h4, h5 {
+  color: darken($bgColor,20);
+  margin-bottom: 10px;
+}
+h1 { font-size: 2em; border-bottom: 2px solid $navbar-color; font-weight: bold;}
+h2 { font-size: 1.8em; border-bottom: 2px solid $navbar-color;  }
+h3 { font-size: 1.6em; margin-top: 10px; }
+h4 { font-size: 1.4em; }
+h5 { font-size: 1.2em; }
+
+ul, ol { margin-left: 1.8em; }
+ol { list-style-type: decimal; }
+
+#container {
+  width: 75%;
+  margin: 0 auto;
+  background: #fff;
+  padding: 20px 40px;
+  border: solid 1px black;
+  margin-top: 20px;
+}
+
+#content {
+  clear: both;
+  padding-top: 20px;
+}
+</code>
+</pre>
 
 But our application isn't setup to load that stylesheet yet. We need to make a change to our view templates.
+
+h3. Working with Layouts
+
+We've created about a dozen view templates between our different models. We _could_ go into each of those templates and add a line like this at the top:
+
+<pre lang="cfm">
+<code>
+<cfoutput>
+#styleSheetLinkTag("screen,ie,style")#
+#styleSheetLinkTag(source="print", media="print")#
+</cfoutput>
+</code>
+</pre>
+
+The @styleSheetLinkTag@ would find the Sass file we just wrote. That's a lame job, imagine if we had 100 view templates. What if we want to change the name of the stylesheet later? Ugh.
+
+Wheels and ColdFusion both emphasize the idea of D.R.Y. @Don't Repeat Yourself@. In the area of view templates, we can achieve this by creating a *layout*. A layout is a special view template that wraps other views. Look in your navigation pane for @/views/layout.cfm@, open that file. In this layout we'll put the view code that we want to render for every view template in the application. This code will go between the @head@ tags.
+
+<pre lang="cfm">
+<code>
+<cfoutput>
+#styleSheetLinkTag("screen,ie,style")#
+#styleSheetLinkTag(source="print", media="print")#
+</cfoutput>
+</code>
+</pre>
+
+Now refresh your article listing page and you should see the styles take effect. Whatever code is in the individual view template gets inserted into the layout where you see the @includeContent()@. Using layouts makes it easy to add site-wide elements like navigation, sidebars, and so forth.

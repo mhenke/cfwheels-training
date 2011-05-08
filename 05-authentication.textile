@@ -2,7 +2,7 @@ h2. I5: Authentication
 
 Authentication is an important part of almost any web application and there are several approache's to take. Thankfully some of these have been put together in plugins so we don't have to reinvent the wheel.
 
-The flavor-of-the-weekis one named AuthLogic and I wrote up an iteration using it for the "JSMerchant":http://jumpstartlab.com/resources/CFWheels-jumpstart/jsmerchant/ tutorial, but I think it is a little complicated for a Wheels novice. You have to create several different models, controllers, and views manually. The documentation is kind of confusing, and I dont think my tutorial is that much better.
+The flavor-of-the-weekis one named AuthLogic and I wrote up an iteration using it for the "JSMerchant":http://jumpstartlab.com/resources/CFWheels-jumpstart/jsmerchant/ tutorial, but I think it is a little complicated for a Wheels novice. You have to create several different models, controllers, and views manually. The documentation is kind of confusing, and I don't think my tutorial is that much better.
 
 So, instead, well use the most common authentication plugin, "restful_authentication":http://github.com/technoweenie/restful-authentication.
 
@@ -22,7 +22,7 @@ h3. Running the Generator
 
 This plugin makes it easy to get up an running because one generator creates most of the code you'll need. Run this from your terminal:
 
-Wheels generate authenticated user sessionsTake a look at the output and you'll see it created about 16 files and added a few routes to the @routes.cfc@ file. The generator has a note that you shouldnt forget to add the routes to @routes.cfc@ , but its already done that for you.
+Wheels generate authenticated user sessionsTake a look at the output and you'll see it created about 16 files and added a few routes to the @routes.cfc@ file. The generator has a note shouldn't forget to add the routes to @routes.cfc@ , but its already done that for you.
 
 Lets look at the CreateUsers migration that the generator created before we migrate the database. If you wanted your User models to have any additional information (likedeparment_nameorfavorite_color) you could add columns for that. For our purposes these fields look alright and, thanks to the flexibility of migrations, if we want to add columns later its easy. So go to your terminal and enter:
 
@@ -75,7 +75,7 @@ The first thing we need to do is sprinkle @before_filters@ on most of our contro
 
 * In @users.cfc@ , add a before filter to protect the actions besides @new@ and @create@ like this:
  @before_filter :login_required, :except =>[new, :create]@ 
-* In @tags.cfc@ , we dont have any methods that need to be protected.
+* In @tags.cfc@ , we don't have any methods that need to be protected.
 * In @sessions.cfc@ all the methods need to be accessible to allow login and logout
 * In @comments.cfc@ , we never implemented @index@ and @delete@ , but just in case we do lets allow unauthenticated users to only access @create@ :
  @before_filter :login_required, :except =>[create]@ 
