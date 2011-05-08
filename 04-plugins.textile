@@ -1,6 +1,6 @@
 h2. I4: Installing Plugins
 
-In this iteration we'll learn more about plugins and how to take advantage of the many plugins available to quickly add features to your application. We have already worked with several plugins like *DBMigrations* and *Scaffolding*. We will also cover several other topics like Event Handlers, Responding with Multiple Formats, Layouts, and LESS.
+In this iteration we'll learn more about plugins and how to take advantage of the many plugins available to quickly add features to your application. We have already worked with several plugins like *DBMigrations* and *Scaffolding*. We will also cover several other topics like Event Handlers, Responding with Multiple Formats, Layouts, and Sass (Syntactically Awesome StyleSheets).
 
 h3. Using the *Plugin Manager*
 
@@ -65,10 +65,11 @@ Copy @/views/articles/index.pdf.cfm@ and delete the starting and ending @cfdocum
 
 h3. Sass and Compass
 
-Sass makes CSS fun again. Sass is an extension of CSS3, adding nested rules, variables, mixins, selector inheritance, and more. Compass is an open-source CSS Authoring Framework. Compass takes the CSS supplied Blueprint and the other supported frameworks and transforms them into Sass files. These will make writing %(caps)CSS% and using %(caps)CSS% much, much easier to work with.
+Sass makes CSS fun again. Sass is an extension of CSS3, adding nested rules, variables, mixins, selector inheritance, and more. Compass is an open-source CSS Authoring Framework. Compass takes the CSS supplied Blueprint and the other supported frameworks and transforms them into Sass files. These will make writing %(caps)CSS% and working with %(caps)CSS% much, much easier.
 
 * All the details about Sass can be found here: "http://Sass-lang.com/":http://Sass-lang.com/ 
 * All the details about Compass can be found here: "http://compass-style.org/":http://compass-style.org/
+* Site to convert CSS to Sass: "http://css2sass.heroku.com/":http://css2sass.heroku.com/
  
 h3. Installing %(caps)Sass% and Compass
 
@@ -154,7 +155,7 @@ label { color: darken($bgColor,20);
 
 table { border-collapse:collapse; border-spacing:0; }
 
-label, input[type=button], input[type=submit], button { cursor: pointer; }
+label, input[type=button], input[type=submit], button { cursor: pointer; margin-top: 15px; }
 button, input, select, textarea { margin: 0; }
 
 a {
@@ -168,11 +169,12 @@ h1, h2, h3, h4, h5 {
   color: darken($bgColor,20);
   margin-bottom: 10px;
 }
-h1 { font-size: 2em; border-bottom: 2px solid $navbar-color; font-weight: bold;}
-h2 { font-size: 1.8em; border-bottom: 2px solid $navbar-color;  }
-h3 { font-size: 1.6em; margin-top: 10px; }
+
+h1 { font-size: 2.6em; border-bottom: 1px solid $navbar-color; font-weight: bold; width: 80%; }
+h2 { font-size: 2.2em; border-bottom: 1px solid $navbar-color; width: 80%; }
+h3 { font-size: 1.8em; margin-top: 10px; }
 h4 { font-size: 1.4em; }
-h5 { font-size: 1.2em; }
+h5 { font-size: 1.0em; }
 
 ul, ol { margin-left: 1.8em; }
 ol { list-style-type: decimal; }
@@ -189,6 +191,24 @@ ol { list-style-type: decimal; }
 #content {
   clear: both;
   padding-top: 20px;
+}
+
+#navbar {
+  width: 80%;
+  height: 23px;
+  border: 1px solid $navbar-color;
+  ul, ol { margin-left: 5px; }
+  li {
+    float: left;
+    padding-right: 15px;
+    margin: 0px;
+    a { font-weight: bold; }
+  }
+}
+
+.comment {
+  border-bottom: 1px solid $navbar-color; 
+  width: 80%;
 }
 </code>
 </pre>
