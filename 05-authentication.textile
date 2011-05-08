@@ -1,56 +1,81 @@
 h2. I5: Authentication
 
-Authentication is an important part of almost any web application and there are several approache's to take. Thankfully some of these have been put together in plugins so we don't have to reinvent the wheel.
+Authentication is an important part of almost any web application and there are several approache's to take. We will create one using a @filter@. @Filters@ tell Wheels to run a function before an action is run or after an action has been run. You can also specify multiple functions and actions.
 
-The flavor-of-the-weekis one named AuthLogic and I wrote up an iteration using it for the "JSMerchant":http://jumpstartlab.com/resources/CFWheels-jumpstart/jsmerchant/ tutorial, but I think it is a little complicated for a Wheels novice. You have to create several different models, controllers, and views manually. The documentation is kind of confusing, and I don't think my tutorial is much better.
+h3. Creating a Login view
 
-So, instead, well use the most common authentication plugin, "restful_authentication":http://github.com/technoweenie/restful-authentication.
+Create a new folder and file @/views/main/login.cfm@ with this code:
 
-h3. Installing restful_authentication
+<pre lang="cfm">
+<code>
+<cfoutput>
 
-In the previous iteration we installed libraries using ColdFusionGems. This is the preferred way of managing plugins, but restful_authentication isn't available through ColdFusionGems. Well have to use the older method of installing a plugin.
+<h1>Login</h1>
+<cfif isdefined("error")>
+ <cfdump var="#error#">
+</cfif>
 
-At your terminal, enter the following:
+#flash("error")#
+#errorMessagesFor("user")#
+	
+#startFormTag(controller="main", action="signin")#
 
-ColdFusion git clone git://github.com/technoweenie/restful-authentication.git restful_authenticationIf you arent able to pull down the code from GitHub, you'll need to download the code in a zip file "from github":http://github.com/technoweenie/restful-authentication/zipball/afa61fece60a3cd53a9c894d74b883889b440913 , then extract the zip into @/vendor/plugins/restful_authentication/@.
+ #textField(label="Email", objectName="user", property="email")#
+ #passwordField(label="Password", objectName="user", property="password")#
 
-Once you've installed the plugin, you can test that its available with this command at your terminal:
+ <div>
+  #submitTag(value="Sign In")#
+ </div>
 
-Wheels generateIn the output is a section titleInstalled Generators. It should have a line that says @Plugins (vendor/plugins): authenticated@. If its there, you're ready to go!
+#endFormTag()#
 
-h3. Running the Generator
+</cfoutput>
+</code>
+</pre>
 
-This plugin makes it easy to get up an running because one generator creates most of the code you'll need. Run this from your terminal:
+Nothing special here. Lets try to load our login page at @http://wheels.local/index.cfm/main/login@ If its there, you're ready to go!
 
-Wheels generate authenticated user sessionsTake a look at the output and you'll see it created about 16 files and added a few routes to the @routes.cfc@ file. The generator has a note shouldn't forget to add the routes to @routes.cfc@ , but its already done that for you.
+h3. Creating our Main Controller
 
-Lets look at the CreateUsers migration that the generator created before we migrate the database. If you wanted your User models to have any additional information (likedeparment_nameorfavorite_color) you could add columns for that. For our purposes these fields look alright and, thanks to the flexibility of migrations, if we want to add columns later its easy. So go to your terminal and enter:
+We will make a simple controller with the following actions: @login@, @logout@, and @signin@. The @signin@ action creates a session structure called user if the email and password is correct.
 
-rake db:migrateh3. Creating a First Account
+<pre lang="cfm">
+<code>
+<cfcomponent extends="Controller" output="false">
+	
+<cffunction name="init">
 
-First, stop then restart your server in Eclipse to make sure its picked up the plugin. Then go to @http://wheels.local/users/new@ and the new user form should popup.
+</cffunction>
 
-Go ahead and create yourself an account. If you're successful it will just bounce you to the @http://wheels.local/@ root page. There isn't any information about our login status in our views, though, so its hard to tell if were really logged in.
+<cffunction name="login">
+<cfset user = model("person").new()>
+</cffunction>
 
-Lets open @/views/layouts/application.html.haml@ and add a little footer so the whole @%body%@ chunk looks like this:
+<cffunction name="logout">
+<cfset StructDelete(session, "user")>
+<cfset redirectTo(controller="main", action="login")>
+</cffunction>
 
-%body #container #content = yield %hr %h6 - if current_user = "Logged in as #{current_user.login}" = linkTo "(logout)", logout_path - else = linkTo "(login)", login_pathThe go to @http://wheels.local/index.cfm/articles/@ and you'll get this error:
+<cffunction name="signin">
+	<cfset user = model("person").findOne(where="email='#params.user.email#' AND password='#hash(params.user.password)#'")>
 
-NameError in Articles#index Showing app/views/layouts/application.html.haml where line #14 raised: undefined local variable or method `current_user' for #<ActionView::Base:0x103147400>We tried to use the @current_user@ helper that comes with the restful_authentication plugin, but Wheels isn't recognizing it. We need to do one more setup step. Open @/controllers/application.cfc@ , and underneath the @protect_from_forgery@ line, add this: @include AuthenticatedSystem@.
+	<cfif IsObject(user)>
+		<cfset session.user.id = user.id>
+		<cfset redirectTo(controller="articles", action="index")>
+	<cfelse>
+		<cfset user = model("person").new(email=params.user.email)>
+		<cfset flashInsert(error="The email and password that you entered is not valid.")>
+		<cfset renderPage(action="login")>
+	</cfif>
+</cffunction>
+	
+</cfcomponent>
+</code>
+</pre>
 
-Now refresh your browser and your articles list should come up along with the new footer at the bottom.
+Now login with @admin@@gmail.com@ and @admin@ and you should be directed to our listing page.
 
-h3. An Aside on the Site Root
-
-Its annoying me that we keep going to @http://wheels.local/@ and seeing the Wheels starter page. Lets make the root show our articles index page.
-
-First, delete the file @/public/index.html@. Files in the public directory will take precedence over routes in our application, so as long as that file exists we can't route the root address anywhere.
-
-Second, open @/config/routes.cfc@ and right above the other routes add in this one:
-
-match '/' =>'articles#index'Now visit @http://wheels.local@ and you should see your article list.
-
-h3. Securing New Users
+h3. Securing Creating/Updating Acticles
 
 It looks like we can create a new user, but right away I want to make some changes. Were just going to use one layer of security for the appa user who is logged in has access to all the commands and pages, while a user who isn't logged in can only post comments and try to login. But that scheme will breakdown if just anyone can go to this %(caps)URL% and create an account, right?
 
@@ -69,7 +94,7 @@ With that in place, try accessing @/users/new@ when you logged in and when your 
 
 User.delete_allThen try to reach the registration form and it should work! Create yourself an account if you've deleteed it.
 
-h3. Securing the Rest of the Application
+h3. Better Navigation
 
 The first thing we need to do is sprinkle @before_filters@ on most of our controllers:
 
