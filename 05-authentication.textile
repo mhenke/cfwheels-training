@@ -2,6 +2,58 @@ h2. I5: Authentication
 
 Authentication is an important part of almost any web application and there are several approache's to take. We will create one using a @filter@. @Filters@ tell Wheels to run a function before an action is run or after an action has been run. You can also specify multiple functions and actions.
 
+h3. Creating a People table
+
+We will need a place to store users for authentication so lets create a migration for a people table.  You should be an old hat at this. Here is what the final migration for a People table should look like:
+
+<pre lang="cfm">
+<code>
+<cfcomponent extends="plugins.dbmigrate.Migration" hint="creates people table">
+  <cffunction name="up">
+    <cfscript>
+    t = createTable('people');
+    t.string('firstname');
+    t.string('lastname');
+    t.string('email');
+    t.string('password');
+    t.timestamps();
+    t.create();
+    
+    addRecord(table='people',id=1,email='admin@gmail.com',password='#Hash("admin")#');
+    </cfscript>
+  </cffunction>
+  <cffunction name="down">
+    <cfscript>
+    dropTable('people');
+    </cfscript>
+  </cffunction>
+</cfcomponent>
+</code>
+</pre>
+
+h3. Creating the Person Model
+
+We will create a Model for our users called @Person.cfc@. It will validate several of our properties.
+
+<pre lang="cfm">
+<code>
+<cfcomponent extends="Model" output="false">
+
+ <cffunction name="init">
+
+  <!--- Validations --->
+  <cfset validatesPresenceOf("firstName,lastName,email")>
+  <cfset validatesFormatOf(property="email", type="email")>
+  <cfset validatesLengthOf(property="firstName", maximum=30)>
+  <cfset validatesLengthOf(property="lastName", maximum=50)>
+  <cfset validatesConfirmationOf("password")>
+
+ </cffunction>
+
+</cfcomponent>
+</code>
+</pre>
+
 h3. Creating a Login view
 
 Create a new folder and file @/views/main/login.cfm@ with this code:
@@ -35,28 +87,6 @@ Create a new folder and file @/views/main/login.cfm@ with this code:
 
 Nothing special here. Lets try to load our login page at @http://wheels.local/index.cfm/main/login@ If its there, you're ready to go!
 
-h3. Creating the Person Model
-
-We will create a Model for our users called @Person.cfc@. It will validate several of our properties.
-
-<pre lang="cfm">
-<code>
-<cfcomponent extends="Model" output="false">
-
- <cffunction name="init">
-
-  <!--- Validations --->
-  <cfset validatesPresenceOf("firstName,lastName,email")>
-  <cfset validatesFormatOf(property="email", type="email")>
-  <cfset validatesLengthOf(property="firstName", maximum=30)>
-  <cfset validatesLengthOf(property="lastName", maximum=50)>
-  <cfset validatesConfirmationOf("password")>
-
- </cffunction>
-
-</cfcomponent>
-</code>
-</pre>
 
 h3. Creating our Main Controller
 
