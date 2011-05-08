@@ -10,7 +10,7 @@ What is a tag? We need to figure that out before we can create the model. First,
 
 Many-to-many relationships are tricky because we're using an SQL database. If an Article "has many" tags, then we would put the foreign key @articleid@ inside the @tags@ table - so then a Tag would "belong to" an Article. But a tag can connect to *many* articles, not just one. We can't model this relationship with just the @articles@ and @tags@ tables.
 
-When we start thinking about the database modeling, there are a few ways to achieve this setup. One way is to create a "join table" that just tracks which tags are connected to which articles. Traditionally this table would be named @articlestags@ and Rails would express the relationships by saying that the Article model @hasAndBelongsToMany@ Tags, while the Tag model @hasAndBelongsToMany@ Articles but Wheels doesn't have this relationship yet.
+When we start thinking about the database modeling, there are a few ways to achieve this setup. One way is to create a "join table" that just tracks which tags are connected to which articles. Traditionally this table would be named @articlestags@ and Rails would express the relationships by saying the Article model @hasAndBelongsToMany@ Tags, while the Tag model @hasAndBelongsToMany@ Articles but Wheels doesn't have this relationship yet.
 
 Even if Wheels did have @hasAndBelongsToMany@, most of the time this isn't the best way to really model the relationship. The connection between the two models usually has value of its own, so we should promote it to a real model. For our purposes, we'll introduce a model named "Tagging" which is the connection between Articles and Tags. The relationships will setup like this:
 
@@ -28,7 +28,7 @@ With those relationships in mind, let's design the new models:
 ** @tagid@ Integer holding the foreign key of the related Tag
 ** @articleid@ Integer holding the foreign key of the related Article
 
-Note that there are no changes necessary to Article because the foreign key is stored in the Tagging model. So now lets generate these two models with the DBMigrations plugin:
+Note there are no changes necessary to Article because the foreign key is stored in the Tagging model. So now lets generate these two models with the DBMigrations plugin:
 
 The tags migration should look like this:
 

@@ -26,7 +26,7 @@ Using ColdFusion Builder's Server view, we can add the our ColdFusion server. Op
 
 You should then see the @JSBloggers@ server in the Servers view. If it isn't Running, please start it. Once it's started, try loading the address "http://wheels.local/":http://wheels.local/. You should see Wheels' "Congratulations" page. Scroll down and the Wheels debugging section displays the Wheels version, CFML Engine version along with other useful information.
 
-We need to change the Wheels datasource convention. Wheels assumes our datasource connection is the folder name Wheels resides in but for our case it is not @cfwheels101@ but @JSBloggers@. We could have easily named our ColdFusion server instance that but I wanted to show how we can easily override a Wheels convention.
+We need to change the Wheels datasource convention. Wheels assumes our datasource connection is the folder name Wheels resides in but for our case it is not @cfwheels101@ but @JSBloggers@. We could have easily named our ColdFusion server instance but I wanted to show how we can easily override a Wheels convention.
 
 Press Ctrl+Shift+R while in Eclipse. This is the Open Resource window. I use this a lot when coding in Eclipse. Sometimes I highlight a file name in code and press Ctrl+Shift+R, other times I type in the file name like we will do next. Type in @settings.cfm@, and select @settings.cfm - /JSBloggers/config@. This will open that file for use and type in @<cfset set(dataSourceName="JSBloggers") />@ to tell Wheels to use this as are datasource. Also add in @<cfset set(URLRewriting="Partial") />@ to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers. To reload Wheels, you can add @?reload=true@ to the url or click on the @Reload@ link in the Wheels debug section.
 
@@ -34,7 +34,7 @@ Our blog will be centered around "articles," so we'll need a table in the databa
 
 h3. Working with the Database
 
-Wheels can uses migration files to perform modifications to the database with the DBMigrate plugin. Almost any modification you can make to a DB can be done through a migration. The killer feature about Wheels migrations is that they're generally database agnostic. When developing applications a person might usually use MySQL as we are in this tutorial, but when deploying to their production server it is running PostgreSQL. Many others choose Microsoft SQL Server. It doesn't matter -- the same migrations will work on all of them! This is an example of how Wheels takes some of the painful work off your hands. You write your migrations once, then run them against almost any database.
+Wheels can uses migration files to perform modifications to the database with the DBMigrate plugin. Almost any modification you can make to a DB can be done through a migration. The killer feature about Wheels migrations is they're generally database agnostic. When developing applications a person might usually use MySQL as we are in this tutorial, but when deploying to their production server it is running PostgreSQL. Many others choose Microsoft SQL Server. It doesn't matter -- the same migrations will work on all of them! This is an example of how Wheels takes some of the painful work off your hands. You write your migrations once, then run them against almost any database.
 
 h4. What is a migration?
 
@@ -73,7 +73,7 @@ Let's open @/db/migrate/(some_time_stamp)__create_articles_table.cfc@ and take a
 
 Inside the @up@ method you'll see the generator has placed a call to the @createTable@ method, passed @[tableName]@ as a parameter, and created a block with the variable @t@ referencing the table that's created. Let's change @[tableName]@ to @[articles]@. We can tell @t@ what kind of columns we want in the @articles@ table. 
 
-But first you might be wondering "What is that @t.timestamps@ doing there?". The generator inserted that line. It will create three columns inside our table titled @createdat@ for when created, @updatedat@ for last updated, and @deletedat@ for soft deletes. Wheels will manage these columns for us, so when an article is created it's @createdat@ and @updatedat@ are automatically set. Each time we make a change to the article, the @updatedat@ will automatically be...uhhh...updated. Very handy.
+But first you might be wondering "What is @t.timestamps@ doing there?". The generator inserted that line. It will create three columns inside our table titled @createdat@ for when created, @updatedat@ for last updated, and @deletedat@ for soft deletes. Wheels will manage these columns for us, so when an article is created it's @createdat@ and @updatedat@ are automatically set. Each time we make a change to the article, the @updatedat@ will automatically be...uhhh...updated. Very handy.
 
 Well, what kind of fields does our Article need to have? Since migrations make it easy to add or change columns later, we don't need to think of EVERYTHING right now, we just need a few to get us rolling. Here's a starter set:
 
@@ -123,7 +123,7 @@ Migrating from 0 up to 20110406195353.
 Created table articles
 </pre>
 
-It tells you that it ran the migration. As I said before, DBMigrate keeps track of which migrations _have_ and _have not_ been run. Try running @All non-migrated@ again now, and see what happens.
+It tells you it ran the migration. As I said before, DBMigrate keeps track of which migrations _have_ and _have not_ been run. Try running @All non-migrated@ again now, and see what happens.
 
 We've now created the @articles@ table in the database and can start working on our @Article@ model.
 
