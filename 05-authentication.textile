@@ -98,7 +98,7 @@ We will make a simple controller with the following actions: @login@, @logout@, 
 
 Now login with @admin@@gmail.com@ and @admin@ and you should be directed to our listing page.
 
-h3. Securing Creating/Updating Acticles
+h3. Securing Creating/Updating Articles
 
 It looks like we can create a new user, but right away I want to make some changes. Were just going to use one layer of security for the appa user who is logged in has access to all the commands and pages, while a user who isn't logged in can only post comments and try to login. But that scheme will breakdown if just anyone can go to this %(caps)URL% and create an account, right?
 
@@ -109,15 +109,33 @@ Lets add in a protection scheme like this to the new users form:
 
 That way when the app is first setup we can create an account, then new users can only be created by a logged in user.
 
-We can create a @before_filter@ which will run _before_ the @new@ and @create@ actions of our @users.cfc@. Open that controller and on the second line you'll see @include AuthenticatedSystem@. You can remove that since we put it in the @application.cfc@ and, in its place, put all this code:
+We can create a @filters@ which will run _before_ all the actions except: @index@, @login@, @show@, and @create@. Open the @/controllers/Controller.cfc@ and add this code between the @cfcomponent@ instructions:
 
-before_filter :zero_users_or_authenticated, :only =>[new, :create] def zero_users_or_authenticated unless User.all.size == 0 || current_user redirect_to root_path return false end endThe first line declares that we want to run a before filter named @zero_or_authenticated@ when either the @new@ or @create@ methods are accessed. Then we define that filter, checking if there are either zero registered users OR if there is a user already logged in. If neither of those is true, we redirect to the root path (our articles list) and return false. If either one of them is true this filter wont do anything, allowing the requested user registration form to be rendered.
+<pre lang="cfm">
+<code>
+<cffunction name="init">
+ <cfset filters(through="checkLogin", except="index,login,show,create")>
+</cffunction>
+
+<cffunction name="checkLogin">
+ <cfif StructKeyExists(session, "user")>
+  <cfset loggedInUser = model("person").findByKey(session.user.id)>
+ <cfelse>
+  <cfset redirectTo(controller="main", action="login")>
+ </cfif>
+</cffunction>
+</code>
+</pre>
+
+You can add other functions to @/controllers/Controller.cfc@ and make them globally available in all your controllers like we did for @checkLogin@.
+
+The first line declares that we want to run a before filter named @zero_or_authenticated@ when either the @new@ or @create@ methods are accessed. Then we define that filter, checking if there are either zero registered users OR if there is a user already logged in. If neither of those is true, we redirect to the root path (our articles list) and return false. If either one of them is true this filter wont do anything, allowing the requested user registration form to be rendered.
 
 With that in place, try accessing @/users/new@ when you logged in and when your logged out. If you want to test that it works when no users exist, try this at your Examples:
 
-User.delete_allThen try to reach the registration form and it should work! Create yourself an account if you've deleteed it.
+User.delete_all
 
-h3. Better Navigation
+Then try to reach the registration form and it should work! Create yourself an account if you've deleteed it.
 
 The first thing we need to do is sprinkle @before_filters@ on most of our controllers:
 
@@ -133,7 +151,29 @@ Now our app is pretty secure, but we should hide all those edit, delete, and new
 
 Open @/views/articles/index.cfm@ and find the section where we output theActions. Wrap that whole section in an @if@ clause like this:
 
-<% if current_user %><% end %>Look at the article listing in your browser when you're logged out and make sure those links disappear. Then use the same technique to hide theCreate a New Articlelink.
+@<% if current_user %><% end %>@
+
+Look at the article listing in your browser when you're logged out and make sure those links disappear. Then use the same technique to hide the Create a New Article link.
+
+h3. Better Navigation
+
+<pre lang="cfm">
+<code>
+<div id="navbar">
+ <ul>
+ <cfif "show,edit,new,login" contains params.action >
+  <li>#linkTo(text="<< Back to Articles List", controller="articles", action="index")#</li>
+ </cfif>
+ <cfif StructKeyExists(session, "user")>
+  <li>#linkTo(text="Create a New Article", action="new")#</li>
+  <li>#linkTo(text="Logout", controller="main", action="logout")#</li>
+ <cfelseif params.action NEQ "login">
+  <li>#linkTo(text="Login", controller="main", action="login")#</li>
+ </cfif>
+</ul>
+</div>
+</code>
+</pre>
 
 If you look at the @show@ view template, you'll see that we never added an edit link! Add that link now, but protect it to only show up when a user is logged in.
 
