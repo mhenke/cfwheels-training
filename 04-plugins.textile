@@ -79,7 +79,7 @@ In this layout well put the view code that we want to render for every view temp
  
 h3. SASS and Compass
 
-Sass makes CSS fun again. Sass is an extension of CSS3, adding nested rules, variables, mixins, selector inheritance, and more. Compass is an open-source CSS Authoring Framework. These will make writing %(caps)CSS% and using %(caps)CSS% much, much easier to work with.
+Sass makes CSS fun again. Sass is an extension of CSS3, adding nested rules, variables, mixins, selector inheritance, and more. Compass is an open-source CSS Authoring Framework. Compass takes the CSS supplied Blueprint and the other supported frameworks and transforms them into SASS files. These will make writing %(caps)CSS% and using %(caps)CSS% much, much easier to work with.
 
 * All the details about SASS can be found here: "http://sass-lang.com/":http://sass-lang.com/ 
 * All the details about Compass can be found here: "http://compass-style.org/":http://compass-style.org/
