@@ -126,27 +126,16 @@ We will make a simple controller with the following actions: @login@, @logout@, 
 </code>
 </pre>
 
-Now login with @admin@@gmail.com@ and @admin@ and you should be directed to our listing page.
+Now login with **admin@gmail.com** and **admin** and you should be directed to our listing page.
 
-h3. Securing Creating/Updating Articles
+h3. Securing Our Application
 
-It looks like we can create a new user, but right away I want to make some changes. Were just going to use one layer of security for the appa user who is logged in has access to all the commands and pages, while a user who isn't logged in can only post comments and try to login. But that scheme will breakdown if just anyone can go to this %(caps)URL% and create an account, right?
+It looks like we can login, but we don't have a security check. Were just going to use one layer of security for the appa person who is logged in has access to all the commands and pages, while a person who isn't logged in can only post comments, view articles, and try to login.
 
-Lets add in a protection scheme like this to the new users form:
-
-* If there are zero users in the system, let anyone access the form
-* If there are more than zero users registered, only users already logged in can access this form
-
-That way when the app is first setup we can create an account, then new users can only be created by a logged in user.
-
-We can create a @filters@ which will run _before_ all the actions except: @index@, @login@, @show@, and @create@. Open the @/controllers/Controller.cfc@ and add this code between the @cfcomponent@ instructions:
+Open the @/controllers/Controller.cfc@ and add this code between the @cfcomponent@ instructions:
 
 <pre lang="cfm">
 <code>
-<cffunction name="init">
- <cfset filters(through="checkLogin", except="index,login,show,create")>
-</cffunction>
-
 <cffunction name="checkLogin">
  <cfif StructKeyExists(session, "user")>
   <cfset loggedInUser = model("person").findByKey(session.user.id)>
@@ -159,33 +148,56 @@ We can create a @filters@ which will run _before_ all the actions except: @index
 
 You can add other functions to @/controllers/Controller.cfc@ and make them globally available in all your controllers like we did for @checkLogin@.
 
-The first line declares that we want to run a before filter named @zero_or_authenticated@ when either the @new@ or @create@ methods are accessed. Then we define that filter, checking if there are either zero registered users OR if there is a user already logged in. If neither of those is true, we redirect to the root path (our articles list) and return false. If either one of them is true this filter wont do anything, allowing the requested user registration form to be rendered.
+Then we define an action to check if the person is logged in. If not, we redirect to the login page. If true this filter create a variable called LoggedInUser and then allow the requested action to be rendered.
 
-With that in place, try accessing @/users/new@ when you logged in and when your logged out. If you want to test that it works when no users exist, try this at your Examples:
+The first thing we need to do is sprinkle @checkLogin@ on most of our controllers:
 
-User.delete_all
-
-Then try to reach the registration form and it should work! Create yourself an account if you've deleteed it.
-
-The first thing we need to do is sprinkle @before_filters@ on most of our controllers:
-
-* In @users.cfc@ , add a before filter to protect the actions besides @new@ and @create@ like this:
- @before_filter :login_required, :except =>[new, :create]@ 
-* In @tags.cfc@ , we don't have any methods that need to be protected.
-* In @sessions.cfc@ all the methods need to be accessible to allow login and logout
-* In @comments.cfc@ , we never implemented @index@ and @delete@ , but just in case we do lets allow unauthenticated users to only access @create@ :
- @before_filter :login_required, :except =>[create]@ 
+* In @tags.cfc@ , we don't have any actions that need to be protected.
+* In @comments.cfc@ , we never implemented @index@ and @delete@ , but just in case we do lets allow unauthenticated users to only access
 * In @Articles.cfc@ authentication should be required for @new@ , @create@ , @edit@ , @update@ and @delete@. Figure out how to write the before filter using either @only@ or @except@ 
+
+Did you know how? If not here is the code to add the filters. In the @/controllers/Comments.cfc@:
+
+<pre lang="cfm">
+<code>
+<cffunction name="init">
+		<cfset filters(through="checkLogin", except="create")>
+	</cffunction>
+</code>
+</pre>
+
+Next we add our filter to the @/controllers/Articles.cfc@ in the @init@ method.
+
+<pre lang="cfm">
+<code>
+<cfset filters(through="checkLogin", only="new,create,edit,update,delete")>
+</code>
+</pre>
+
+This will run our @checkLogin@ action in @/controllers/Controller.cfc@ _before_ these actions: @new@, @create@, @edit@, @update@ and @delete@.
+
+With that in place, try accessing @/article/new@ when you logged in and when your logged out. 
 
 Now our app is pretty secure, but we should hide all those edit, delete, and new article links from unauthenticated users.
 
-Open @/views/articles/index.cfm@ and find the section where we output theActions. Wrap that whole section in an @if@ clause like this:
+Open @/views/articles/index.cfm@ and find the section where we output the Actions. Wrap that whole section in an @if@ clause like this:
 
-@<% if current_user %><% end %>@
+<pre lang="cfm">
+<code>
+<cfif StructKeyExists(session, "user")>
+	<i>Actions:
+	#linkTo(text='edit', action='edit', key=id)#,
+	#linkTo(text='remove', action='delete', key=id, confirm="Remove the article '#title#'?")# 
+	</i>
+</cfif>
+</code>
+</pre>
 
-Look at the article listing in your browser when you're logged out and make sure those links disappear. Then use the same technique to hide the Create a New Article link.
+Look at the article listing in your browser when you're logged out and make sure those links disappear. 
 
 h3. Better Navigation
+
+We still have to hide the Create a New Article link but the navigation has been bothering me. Let's try to clean it up a little more. Remove any cases of "<< Back to Articles List" and "Create a New Article". Then add this code to @/views/layout.cfm@.
 
 <pre lang="cfm">
 <code>
@@ -205,6 +217,14 @@ h3. Better Navigation
 </code>
 </pre>
 
-If you look at the @show@ view template, you'll see that we never added an edit link! Add that link now, but protect it to only show up when a user is logged in.
+If you look at the @show@ view template, you'll see that we never added an edit link! Let's quick add that link now, but protect it to only show up when a user is logged in and they are on the @article@ controller and @show@ action.
+
+<pre lang="cfm">
+<code>
+<cfif params.controller EQ "articles" and params.action EQ "show">
+<li>#linkTo(text='Edit Current Article', action='edit', key=params.key)#</li>
+</cfif>
+</code>
+</pre>
 
 Your basic authentication is done, and Iteration 5 is complete!

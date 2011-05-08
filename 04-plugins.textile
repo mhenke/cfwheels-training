@@ -167,7 +167,7 @@ a {
 
 h1, h2, h3, h4, h5 {
   color: darken($bgColor,20);
-  margin-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 h1 { font-size: 2.6em; border-bottom: 1px solid $navbar-color; font-weight: bold; width: 80%; }
