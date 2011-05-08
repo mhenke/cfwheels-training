@@ -130,7 +130,7 @@ h3. A Few SASS Examples
 
 Were not focusing on %(caps)CSS% development, so here are a few styles you can copy & paste and modify to your hearts content:
 
-<pre lang="scss">
+<pre lang="sass">
 <code>
 $bgColor: #AAA;
 $fgColor: #0000FF;
