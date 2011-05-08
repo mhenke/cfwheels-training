@@ -182,7 +182,7 @@ Now create the file @/views/articles/show.cfm@ and add this code:
 <cfoutput>
  <h2>#article.title#</h2>
  <p>#article.body#</p>
- #linkTo(text="<< Back to Articles List", action="index")#
+ #linkTo(text="<< Back to Articles List", controller="articles", action="index")#
 </cfoutput>
 </code>
 </pre>
