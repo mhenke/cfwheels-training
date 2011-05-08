@@ -35,6 +35,29 @@ Create a new folder and file @/views/main/login.cfm@ with this code:
 
 Nothing special here. Lets try to load our login page at @http://wheels.local/index.cfm/main/login@ If its there, you're ready to go!
 
+h3. Creating the Person Model
+
+We will create a Model for our users called @Person.cfc@. It will validate several of our properties.
+
+<pre lang="cfm">
+<code>
+<cfcomponent extends="Model" output="false">
+
+ <cffunction name="init">
+
+  <!--- Validations --->
+  <cfset validatesPresenceOf("firstName,lastName,email")>
+  <cfset validatesFormatOf(property="email", type="email")>
+  <cfset validatesLengthOf(property="firstName", maximum=30)>
+  <cfset validatesLengthOf(property="lastName", maximum=50)>
+  <cfset validatesConfirmationOf("password")>
+
+ </cffunction>
+
+</cfcomponent>
+</code>
+</pre>
+
 h3. Creating our Main Controller
 
 We will make a simple controller with the following actions: @login@, @logout@, and @signin@. The @signin@ action creates a session structure called user if the email and password is correct.
