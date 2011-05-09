@@ -256,6 +256,10 @@ The first action we're interested in first is @create@. You can cheat by looking
 
 Test out your form to create another comment now -- and it should work!
 
+h4. Comment Validation
+
+During this training, I noticed a "bug" with the @renderPage@ and @#includePartial(article.comments)#@ combination. It seems @includePartial@ used this way doesn't allow another controller to be called so, I copied @/views/articles/_comment.cfm@ to @/views/comments@. This allows error messages to appear along with the form being populated again. Another fix could be to do a @redirectTo@.
+
 h3. Cleaning Up
 
 We've got some decent comment functionality, but there are a few things we should add and tweak.
