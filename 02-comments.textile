@@ -28,7 +28,7 @@ Pretty simple, huh?
 
 h3. Setting up the Migration
 
-Open the DBMigrate plugin and fill it out with the following and click "create":
+Open the *DBMigrate* plugin and fill it out with the following and click "create":
 
 * Select template? Create table
 * Migration description: creates comments table
@@ -44,7 +44,7 @@ t.string('authorname');
 
 Then keep adding lines creating strings named @authoremail@, @authorurl@, and a text field named @body@.
 
-Once that's complete, go to the DBMigrate plugin and run the migration by clicking @go@.
+Once that's complete, go to the *DBMigrate* plugin and run the migration by clicking @go@.
 
 h3. Relationships
 

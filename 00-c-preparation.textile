@@ -79,7 +79,7 @@ h4. Install DBMigrate Plugin
 ** Download "http://code.google.com/p/cfwheels-dbmigrate/":http://code.google.com/p/cfwheels-dbmigrate/
 ** Move the downloaded zip into "C:\JRun4\servers\cfwheels101\plugins"
 ** Reload CFWheels "http://wheels.local/":http://wheels.local/
-** You should see DBMigrate under Plugins
+** You should see *DBMigrate* under Plugins
 
 h4. Install Scaffold Plugin
 
@@ -113,3 +113,14 @@ h2. Add JSBloggers connection
 ** Name: JSBloggers
 ** Driver: MySQL
 ** URL: jdbc:mysql://localhost:3306/
+
+h2. Setup Git and Github
+
+h3. Create a free Github account
+
+* Sign up for a free "Github account":https://github.com/signup/free
+
+h3. Install Git and Connect to Github
+
+* "Setup Git and Github":http://help.github.com/win-set-up-git/
+
