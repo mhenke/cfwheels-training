@@ -15,7 +15,7 @@ A machine running Windows is ideal, but we should be able to get things going on
 Preparation for JSBloggers Project ============================
 https://github.com/mhenke/cfwheels-training/blob/develop/00-c-preparation.textile
 
-Bonus ============================
+Git and Github Account  ============================
 Setup a free Github Account: https://github.com/signup/free
 Git for Windows: http://kylecordes.com/2008/git-windows-go
 Git for OSX: http://help.github.com/mac-git-installation/
