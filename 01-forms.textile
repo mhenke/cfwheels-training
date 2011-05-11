@@ -1,4 +1,4 @@
-h1. I1: Form-Based Workflow
+h2. I1: Form-Based Workflow
 
 We've created an articles page, but it isn't a viable long-term solution. The users of our app will expect to add content through a web interface. In this iteration we'll create an @HTML@ form to submit the article, then all the backend processing to get it into the database.
 

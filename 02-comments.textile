@@ -1,4 +1,4 @@
-h1. I2: Adding Comments
+h2. I2.1: Adding Comments
 
 Most blogs allow the reader to interact with the content by posting comments. Let's add some simple comment functionality.
 
@@ -134,6 +134,8 @@ Now you've created a few comments, try executing @a.comments@ again.
 
 Did your comments all show up? Great. Now we need to integrate them into the article display.
 
+h2. I2.1: Adding Comments (continued)
+
 h3. Displaying Comments for an Article
 
 We want to display any comments underneath their parent article. Because we've setup the relationships between those models, this is very easy. Open @/views/articles/show.cfm@ and add the following lines right before the link to the articles list:
@@ -264,15 +266,9 @@ h3. Cleaning Up
 
 We've got some decent comment functionality, but there are a few things we should add and tweak.
 
-h4. Comments Count
+h4. Validation for Articles and Comments
 
-Let's make it so where the view template has the "Comments" header it displays how many comments there are, like "Comments ( 3 )". Open up your article's @show.cfm@ and change the comments header so it looks like this:
-
-<pre lang="cfm">
-<code>
-<h3>Comments ( #article.commentCount()# )</h3>
-</code>
-</pre>
+TODO: add section for validation of articles and comments
 
 h4. Form Labels
 
@@ -311,6 +307,16 @@ Refresh, and you should see html source like this:
  <label for="comment-authorname">Authorname</label><br>
  <input type="text" value="" name="comment[authorname]" maxlength="255" id="comment-authorname">
 </p>
+</code>
+</pre>
+
+h4. Comments Count
+
+Let's make it so where the view template has the "Comments" header it displays how many comments there are, like "Comments ( 3 )". Open up your article's @show.cfm@ and change the comments header so it looks like this:
+
+<pre lang="cfm">
+<code>
+<h3>Comments ( #article.commentCount()# )</h3>
 </code>
 </pre>
 

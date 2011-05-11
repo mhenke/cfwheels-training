@@ -1,4 +1,4 @@
-h1. I3: Tagging 
+h2. I3: Tagging 
 
 In this iteration we'll add the ability to tag articles for organization and navigation. Tagging is similar to some blogs having a "Posted Under" feature. For example, if I wrote a blog post about our training, I might tag it as "Wheels", "Training", and "ColdFusion".
 
