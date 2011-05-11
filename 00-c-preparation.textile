@@ -94,49 +94,18 @@ h3. Install MySQL Server
 * Windows
 ** Download and install "http://dev.mysql.com/downloads/mirror.php?id=401202":http://dev.mysql.com/downloads/mirror.php?id=401202 
 
+
+h4. Create JSBloggers Database
+
+* Select Start --> MySQL - MySQL 5.1 Server --> MySQL Command Line Client
+** Type your password then "create database jsbloggers;" and press return
+
 h2. Client Tools
 
 h3. Install ColdFusion Builder
 
 * Windows
 ** Download and install as standalone "http://www.adobe.com/products/coldfusion/cfbuilder/features/":http://www.adobe.com/products/coldfusion/cfbuilder/features/
-
-h3. Install SQL Explorer
-
-* SQL Explorer
-** Open CFBuilder
-** Select Help --> Install New Software...
-** Click the "Add..." button
-** In the "Add Repository" dialog, set the following:
-*** Name: "SQL Explorer"
-*** Location: http://eclipsesql.sourceforge.net/
-*** Click the "OK"
-** Click on the checkbox next to "SQL Explorer"
-** Click the "Next" button
-** On the "Install Details" window, click the "Next >" button
-** On the "Review Licenses" window, select "I accept the terms of the license agreement" and then click the "Finish >" button
-** When you're prompted with a "Security Warning" about the software having unsigned content, click the "OK" button to continue.
-** When prompted to restart Eclipse, click the "Restart Now" button
-
-h4. Install MySQL driver
-
-* Download and extract "JDBC Driver for MySQL (Connector/J)":http://www.mysql.com/downloads/connector/j/
-* Follow instructions to "add MySql driver":http://www.sqlexplorer.org/drivers.php
-** Driver Class Name: com.mysql.jdbc.Driver
-
-h4. Create Connection
-
-* Follow instructions to "create a connection":http://eclipsesql.sourceforge.net/connections.php
-** Name: JSBlogger
-** Driver: MySQL
-** URL: jdbc:mysql://localhost:3306
-** Check AutoLogin
-** User and Password
-
-h3. Create JSBloggers Database
-
-* Right-click on the JSBloggers connections and select "New SQL Editor" and run this command
-** create database jsbloggers;
 
 h2. Add JSBloggers connection
 
