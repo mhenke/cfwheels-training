@@ -115,6 +115,15 @@ h3. Install ColdFusion on Wheels
 ** Extract and copy the files to "C:\JRun4\servers\cfwheels101"
 ** Test at "http://wheels.local/":http://wheels.local/ and you should see a Congratulations page
 
+h4. Install Plugin Manager
+
+* Plugin Manager
+** Download
+** Move the downloaded zip archive file into "C:\ColdFusion9\wwwroot"
+** Reload CFWheels "http://wheels.local/":http://wheels.local/
+** You should see *Plugin Manager* under Plugins
+
+
 h4. Install DBMigrate Plugin
 
 * DBMigrate
