@@ -1,6 +1,6 @@
 h1. Preparation for JSBloggers Project
 
-While it's possible to sit and watch the material presented during class, to receive the maximum benefit you should have your own system to work on.  You will need to prepare your laptop system in advance of the class so we can cover the maximum amount of material.
+While it's possible to sit and watch the material presented during class, to receive the maximum benefit you should have your own system to work on.  You will need to prepare your laptop system in advance of the class so we can cover the maximum amount of material.  
 
 h2. Installing Servers
 
@@ -10,12 +10,41 @@ h3. Install MySQL Database
 
 * Download and install MySQL 5.5 or newer.  You can find the downloads by going to "MySQL Downloads page":http://www.mysql.com
 * Run the installer and select the options as follows:
-** Development server
-** OLTP database engine
-** Add exception to firewall
-** Add bin to path
-** Set the root password to "cfwheels" in all lowercase, no quotes
-
+** Accept the End-User License Agreement (EULA)
+** Select Custom Setup Type
+** On the Custom Setup click the "Next" button to select all components
+** Click the "Install" button to install the server
+** Note: On Windows Vista & Windows 7 computers you'll be prompted if you want to allow this application to make changes to your computer, click the "Yes" button
+** On the MySQL Enterprise advertisement screen click the "Next" button
+** On the MySQL Enterprise monitoring service advertisement screen click the "Next" button
+** Check the "Launch the MySQL Instance Configuration Wizard" checkbox, then click the "Finish" button
+** Note: On Windows Vista & Windows 7 computers you'll be prompted if you want to allow this application to make changes to your computer, click the "Yes" button
+** On the "MySQL Instance Configuration Wizard screen" click the "Next" button
+** Select the "Detailed Configuration" radio button, then click the "Next" button
+** On the "Server Type" screen select "Developer Machine" radio button, then click the "Next" button
+** On the "Database usage" screen, select the "Transactional Database Only" radio button, then click the "Next" button
+** On the "Select Drive" screen, click the "Next" button
+** On the "Concurrent Connections" screen select "Decision Support (DSS)/OLAP" radio button, then click the "Next" button
+** On the "Networking" screen, select the following options:
+*** Check "Enable TCP/IP Networking"
+*** Set the port number to "3306"
+*** Check "Add firewall exception for this port"
+*** Check "Enable Strict Mode"
+*** Click the "Next" button
+* On the "Default character set" screen, select the "Best Support for Multilingualism" radio button, then click the "Next" button
+** On the "Set Windows Options" screen, select the following options:
+*** Check the "Install as Windows Service" checkbox
+*** Set the "Service Name" to "MySQL"
+*** Check the "Launch MySQL automatically" checkbox
+*** Check the "Include Bin Directory in Windows PATH" checkbox
+*** Click the "Next" button
+** On the "Security Options" screen, select the following options:
+*** Check the "Modifiy Security Settings" checkbox
+*** Set the root password to "cfwheels" in all lowercase, no quotes
+*** Check the "Enable root access from remote machines" checkbox
+*** Uncheck the "Create An Anonymous Account" checkbox
+*** Click the "Next" button
+** Click the "Execute" button
 
 h3. Install Adobe ColdFusion 9
 
