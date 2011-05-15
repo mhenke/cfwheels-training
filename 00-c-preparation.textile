@@ -1,8 +1,21 @@
 h1. Preparation for JSBloggers Project
 
-There are a few extra steps of preparation when working with Wheels projects:
+While it's possible to sit and watch the material presented during class, to receive the maximum benefit you should have your own system to work on.  You will need to prepare your laptop system in advance of the class so we can cover the maximum amount of material.
 
 h2. Installing Servers
+
+This class will make use of the Adobe ColdFusion 9 application server for processing the ColdFusion Markup Language (CFML) pages that you'll be creating.  Our application will also store data in a relational database using the MySQL database server. 
+
+h3. Install MySQL Database
+
+* Download and install MySQL 5.5 or newer.  You can find the downloads by going to "MySQL Downloads page":http://www.mysql.com
+* Run the installer and select the options as follows:
+** Development server
+** OLTP database engine
+** Add exception to firewall
+** Add bin to path
+** Set the root password to "cfwheels" in all lowercase, no quotes
+
 
 h3. Install Adobe ColdFusion 9
 
