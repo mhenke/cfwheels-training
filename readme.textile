@@ -35,4 +35,8 @@ Troy Murray - "https://github.com/talltroym/":https://github.com/talltroym/
 
 h2. Git Workflow for Contributors
 
-This project uses the excellent "Git Workflow series":http://www.silverwareconsulting.com/index.cfm/Git-Workflow/ by "Bob Silverburg":https://github.com/bobsilverberg/ for contributions.
+This project uses the excellent "Git Workflow series":http://www.silverwareconsulting.com/index.cfm/Git-Workflow by "Bob Silverburg":https://github.com/bobsilverberg/ for contributions.
+
+h2. Dealing with line endings
+
+Before contributing, please read this "http://help.github.com/dealing-with-lineendings/":http://help.github.com/dealing-with-lineendings/
