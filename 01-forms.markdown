@@ -7,12 +7,12 @@ We’ve created an articles page, but it isn’t a viable long-term solution. Th
 Previously we setup the `<cfset addRoute(name="home", pattern="", controller="Articles", action="index") />` route in `/config/routes.cfm`, and told Wheels we were going to follow the RESTful conventions for this model named Article. Following this convention, the URL for creating a new article would be `http://wheels.local/index.cfm/articles/new`. Enter the url into your browser and see what comes up.
 
 <pre lang="cfm">
-Wheels.ViewNotFound  
+Wheels.ViewNotFound\
 Could not find the view page for the new action in the Articles controller.
 
 Suggested action
 
-Create a file named new.cfm in the views/articles directory (create the directory as well if it doesn’t already exist).  
+Create a file named new.cfm in the views/articles directory (create the directory as well if it doesn’t already exist).\
 
 </pre>
 This is an error message we’ve seen before. The router went looking for an action named `new` inside the `Articles.cfc` and didn’t find it.
@@ -20,23 +20,23 @@ This is an error message we’ve seen before. The router went looking for an act
 So first let’s create the action. Open `/controllers/Articles.cfc` and add this method structure, making sure it’s *inside* the `cfcomponent` instruction, but *outside* the existing `index` method:
 
 <pre lang="cfm">
-<code>  
+<code>\
 <cffunction name="new">
 
-</cffunction>  
-</code>  
+</cffunction>\
+</code>\
 
 </pre>
 Create a new file `/views/Articles/new.cfm` with these contents:
 
 <pre lang="cfm">
-<code>  
+<code>\
 
 <h1>
 Create a New Article
 
 </h1>
-</code>  
+</code>\
 
 </pre>
 Refresh your browser and you should just see the heading “Create a New Article”.
@@ -46,16 +46,16 @@ Refresh your browser and you should just see the heading “Create a New Article
 It’s not very impressive so far — we need to add a form to the `new.cfm` so the user can enter in the article title and body. Because we’re following the RESTful conventions, Wheels can take care of many of the details. Inside the `new.cfm`, enter this code below your header:
 
 <pre lang="cfm">
-<code>  
-<cfoutput>  
- \#errorMessagesFor (“article”)\#  
- \#startFormTag (action=“create”)\#  
- \#textField (objectName=‘article’, property=‘title’, label=‘Title’)\#  
- \#textArea (objectName=‘article’, property=‘body’, label=‘Body’)\#  
- \#submitTag ()\#  
- \#endFormTag ()\#  
-</cfoutput>  
-</code>  
+<code>\
+<cfoutput>\
+ \#errorMessagesFor (“article”)\#\
+ \#startFormTag (action=“create”)\#\
+ \#textField (objectName=‘article’, property=‘title’, label=‘Title’)\#\
+ \#textArea (objectName=‘article’, property=‘body’, label=‘Body’)\#\
+ \#submitTag ()\#\
+ \#endFormTag ()\#\
+</cfoutput>\
+</code>\
 
 </pre>
 What is all that? Let’s look at it piece by piece:
@@ -74,19 +74,19 @@ What is all that? Let’s look at it piece by piece:
 Refresh your browser and you’ll see this:
 
 <pre lang="cfm">
-Wheels.ObjectNotFound  
+Wheels.ObjectNotFound\
 Wheels tried to find the model object article for the form helper, but it does not exist.
 
 Error location
 
 Line 3 in views\\articles\\new.cfm
 
-2: <cfoutput>  
-3: \#errorMessagesFor (“article”)\#  
-4: \#startFormTag (action=“create”)\#  
-5: \#textField (objectName=‘article’, property=‘title’, label=‘Title’)\#  
-6: \#textArea (objectName=‘article’, property=‘body’, label=‘Body’)\#  
-7: \#submitTag ()\#  
+2: <cfoutput>\
+3: \#errorMessagesFor (“article”)\#\
+4: \#startFormTag (action=“create”)\#\
+5: \#textField (objectName=‘article’, property=‘title’, label=‘Title’)\#\
+6: \#textArea (objectName=‘article’, property=‘body’, label=‘Body’)\#\
+7: \#submitTag ()\#\
 
 </pre>
 What’s Wheels trying to tell us. In our `new.cfm` on line \#3 there was an error about “Wheels.ObjectNotFound”. Somewhere in line \#4 we’re working with an object that doesn’t exist.
@@ -96,9 +96,9 @@ And since there’s only one object in line \#3, it makes it pretty obvious — 
 Go into your `Articles.cfc`, and *inside* the `new` method, add this line:
 
 <pre lang="cfm">
-<code>  
-<cfset article = model("Article").new() />  
-</code>  
+<code>\
+<cfset article = model("Article").new() />\
+</code>\
 
 </pre>
 Then refresh your browser and your form should come up. Enter in a title, some body text, and click “Save changes”.
@@ -108,24 +108,24 @@ Then refresh your browser and your form should come up. Enter in a title, some b
 You’re old friend pops up again…
 
 <pre lang="cfm">
-Wheels.ViewNotFound  
+Wheels.ViewNotFound\
 Could not find the view page for the create action in the Articles controller.
 
 Suggested action
 
-Create a file named create.cfm in the views/articles directory (create the directory as well if it doesn’t already exist).  
+Create a file named create.cfm in the views/articles directory (create the directory as well if it doesn’t already exist).\
 
 </pre>
 When we loaded the form we accessed the `new` action, but when the form is submitted to the application, following the REST convention, it goes to a `create` action. We need to create the action. Inside your `Articles.cfc` add the `create` method (again, *inside* the `cfcomponent` instruction, but *outside* the other actions):
 
 <pre lang="cfm">
-<code>  
-<cffunction name="create">  
- <cfset article = model("Article").new(params.article) />  
- <cfset article.save() />  
- <cfset redirectTo(action="index") />  
-</cffunction>  
-</code>  
+<code>\
+<cffunction name="create">\
+ <cfset article = model("Article").new(params.article) />\
+ <cfset article.save() />\
+ <cfset redirectTo(action="index") />\
+</cffunction>\
+</code>\
 
 </pre>
 This method says…
@@ -144,18 +144,18 @@ Right now our article list is very plain and we end up typing in a bunch of URLs
 -   Add this code at the very bottom:
 
 <pre lang="cfm">
-<code>  
-<cfoutput>  
+<code>\
+<cfoutput>\
 
 <p>
 \#linkTo (text=“Create a New Article”, action=“new”)\#
 
 </p>
-</cfoutput>  
-</code>  
+</cfoutput>\
+</code>\
 
 </pre>
-It uses the Wheels `linkTo` helper, tells it we want a link with the text “Create a New Article” that points to the address `new` (which the router handles for us)  
+It uses the Wheels `linkTo` helper, tells it we want a link with the text “Create a New Article” that points to the address `new` (which the router handles for us)\
 \* Find where, in the middle of the view, we output just the `title`. Change it so it says `linkTo(text=title, action='show', key=id)`. This creates a link with the text of the articles title which points to a page where we’ll show just that article.
 
 Refresh your browser and you should now see a list of the article titles that are linked somewhere and a link at the bottom to “Create a New Article”. Test the create link and it takes you to the new article form. Then go back to the article list and click one of the article titles.
@@ -165,11 +165,11 @@ Refresh your browser and you should now see a list of the article titles that ar
 Tired of this error message yet? Go to your `Articles.cfc` and add a method like this:
 
 <pre lang="cfm">
-<code>  
+<code>\
 <cffunction name="show">
 
-</cffunction>  
-</code>  
+</cffunction>\
+</code>\
 
 </pre>
 Let’s pause here before creating the view template.
@@ -179,16 +179,16 @@ Look at the URL: `http://wheels.local/index.cfm/articles/show/1`. When we added 
 So what do we want to do when the user clicks an article title? Find the article, then display a page with it’s title and body. We’ll use the number on the end of the URL to find the article in the database. The router will send us this number in the variable `params.key`. Inside the `show` method that we just created, add this line:
 
 <pre lang="cfm">
-<code>  
-<cfset article = model("Article").findByKey(params.key) />  
-</code>  
+<code>\
+<cfset article = model("Article").findByKey(params.key) />\
+</code>\
 
 </pre>
 Now create the file `/views/articles/show.cfm` and add this code:
 
 <pre lang="cfm">
-<code>  
-<cfoutput>  
+<code>\
+<cfoutput>\
 
 <h2>
 \#article.title\#
@@ -199,9 +199,9 @@ Now create the file `/views/articles/show.cfm` and add this code:
 \#article.body\#
 
 </p>
-\#linkTo (text=“<< Back to Articles List”, controller=“articles”, action=“index”)\#  
-</cfoutput>  
-</code>  
+\#linkTo (text=“<< Back to Articles List”, controller=“articles”, action=“index”)\#\
+</cfoutput>\
+</code>\
 
 </pre>
 Refresh your browser and your article should show up along with a link back to the index.
@@ -213,16 +213,16 @@ We can create articles and we can display them, but when we eventually deliver t
 Look at your `index.cfm` and change the whole `<li>` segment so it looks like this:
 
 <pre lang="cfm">
-<code>  
+<code>\
 
 <li>
-<b>\#linkTo (text=title, action=“show”, key=id)\#</b><br/>  
- <i>Actions:  
- \#linkTo (text=‘edit’, action=‘edit’, key=id)\#,  
- \#linkTo (text=‘remove’, action=‘delete’, key=id, confirm=“Remove the article ‘\#title\#’?”)\#   
- </i>   
-</i>  
-</code>  
+<b>\#linkTo (text=title, action=“show”, key=id)\#</b><br/>\
+ <i>Actions:\
+ \#linkTo (text=‘edit’, action=‘edit’, key=id)\#,\
+ \#linkTo (text=‘remove’, action=‘delete’, key=id, confirm=“Remove the article ‘\#title\#’?”)\# \
+ </i> \
+</i>\
+</code>\
 
 </pre>
 The first link we added, for edit, is pretty similar to what we’ve done before — creating a link with the text “edit” pointing to the address `edit`, which is defined by the router, and editing the key named `id`.
@@ -236,31 +236,31 @@ Refresh your browser and you should see “edit” and “remove” links for ea
 The router is expecting to find an action in `Articles.cfc` named `edit`, so let’s add this:
 
 <pre lang="cfm">
-<code>  
-<cffunction name="edit">  
- <cfset article = model("Article").findByKey(params.key) />  
-</cffunction>  
-</code>  
+<code>\
+<cffunction name="edit">\
+ <cfset article = model("Article").findByKey(params.key) />\
+</cffunction>\
+</code>\
 
 </pre>
 All the `edit` action is really going to do is find the article to be edited, then display the editing form. If you refresh after adding that `edit` action you’ll see the template missing error. Create a file `/views/articles/edit.cfm` but **hold on before you type anything**. Below is what the edit form should look like:
 
 <pre lang="cfm">
-<code>  
+<code>\
 
 <h1>
 Edit an Article
 
 </h1>
-<cfoutput>  
- \#errorMessagesFor (“article”)\#  
- \#startFormTag (action=“update”)\#  
- \#textField (objectName=‘article’, property=‘title’, label=‘Title’)\#  
- \#textArea (objectName=‘article’, property=‘body’, label=‘Body’)\#  
- \#submitTag (value=“Update”)\#  
- \#endFormTag ()\#  
-</cfoutput>  
-<code>  
+<cfoutput>\
+ \#errorMessagesFor (“article”)\#\
+ \#startFormTag (action=“update”)\#\
+ \#textField (objectName=‘article’, property=‘title’, label=‘Title’)\#\
+ \#textArea (objectName=‘article’, property=‘body’, label=‘Body’)\#\
+ \#submitTag (value=“Update”)\#\
+ \#endFormTag ()\#\
+</cfoutput>\
+<code>\
 
 </pre>
 In the ColdFusion and Wheels communities there is a mantra of “Don’t Repeat Yourself” ~~- but that’s exactly what I’ve done here. This view is basically the same as the `new.cfm`~~- the only changes are the H1 and the submit button now has a value parameter. It will display in the button form control. We can abstract this form into a single file called a *partial*, then reference this partial from both `new.cfm` and `edit.cfm`.
@@ -268,9 +268,9 @@ In the ColdFusion and Wheels communities there is a mantra of “Don’t Repeat 
 Create a file `/views/articles/_form.cfm` and, yes, it has to have the underscore at the beginning of the filename. Go into your `/views/articles/new.cfm` and CUT all the text from and including the `cfoutput` line all the way to it’s ending `cfoutput`. The only thing left will be your H1 line. Then add the following code at the bottom of that view:
 
 <pre lang="cfm">
-<code>  
-<cfoutput>\#includePartial (“form”)\#</cfoutput>  
-</code>  
+<code>\
+<cfoutput>\#includePartial (“form”)\#</cfoutput>\
+</code>\
 
 </pre>
 Now go back to the `_form.cfm` and paste the form code. Change the `startFormTag` to `#startFormTag(action=myaction)#` and the text on the `submit` button to say “Save” so it makes sense both when creating a new article and editing and existing one.
@@ -278,11 +278,11 @@ Now go back to the `_form.cfm` and paste the form code. Change the `startFormTag
 Also for editing we need to have a hidden field for the article’s `id`. So please add this above the `submitTag` in our partial.
 
 <pre lang="cfm">
-<code>  
-<cfif myaction EQ "update">  
- \#hiddenField (objectName=‘article’, property=‘id’)\#  
-</cfif>  
-</code>  
+<code>\
+<cfif myaction EQ "update">\
+ \#hiddenField (objectName=‘article’, property=‘id’)\#\
+</cfif>\
+</code>\
 
 </pre>
 Then look at your `edit.cfm` file, write an H1 header saying “Edit an Article”, then use the same code to render the partial named `form`.
@@ -294,13 +294,13 @@ Go back to your articles list and try creating a new article ~~- it should work 
 The router is looking for an action named `update`. Just like the `new` action sends it’s form data to the `create` action, the `edit` action sends it’s form data to the `update` action. In fact, within our `Articles.cfc`, the `update` method will look very similar to `create`
 
 <pre lang="cfm">
-<code>  
-<cffunction name="update">  
- <cfset article = model("Article").findByKey(params.key) />  
- <cfset article.update(params.article) />  
- <cfset redirectTo(action="show",key=params.key) />  
-</cffunction>  
-</code>  
+<code>\
+<cffunction name="update">\
+ <cfset article = model("Article").findByKey(params.key) />\
+ <cfset article.update(params.article) />\
+ <cfset redirectTo(action="show",key=params.key) />\
+</cffunction>\
+</code>\
 
 </pre>
 The new bits here is the `update` method and `key` in our `redirect`. The `update` method works very similar to when we called the `new` method and passed in the structure of form data. When we call `update` on the `article` object and pass in the data from the form, it changes the values in the object to match the values submitted with the form. And saves the object to the database and redirect to the articles list. The `key` in `redirect` tells Wheels to show the same article being update after updated.
@@ -312,13 +312,13 @@ Now try editing and saving some of your articles.
 Next, click the **REMOVE** link for an article and hit OK. You can see the router is expecting a `delete` action. Go into `Articles.cfc` and add a delete method like this:
 
 <pre lang="cfm">
-<code>  
-<cffunction name="delete">  
- <cfset article = model("Article").findByKey(params.key) />  
- <cfset article.delete() />  
- <cfset redirectTo(action="index") />  
-</cffunction>  
-</code>  
+<code>\
+<cffunction name="delete">\
+ <cfset article = model("Article").findByKey(params.key) />\
+ <cfset article.delete() />\
+ <cfset redirectTo(action="index") />\
+</cffunction>\
+</code>\
 
 </pre>
 Here we’re doing a `findByKey` based on `params.key` like we did in the `show` action. We call that object’s `delete` method, then redirect back to the articles list.
@@ -332,7 +332,7 @@ It would be nice, though, if we gave the user some kind of status message about 
 Wheels creates the object named `flash`, so we don’t need to do anything to set it up. We can start by integrating it into our `index.cfm` by adding this line at the very top:
 
 <pre lang="cfm">
-<code>  
+<code>\
 
 <div class="flash">
 <p>
@@ -340,15 +340,15 @@ Wheels creates the object named `flash`, so we don’t need to do anything to se
 
 </p>
 </div>
-</code>  
+</code>\
 
 </pre>
 This outputs the value stored in the `flash` object with the key `message`. If you refresh your articles list you won’t see anything because we haven’t stored a message in there yet. Look at `Articles.cfc` and add this line right after the `save!` line in your `create` method:
 
 <pre lang="cfm">
-<code>  
-<cfset flashInsert(message="Article '#article.title#' was created.") />  
-</code>  
+<code>\
+<cfset flashInsert(message="Article '#article.title#' was created.") />\
+</code>\
 
 </pre>
 Then go to your articles list, create another sample article, and when you click create you should see the flash message at the top of your view.
