@@ -55,7 +55,8 @@ useful to you please drop him an email!
 Please add yourself if you helped:
 
 Mike Henke (henke.mike@gmail.com) -
-[https://github.com/mhenke/](https://github.com/mhenke/)\
+[https://github.com/mhenke/](https://github.com/mhenke/)
+
 Troy Murray -
 [https://github.com/talltroym/](https://github.com/talltroym/)
 

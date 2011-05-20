@@ -75,7 +75,7 @@ responses for PDF. Create `/views/articles/index.pdf.cfm` and place this
 in it.
 
 ~~~~ {lang="cfm"}
-Listing articles     #articles.title#   
+Listing articles     #articles.title#
 ~~~~
 
 Reload the page with the error and you should see a pdf with our custom
@@ -126,13 +126,13 @@ need to install this on environments like Production.
 
 Now for the big finale:
 
-\1) we will setup a configuration file\
-2) install Blueprint for a project, and \
+1) we will setup a configuration file
+2) install Blueprint for a project, and
 3) start a watcher (this will automate the compiling of our css).
 
 Here are the steps in detail:
 
-\1) In the webroot create a folder called Sass and create a file called
+1) In the webroot create a folder called Sass and create a file called
 `config.rb` in it. Paste in this code in the `config.rb` file:
 
 ~~~~ {lang="ruby"}
