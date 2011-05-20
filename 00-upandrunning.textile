@@ -21,7 +21,7 @@ Using ColdFusion Builder's Server view, we can add the our ColdFusion server. Op
 * Application Server: Jrun
 * Host Name: wheels.local
 ** Select Is Local
-* WebServer Port: 80 
+* WebServer Port: 80
 * Click Finish
 
 You should then see the @JSBloggers@ server in the Servers view. If it isn't Running, please start it. Once it's started, try loading the address "http://wheels.local/":http://wheels.local/. You should see Wheels' "Congratulations" page. Scroll down and the Wheels debugging section displays the Wheels version, CFML Engine version along with other useful information.
@@ -30,7 +30,7 @@ We need to change the Wheels datasource convention. Wheels assumes our datasourc
 
 Press Ctrl+Shift+R while in Eclipse. This is the Open Resource window. I use this a lot when coding in Eclipse. Sometimes I highlight a file name in code and press Ctrl+Shift+R, other times I type in the file name like we will do next. Type in @settings.cfm@, and select @settings.cfm - /JSBloggers/config@. This will open that file for use and type in @<cfset set(dataSourceName="JSBloggers") />@ to tell Wheels to use this as are datasource. Also add in @<cfset set(URLRewriting="Partial") />@ to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers. To reload Wheels, you can add @?reload=true@ to the url or click on the @Reload@ link in the Wheels debug section.
 
-Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our Wheels app to work with that data. 
+Our blog will be centered around "articles," so we'll need a table in the database to store all the articles and a model to allow our Wheels app to work with that data.
 
 h3. Working with the Database
 
@@ -40,7 +40,7 @@ h4. What is a migration?
 
 Migrations are a convenient way for you to alter your database in a structured and organized manner. Migrations are meant to be _symmetric_. Whatever a migration changes inside the @up@ method should be _undone_ with the @down@ method. Frequently in development you'll think you want the database to look one way, then realize you need something different. You can create a migration to make your changes to the DB, start building, and then revert as necessary.
 
-Let's generate a "Create table" migration for our articles. In the browser select, DBMigration link in the Wheels debugging section and open it in a new tab (This will make switching between plugins and our code easier). And complete the page like: 
+Let's generate a "Create table" migration for our articles. In the browser select, DBMigration link in the Wheels debugging section and open it in a new tab (This will make switching between plugins and our code easier). And complete the page like:
 
 * Template: Create table
 * Migration prefix: Timestamp (e.g. 20110406075307)
@@ -70,7 +70,7 @@ Let's open @/db/migrate/(some_time_stamp)__create_articles_table.cfc@ and take a
 </code>
 </pre>
 
-Inside the @up@ method you'll see the generator has placed a call to the @createTable@ method, passed @[tableName]@ as a parameter, and created a block with the variable @t@ referencing the table that's created. Let's change @[tableName]@ to @[articles]@. We can tell @t@ what kind of columns we want in the @articles@ table. 
+Inside the @up@ method you'll see the generator has placed a call to the @createTable@ method, passed @[tableName]@ as a parameter, and created a block with the variable @t@ referencing the table that's created. Let's change @[tableName]@ to @[articles]@. We can tell @t@ what kind of columns we want in the @articles@ table.
 
 But first you might be wondering "What is @t.timestamps@ doing there?". The generator inserted that line. It will create three columns inside our table titled @createdat@ for when created, @updatedat@ for last updated, and @deletedat@ for soft deletes. Wheels will manage these columns for us, so when an article is created it's @createdat@ and @updatedat@ are automatically set. Each time we make a change to the article, the @updatedat@ will automatically be...uhhh...updated. Very handy.
 
@@ -138,11 +138,11 @@ With this file in place we can start developing!
 
 h3. Working with a Model
 
-Another awesome feature of working with Wheels is the @ORM@. The @ORM@ stands for Object-relational mapping. It allows you to map objects in your application to records in your database tables. This can simplify your development process and even once an app is in production the @ORM@ makes it very easy to do modifications, searches, and other data operations. So let's create a @controller@ to do some simple interactions with our @model@. 
+Another awesome feature of working with Wheels is the @ORM@. The @ORM@ stands for Object-relational mapping. It allows you to map objects in your application to records in your database tables. This can simplify your development process and even once an app is in production the @ORM@ makes it very easy to do modifications, searches, and other data operations. So let's create a @controller@ to do some simple interactions with our @model@.
 
 * File --> New (Alt+Shift+N) --> ColdFusion Component
 * Source Location: /JSBloggers/controllers
-** By clicking Browse... 
+** By clicking Browse...
 * Component Name: Examples
 * Extends: Controller
 * Click Finish
@@ -167,7 +167,7 @@ The first line was to demonstrate we can do anything in our @controller@ we prev
 
 All the information about the @Article@ model is in the file @/models/Article.cfc@, so let's open that now.
 
-Not very impressive, right? There are no attributes defined inside the model, so how does Wheels know an Article should have a @title@, a @body@, etc? It queries the database, looks at the articles table, and assumes whatever columns the table has should probably be the attributes accessible through the model. 
+Not very impressive, right? There are no attributes defined inside the model, so how does Wheels know an Article should have a @title@, a @body@, etc? It queries the database, looks at the articles table, and assumes whatever columns the table has should probably be the attributes accessible through the model.
 
 h4. Let's look at the Articles table
 
@@ -193,7 +193,7 @@ Now you'll see the @findAll()@ command gave you back an query object holding the
 
 h3. Moving Towards a Web Interface - Setting up the Router
 
-We've created a few articles through the Examples controller, but we really don't have a web application until we have a better web interface. Let's get that started. We said "Wheels uses an *MVC* architecture", and we've worked with the Model, now we need a Controller and View. 
+We've created a few articles through the Examples controller, but we really don't have a web application until we have a better web interface. Let's get that started. We said "Wheels uses an *MVC* architecture", and we've worked with the Model, now we need a Controller and View.
 
 When a Wheels application gets a request from a web browser it first goes to the _router_. The router decides what the request is trying to do and what resources it is trying to interact with. The router dissects a request based on the address it is requesting. Let's open the router's configuration file, @/config/routes.cfm@.
 
