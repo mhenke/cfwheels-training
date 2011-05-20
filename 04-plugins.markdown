@@ -67,7 +67,7 @@ PDF, and XLS. XML and JSON Formats can be automatic generated. Let's
 test the JSON response. Add `?format=json` to the end of our index
 page's url. It should return a JSON file. Try `?format=pdf`.
 
-    Element TEMPLATE is undefined in LOC.The error occurred in C:\JRun4\servers\cfwheels\cfusion.ear\cfusion.war\wheels\controller\provides.cfm: line 123
+    Element TEMPLATE is undefined in LOC.The error occurred in C:\\JRun4\\servers\\cfwheels\\cfusion.ear\\cfusion.war\\wheels\\controller\\provides.cfm: line 123
 
 Not to helpful, huh. Well, we mentioned XML and JSON can be
 automatically generated so we'll need to provide our own custom

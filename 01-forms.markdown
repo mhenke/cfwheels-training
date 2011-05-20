@@ -74,7 +74,7 @@ What is all that? Let's look at it piece by piece:
 Refresh your browser and you'll see this:
 
 ~~~~ {lang="cfm"}
-Wheels.ObjectNotFoundWheels tried to find the model object article for the form helper, but it does not exist.Error locationLine 3 in views\articles\new.cfm2: 3: #errorMessagesFor("article")#4: #startFormTag(action="create")#5:  #textField(objectName='article', property='title', label='Title')#6:  #textArea(objectName='article', property='body', label='Body')#7:  #submitTag()#
+Wheels.ObjectNotFoundWheels tried to find the model object article for the form helper, but it does not exist.Error locationLine 3 in views\\articles\new.cfm2: 3: #errorMessagesFor("article")#4: #startFormTag(action="create")#5:  #textField(objectName='article', property='title', label='Title')#6:  #textArea(objectName='article', property='body', label='Body')#7:  #submitTag()#
 ~~~~
 
 What's Wheels trying to tell us. In our `new.cfm` on line \#3 there was
@@ -216,7 +216,7 @@ Look at your `index.cfm` and change the whole `<li>` segment so it looks
 like this:
 
 ~~~~ {lang="cfm"}
- #linkTo(text=title, action="show", key=id)# Actions: #linkTo(text='edit', action='edit', key=id)#, #linkTo(text='remove', action='delete', key=id, confirm="Remove the article '#title#'?")#   
+ #linkTo(text=title, action="show", key=id)# Actions: #linkTo(text='edit', action='edit', key=id)#, #linkTo(text='remove', action='delete', key=id, confirm="Remove the article '#title#'?")#
 ~~~~
 
 The first link we added, for edit, is pretty similar to what we've done
