@@ -307,7 +307,7 @@ We are saying place the label before the input, and prepend `<p>` to the
 label, then prepend `<br>` to the input, and finally append `</p>` to
 the input. Confused? Hopefully, not :-)
 
-Refresh, and you should see html source like this:
+Refresh, and you should see HTML source like this:
 
 ~~~~ {lang="cfm"}
  Authorname 

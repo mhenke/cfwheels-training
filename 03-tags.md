@@ -80,7 +80,7 @@ The taggings migration should look like this:
 
 Now run both migrations. Currently DBMigrations plugin doesn't have a
 command for composite keys, so we will have to run this sql command
-seperately.
+separately.
 
 ~~~~ {lang="sql"}
 ALTER TABLE jsbloggers.taggings ADD PRIMARY KEY (tagid,articleid);
@@ -238,11 +238,11 @@ article.
 Refresh your view and...BOOM:
 
 ~~~~ {lang="cfm"}
-Attribute validation error for tag cfloop.The value of the attribute query, which is currently tags, is invalid.
+Attribute validation error for tag cfloop. The value of the attribute query, which is currently tags, is invalid.
 ~~~~
 
 The `show` page is trying to use `tags`, but the action doesn't know
-anything about our Tags variable. We need to create the `tags` vaiable
+anything about our Tags variable. We need to create the `tags` variable
 in the `show` action of the `/controllers/Article.cfc`. Open up
 `/controllers/Article.cfc` and add this code
 `<cfset tags = article.tags(order="name")/>` inside the `show` method.
@@ -265,7 +265,7 @@ association. First we need to add
 Tag this post under: #hasManyCheckBox(  label=tags.name,  objectName="article",  association="taggings",  keys="#tags.id#,#article.key()#" )#
 ~~~~
 
-In our `new` action, we need to mode the exisitn code slightly ending up
+In our `new` action, we need to mode the existing code slightly ending up
 with this:
 
 ~~~~ {lang="cfm"}
@@ -286,9 +286,9 @@ editing.
 
 ### Avoiding Repeated Tags
 
-Lets Tag an acticle with "Glee Club". Then lets update the Article and
+Lets Tag an article with "Glee Club". Then lets update the Article and
 you'll see "Glee Club" checked. What happens if we type in "Glee Club"
-again in the "New Tag" input. What is happenning? How would we solve
+again in the "New Tag" input. What is happening? How would we solve
 this?
 
 It prevents duplicates and allows you to remove tags from the edit form.
@@ -297,7 +297,7 @@ Test it out and make sure things are working!
 ### Listing Articles by Tag
 
 The links for our tags are showing up, but if you click on them you'll
-get our old friend, the "Wheels.ViewNotFound". Createyour
+get our old friend, the "Wheels.ViewNotFound". Create your
 `/controllers/Tags.cfc` and add a `show` method like this:
 
 ~~~~ {lang="cfm"}

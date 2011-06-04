@@ -3,7 +3,7 @@
 We've created an articles page, but it isn't a viable long-term
 solution. The users of our app will expect to add content through a web
 interface. In this iteration we'll create an `HTML` form to submit the
-article, then all the backend processing to get it into the database.
+article, then all the back-end processing to get it into the database.
 
 ### Creating the New Action and View
 
@@ -55,7 +55,7 @@ What is all that? Let's look at it piece by piece:
     returns a list containing all the error messages if any.
 -   `startFormTag` is a Wheels helper instruction which takes an action
     parameter, in this case `create`, The first line basically says
-    "Make an openning form tag with the name of the action included in
+    "Make an opening form tag with the name of the action included in
     the URL."
 -   The `textField` helper creates a single-line text field control
     -   The `objectName` parameter which says for this input use the
@@ -74,7 +74,7 @@ What is all that? Let's look at it piece by piece:
 Refresh your browser and you'll see this:
 
 ~~~~ {lang="cfm"}
-Wheels.ObjectNotFoundWheels tried to find the model object article for the form helper, but it does not exist.Error locationLine 3 in views\\articles\new.cfm2: 3: #errorMessagesFor("article")#4: #startFormTag(action="create")#5:  #textField(objectName='article', property='title', label='Title')#6:  #textArea(objectName='article', property='body', label='Body')#7:  #submitTag()#
+Wheels.ObjectNotFoundWheels tried to find the model object article for the form helper, but it does not exist. Error locationLine 3 in views\\articles\new.cfm2: 3: #errorMessagesFor("article")#4: #startFormTag(action="create")#5:  #textField(objectName='article', property='title', label='Title')#6:  #textArea(objectName='article', property='body', label='Body')#7:  #submitTag()#
 ~~~~
 
 What's Wheels trying to tell us. In our `new.cfm` on line \#3 there was
@@ -104,7 +104,7 @@ title, some body text, and click "Save changes".
 You're old friend pops up again...
 
 ~~~~ {lang="cfm"}
-Wheels.ViewNotFoundCould not find the view page for the create action in the Articles controller.Suggested actionCreate a file named create.cfm in the views/articles directory (create the directory as well if it doesn't already exist).
+Wheels.ViewNotFoundCould not find the view page for the create action in the Articles controller. Suggested action Create a file named create.cfm in the views/articles directory (create the directory as well if it doesn't already exist).
 ~~~~
 
 When we loaded the form we accessed the `new` action, but when the form
@@ -226,7 +226,7 @@ before - creating a link with the text "edit" pointing to the address
 The second one is a little more complex. So this link will have the text
 "remove", will point to the `delete`. We've also added a `confirm`
 parameter. If a link has a `confirm`, then Wheels will generate some
-Javascript which will popup a box when the link is clicked that contains
+Javascript which will pop up a box when the link is clicked that contains
 the text in the `confirm`. Here we're setting the message to check that
 the user wants to remove the article and including the article's title
 in the message.

@@ -114,7 +114,7 @@ and take a look. Press `ctrl-shift-r` again, and type `*create_` and
 select our newly created migration file. First please note the filename
 is our comment with underlines instead of spaces and a timestamp of when
 the migration was created. Migrations need to be ordered, so the
-timestamp serves to keep them in chronologic order. Inside the file,
+timestamp serves to keep them in chronological order. Inside the file,
 you'll see two methods: `up` and `down`.
 
 ~~~~ {lang="cfm"}
@@ -373,7 +373,7 @@ route is mapping the code to the `index` action of the `Articles`
 controller but we are getting ann error since the view doesn't exist.
 
 ~~~~ {lang="cfm"}
-Wheels.ViewNotFoundCould not find the view page for the index action in the Articles controller.Suggested actionCreate a file named index.cfm in the views/articles directory (create the directory as well if it doesn't already exist).
+Wheels.ViewNotFound Could not find the view page for the index action in the Articles controller. Suggested action Create a file named index.cfm in the views/articles directory (create the directory as well if it doesn't already exist).
 ~~~~
 
 ### Creating the Index View
@@ -388,8 +388,8 @@ Wheels figures it out.
 Let's create that view template now. In the left pane of your Eclipse
 window, expand the `JSBloggers` project so you can see `views`, then
 expand `views`. Right-click on the `views` folder, select `New` then
-`Folder` and, in the popup, name the folder `Articles`. Next repeat the
-process, but select `File` and, in the popup, name the file `index.cfm`
+`Folder` and, in the pop up, name the folder `Articles`. Next repeat the
+process, but select `File` and, in the pop up, name the file `index.cfm`
 
 Now you're looking at a blank file. Enter in this view template code
 which is a mix of HTML and what are called CFML tags:
