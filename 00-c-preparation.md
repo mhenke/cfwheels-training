@@ -10,7 +10,7 @@ projects:
 -   Windows
     -   Download and install
         [http://dev.mysql.com/downloads/mirror.php?id=401202](http://dev.mysql.com/downloads/mirror.php?id=401202)
-
+        
 #### Create JSBloggers Database
 
 -   Select Start --\> MySQL - MySQL 5.1 Server --\> MySQL Command Line
@@ -35,6 +35,26 @@ projects:
         [http://localhost:8301/cfide/administrator/](http://localhost:8301/cfide/administrator/)
     -   Path should be C:\\JRun4\\servers\\cfwheels101\\
     -   Our web root is "C:\\JRun4\\servers\\cfwheels101\\"
+    
+#### Add JSBloggers connection
+
+-   Add DataSource through the ColdFusion Administrator
+    -   Name: JSBloggers
+    -   Driver: MySQL
+    -   URL: jdbc:mysql://localhost:3306/
+    
+### Install MySQL Server
+
+-   Windows
+    -   Download and install
+        [http://dev.mysql.com/downloads/mirror.php?id=401202](http://dev.mysql.com/downloads/mirror.php?id=401202)
+
+#### Create JSBloggers Database
+
+-   Select Start --\> MySQL - MySQL 5.1 Server --\> MySQL Command Line
+    Client
+    -   Type your password then "create database jsbloggers;" and press
+        return
 
 ### Install ColdFusion on Wheels
 
@@ -72,4 +92,3 @@ projects:
 ### Install Git and Connect to Github
 
 -   [Setup Git and Github](http://help.github.com/win-set-up-git/)
-
