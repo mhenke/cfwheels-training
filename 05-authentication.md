@@ -13,8 +13,8 @@ create a migration for a people table. You should be an old hat at
 this. Here is what the final migration for a People table should
 look like:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="creates people table">
   <cffunction name="up">
     <cfscript>
@@ -35,16 +35,16 @@ look like:
     </cfscript>
   </cffunction>
 </cfcomponent>
-</code>
-</pre>
+
+```
 
 h3. Creating the Person Model
 
 We will create a Model for our users called @Person.cfc@. It will
 validate several of our properties.
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfcomponent extends="Model" output="false">
 
  <cffunction name="init">
@@ -59,16 +59,16 @@ validate several of our properties.
  </cffunction>
 
 </cfcomponent>
-</code>
-</pre>
+
+```
 
 h3. Creating a Login view
 
 Create a new folder and file @/views/main/login.cfm@ with this
 code:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfoutput>
 
 <h1>Login</h1>
@@ -91,8 +91,8 @@ code:
 #endFormTag()#
 
 </cfoutput>
-</code>
-</pre>
+
+```
 
 Nothing special here. Lets try to load our login page at
 @http://wheels.local/index.cfm/main/login@ If its there, you're
@@ -105,8 +105,8 @@ We will make a simple controller with the following actions:
 session structure called user if the email and password is
 correct.
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfcomponent extends="Controller" output="false">
 
  <cffunction name="init">
@@ -136,8 +136,8 @@ correct.
  </cffunction>
 
 </cfcomponent>
-</code>
-</pre>
+
+```
 
 Now login with **admin@gmail.com** and **admin** and you should be
 directed to our listing page.
@@ -153,8 +153,8 @@ and try to login.
 Open the @/controllers/Controller.cfc@ and add this code between
 the @cfcomponent@ instructions:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cffunction name="checkLogin">
  <cfif StructKeyExists(session, "user")>
   <cfset loggedInUser = model("person").findByKey(session.user.id)>
@@ -162,8 +162,8 @@ the @cfcomponent@ instructions:
   <cfset redirectTo(controller="main", action="login")>
  </cfif>
 </cffunction>
-</code>
-</pre>
+
+```
 
 You can add other functions to @/controllers/Controller.cfc@ and
 make them globally available in all your controllers like we did
@@ -189,22 +189,22 @@ our controllers:
 Did you know how? If not here is the code to add the filters. In
 the @/controllers/Comments.cfc@:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cffunction name="init">
         <cfset filters(through="checkLogin", except="create")>
     </cffunction>
-</code>
-</pre>
+
+```
 
 Next we add our filter to the @/controllers/Articles.cfc@ in the
 @init@ method.
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfset filters(through="checkLogin", only="new,create,edit,update,delete")>
-</code>
-</pre>
+
+```
 
 This will run our @checkLogin@ action in
 @/controllers/Controller.cfc@ *before* these actions: @new@,
@@ -220,16 +220,16 @@ Open @/views/articles/index.cfm@ and find the section where we
 output the Actions. Wrap that whole section in an @if@ clause like
 this:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfif StructKeyExists(session, "user")>
     <i>Actions:
     #linkTo(text='edit', action='edit', key=id)#,
     #linkTo(text='remove', action='delete', key=id, confirm="Remove the article '#title#'?")# 
     </i>
 </cfif>
-</code>
-</pre>
+
+```
 
 Look at the article listing in your browser when you're logged out
 and make sure those links disappear.
@@ -241,8 +241,8 @@ navigation has been bothering me. Let's try to clean it up a little
 more. Remove any cases of "<< Back to Articles List" and "Create a
 New Article". Then add this code to @/views/layout.cfm@.
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <div id="navbar">
  <ul>
  <cfif "show,edit,new,login" contains params.action >
@@ -256,21 +256,21 @@ New Article". Then add this code to @/views/layout.cfm@.
  </cfif>
 </ul>
 </div>
-</code>
-</pre>
+
+```
 
 If you look at the @show@ view template, you'll see that we never
 added an edit link! Let's quick add that link now, but protect it
 to only show up when a user is logged in and they are on the
 @article@ controller and @show@ action.
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfif params.controller EQ "articles" and params.action EQ "show">
 <li>#linkTo(text='Edit Current Article', action='edit', key=params.key)#</li>
 </cfif>
-</code>
-</pre>
+
+```
 
 Your basic authentication is done, and Iteration 5 is complete!
 

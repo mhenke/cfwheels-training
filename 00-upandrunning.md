@@ -118,8 +118,8 @@ timestamp of when the migration was created. Migrations need to be
 ordered, so the timestamp serves to keep them in chronologic order.
 Inside the file, you'll see two methods: @up@ and @down@.
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="create articles table">
   <cffunction name="up">
    <cfscript>
@@ -134,8 +134,8 @@ Inside the file, you'll see two methods: @up@ and @down@.
    </cfscript>
   </cffunction>
 </cfcomponent>
-</code>
-</pre>
+
+```
 
 Inside the @up@ method you'll see the generator has placed a call
 to the @createTable@ method, passed @[tableName]@ as a parameter,
@@ -162,8 +162,8 @@ rolling. Here's a starter set:
 
 So add these into your @up@ so it looks like this:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cffunction name="up">
  <cfscript>
  t = createTable('articles');
@@ -173,8 +173,8 @@ So add these into your @up@ so it looks like this:
  t.create();
  </cfscript>
 </cffunction>
-</code>
-</pre>
+
+```
 
 That's it! You might be wondering, what is the "text" type? This is
 an example of relying on the Wheels database adapters to make the
@@ -192,15 +192,15 @@ what columns are inside of it. That's what the generator has setup
 for us here, where it says @dropTable('[tableName]');@ replace
 @[tableName]@ with @articles@.
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cffunction name="down">
  <cfscript>
  dropTable('articles');
  </cfscript>
 </cffunction>
-</code>
-</pre>
+
+```
 
 Save that migration cfc file, switch over to your browser, and
 click @go@ under the *Migrate* section:
@@ -214,12 +214,12 @@ migrations not yet ran."
 In this case we had one migration to run and it should print some
 output like this to your browser under *Migration Results*:
 
-<pre lang="cfm">
+```cfm
 Migrating from 0 up to 20110406195353.
 
 -------- 20110406195353_create_articles_table --------------
 Created table articles
-</pre>
+```
 
 The migration page tells you the plugin ran the migration. As I
 said before, *DBMigrate* keeps track of which migrations *have* and
@@ -270,8 +270,8 @@ experiments... To view our first experiment, we'll go to
 http://wheels.local/index.cfm/examples/one:http://wheels.local/index.cfm/examples/one.Enter
 each of these instructions and observe the results:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cffunction name="one">
  <cfset time = now() />
  <cfdump var="#now()#" />
@@ -281,8 +281,8 @@ each of these instructions and observe the results:
  <cfdump var="#article#" />
  <cfabort>
 </cffunction>
-</code>
-</pre>
+
+```
 
 The first line was to demonstrate we can do anything in our
 @controller@ we previously did during @CFML in 100 minutes@. The
@@ -320,8 +320,8 @@ our example the @article@ object didn't have th? attributes @id@,
 sample article and you'll see how it to add these. Enter each of
 the following lines:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cffunction name="two">
  <cfset a.title = "Sample Article Title" />
  <cfset a.body = "This is the text for my article, woo hoo!" />
@@ -331,8 +331,8 @@ the following lines:
  <cfdump var="#articles#" />
  <cfabort>
 </cffunction>
-</code>
-</pre>
+
+```
 
 Now you'll see the @findAll()@ command gave you back an query
 object holding the one article we created and saved. Go ahead and
@@ -358,11 +358,11 @@ pattern="", controller="wheels", action="wheels") /\>@. This is the
 default route and it directs to the Congratulations page, you saw
 when we first loaded our application. Let's replace it with:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfset addRoute(name="home", pattern="", controller="Articles", action="index") />
-</code>
-</pre>
+
+```
 
 This line tells Wheels to do a lot of work. It declares that we
 have a resource named @home@ and the router should expect requests
@@ -414,13 +414,13 @@ router sees this request come in, it tries to call the @index@
 action inside @Articles@ controller. It goes to the @index@ action
 which gets all our articles:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cffunction name="index">
  <cfset articles = model("Article").findAll() />
 </cffunction>
-</code>
-</pre>
+
+```
 
 h4. Passing Action variables to Views
 
@@ -438,14 +438,14 @@ default route is mapping the code to the @index@ action of the
 @Articles@ controller but we are getting ann error since the view
 doesn't exist.
 
-<pre lang="cfm">
+```cfm
 Wheels.ViewNotFound
 Could not find the view page for the index action in the Articles controller.
 
 Suggested action
 
 Create a file named index.cfm in the views/articles directory (create the directory as well if it doesn't already exist).
-</pre>
+```
 
 h3. Creating the Index View
 
@@ -466,8 +466,8 @@ popup, name the file @index.cfm@
 Now you're looking at a blank file. Enter in this view template
 code which is a mix of HTML and what are called CFML tags:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <h1>Listing articles</h1>
 
 <ul>
@@ -477,8 +477,8 @@ code which is a mix of HTML and what are called CFML tags:
   </li>
  </cfoutput>
 </ul>
-</code>
-</pre>
+
+```
 
 CFML is a templating language that allows us to mix CFML into our
 HTML. There are only a few things to know about CFML:

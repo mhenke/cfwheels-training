@@ -80,13 +80,13 @@ the line and save the file.
 -   C:\Program Files (x86)\Apache Software
     Foundation\Apache2.2\conf\httpd.conf
 
-<pre lang="cfm">
-<code>
+```cfm
+
 LoadModule proxy_module modules/mod_proxy.so
 LoadModule proxy_http_module modules/mod_proxy_http.so
 Include conf/extra/httpd-vhosts.conf
-</code>
-</pre>
+
+```
 
 Next add this code to the bottom the the next file,
 @httpd-vhosts.conf@.
@@ -94,8 +94,8 @@ Next add this code to the bottom the the next file,
 -   C:\Program Files (x86)\Apache Software
     Foundation\Apache2.2\conf\extra\httpd-vhosts.conf
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <VirtualHost *:80>
  ServerName wheels.local
 
@@ -108,19 +108,19 @@ Next add this code to the bottom the the next file,
  ProxyPass / http://wheels.local:8301/
  ProxyPassReverse / http://wheels.local:8301/
 </VirtualHost>
-</code>
-</pre>
+
+```
 
 Finally, open the last file, @hosts@, and add this line at the
 top.
 
 -   C:\Windows\System32\drivers\etc\hosts add this:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 127.0.0.1   wheels.local
-</code>
-</pre>
+
+```
 
 Now instead of going to
 "http://localhost:8301/":http://localhost:8301/, you can get to our

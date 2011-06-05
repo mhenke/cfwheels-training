@@ -16,14 +16,14 @@ convention, the URL for creating a new article would be
 @http://wheels.local/index.cfm/articles/new@. Enter the url into
 your browser and see what comes up.
 
-<pre lang="cfm">
+```cfm
 Wheels.ViewNotFound
 Could not find the view page for the new action in the Articles controller.
 
 Suggested action
 
 Create a file named new.cfm in the views/articles directory (create the directory as well if it doesn't already exist).
-</pre>
+```
 
 This is an error message we've seen before. The router went looking
 for an action named @new@ inside the @Articles.cfc@ and didn't find
@@ -34,21 +34,21 @@ and add this method structure, making sure it's *inside* the
 @cfcomponent@ instruction, but *outside* the existing @index@
 method:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cffunction name="new">
 
 </cffunction>
-</code>
-</pre>
+
+```
 
 Create a new file @/views/Articles/new.cfm@ with these contents:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <h1>Create a New Article</h1>
-</code>
-</pre>
+
+```
 
 Refresh your browser and you should just see the heading "Create a
 New Article".
@@ -61,8 +61,8 @@ Because we're following the RESTful conventions, Wheels can take
 care of many of the details. Inside the @new.cfm@, enter this code
 below your header:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfoutput>
  #errorMessagesFor("article")#
  #startFormTag(action="create")#
@@ -71,8 +71,8 @@ below your header:
   #submitTag()#
  #endFormTag()#
 </cfoutput>
-</code>
-</pre>
+
+```
 
 What is all that? Let's look at it piece by piece:
 
@@ -95,7 +95,7 @@ What is all that? Let's look at it piece by piece:
 
 Refresh your browser and you'll see this:
 
-<pre lang="cfm">
+```cfm
 Wheels.ObjectNotFound
 Wheels tried to find the model object article for the form helper, but it does not exist.
 
@@ -109,7 +109,7 @@ Line 3 in views\articles\new.cfm
 5:  #textField(objectName='article', property='title', label='Title')#
 6:  #textArea(objectName='article', property='body', label='Body')#
 7:  #submitTag()#
-</pre>
+```
 
 What's Wheels trying to tell us. In our @new.cfm@ on line \#3 there
 was an error about "Wheels.ObjectNotFound". Somewhere in line \#4
@@ -126,11 +126,11 @@ thing, but we need to create the blank object for it.
 Go into your @Articles.cfc@, and *inside* the @new@ method, add
 this line:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfset article = model("Article").new() />
-</code>
-</pre>
+
+```
 
 Then refresh your browser and your form should come up. Enter in a
 title, some body text, and click "Save changes".
@@ -139,14 +139,14 @@ h3. The Create Action
 
 You're old friend pops up again...
 
-<pre lang="cfm">
+```cfm
 Wheels.ViewNotFound
 Could not find the view page for the create action in the Articles controller.
 
 Suggested action
 
 Create a file named create.cfm in the views/articles directory (create the directory as well if it doesn't already exist).
-</pre>
+```
 
 When we loaded the form we accessed the @new@ action, but when the
 form is submitted to the application, following the REST
@@ -155,15 +155,15 @@ action. Inside your @Articles.cfc@ add the @create@ method (again,
 *inside* the @cfcomponent@ instruction, but *outside* the other
 actions):
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cffunction name="create">
  <cfset article = model("Article").new(params.article) />
  <cfset article.save() />
  <cfset redirectTo(action="index") />
 </cffunction>
-</code>
-</pre>
+
+```
 
 This method says...
 
@@ -199,13 +199,13 @@ bunch of URLs by hand. Let's add some links. Open your
 
 -   Add this code at the very bottom:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfoutput>
  <p>#linkTo(text="Create a New Article", action="new")#</p>
 </cfoutput>
-</code>
-</pre>
+
+```
 
 It uses the Wheels @linkTo@ helper, tells it we want a link with
 the text "Create a New Article" that points to the address @new@
@@ -226,13 +226,13 @@ h3. Creating the Show Action
 Tired of this error message yet? Go to your @Articles.cfc@ and add
 a method like this:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cffunction name="show">
 
 </cffunction>
-</code>
-</pre>
+
+```
 
 Let's pause here before creating the view template.
 
@@ -251,23 +251,23 @@ the database. The router will send us this number in the variable
 @params.key@. Inside the @show@ method that we just created, add
 this line:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfset article = model("Article").findByKey(params.key) />
-</code>
-</pre>
+
+```
 
 Now create the file @/views/articles/show.cfm@ and add this code:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfoutput>
  <h2>#article.title#</h2>
  <p>#article.body#</p>
  #linkTo(text="<< Back to Articles List", controller="articles", action="index")#
 </cfoutput>
-</code>
-</pre>
+
+```
 
 Refresh your browser and your article should show up along with a
 link back to the index.
@@ -284,8 +284,8 @@ Look at your @index.cfm@ and change the whole @
 <li>
 @ segment so it looks like this:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <li>
  <b>#linkTo(text=title, action="show", key=id)#</b><br/>
  <i>Actions:
@@ -293,8 +293,8 @@ Look at your @index.cfm@ and change the whole @
  #linkTo(text='remove', action='delete', key=id, confirm="Remove the article '#title#'?")# 
  </i> 
 </i>
-</code>
-</pre>
+
+```
 
 The first link we added, for edit, is pretty similar to what we've
 done before -- creating a link with the text "edit" pointing to the
@@ -317,13 +317,13 @@ h3. Creating an Edit Action & View
 The router is expecting to find an action in @Articles.cfc@ named
 @edit@, so let's add this:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cffunction name="edit">
  <cfset article = model("Article").findByKey(params.key) />
 </cffunction>
-</code>
-</pre>
+
+```
 
 All the @edit@ action is really going to do is find the article to
 be edited, then display the editing form. If you refresh after
@@ -332,8 +332,8 @@ Create a file @/views/articles/edit.cfm@ but
 *hold on before you type anything*. Below is what the edit form
 should look like:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <h1>Edit an Article</h1>
 <cfoutput>
  #errorMessagesFor("article")#
@@ -343,8 +343,8 @@ should look like:
   #submitTag(value="Update")#
  #endFormTag()#
 </cfoutput>
-<code>
-</pre>
+
+```
 
 In the ColdFusion and Wheels communities there is a mantra of
 "Don't Repeat Yourself" -- but that's exactly what I've done here.
@@ -361,11 +361,11 @@ the @cfoutput@ line all the way to it's ending @cfoutput@. The only
 thing left will be your H1 line. Then add the following code at the
 bottom of that view:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfoutput>#includePartial("form")#</cfoutput>
-</code>
-</pre>
+
+```
 
 Now go back to the @\_form.cfm@ and paste the form code. Change the
 @startFormTag@ to @\#startFormTag(action=myaction)\#@ and the text
@@ -375,13 +375,13 @@ creating a new article and editing and existing one.
 Also for editing we need to have a hidden field for the article's
 @id@. So please add this above the @submitTag@ in our partial.
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfif myaction EQ "update">
  #hiddenField(objectName='article', property='id')#
 </cfif>
-</code>
-</pre>
+
+```
 
 Then look at your @edit.cfm@ file, write an H1 header saying "Edit
 an Article", then use the same code to render the partial named
@@ -402,15 +402,15 @@ The router is looking for an action named @update@. Just like the
 within our @Articles.cfc@, the @update@ method will look very
 similar to @create@
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cffunction name="update">
  <cfset article = model("Article").findByKey(params.key) />
  <cfset article.update(params.article) />
  <cfset redirectTo(action="show",key=params.key) />
 </cffunction>
-</code>
-</pre>
+
+```
 
 The new bits here is the @update@ method and @key@ in our
 @redirect@. The @update@ method works very similar to when we
@@ -429,15 +429,15 @@ Next, click the *REMOVE* link for an article and hit OK. You can
 see the router is expecting a @delete@ action. Go into
 @Articles.cfc@ and add a delete method like this:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cffunction name="delete">
  <cfset article = model("Article").findByKey(params.key) />
  <cfset article.delete() />
  <cfset redirectTo(action="index") />
 </cffunction>
-</code>
-</pre>
+
+```
 
 Here we're doing a @findByKey@ based on @params.key@ like we did in
 the @show@ action. We call that object's @delete@ method, then
@@ -458,11 +458,11 @@ Wheels creates the object named @flash@, so we don't need to do
 anything to set it up. We can start by integrating it into our
 @index.cfm@ by adding this line at the very top:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <div class="flash"><p><cfoutput>#flash("message")#</cfoutput></p></div>
-</code>
-</pre>
+
+```
 
 This outputs the value stored in the @flash@ object with the key
 @message@. If you refresh your articles list you won't see anything
@@ -470,11 +470,11 @@ because we haven't stored a message in there yet. Look at
 @Articles.cfc@ and add this line right after the @save!@ line in
 your @create@ method:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfset flashInsert(message="Article '#article.title#' was created.") />
-</code>
-</pre>
+
+```
 
 Then go to your articles list, create another sample article, and
 when you click create you should see the flash message at the top

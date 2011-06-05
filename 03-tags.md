@@ -69,8 +69,8 @@ models with the DBMigrations plugin:
 
 The tags migration should look like this:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="creates tags tables">
  <cffunction name="up" >
   <cfscript >
@@ -86,13 +86,13 @@ The tags migration should look like this:
   </cfscript >
  </cffunction >
 </cfcomponent >
-</code>
-</pre>
+
+```
 
 The taggings migration should look like this:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="creates taggings table">
  <cffunction name="up">
   <cfscript>
@@ -108,18 +108,18 @@ The taggings migration should look like this:
   </cfscript>
  </cffunction>
 </cfcomponent>
-</code>
-</pre>
+
+```
 
 Now run both migrations. Currently DBMigrations plugin doesn't have
 a command for composite keys, so we will have to run this sql
 command seperately.
 
-<pre lang="sql">
-<code>
+```sql
+
 ALTER TABLE jsbloggers.taggings ADD PRIMARY KEY (tagid,articleid);
-</code>
-</pre>
+
+```
 
 h3. Expressing Relationships
 
@@ -129,50 +129,50 @@ the files below, create in if not already then add these lines:
 
 In @/models/Article.cfc@
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfset hasMany("taggings") />
-</code>
-</pre>
+
+```
 
 Then in @/models/Tagging.cfc@
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfset belongsTo("article") />
 <cfset belongsTo("tag") />
-</code>
-</pre>
+
+```
 
 In @/models/Tag.cfc@
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfset hasMany("taggings") />
-</code>
-</pre>
+
+```
 
 Now we can get the many-to-many association that we set up above.
 Here is how we will include the related tables from the tagging:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfset data = model("tagging").findAll(include="article,tag",where="articleid=3") />
-</code>
-</pre>
+
+```
 
 After Wheels had been around for awhile, developers were finding
 this kind of relationship very common. In practical usage, if I had
 an object named @article@ and I wanted to find its Tags, I'd have
 to run code like this:
 
-<pre lang="cfm">
-<code>
+```cfm
+
  <cfset article = model("article").findByKey(key=3,include="taggings") />
  <cfdump var="#article.taggings#">
  <cfabort>
-</code>
-</pre>
+
+```
 
 That's a pain since we don't have @tags@ yet. The solution was to
 augment the relationship with "shortcut". We'll update our
@@ -180,19 +180,19 @@ relationship now to the Article and Tag classes:
 
 In @/models/article.cfc@
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfset hasMany(name="taggings",shortcut="tags") />
-</code>
-</pre>
+
+```
 
 In @/models/tag.cfc@
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfset hasMany(name="taggings",shortcut="articles") />
-</code>
-</pre>
+
+```
 
 Now we can get the many-to-many association that we set up above.
 How we will include the related tables from the tagging is still
@@ -206,8 +206,8 @@ we can ask for @tag.articles()@.
 Lets create an example to test our relationship with the
 "shortcut":
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cffunction name="six">
  <cfset article = model("article").findByKey(key=3,include="taggings") />
  <cfdump var="#article.tags()#">
@@ -216,8 +216,8 @@ Lets create an example to test our relationship with the
  <cfdump var="#tag.articles()#">
  <cfabort>
 </cffunction>
-</code>
-</pre>
+
+```
 
 You should see in the articles with their tags in the first dump
 and tags with their articles.
@@ -234,12 +234,12 @@ Adding the text field will take place in the file
 @/views/articles/\_form.cfm@. Add this code underneath the body
 text area like this:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <h3>Tag this post under:</h3>
 #textFieldTag(name='newTag', label='New Tag')#
-</code>
-</pre>
+
+```
 
 This is the first time we used @textFieldTag@, it builds and
 returns a string containing a text field form control based on the
@@ -247,8 +247,8 @@ supplied name. An Article doesn't have a property named @newTag@ --
 we made it up. In order for us to add a new tag, we need to add a
 method to the @article.cfc@ file like this:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cffunction name="newTag">
  <cfif len(trim(params.newTag))>
   <cfset Tag = model("Tag").findOne(tagid=Tag.id,articleid=article.id)/>
@@ -260,8 +260,8 @@ method to the @article.cfc@ file like this:
   <cfset Tagging = model("Tagging").create(tagid=Tag.id,articleid=article.id) />
  </cfif>
 </cffunction>
-</code>
-</pre>
+
+```
 
 Your form should now show up and there's a text box at the bottom
 named "New Tag". Enter content for a new article and in the tag
@@ -274,15 +274,15 @@ Did it really work? It's hard to tell. Let's jump into the Examples
 and have a look. Replace the key with the article, you added the
 tag to.
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cffunction name="seven">
    <cfset a = model("article").findByKey(key=3,include="taggings") />
    <cfdump var="#a.tags()#" />
    <cfabort>
  </cffunction>
-</code>
-</pre>
+
+```
 
 I bet the Examples Seven reported that @a.tags@ had @0@ tags -- an
 empty query. So we didn't generate an error, but we didn't create
@@ -291,8 +291,8 @@ any tags either.
 We will need to call our @newTag@ method within our @create@ and
 @update@ actions by adding @<cfset newTag()/\>@.
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cffunction name="create">
  <cfset article = model("article").create(params.article)/>
 
@@ -310,8 +310,8 @@ We will need to call our @newTag@ method within our @create@ and
 
  <cfset redirectTo(action="index")/>
 </cffunction>
-</code>
-</pre>
+
+```
 
 Now try adding the tag again and verify it is present in Examples
 Seven. And you'll see the Tag is associated with the Article.
@@ -323,8 +323,8 @@ but we haven't done anything to display them in the article pages.
 Let's start with @/views/articles/show.cfm@. Right below the line
 that displays the @article.title@, add this line:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <h3>Tags</h3>
  <cfif article.hasTaggings() EQ "YES">
   <cfloop query="tags">
@@ -333,19 +333,19 @@ that displays the @article.title@, add this line:
  <cfelse>
   None
  </cfif>
-</code>
-</pre>
+
+```
 
 These lines should loop and output through all the @tags@ for the
 article.
 
 Refresh your view and...BOOM:
 
-<pre lang="cfm">
+```cfm
 Attribute validation error for tag cfloop.
 
 The value of the attribute query, which is currently tags, is invalid.
-</pre>
+```
 
 The @show@ page is trying to use @tags@, but the action doesn't
 know anything about our Tags variable. We need to create the @tags@
@@ -370,8 +370,8 @@ Tag this post under:
 </h3>
 @.
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <h3>Tag this post under:</h3>
 <cfloop query="tags">
  #hasManyCheckBox(
@@ -381,14 +381,14 @@ Tag this post under:
   keys="#tags.id#,#article.key()#"
  )#
 </cfloop>
-</code>
-</pre>
+
+```
 
 In our @new@ action, we need to mode the exisitn code slightly
 ending up with this:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cffunction name="new">
  <cfset var newTagging = arrayNew(1)/>
  <cfset tag = model("tag").new()/>
@@ -396,8 +396,8 @@ ending up with this:
  <cfset newTagging[1] = model("tagging").new()/>
  <cfset article = model("article").new(taggings=newTagging)/>
 </cffunction>
-</code>
-</pre>
+
+```
 
 The first line creates an array in our local scope. We did this
 since we don't need the variable in the views. The next new line
@@ -428,8 +428,8 @@ The links for our tags are showing up, but if you click on them
 you'll get our old friend, the "Wheels.ViewNotFound". Createyour
 @/controllers/Tags.cfc@ and add a @show@ method like this:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfcomponent extends="Controller" output="false">
 
 <cffunction name="show">
@@ -438,13 +438,13 @@ you'll get our old friend, the "Wheels.ViewNotFound". Createyour
 </cffunction>
 
 </cfcomponent>
-</code>
-</pre>
+
+```
 
 Then create a file @/views/tags/show.cfm@ like this:
 
-<pre lang="cfm">
-<code>
+```cfm
+
 <cfoutput>
 <h1>Articles Tagged with #tags.name#</h1>
 <ul>
@@ -453,8 +453,8 @@ Then create a file @/views/tags/show.cfm@ like this:
     </cfloop>
 </ul>
 </cfoutput>
-</code>
-</pre>
+
+```
 
 Refresh your view and you should see a list of articles with that
 tag. Keep in mind that there might be some abnormalities from
