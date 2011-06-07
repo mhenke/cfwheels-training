@@ -19,7 +19,7 @@ to Eclipse and right click on the models folder, then select New
 —\\\> File and enter “Comment.cfc” for File name. The file will be  
 created and automatically open, then you can add this code to it:
 
-\`\`\`cfm
+```cfm
 
 <cfcomponent extends="Model" output="false">  
  <cffunction name="init">
@@ -27,7 +27,7 @@ created and automatically open, then you can add this code to it:
 </cffunction>  
 </cfcomponent>
 
-\`\`\`
+```
 
 Pretty simple, huh?
 
@@ -44,12 +44,12 @@ Open the file that the generator created,
 the `self.up` you need to add one line for each of the pieces of  
 data we just brainstormed. It’ll start off with these…
 
-\`\`\`cfm
+```cfm
 
 t.integer (‘articleid’);  
 t.string (‘authorname’);
 
-\`\`\`
+```
 
 Then keep adding lines creating strings named `authoremail`,  
 `authorurl`, and a text field named `body`.
@@ -88,7 +88,7 @@ Following this convention will get us a lot of functionality “for
 free.” Open your `/models/comment.cfc` and add the middle line so  
 it looks like this:
 
-\`\`\`cfm
+```cfm
 
 <cfcomponent extends="Model" output="false">
 
@@ -98,19 +98,19 @@ it looks like this:
 
 </cfcomponent>
 
-\`\`\`
+```
 
 A comment relates to a single article, it “belongs to” an article.  
 We then want to declare the other side of the relationship inside  
 `/models/article.cfc` like this:
 
-\`\`\`cfm
+```cfm
 
 <cffunction name="init">  
  <cfset hasMany("comments") />  
 </cffunction>
 
-\`\`\`
+```
 
 Wheels now know an article “has many” comments, and a comment  
 “belongs to” an article. We have explained to Wheels these objects  
@@ -124,7 +124,7 @@ in the following instructions and observe the output at at
 [[http://wheels.local/index.cfm/Examples/three](http://wheels.local/index.cfm/Examples/three)](http://wheels.local/index.cfm/Examples/three)  
 :
 
-\`\`\`cfm
+```cfm
 
 <cffunction name="three">  
  <cfset a = model("article").findByKey(key=3,
@@ -135,7 +135,7 @@ in the following instructions and observe the output at at
  <cfabort>  
 </cffunction>
 
-\`\`\`
+```
 
 When you called the `comments` method on object `a`, it gave you  
 back a blank array because that article doesn’t have any comments.  
@@ -147,7 +147,7 @@ number of article `a`.
 
 Try creating a few comments for that article like this:
 
-\`\`\`cfm
+```cfm
 
 <cffunction name="four">  
  <cfset a = model("article").findByKey(key=3,include="comments") />
@@ -162,7 +162,7 @@ Try creating a few comments for that article like this:
  <cfabort>  
 </cffunction>
 
-\`\`\`
+```
 
 For the first comment, `c`, I used a series of commands like we’ve  
 done before. For the second comment, `d`, I used the `create`  
@@ -174,7 +174,7 @@ to the database all in one step.
 Now you’ve created a few comments, try executing `a.comments`  
 again.
 
-\`\`\`cfm
+```cfm
 
 <cffunction name="five">  
  <cfset a = model("article").findByKey(key=3,include="comments") />  
@@ -182,7 +182,7 @@ again.
  <cfabort>  
 </cffunction>
 
-\`\`\`
+```
 
 Did your comments all show up? Great. Now we need to integrate them  
 into the article display.
@@ -196,7 +196,7 @@ Because we’ve setup the relationships between those models, this is
 very easy. Open `/views/articles/show.cfm` and add the following  
 lines right before the link to the articles list:
 
-\`\`\`cfm
+```cfm
 
 <h3>
 Comments
@@ -204,7 +204,7 @@ Comments
 </h3>
 <cfoutput>\#includePartial (article.comments)\#</cfoutput>
 
-\`\`\`
+```
 
 This says we want to render a partial named “comment” and we want  
 to do it once for each element in the collection  
@@ -215,7 +215,7 @@ element of that array one at a time into the partial named
 “comment”. Now we need to create the partial  
 `/views/articles/\_comment.cfm` and add this code:
 
-\`\`\`cfm
+```cfm
 
 <cfoutput>  
 
@@ -233,7 +233,7 @@ Comment by \#arguments.comment.authorname\#
 </div>
 </cfoutput>
 
-\`\`\`
+```
 
 With that in place, try clicking on the articles and find the one  
 where you created the comments. Did they show up? What happens when  
@@ -250,17 +250,17 @@ Let’s start with the form. The comment form should be embedded into
 the article’s `show` template. So let’s add this code right above  
 the “<< Back to Articles List” in the articles `show.cfm`
 
-\`\`\`cfm
+```cfm
 
 \#includePartial (“comment\_form”)\#
 
-\`\`\`
+```
 
 Obviously this is expecting a file  
 `/views/articles/\_comment\_form.cfm`, so create the file and add  
 this content for now:
 
-\`\`\`cfm
+```cfm
 
 <h3>
 Post a Comment
@@ -270,7 +270,7 @@ Post a Comment
 (Comment form will go here)
 
 </p>
-\`\`\`
+```
 
 Look at an article in your browser to make sure the partial is  
 showing up. Then we can start figuring out the details of the  
@@ -285,16 +285,16 @@ article’s `new` method, we’re running the `show` method. So we’ll
 need to create a blank Comment object inside that `show` method  
 like this:
 
-\`\`\`cfm
+```cfm
 
 <cfset comment = article.newComments() />
 
-\`\`\`
+```
 
 This is just like we did it in the Examples. Now we can create a  
 form inside our `\_comment\_form.cfm` partial like this:
 
-\`\`\`cfm
+```cfm
 
 <h3>
 Post a Comment
@@ -312,7 +312,7 @@ Post a Comment
  \#endFormTag ()\#  
 </cfoutput>
 
-\`\`\`
+```
 
 The only new thing here is the hidden field helper. This hidden  
 field will hold the ID of the article to help when creating the  
@@ -321,14 +321,14 @@ comment object.
 Save then refresh in your web browser and… well… you’ll get an  
 error like this:
 
-\`\`\`cfm  
+```cfm  
 Wheels.ViewNotFound  
 Could not find the view page for the create action in the Comments controller.
 
 Suggested action
 
 Create a file named create.cfm in the views/comments directory (create the directory as well if it doesn’t already exist).  
-\`\`\`
+```
 
 The `startFormTag` helper is trying to build the form so that it  
 submits to `/comments/create`, but we haven’t created the Comments  
@@ -340,7 +340,7 @@ Just like we needed an `Articles.cfc` to manipulate our Articles,
 we’ll need a `Comments.cfc` to manipulate our Comments. Create it  
 to add this code:
 
-\`\`\`cfm
+```cfm
 
 <cfcomponent extends="Controller" output="false">
 
@@ -355,7 +355,7 @@ to add this code:
 
 </cfcomponenet>
 
-\`\`\`
+```
 
 The first action we’re interested in first is `create`. You can  
 cheat by looking at the `create` method in your `Articles.cfc`. For  
@@ -363,11 +363,11 @@ your `Comments.cfc`, everything should be the same just replace
 article with comment. Then the `redirectTo` is a little different,  
 use this:
 
-\`\`\`cfm
+```cfm
 
 <cfset redirectTo(controller="article",action="index")>
 
-\`\`\`
+```
 
 Test out your form to create another comment now — and it should  
 work!
@@ -403,22 +403,22 @@ probably say “Your Name” and “Your URL (optional)”, right? To
 change the text that the label helper prints out, you just pass in  
 the desired text as a second parameter, like this:
 
-\`\`\`cfm
+```cfm
 
 \#textArea (objectName=‘comment’, property=‘authorname’, label=‘Your Name’)\#
 
-\`\`\`
+```
 
 Change your `\_comment\_form.cfm` so it prints out “Your Name”,  
 “Your Email Address”, “Your URL (optional)”, and “Your Comment”.  
 Then refresh the page and look at the html generated. It should  
 look like this:
 
-\`\`\`cfm
+```cfm
 
 <label for="comment-authorname">Your Name<input type="text" value="" name="comment[authorname]" maxlength="255" id="comment-authorname"></label>
 
-\`\`\`
+```
 
 Nicer, shouldn’t the label be around “Author Name”? And we are  
 still missing the wrapping @  
@@ -429,7 +429,7 @@ accomplish this we will set some defaults for a our helper
 functions in `config/settings.cfm`. Open the file and add these  
 lines:
 
-\`\`\`cfm
+```cfm
 
 <cfset set(functionName="textField", labelPlacement='before', prependToLabel="<p>“, prepend=”<br>“, append=”
 
@@ -437,7 +437,7 @@ lines:
 “) /\>  
 <cfset set(functionName="textArea", labelPlacement='before', prependToLabel="<p>”, prepend=“<br>”, append=“</p\>”) /\>
 
-\`\`\`
+```
 
 We are saying place the label before the input, and prepend @  
 
@@ -450,14 +450,14 @@ append @
 
 Refresh, and you should see html source like this:
 
-\`\`\`cfm
+```cfm
 
 <p>
 <label for="comment-authorname">Authorname</label><br>  
  <input type="text" value="" name="comment[authorname]" maxlength="255" id="comment-authorname">  
 
 </p>
-\`\`\`
+```
 
 #### Comments Count
 
@@ -466,13 +466,13 @@ it displays how many comments there are, like “Comments ( 3 )”.
 Open up your article’s `show.cfm` and change the comments header so  
 it looks like this:
 
-\`\`\`cfm
+```cfm
 
 <h3>
 Comments ( \#article.commentCount ()\# )
 
 </h3>
-\`\`\`
+```
 
 #### Add Timestamp to the Comment Display
 
@@ -482,12 +482,12 @@ two dates and creates a text description of their difference like
 “32 minutes later”, “3 months later”, and so on. You can use it in  
 your `\_comment.cfm` partial like this:
 
-\`\`\`cfm
+```cfm
 
 <p>
 Posted \#distanceOfTimeInWords (arguments.comment.createdat, now ())\# later
 
 </p>
-\`\`\`
+```
 
 With that, you’re done with I2!

@@ -1,34 +1,24 @@
 ## I0: Up and Running
 
-Part of the reason ColdFusion on Wheels became popular quickly is  
-it takes a lot of the hard work off your hands, and it’s especially  
-true in starting up a project. Wheels practices the idea of  
-“sensible defaults” and tries to, with a couple simple actions,  
-create a working application ready for your customization.
+Part of the reason ColdFusion on Wheels became popular quickly is it takes a lot of the hard work off your hands, and it’s especially true in starting up a project. Wheels practices the idea of  
+“sensible defaults” and tries to, with a couple simple actions, create a working application ready for your customization.
 
 ### Setting the Stage
 
-First we need to make sure everything is setup and installed. See  
-the [Preparation for Wheels  
-Projects](/resources/CFWheels-jumpstart/preparation/) page for  
-instructions on setting up and verifying your ColdFusion, Wheels,  
+First we need to make sure everything is setup and installed. See the [Preparation for Wheels Projects](/resources/CFWheels-jumpstart/preparation/) page for instructions on setting up and verifying your ColdFusion, Wheels,  
 and add-ons.
 
-With that done, we need to create new project in Eclipse. Open  
-Eclipse and…
+With that done, we need to create new project in Eclipse. Open Eclipse and…
 
 - File ~~~~\\\> New~~~~\\\> ColdFusion Project  
  **\\** Project Name: JSBlogger**\\** Uncheck Use Default Location in  
  Project Location put “C:\\JRun4\\servers\\cfwheels101” \\**\\** Click  
  Finish
 
-Eclipse will then create a ColdFusion project for you and  
-automatically open the project.
+Eclipse will then create a ColdFusion project for you and automatically open the project.
 
-Using ColdFusion Builder’s Server view, we can add the our  
-ColdFusion server. Open up the Servers view (Window - Show Views -  
-Servers). In the Server view, click the add server icon. In the New  
-ColdFusion Server Setup window set:
+Using ColdFusion Builder’s Server view, we can add the our ColdFusion server. Open up the Servers view (Window - Show Views -  
+Servers). In the Server view, click the add server icon. In the New ColdFusion Server Setup window set:
 
 - Server Name: JSBloggers  
 - Application Server: Jrun  
@@ -36,34 +26,21 @@ ColdFusion Server Setup window set:
 - WebServer Port: 80  
 - Click Finish
 
-You should then see the `JSBloggers` server in the Servers view. If  
-it isn’t Running, please start it. Once it’s started, try loading  
-the address [[http://wheels.local/](http://wheels.local/)](http://wheels.local/). You should  
-see Wheels’ “Congratulations” page. Scroll down and the Wheels  
-debugging section displays the Wheels version, CFML Engine version  
-along with other useful information.
+You should then see the `JSBloggers` server in the Servers view. If it isn’t Running, please start it. Once it’s started, try loading  
+the address [[http://wheels.local/](http://wheels.local/)](http://wheels.local/). You should see Wheels’ “Congratulations” page. Scroll down and the Wheels  
+debugging section displays the Wheels version, CFML Engine version along with other useful information.
 
-We need to change the Wheels datasource convention. Wheels assumes  
-our datasource connection is the folder name Wheels resides in but  
-for our case it is not `cfwheels101` but `JSBloggers`. We could  
-have easily named our ColdFusion server instance but I wanted to  
-show how we can easily override a Wheels convention.
+We need to change the Wheels datasource convention. Wheels assumes our datasource connection is the folder name Wheels resides in but  
+for our case it is not `cfwheels101` but `JSBloggers`. We could have easily named our ColdFusion server instance but I wanted to show how we can easily override a Wheels convention.
 
-Press Ctrl+Shift+R while in Eclipse. This is the Open Resource  
-window. I use this a lot when coding in Eclipse. Sometimes I  
-highlight a file name in code and press Ctrl+Shift+R, other times I  
-type in the file name like we will do next. Type in `settings.cfm`,  
-and select `settings.cfm - /JSBloggers/config`. This will open that  
-file for use and type in `<cfset set(dataSourceName="JSBloggers")
-/\>` to tell Wheels to use this as are datasource. Also add in  
-`<cfset set(URLRewriting="Partial") /\>` to tell Wheels to use  
-Partial for URL Rewriting. Then reload Wheels and you should see  
-under DataSource, JSBloggers. To reload Wheels, you can add  
-`?reload=true` to the url or click on the `Reload` link in the  
-Wheels debug section.
+Press Ctrl+Shift+R while in Eclipse. This is the Open Resource window. I use this a lot when coding in Eclipse. Sometimes I  
+highlight a file name in code and press Ctrl+Shift+R, other times I type in the file name like we will do next. Type in `settings.cfm`,  
+and select `settings.cfm - /JSBloggers/config`. This will open that file for use and type in `<cfset set(dataSourceName="JSBloggers")
+/\>` to tell Wheels to use this as are datasource. Also add in `<cfset set(URLRewriting="Partial") /\>` to tell Wheels to use  
+Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers. To reload Wheels, you can add  
+`?reload=true` to the url or click on the `Reload` link in the Wheels debug section.
 
-Our blog will be centered around “articles,” so we’ll need a table  
-in the database to store all the articles and a model to allow our  
+Our blog will be centered around “articles,” so we’ll need a table in the database to store all the articles and a model to allow our  
 Wheels app to work with that data.
 
 ### Working with the Database
@@ -118,7 +95,7 @@ timestamp of when the migration was created. Migrations need to be
 ordered, so the timestamp serves to keep them in chronologic order.  
 Inside the file, you’ll see two methods: `up` and `down`.
 
-\`\`\`cfm
+```cfm
 
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="create articles table">  
  <cffunction name="up">  
@@ -135,7 +112,7 @@ Inside the file, you’ll see two methods: `up` and `down`.
  </cffunction>  
 </cfcomponent>
 
-\`\`\`
+```
 
 Inside the `up` method you’ll see the generator has placed a call  
 to the `createTable` method, passed `[tableName]` as a parameter,  
@@ -162,7 +139,7 @@ rolling. Here’s a starter set:
 
 So add these into your `up` so it looks like this:
 
-\`\`\`cfm
+```cfm
 
 <cffunction name="up">  
  <cfscript>  
@@ -174,7 +151,7 @@ So add these into your `up` so it looks like this:
  </cfscript>  
 </cffunction>
 
-\`\`\`
+```
 
 That’s it! You might be wondering, what is the “text” type? This is  
 an example of relying on the Wheels database adapters to make the  
@@ -192,7 +169,7 @@ what columns are inside of it. That’s what the generator has setup
 for us here, where it says `dropTable('[tableName]');` replace  
 `[tableName]` with `articles`.
 
-\`\`\`cfm
+```cfm
 
 <cffunction name="down">  
  <cfscript>  
@@ -200,7 +177,7 @@ for us here, where it says `dropTable('[tableName]');` replace
  </cfscript>  
 </cffunction>
 
-\`\`\`
+```
 
 Save that migration cfc file, switch over to your browser, and  
 click `go` under the **Migrate** section:
@@ -214,12 +191,12 @@ migrations not yet ran.”
 In this case we had one migration to run and it should print some  
 output like this to your browser under **Migration Results**:
 
-\`\`\`cfm  
+```cfm  
 Migrating from 0 up to 20110406195353.
 
 ~~~~~~~~~~~~~~- 20110406195353*create*articles\_table~~~~~~~~~~~~—~~—  
 Created table articles  
-\`\`\`
+```
 
 The migration page tells you the plugin ran the migration. As I  
 said before, **DBMigrate** keeps track of which migrations **have** and  
@@ -270,7 +247,7 @@ experiments… To view our first experiment, we’ll go to
 [http://wheels.local/index.cfm/examples/one:http://wheels.local/index.cfm/examples/one.Enter](http://wheels.local/index.cfm/examples/one:http://wheels.local/index.cfm/examples/one.Enter)  
 each of these instructions and observe the results:
 
-\`\`\`cfm
+```cfm
 
 <cffunction name="one">  
  <cfset time = now() />  
@@ -282,7 +259,7 @@ each of these instructions and observe the results:
  <cfabort>  
 </cffunction>
 
-\`\`\`
+```
 
 The first line was to demonstrate we can do anything in our  
 `controller` we previously did during `CFML in 100 minutes`. The  
@@ -320,7 +297,7 @@ our example the `article` object didn’t have th? attributes `id`,
 sample article and you’ll see how it to add these. Enter each of  
 the following lines:
 
-\`\`\`cfm
+```cfm
 
 <cffunction name="two">  
  <cfset a.title = "Sample Article Title" />  
@@ -332,7 +309,7 @@ the following lines:
  <cfabort>  
 </cffunction>
 
-\`\`\`
+```
 
 Now you’ll see the `findAll()` command gave you back an query  
 object holding the one article we created and saved. Go ahead and  
@@ -358,11 +335,11 @@ pattern="", controller="wheels", action="wheels") /\>`. This is the
 default route and it directs to the Congratulations page, you saw  
 when we first loaded our application. Let’s replace it with:
 
-\`\`\`cfm
+```cfm
 
 <cfset addRoute(name="home", pattern="", controller="Articles", action="index") />
 
-\`\`\`
+```
 
 This line tells Wheels to do a lot of work. It declares that we  
 have a resource named `home` and the router should expect requests  
@@ -414,13 +391,13 @@ router sees this request come in, it tries to call the `index`
 action inside `Articles` controller. It goes to the `index` action  
 which gets all our articles:
 
-\`\`\`cfm
+```cfm
 
 <cffunction name="index">  
  <cfset articles = model("Article").findAll() />  
 </cffunction>
 
-\`\`\`
+```
 
 #### Passing Action variables to Views
 
@@ -438,14 +415,14 @@ default route is mapping the code to the `index` action of the
 `Articles` controller but we are getting ann error since the view  
 doesn’t exist.
 
-\`\`\`cfm  
+```cfm  
 Wheels.ViewNotFound  
 Could not find the view page for the index action in the Articles controller.
 
 Suggested action
 
 Create a file named index.cfm in the views/articles directory (create the directory as well if it doesn’t already exist).  
-\`\`\`
+```
 
 ### Creating the Index View
 
@@ -466,7 +443,7 @@ popup, name the file `index.cfm`
 Now you’re looking at a blank file. Enter in this view template  
 code which is a mix of HTML and what are called CFML tags:
 
-\`\`\`cfm
+```cfm
 
 <h1>
 Listing articles
@@ -482,7 +459,7 @@ Listing articles
 </cfoutput>  
 
 </ul>
-\`\`\`
+```
 
 CFML is a templating language that allows us to mix CFML into our  
 HTML. There are only a few things to know about CFML:

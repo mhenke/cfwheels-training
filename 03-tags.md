@@ -69,7 +69,7 @@ models with the DBMigrations plugin:
 
 The tags migration should look like this:
 
-\`\`\`cfm
+```cfm
 
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="creates tags tables">  
  <cffunction name="up" >  
@@ -87,11 +87,11 @@ The tags migration should look like this:
  </cffunction >  
 </cfcomponent >
 
-\`\`\`
+```
 
 The taggings migration should look like this:
 
-\`\`\`cfm
+```cfm
 
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="creates taggings table">  
  <cffunction name="up">  
@@ -109,17 +109,17 @@ The taggings migration should look like this:
  </cffunction>  
 </cfcomponent>
 
-\`\`\`
+```
 
 Now run both migrations. Currently DBMigrations plugin doesn’t have  
 a command for composite keys, so we will have to run this sql  
 command seperately.
 
-\`\`\`sql
+```sql
 
 ALTER TABLE jsbloggers.taggings ADD PRIMARY KEY (tagid,articleid);
 
-\`\`\`
+```
 
 ### Expressing Relationships
 
@@ -129,50 +129,50 @@ the files below, create in if not already then add these lines:
 
 In `/models/Article.cfc`
 
-\`\`\`cfm
+```cfm
 
 <cfset hasMany("taggings") />
 
-\`\`\`
+```
 
 Then in `/models/Tagging.cfc`
 
-\`\`\`cfm
+```cfm
 
 <cfset belongsTo("article") />  
 <cfset belongsTo("tag") />
 
-\`\`\`
+```
 
 In `/models/Tag.cfc`
 
-\`\`\`cfm
+```cfm
 
 <cfset hasMany("taggings") />
 
-\`\`\`
+```
 
 Now we can get the many-to-many association that we set up above.  
 Here is how we will include the related tables from the tagging:
 
-\`\`\`cfm
+```cfm
 
 <cfset data = model("tagging").findAll(include="article,tag",where="articleid=3") />
 
-\`\`\`
+```
 
 After Wheels had been around for awhile, developers were finding  
 this kind of relationship very common. In practical usage, if I had  
 an object named `article` and I wanted to find its Tags, I’d have  
 to run code like this:
 
-\`\`\`cfm
+```cfm
 
 <cfset article = model("article").findByKey(key=3,include="taggings") />  
  <cfdump var="#article.taggings#">  
  <cfabort>
 
-\`\`\`
+```
 
 That’s a pain since we don’t have `tags` yet. The solution was to  
 augment the relationship with “shortcut”. We’ll update our  
@@ -180,19 +180,19 @@ relationship now to the Article and Tag classes:
 
 In `/models/article.cfc`
 
-\`\`\`cfm
+```cfm
 
 <cfset hasMany(name="taggings",shortcut="tags") />
 
-\`\`\`
+```
 
 In `/models/tag.cfc`
 
-\`\`\`cfm
+```cfm
 
 <cfset hasMany(name="taggings",shortcut="articles") />
 
-\`\`\`
+```
 
 Now we can get the many-to-many association that we set up above.  
 How we will include the related tables from the tagging is still  
@@ -206,7 +206,7 @@ we can ask for `tag.articles()`.
 Lets create an example to test our relationship with the  
 [shortcut]()
 
-\`\`\`cfm
+```cfm
 
 <cffunction name="six">  
  <cfset article = model("article").findByKey(key=3,include="taggings") />  
@@ -217,7 +217,7 @@ Lets create an example to test our relationship with the
  <cfabort>  
 </cffunction>
 
-\`\`\`
+```
 
 You should see in the articles with their tags in the first dump  
 and tags with their articles.
@@ -234,7 +234,7 @@ Adding the text field will take place in the file
 `/views/articles/\_form.cfm`. Add this code underneath the body  
 text area like this:
 
-\`\`\`cfm
+```cfm
 
 <h3>
 Tag this post under:
@@ -242,7 +242,7 @@ Tag this post under:
 </h3>
 \#textFieldTag (name=‘newTag’, label=‘New Tag’)\#
 
-\`\`\`
+```
 
 This is the first time we used `textFieldTag`, it builds and  
 returns a string containing a text field form control based on the  
@@ -250,7 +250,7 @@ supplied name. An Article doesn’t have a property named `newTag` —
 we made it up. In order for us to add a new tag, we need to add a  
 method to the `article.cfc` file like this:
 
-\`\`\`cfm
+```cfm
 
 <cffunction name="newTag">  
  <cfif len(trim(params.newTag))>  
@@ -264,7 +264,7 @@ method to the `article.cfc` file like this:
  </cfif>  
 </cffunction>
 
-\`\`\`
+```
 
 Your form should now show up and there’s a text box at the bottom  
 named “New Tag”. Enter content for a new article and in the tag  
@@ -277,7 +277,7 @@ Did it really work? It’s hard to tell. Let’s jump into the Examples
 and have a look. Replace the key with the article, you added the  
 tag to.
 
-\`\`\`cfm
+```cfm
 
 <cffunction name="seven">  
  <cfset a = model("article").findByKey(key=3,include="taggings") />  
@@ -285,7 +285,7 @@ tag to.
  <cfabort>  
  </cffunction>
 
-\`\`\`
+```
 
 I bet the Examples Seven reported that `a.tags` had `0` tags — an  
 empty query. So we didn’t generate an error, but we didn’t create  
@@ -294,7 +294,7 @@ any tags either.
 We will need to call our `newTag` method within our `create` and  
 `update` actions by adding `<cfset newTag()/\>`.
 
-\`\`\`cfm
+```cfm
 
 <cffunction name="create">  
  <cfset article = model("article").create(params.article)/>
@@ -314,7 +314,7 @@ We will need to call our `newTag` method within our `create` and
 <cfset redirectTo(action="index")/>  
 </cffunction>
 
-\`\`\`
+```
 
 Now try adding the tag again and verify it is present in Examples  
 Seven. And you’ll see the Tag is associated with the Article.
@@ -326,7 +326,7 @@ but we haven’t done anything to display them in the article pages.
 Let’s start with `/views/articles/show.cfm`. Right below the line  
 that displays the `article.title`, add this line:
 
-\`\`\`cfm
+```cfm
 
 <h3>
 Tags
@@ -340,18 +340,18 @@ Tags
  None  
  </cfif>
 
-\`\`\`
+```
 
 These lines should loop and output through all the `tags` for the  
 article.
 
 Refresh your view and…BOOM:
 
-\`\`\`cfm  
+```cfm  
 Attribute validation error for tag cfloop.
 
 The value of the attribute query, which is currently tags, is invalid.  
-\`\`\`
+```
 
 The `show` page is trying to use `tags`, but the action doesn’t  
 know anything about our Tags variable. We need to create the `tags`  
@@ -395,7 +395,7 @@ Tag this post under:
 In our  ````new@ action, we need to mode the exisitn code slightly  
 ending up with this:
 
-\`\`\`cfm
+```cfm
 
 <cffunction name="new">  
  <cfset var newTagging = arrayNew(1)/>  
@@ -405,7 +405,7 @@ ending up with this:
  <cfset article = model("article").new(taggings=newTagging)/>  
 </cffunction>
 
-\`\`\`
+```
 
 The first line creates an array in our local scope. We did this  
 since we don’t need the variable in the views. The next new line  
@@ -436,7 +436,7 @@ The links for our tags are showing up, but if you click on them
 you’ll get our old friend, the “Wheels.ViewNotFound”. Createyour  
 `/controllers/Tags.cfc` and add a `show` method like this:
 
-\`\`\`cfm
+```cfm
 
 <cfcomponent extends="Controller" output="false">
 
@@ -447,11 +447,11 @@ you’ll get our old friend, the “Wheels.ViewNotFound”. Createyour
 
 </cfcomponent>
 
-\`\`\`
+```
 
 Then create a file `/views/tags/show.cfm` like this:
 
-\`\`\`cfm
+```cfm
 
 <cfoutput>  
 
@@ -471,7 +471,7 @@ Articles Tagged with \#tags.name\#
 </ul>
 </cfoutput>
 
-\`\`\`
+```
 
 Refresh your view and you should see a list of articles with that  
 tag. Keep in mind that there might be some abnormalities from  

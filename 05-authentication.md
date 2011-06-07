@@ -13,7 +13,7 @@ create a migration for a people table. You should be an old hat at
 this. Here is what the final migration for a People table should  
 look like:
 
-\`\`\`cfm
+```cfm
 
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="creates people table">  
  <cffunction name="up">  
@@ -36,14 +36,14 @@ addRecord (table=‘people’,id=1,email=‘[admin@gmail.com](mailto:admin@gmail
  </cffunction>  
 </cfcomponent>
 
-\`\`\`
+```
 
 ### Creating the Person Model
 
 We will create a Model for our users called `Person.cfc`. It will  
 validate several of our properties.
 
-\`\`\`cfm
+```cfm
 
 <cfcomponent extends="Model" output="false">
 
@@ -60,14 +60,14 @@ validate several of our properties.
 
 </cfcomponent>
 
-\`\`\`
+```
 
 ### Creating a Login view
 
 Create a new folder and file `/views/main/login.cfm` with this  
 code:
 
-\`\`\`cfm
+```cfm
 
 <cfoutput>
 
@@ -95,7 +95,7 @@ Login
 
 </cfoutput>
 
-\`\`\`
+```
 
 Nothing special here. Lets try to load our login page at  
 `http://wheels.local/index.cfm/main/login` If its there, you’re  
@@ -108,7 +108,7 @@ We will make a simple controller with the following actions:
 session structure called user if the email and password is  
 correct.
 
-\`\`\`cfm
+```cfm
 
 <cfcomponent extends="Controller" output="false">
 
@@ -140,7 +140,7 @@ correct.
 
 </cfcomponent>
 
-\`\`\`
+```
 
 Now login with **[admin@gmail.com](mailto:admin@gmail.com)** and **admin** and you should be  
 directed to our listing page.
@@ -156,7 +156,7 @@ and try to login.
 Open the `/controllers/Controller.cfc` and add this code between  
 the `cfcomponent` instructions:
 
-\`\`\`cfm
+```cfm
 
 <cffunction name="checkLogin">  
  <cfif StructKeyExists(session, "user")>  
@@ -166,7 +166,7 @@ the `cfcomponent` instructions:
  </cfif>  
 </cffunction>
 
-\`\`\`
+```
 
 You can add other functions to `/controllers/Controller.cfc` and  
 make them globally available in all your controllers like we did  
@@ -192,22 +192,22 @@ our controllers:
 Did you know how? If not here is the code to add the filters. In  
 the `/controllers/Comments.cfc`:
 
-\`\`\`cfm
+```cfm
 
 <cffunction name="init">  
  <cfset filters(through="checkLogin", except="create")>  
  </cffunction>
 
-\`\`\`
+```
 
 Next we add our filter to the `/controllers/Articles.cfc` in the  
 `init` method.
 
-\`\`\`cfm
+```cfm
 
 <cfset filters(through="checkLogin", only="new,create,edit,update,delete")>
 
-\`\`\`
+```
 
 This will run our `checkLogin` action in  
 `/controllers/Controller.cfc` **before** these actions: `new`,  
@@ -223,7 +223,7 @@ Open `/views/articles/index.cfm` and find the section where we
 output the Actions. Wrap that whole section in an `if` clause like  
 this:
 
-\`\`\`cfm
+```cfm
 
 <cfif StructKeyExists(session, "user")>  
  <i>Actions:  
@@ -232,7 +232,7 @@ this:
  </i>  
 </cfif>
 
-\`\`\`
+```
 
 Look at the article listing in your browser when you’re logged out  
 and make sure those links disappear.
@@ -244,7 +244,7 @@ navigation has been bothering me. Let’s try to clean it up a little
 more. Remove any cases of “<< Back to Articles List” and “Create a  
 New Article”. Then add this code to `/views/layout.cfm`.
 
-\`\`\`cfm
+```cfm
 
 <div id="navbar">
 
@@ -277,14 +277,14 @@ New Article”. Then add this code to `/views/layout.cfm`.
 
 </ul>
 </div>
-\`\`\`
+```
 
 If you look at the `show` view template, you’ll see that we never  
 added an edit link! Let’s quick add that link now, but protect it  
 to only show up when a user is logged in and they are on the  
 `article` controller and `show` action.
 
-\`\`\`cfm
+```cfm
 
 <cfif params.controller EQ "articles" and params.action EQ "show">  
 
@@ -294,6 +294,6 @@ to only show up when a user is logged in and they are on the
 </li>
 </cfif>
 
-\`\`\`
+```
 
 Your basic authentication is done, and Iteration 5 is complete!
