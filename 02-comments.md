@@ -420,38 +420,22 @@ look like this:
 
 ```
 
-Nicer, shouldn’t the label be around “Author Name”? And we are  
-still missing the wrapping @  
-
-<p>
-@ tag along with a `<br>` between the label and input. To  
-accomplish this we will set some defaults for a our helper  
-functions in `config/settings.cfm`. Open the file and add these  
-lines:
+Nicer, shouldn’t the label be around “Author Name”? And we are
+still missing the wrapping @<p>@ tag along with a `<br>` between the label and input. To accomplish this we will set some defaults for a our helper functions in `config/settings.cfm`. Open the file and add these lines:
 
 ```cfm
-
 <cfset set(functionName="textField", labelPlacement='before', prependToLabel="<p>“, prepend=”<br>“, append=”
 
 </p>
 “) /\>  
 <cfset set(functionName="textArea", labelPlacement='before', prependToLabel="<p>”, prepend=“<br>”, append=“</p\>”) /\>
-
 ```
 
-We are saying place the label before the input, and prepend @  
-
-<p>
-@ to the label, then prepend `<br>` to the input, and finally  
-append @  
-
-</p>
-@ to the input. Confused? Hopefully, not :-)
+We are saying place the label before the input, and prepend @ <p>@ to the label, then prepend `<br>` to the input, and finally append @</p>@ to the input. Confused? Hopefully, not :-)
 
 Refresh, and you should see html source like this:
 
 ```cfm
-
 <p>
 <label for="comment-authorname">Authorname</label><br>  
  <input type="text" value="" name="comment[authorname]" maxlength="255" id="comment-authorname">  
@@ -461,29 +445,19 @@ Refresh, and you should see html source like this:
 
 #### Comments Count
 
-Let’s make it so where the view template has the “Comments” header  
-it displays how many comments there are, like “Comments ( 3 )”.  
-Open up your article’s `show.cfm` and change the comments header so  
-it looks like this:
+Let’s make it so where the view template has the “Comments” header it displays how many comments there are, like “Comments ( 3 )”. Open up your article’s `show.cfm` and change the comments header so it looks like this:
 
 ```cfm
-
 <h3>
 Comments ( \#article.commentCount ()\# )
-
 </h3>
 ```
 
 #### Add Timestamp to the Comment Display
 
-We should add something about when the comment was posted. Wheels  
-has a really neat helper named `distanceOfTimeInWords` which takes  
-two dates and creates a text description of their difference like  
-“32 minutes later”, “3 months later”, and so on. You can use it in  
-your `\_comment.cfm` partial like this:
+We should add something about when the comment was posted. Wheels has a really neat helper named `distanceOfTimeInWords` which takes two dates and creates a text description of their difference like “32 minutes later”, “3 months later”, and so on. You can use it in your `_comment.cfm` partial like this:
 
 ```cfm
-
 <p>
 Posted \#distanceOfTimeInWords (arguments.comment.createdat, now ())\# later
 
