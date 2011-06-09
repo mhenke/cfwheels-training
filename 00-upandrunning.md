@@ -10,9 +10,9 @@ and add-ons.
 
 With that done, we need to create new project in Eclipse. Open Eclipse and…
 
-- File ~~~~\\\> New~~~~\\\> ColdFusion Project  
- **\\** Project Name: JSBlogger**\\** Uncheck Use Default Location in  
- Project Location put “C:\\JRun4\\servers\\cfwheels101” \\**\\** Click  
+- File ~~~~\> New~~~~\> ColdFusion Project  
+ **** Project Name: JSBlogger**** Uncheck Use Default Location in  
+ Project Location put “C:JRun4serverscfwheels101” **** Click  
  Finish
 
 Eclipse will then create a ColdFusion project for you and automatically open the project.
@@ -22,7 +22,7 @@ Servers). In the Server view, click the add server icon. In the New ColdFusion S
 
 - Server Name: JSBloggers  
 - Application Server: Jrun  
-- Host Name: wheels.local \\**\\** Select Is Local  
+- Host Name: wheels.local **** Select Is Local  
 - WebServer Port: 80  
 - Click Finish
 
@@ -234,8 +234,8 @@ in production the `ORM` makes it very easy to do modifications,
 searches, and other data operations. So let’s create a `controller`  
 to do some simple interactions with our `model`.
 
-- File ~~~~\\\> New~~~~\\\> ColdFusion Component  
-- Source Location: /JSBloggers/controllers \\**\\** By clicking  
+- File ~~~~\> New~~~~\> ColdFusion Component  
+- Source Location: /JSBloggers/controllers **** By clicking  
  Browse…  
 - Component Name: Examples  
 - Extends: Controller  

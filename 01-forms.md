@@ -85,9 +85,9 @@ What is all that? Let’s look at it piece by piece:
  says “Make an openning form tag with the name of the action  
  included in the URL.”  
 - The `textField` helper creates a single-line text field control  
- **\\** The `objectName` parameter which says for this input use the object named `article` to build the form control**\\**  
+ **** The `objectName` parameter which says for this input use the object named `article` to build the form control****  
  The `property` parameter create the name of the property to use in  
- the form control \\**\\** The `lable` parameter creates an HTML label  
+ the form control **** The `lable` parameter creates an HTML label  
  for the form control, this is good usability practice and will have  
  some other benefits for us later  
 - The `textArea` helper creates a text area field form control  
@@ -103,7 +103,7 @@ Wheels tried to find the model object article for the form helper, but it does n
 
 Error location
 
-Line 3 in views\\articles\\new.cfm
+Line 3 in viewsarticlesnew.cfm
 
 2: <cfoutput>  
 3: \#errorMessagesFor (“article”)\#  
@@ -113,11 +113,11 @@ Line 3 in views\\articles\\new.cfm
 7: \#submitTag ()\#  
 ```
 
-What’s Wheels trying to tell us. In our `new.cfm` on line \\\#3 there  
-was an error about “Wheels.ObjectNotFound”. Somewhere in line \\\#4  
+What’s Wheels trying to tell us. In our `new.cfm` on line \#3 there  
+was an error about “Wheels.ObjectNotFound”. Somewhere in line \#4  
 we’re working with an object that doesn’t exist.
 
-And since there’s only one object in line \\\#3, it makes it pretty  
+And since there’s only one object in line \#3, it makes it pretty  
 obvious — the problem is we started talking about a thing named  
 `article` without ever creating that thing. Wheels uses some of the  
 **reflection** techniques we talked about earlier in order to setup  
@@ -215,7 +215,7 @@ bunch of URLs by hand. Let’s add some links. Open your
 
 It uses the Wheels `linkTo` helper, tells it we want a link with  
 the text “Create a New Article” that points to the address `new`  
-(which the router handles for us) \\\* Find where, in the middle of  
+(which the router handles for us) \* Find where, in the middle of  
 the view, we output just the `title`. Change it so it says  
 `linkTo(text=title, action='show', key=id)`. This creates a link  
 with the text of the articles title which points to a page where  

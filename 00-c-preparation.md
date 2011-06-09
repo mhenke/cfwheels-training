@@ -18,67 +18,67 @@ relational database using the MySQL database server.
 - Download and install MySQL 5.5 or newer. You can find the  
  downloads by going to [MySQL Downloads page](http://www.mysql.com)  
 - Run the installer and select the options as follows:  
- **\\** Accept the End-User License Agreement (EULA)**\\** Select Custom  
+ **** Accept the End-User License Agreement (EULA)**** Select Custom  
  Setup Type  
- **\\** On the Custom Setup click the “Next” button to select all components**\\**  
+ **** On the Custom Setup click the “Next” button to select all components****  
  Click the “Install” button to install the server  
- **\\** Note: On Windows Vista & Windows 7 computers you’ll be prompted if you want to allow this application to make changes to your computer, click the “Yes” button**\\**  
+ **** Note: On Windows Vista & Windows 7 computers you’ll be prompted if you want to allow this application to make changes to your computer, click the “Yes” button****  
  On the MySQL Enterprise advertisement screen click the “Next”  
  button  
- **\\** On the MySQL Enterprise monitoring service advertisement screen click the “Next” button**\\**  
+ **** On the MySQL Enterprise monitoring service advertisement screen click the “Next” button****  
  Check the “Launch the MySQL Instance Configuration Wizard”  
  checkbox, then click the “Finish” button  
- **\\** Note: On Windows Vista & Windows 7 computers you’ll be prompted if you want to allow this application to make changes to your computer, click the “Yes” button**\\**  
+ **** Note: On Windows Vista & Windows 7 computers you’ll be prompted if you want to allow this application to make changes to your computer, click the “Yes” button****  
  On the “MySQL Instance Configuration Wizard screen” click the  
  “Next” button  
- **\\** Select the “Detailed Configuration” radio button, then click the “Next” button**\\**  
+ **** Select the “Detailed Configuration” radio button, then click the “Next” button****  
  On the “Server Type” screen select “Developer Machine” radio  
  button, then click the “Next” button  
- **\\** On the “Database usage” screen, select the “Transactional Database Only” radio button, then click the “Next” button**\\**  
+ **** On the “Database usage” screen, select the “Transactional Database Only” radio button, then click the “Next” button****  
  On the “Select Drive” screen, click the “Next” button  
- **\\** On the “Concurrent Connections” screen select “Decision Support (DSS)/OLAP” radio button, then click the “Next” button**\\**  
+ **** On the “Concurrent Connections” screen select “Decision Support (DSS)/OLAP” radio button, then click the “Next” button****  
  On the “Networking” screen, select the following options:  
- ****\\** Check “Enable TCP/IP Networking”\\** Set the port number to  
- “3306” ****\\** Check “Add firewall exception for this port”\\** Check  
- “Enable Strict Mode” **\\**\* Click the “Next” button  
+ ****** Check “Enable TCP/IP Networking”** Set the port number to  
+ “3306” ****** Check “Add firewall exception for this port”** Check  
+ “Enable Strict Mode” ****\* Click the “Next” button  
 - On the “Default character set” screen, select the “Best Support  
  for Multilingualism” radio button, then click the “Next” button  
- **\\** On the “Set Windows Options” screen, select the following options: ****\\** Check the “Install as Windows Service” checkbox\*  
+ **** On the “Set Windows Options” screen, select the following options: ****** Check the “Install as Windows Service” checkbox\*  
  Set the “Service Name” to “MySQL”  
-\\** Check the “Launch MySQL automatically” checkbox****\\** Check the  
+** Check the “Launch MySQL automatically” checkbox****** Check the  
  “Include Bin Directory in Windows PATH” checkbox  
-\\** Click the “Next” button**\* On the “Security Options” screen,  
+** Click the “Next” button**\* On the “Security Options” screen,  
  select the following options:  
-\\** Check the “Modifiy Security Settings” checkbox****\\** Set the  
+** Check the “Modifiy Security Settings” checkbox****** Set the  
  root password to “cfwheels” in all lowercase, no quotes  
-\\** Check the “Enable root access from remote machines” checkbox****\\**  
+** Check the “Enable root access from remote machines” checkbox******  
  Uncheck the “Create An Anonymous Account” checkbox  
-\\** Click the “Next” button\*\* Click the “Execute” button
+** Click the “Next” button\*\* Click the “Execute” button
 
 ### Install Adobe ColdFusion 9
 
 - Adobe ColdFusion 9  
- **\\** Download and install [[http://www.adobe.com/products/coldfusion/](http://www.adobe.com/products/coldfusion/)](http://www.adobe.com/products/coldfusion/) as multiple instances**\\**  
+ **** Download and install [[http://www.adobe.com/products/coldfusion/](http://www.adobe.com/products/coldfusion/)](http://www.adobe.com/products/coldfusion/) as multiple instances****  
  Follow the instructions in the installation wizard and let it run  
  to completion. Ensure you select Multiserver configuration.  
- ****\\** Presentation / Slides for [Installing Multiple Versions of ColdFusion Together](http://www.cfgothchic.com/blog/post.cfm/my-cfmeetup-presentation-installing-multiple-versions-of-coldfusion**)  
+ ****** Presentation / Slides for [Installing Multiple Versions of ColdFusion Together](http://www.cfgothchic.com/blog/post.cfm/my-cfmeetup-presentation-installing-multiple-versions-of-coldfusion**)  
  Name the instancecfwheels101**\*  
- **\\** Test at [[http://localhost:8301/cfide/administrator/](http://localhost:8301/cfide/administrator/)](http://localhost:8301/cfide/administrator/*%5C*)  
- Path should be C:\\JRun4\\servers\\cfwheels101   
- \\**\\** Our web root is “C:\\JRun4\\servers\\cfwheels101”
+ **** Test at [[http://localhost:8301/cfide/administrator/](http://localhost:8301/cfide/administrator/)](http://localhost:8301/cfide/administrator/*%5C*)  
+ Path should be C:JRun4serverscfwheels101   
+ **** Our web root is “C:JRun4serverscfwheels101”
 
 ### Install Apache ( optional )
 
 - Apache  
- **\\** Download and install the "Win32 Binary without crypto (no mod\\*ssl) ":[http://apache.tradebit.com/pub//httpd/binaries/win32/httpd-2.2.17-win32-x86-no](http://apache.tradebit.com/pub//httpd/binaries/win32/httpd-2.2.17-win32-x86-no)\\*ssl.msi**\\**  
+ **** Download and install the "Win32 Binary without crypto (no mod*ssl) ":[http://apache.tradebit.com/pub//httpd/binaries/win32/httpd-2.2.17-win32-x86-no](http://apache.tradebit.com/pub//httpd/binaries/win32/httpd-2.2.17-win32-x86-no)*ssl.msi****  
  We will modify three files: httpd.conf, httpd-vhosts.conf, and  
  hosts
 
 First uncomment these lines by deleting the hash (`\#`) in front of  
 the line and save the file.
 
-- C:\\Program Files (x86)\\Apache Software  
- Foundation\\Apache2.2\\conf\\httpd.conf
+- C:Program Files (x86)Apache Software  
+ FoundationApache2.2confhttpd.conf
 
 ```cfm
 
@@ -91,8 +91,8 @@ Include conf/extra/httpd-vhosts.conf
 Next add this code to the bottom the the next file,  
 `httpd-vhosts.conf`.
 
-- C:\\Program Files (x86)\\Apache Software  
- Foundation\\Apache2.2\\conf\\extra\\httpd-vhosts.conf
+- C:Program Files (x86)Apache Software  
+ FoundationApache2.2confextrahttpd-vhosts.conf
 
 ```cfm
 
@@ -114,7 +114,7 @@ ProxyPass / [http://wheels.local:8301/](http://wheels.local:8301/)
 Finally, open the last file, `hosts`, and add this line at the  
 top.
 
-- C:\\Windows\\System32\\drivers\\etc\\hosts add this:
+- C:WindowsSystem32driversetchosts add this:
 
 ```cfm
 
@@ -130,56 +130,56 @@ ColdFusion server instance via
 ### Install ColdFusion on Wheels
 
 - ColdFusion on Wheels  
- **\\** Download [[http://cfwheels.org/download/latest-version](http://cfwheels.org/download/latest-version)](http://cfwheels.org/download/latest-version*%5C*)  
- Extract and copy the files to “C:\\JRun4\\servers\\cfwheels101” \\**\\**  
+ **** Download [[http://cfwheels.org/download/latest-version](http://cfwheels.org/download/latest-version)](http://cfwheels.org/download/latest-version*%5C*)  
+ Extract and copy the files to “C:JRun4serverscfwheels101” ****  
  Test at [[http://wheels.local/](http://wheels.local/)](http://wheels.local/) and you should  
  see a Congratulations page
 
 #### Install Plugin Manager
 
-- Plugin Manager **\\** Download**\\** Move the downloaded zip archive  
- file into “C:\\ColdFusion9\\wwwroot”  
- **\\** Reload CFWheels [[http://wheels.local/](http://wheels.local/)](http://wheels.local/*%5C*)  
+- Plugin Manager **** Download**** Move the downloaded zip archive  
+ file into “C:ColdFusion9wwwroot”  
+ **** Reload CFWheels [[http://wheels.local/](http://wheels.local/)](http://wheels.local/*%5C*)  
  You should see **Plugin Manager** under Plugins
 
 #### Install DBMigrate Plugin
 
 - DBMigrate  
- **\\** Download [[http://code.google.com/p/cfwheels-dbmigrate/](http://code.google.com/p/cfwheels-dbmigrate/)](http://code.google.com/p/cfwheels-dbmigrate/*%5C*)  
- Move the downloaded zip into “C:\\JRun4\\servers\\cfwheels101\\plugins”  
- **\\** Reload CFWheels [[http://wheels.local/](http://wheels.local/)](http://wheels.local/*%5C*)  
+ **** Download [[http://code.google.com/p/cfwheels-dbmigrate/](http://code.google.com/p/cfwheels-dbmigrate/)](http://code.google.com/p/cfwheels-dbmigrate/*%5C*)  
+ Move the downloaded zip into “C:JRun4serverscfwheels101plugins”  
+ **** Reload CFWheels [[http://wheels.local/](http://wheels.local/)](http://wheels.local/*%5C*)  
  You should see **DBMigrate** under Plugins
 
 #### Install Scaffold Plugin
 
 - Scaffold  
- **\\** Download [[http://cfwheels.org/plugins/listing/9](http://cfwheels.org/plugins/listing/9)](http://cfwheels.org/plugins/listing/9*%5C*)  
- Move the downloaded zip into “C:\\JRun4\\servers\\cfwheels101\\plugins”  
- **\\** Reload Wheels [[http://wheels.local/](http://wheels.local/)](http://wheels.local/*%5C*)  
+ **** Download [[http://cfwheels.org/plugins/listing/9](http://cfwheels.org/plugins/listing/9)](http://cfwheels.org/plugins/listing/9*%5C*)  
+ Move the downloaded zip into “C:JRun4serverscfwheels101plugins”  
+ **** Reload Wheels [[http://wheels.local/](http://wheels.local/)](http://wheels.local/*%5C*)  
  You should see Scaffold under Plugins
 
 ### Install MySQL Server
 
-- Windows \\**\\** Download and install  
+- Windows **** Download and install  
  [[http://dev.mysql.com/downloads/mirror.php?id=401202](http://dev.mysql.com/downloads/mirror.php?id=401202)](http://dev.mysql.com/downloads/mirror.php?id=401202)
 
 #### Create JSBloggers Database
 
-- Select Start ~~~~\\\> MySQL~~ MySQL 5.1 Server~~-\\\> MySQL Command  
- Line Client \\**\\** Type your password then “create database  
+- Select Start ~~~~\> MySQL~~ MySQL 5.1 Server~~-\> MySQL Command  
+ Line Client **** Type your password then “create database  
  jsbloggers;” and press return
 
 ## Client Tools
 
 ### Install ColdFusion Builder
 
-- Windows \\**\\** Download and install as standalone  
+- Windows **** Download and install as standalone  
  [[http://www.adobe.com/products/coldfusion/cfbuilder/features/](http://www.adobe.com/products/coldfusion/cfbuilder/features/)](http://www.adobe.com/products/coldfusion/cfbuilder/features/)
 
 ## Add JSBloggers connection
 
 - Add DataSource through the ColdFusion Administrator  
- **\\** Name: JSBloggers**\\** Driver: MySQL \\**\\** URL:  
+ **** Name: JSBloggers**** Driver: MySQL **** URL:  
  jdbc:mysql://localhost:3306/
 
 ## Setup Git and Github

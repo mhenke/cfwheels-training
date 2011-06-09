@@ -16,7 +16,7 @@ data does it have…
 
 With that understanding, let’s create a Comment model. Switch over  
 to Eclipse and right click on the models folder, then select New  
-—\\\> File and enter “Comment.cfc” for File name. The file will be  
+—\> File and enter “Comment.cfc” for File name. The file will be  
 created and automatically open, then you can add this code to it:
 
 ```cfm

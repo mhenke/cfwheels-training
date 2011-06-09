@@ -58,9 +58,9 @@ Articles and Tags. The relationships will setup like this:
 
 With those relationships in mind, let’s design the new models:
 
-- Tag \\**\\** `name` A string  
+- Tag **** `name` A string  
 - Tagging  
- **\\** `tagid` Integer holding the foreign key of the related Tag**\\**  
+ **** `tagid` Integer holding the foreign key of the related Tag****  
  `articleid` Integer holding the foreign key of the related Article
 
 Note there are no changes necessary to Article because the foreign  
