@@ -202,7 +202,7 @@ lines right before the link to the articles list:
 Comments
 
 </h3>
-<cfoutput>\#includePartial (article.comments)\#</cfoutput>
+<cfoutput>#includePartial (article.comments)#</cfoutput>
 
 ```
 
@@ -222,12 +222,12 @@ element of that array one at a time into the partial named
 <div class="comment">
 
 <h4>
-Comment by \#arguments.comment.authorname\#
+Comment by #arguments.comment.authorname#
 
 </h4>
 
 <p>
-\#arguments.comment.body\#
+#arguments.comment.body#
 
 </p>
 </div>
@@ -252,7 +252,7 @@ the “<< Back to Articles List” in the articles `show.cfm`
 
 ```cfm
 
-\#includePartial (“comment\_form”)\#
+#includePartial (“comment\_form”)#
 
 ```
 
@@ -301,15 +301,15 @@ Post a Comment
 
 </h3>
 <cfoutput>  
- \#errorMessagesFor (“comment”)\#  
- \#startFormTag (controller=“comments”,action=“create”)\#  
- \#hiddenField (objectName=‘comment’, property=‘articleid’)\#  
- \#textField (objectName=‘comment’, property=‘authorname’)\#  
- \#textField (objectName=‘comment’, property=‘authoremail’)\#  
- \#textField (objectName=‘comment’, property=‘authorurl’)\#  
- \#textArea (objectName=‘comment’, property=‘body’)\#  
- \#submitTag (value=“Create Comment”)\#  
- \#endFormTag ()\#  
+ #errorMessagesFor (“comment”)#  
+ #startFormTag (controller=“comments”,action=“create”)#  
+ #hiddenField (objectName=‘comment’, property=‘articleid’)#  
+ #textField (objectName=‘comment’, property=‘authorname’)#  
+ #textField (objectName=‘comment’, property=‘authoremail’)#  
+ #textField (objectName=‘comment’, property=‘authorurl’)#  
+ #textArea (objectName=‘comment’, property=‘body’)#  
+ #submitTag (value=“Create Comment”)#  
+ #endFormTag ()#  
 </cfoutput>
 
 ```
@@ -375,7 +375,7 @@ work!
 #### Comment Validation
 
 During creating this training, I noticed a “bug” with the  
-`renderPage` and `\#includePartial(article.comments)\#`  
+`renderPage` and `#includePartial(article.comments)#`  
 combination. It seems `includePartial` used this way doesn’t allow  
 another controller to be called so, I copied  
 `/views/articles/\_comment.cfm` to `/views/comments`. This allows  
@@ -405,7 +405,7 @@ the desired text as a second parameter, like this:
 
 ```cfm
 
-\#textArea (objectName=‘comment’, property=‘authorname’, label=‘Your Name’)\#
+#textArea (objectName=‘comment’, property=‘authorname’, label=‘Your Name’)#
 
 ```
 
@@ -449,7 +449,7 @@ Let’s make it so where the view template has the “Comments” header it disp
 
 ```cfm
 <h3>
-Comments ( \#article.commentCount ()\# )
+Comments ( #article.commentCount ()# )
 </h3>
 ```
 
@@ -459,7 +459,7 @@ We should add something about when the comment was posted. Wheels has a really n
 
 ```cfm
 <p>
-Posted \#distanceOfTimeInWords (arguments.comment.createdat, now ())\# later
+Posted #distanceOfTimeInWords (arguments.comment.createdat, now ())# later
 
 </p>
 ```

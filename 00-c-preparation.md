@@ -64,7 +64,7 @@ Path should be C:JRun4serverscfwheels101
  **** Download and install the "Win32 Binary without crypto (no mod*ssl) ":[http://apache.tradebit.com/pub//httpd/binaries/win32/httpd-2.2.17-win32-x86-no](http://apache.tradebit.com/pub//httpd/binaries/win32/httpd-2.2.17-win32-x86-no)*ssl.msi****  
  We will modify three files: httpd.conf, httpd-vhosts.conf, and hosts
 
-First uncomment these lines by deleting the hash (`\#`) in front of  
+First uncomment these lines by deleting the hash (`#`) in front of  
 the line and save the file.
 
 - C:/Program Files (x86)/Apache Software/Foundation/Apache2.2/conf/httpd.conf

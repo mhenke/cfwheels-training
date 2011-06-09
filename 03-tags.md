@@ -240,7 +240,7 @@ text area like this:
 Tag this post under:
 
 </h3>
-\#textFieldTag (name=‘newTag’, label=‘New Tag’)\#
+#textFieldTag (name=‘newTag’, label=‘New Tag’)#
 
 ```
 
@@ -334,7 +334,7 @@ Tags
 </h3>
 <cfif article.hasTaggings() EQ "YES">  
  <cfloop query="tags">  
- \#linkTo (text=tags.name, controller=“tags”, action=“show”, key=tags.id)\#<br>  
+ #linkTo (text=tags.name, controller=“tags”, action=“show”, key=tags.id)#<br>  
  </cfloop>  
  <cfelse>  
  None  
@@ -456,14 +456,14 @@ Then create a file `/views/tags/show.cfm` like this:
 <cfoutput>  
 
 <h1>
-Articles Tagged with \#tags.name\#
+Articles Tagged with #tags.name#
 
 </h1>
 <ul>
 <cfloop query="articles" >  
 
 <li>
-\#linkTo (text=articles.title, controller=“articles”, action=“show”, key=articles.articleid)\#<br>
+#linkTo (text=articles.title, controller=“articles”, action=“show”, key=articles.articleid)#<br>
 
 </li>
 </cfloop>  

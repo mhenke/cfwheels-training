@@ -257,7 +257,7 @@ Listing articles
 <cfoutput query="articles">  
 
 <li>
-<b>\#articles.title\#</b><br/>  
+<b>#articles.title#</b><br/>  
 
 </li>
 </cfoutput>  

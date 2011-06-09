@@ -26,7 +26,7 @@ look like:
  t.timestamps ();  
  t.create ();
 
-addRecord (table=‘people’,id=1,email=‘[admin@gmail.com](mailto:admin@gmail.com)’,password=‘\#Hash (“admin”)\#’);  
+addRecord (table=‘people’,id=1,email=‘[admin@gmail.com](mailto:admin@gmail.com)’,password=‘#Hash (“admin”)#’);  
  </cfscript>  
  </cffunction>  
  <cffunction name="down">  
@@ -79,19 +79,19 @@ Login
  <cfdump var="#error#">  
 </cfif>
 
-\#flash (“error”)\#  
-\#errorMessagesFor (“user”)\#
+#flash (“error”)#  
+#errorMessagesFor (“user”)#
 
-\#startFormTag (controller=“main”, action=“signin”)\#
+#startFormTag (controller=“main”, action=“signin”)#
 
-\#textField (label=“Email”, objectName=“user”, property=“email”)\#  
- \#passwordField (label=“Password”, objectName=“user”, property=“password”)\#
+#textField (label=“Email”, objectName=“user”, property=“email”)#  
+ #passwordField (label=“Password”, objectName=“user”, property=“password”)#
 
 <div>
-\#submitTag (value=“Sign In”)\#  
+#submitTag (value=“Sign In”)#  
 
 </div>
-\#endFormTag ()\#
+#endFormTag ()#
 
 </cfoutput>
 
@@ -227,8 +227,8 @@ this:
 
 <cfif StructKeyExists(session, "user")>  
  <i>Actions:  
- \#linkTo (text=‘edit’, action=‘edit’, key=id)\#,  
- \#linkTo (text=‘remove’, action=‘delete’, key=id, confirm=“Remove the article ‘\#title\#’?”)\#   
+ #linkTo (text=‘edit’, action=‘edit’, key=id)#,  
+ #linkTo (text=‘remove’, action=‘delete’, key=id, confirm=“Remove the article ‘#title#’?”)#   
  </i>  
 </cfif>
 
@@ -252,25 +252,25 @@ New Article”. Then add this code to `/views/layout.cfm`.
 <cfif "show,edit,new,login" contains params.action >  
 
 <li>
-\#linkTo (text=“<< Back to Articles List”, controller=“articles”, action=“index”)\#
+#linkTo (text=“<< Back to Articles List”, controller=“articles”, action=“index”)#
 
 </li>
 </cfif>  
  <cfif StructKeyExists(session, "user")>  
 
 <li>
-\#linkTo (text=“Create a New Article”, action=“new”)\#
+#linkTo (text=“Create a New Article”, action=“new”)#
 
 </li>
 
 <li>
-\#linkTo (text=“Logout”, controller=“main”, action=“logout”)\#
+#linkTo (text=“Logout”, controller=“main”, action=“logout”)#
 
 </li>
 <cfelseif params.action NEQ "login">  
 
 <li>
-\#linkTo (text=“Login”, controller=“main”, action=“login”)\#
+#linkTo (text=“Login”, controller=“main”, action=“login”)#
 
 </li>
 </cfif>  
@@ -289,7 +289,7 @@ to only show up when a user is logged in and they are on the
 <cfif params.controller EQ "articles" and params.action EQ "show">  
 
 <li>
-\#linkTo (text=‘Edit Current Article’, action=‘edit’, key=params.key)\#
+#linkTo (text=‘Edit Current Article’, action=‘edit’, key=params.key)#
 
 </li>
 </cfif>

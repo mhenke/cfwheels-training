@@ -77,16 +77,16 @@ Error location
 Line 3 in viewsarticlesnew.cfm
 
 2: <cfoutput>  
-3: \#errorMessagesFor (“article”)\#  
-4: \#startFormTag (action=“create”)\#  
-5: \#textField (objectName=‘article’, property=‘title’, label=‘Title’)\#  
-6: \#textArea (objectName=‘article’, property=‘body’, label=‘Body’)\#  
-7: \#submitTag ()\#  
+3: #errorMessagesFor (“article”)#  
+4: #startFormTag (action=“create”)#  
+5: #textField (objectName=‘article’, property=‘title’, label=‘Title’)#  
+6: #textArea (objectName=‘article’, property=‘body’, label=‘Body’)#  
+7: #submitTag ()#  
 ```
 
 What’s Wheels trying to tell us. In our `new.cfm` on line #3 there was an error about “Wheels.ObjectNotFound”. Somewhere in line #4 we’re working with an object that doesn’t exist.
 
-And since there’s only one object in line \#3, it makes it pretty obvious — the problem is we started talking about a thing named `article` without ever creating that thing. Wheels uses some of the **reflection** techniques we talked about earlier in order to setup the form. Remember in the `Examples.cfc` when we called `Article.new` to create a new object? Wheels wants to do the same thing, but we need to create the blank object for it.
+And since there’s only one object in line #3, it makes it pretty obvious — the problem is we started talking about a thing named `article` without ever creating that thing. Wheels uses some of the **reflection** techniques we talked about earlier in order to setup the form. Remember in the `Examples.cfc` when we called `Article.new` to create a new object? Wheels wants to do the same thing, but we need to create the blank object for it.
 
 Go into your `Articles.cfc`, and **inside** the `new` method, add this line:
 
@@ -138,7 +138,7 @@ Right now our article list is very plain and we end up typing in a bunch of URLs
 <cfoutput>  
 
 <p>
-\#linkTo (text=“Create a New Article”, action=“new”)\#
+#linkTo (text=“Create a New Article”, action=“new”)#
 
 </p>
 </cfoutput>
@@ -176,15 +176,15 @@ Now create the file `/views/articles/show.cfm` and add this code:
 <cfoutput>  
 
 <h2>
-\#article.title\#
+#article.title#
 
 </h2>
 
 <p>
-\#article.body\#
+#article.body#
 
 </p>
-\#linkTo (text=“<< Back to Articles List”, controller=“articles”, action=“index”)\#  
+#linkTo (text=“<< Back to Articles List”, controller=“articles”, action=“index”)#  
 </cfoutput>
 ```
 
@@ -200,10 +200,10 @@ Look at your `index.cfm` and change the whole @ <li>@ segment so it looks like t
 
 ```cfm
 <li>
-<b>\#linkTo (text=title, action=“show”, key=id)\#</b><br/>  
+<b>#linkTo (text=title, action=“show”, key=id)#</b><br/>  
  <i>Actions:  
- \#linkTo (text=‘edit’, action=‘edit’, key=id)\#,  
- \#linkTo (text=‘remove’, action=‘delete’, key=id, confirm=“Remove the article ‘\#title\#’?”)\#   
+ #linkTo (text=‘edit’, action=‘edit’, key=id)#,  
+ #linkTo (text=‘remove’, action=‘delete’, key=id, confirm=“Remove the article ‘#title#’?”)#   
  </i>   
 </i>
 ```
@@ -231,12 +231,12 @@ Edit an Article
 
 </h1>
 <cfoutput>  
- \#errorMessagesFor (“article”)\#  
- \#startFormTag (action=“update”)\#  
- \#textField (objectName=‘article’, property=‘title’, label=‘Title’)\#  
- \#textArea (objectName=‘article’, property=‘body’, label=‘Body’)\#  
- \#submitTag (value=“Update”)\#  
- \#endFormTag ()\#  
+ #errorMessagesFor (“article”)#  
+ #startFormTag (action=“update”)#  
+ #textField (objectName=‘article’, property=‘title’, label=‘Title’)#  
+ #textArea (objectName=‘article’, property=‘body’, label=‘Body’)#  
+ #submitTag (value=“Update”)#  
+ #endFormTag ()#  
 </cfoutput>
 ```
 In the ColdFusion and Wheels communities there is a mantra of “Don’t Repeat Yourself” ~~- but that’s exactly what I’ve done here.
@@ -246,15 +246,15 @@ This view is basically the same as the `new.cfm`~~- the only changes are the H1 
 Create a file `/views/articles/\_form.cfm` and, yes, it has to have the underscore at the beginning of the filename. Go into your `/views/articles/new.cfm` and CUT all the text from and including the `cfoutput` line all the way to it’s ending `cfoutput`. The only thing left will be your H1 line. Then add the following code at the bottom of that view:
 
 ```cfm
-<cfoutput>\#includePartial (“form”)\#</cfoutput>
+<cfoutput>#includePartial (“form”)#</cfoutput>
 ```
-Now go back to the `\_form.cfm` and paste the form code. Change the `startFormTag` to `\#startFormTag(action=myaction)\#` and the text on the `submit` button to say “Save” so it makes sense both when creating a new article and editing and existing one.
+Now go back to the `\_form.cfm` and paste the form code. Change the `startFormTag` to `#startFormTag(action=myaction)#` and the text on the `submit` button to say “Save” so it makes sense both when creating a new article and editing and existing one.
 
 Also for editing we need to have a hidden field for the article’s `id`. So please add this above the `submitTag` in our partial.
 
 ```cfm
 <cfif myaction EQ "update">  
- \#hiddenField (objectName=‘article’, property=‘id’)\#  
+ #hiddenField (objectName=‘article’, property=‘id’)#  
 </cfif>
 ```
 
@@ -303,7 +303,7 @@ Wheels creates the object named `flash`, so we don’t need to do anything to se
 ```cfm
 <div class="flash">
 <p>
-<cfoutput>\#flash (“message”)\#</cfoutput>
+<cfoutput>#flash (“message”)#</cfoutput>
 
 </p>
 </div>
