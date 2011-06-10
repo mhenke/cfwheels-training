@@ -90,9 +90,9 @@ The lines you may need to modify are the css\_dir, images\_dir, and javascript\_
 
 In the Command Prompt type in the path to your webroot and the Sass folder you created like "C:\\JRun4\\servers\\cfwheels\\cfusion.ear\\cfusion.war\\Sass".
 
-Type in and run: 'compass install blueprint/basic`
+Type in and run: 'compass install blueprint/basic'
 
-Drop down one directory in your command prompt, so you are in your webroot and type in and run: 'compass watch Sass`
+Drop down one directory in your command prompt, so you are in your webroot and type in and run: 'compass watch Sass'
 
 Check your editor, you will need to refresh in Eclipse. You should see a '/Sass/src/' folder in your Sass folder. This is where you will be creating the Sass for your CSS. Also created are some compiled CSS files in your '/stylesheet/' location. Lets first check out the 'scss' files used to generate the stylesheets then the actual CSS.
 
@@ -102,40 +102,57 @@ In '/Sass/src/' you'll see a 'partials' folder. This is exactly like Wheels part
 
 Were not focusing on CSS development, so here are a few styles you can copy & paste and modify to your hearts content:
 
-```Sass
+```sass
 $bgColor: #AAA;
 $fgColor: #0000FF;
 $navbar-color: #ce4dd6;
 
-body {  background-color:
-	 $bgColor;  
+body {  
+	background-color: $bgColor;  
 	color: $fgColor;  
 	font-size: 14px;   
 	font-family: Verdana, Helvetica, Arial;  
 	line-height: 24px;
-	}
+}
 	
 select, input, textarea {  
 	color: $fgColor;
-	}
+}
 	
 label { 
 	color: darken($bgColor,20);
 	font-weight: bold;
-	}
+}
 
 table { 
 	border-collapse:collapse; border-spacing:0; 
-	}
+}
 
 label, input[type=button], input[type=submit], button { 
 	cursor: pointer; 
 	margin-top: 15px; 
-	}
+}
 button, input, select, textarea { 
 	margin: 0; 
+}
+
+a {  
+	color: lighten($fgColor,10);  
+	
+	&:hover { 
+		color: darken($fgColor,10);
+		text-decoration: none;
+	} 
+	
+	&:visited {
+		color: darken($fgColor,10);
 	}
-a {  color: lighten($fgColor,10);  &:hover { color: darken($fgColor,10);            text-decoration: none }  &:visited { color: darken($fgColor,10); }}h1, h2, h3, h4, h5 {  color: darken($bgColor,20);  padding-bottom: 10px;}h1 { font-size: 2.6em; border-bottom: 1px solid $navbar-color; font-weight: bold; width: 80%; }h2 { font-size: 2.2em; border-bottom: 1px solid $navbar-color; width: 80%; }h3 { font-size: 1.8em; margin-top: 10px; }h4 { font-size: 1.4em; }h5 { font-size: 1.0em; }ul, ol { margin-left: 1.8em; }ol { list-style-type: decimal; }#container {  width: 75%;  margin: 0 auto;  background: #fff;  padding: 20px 40px;  border: solid 1px black;  margin-top: 20px;}#content {  clear: both;  padding-top: 20px;}#navbar {  width: 80%;  height: 23px;  border: 1px solid $navbar-color;  ul, ol { margin-left: 5px; }  li {    float: left;    padding-right: 15px;    margin: 0px;    a { font-weight: bold; }  }}.comment {  border-bottom: 1px solid $navbar-color;   width: 80%;}
+}
+
+h1, h2, h3, h4, h5 {  
+	color: darken($bgColor,20);  
+	padding-bottom: 10px;
+}
 ```
 
 But our application isn't setup to load that stylesheet yet. We need to make a change to our view templates.
@@ -145,7 +162,8 @@ But our application isn't setup to load that stylesheet yet. We need to make a c
 We've created about a dozen view templates between our different models. We *could* go into each of those templates and add a line like this at the top:
 
 ```cfm
-#styleSheetLinkTag("screen,ie,style")##styleSheetLinkTag(source="print", media="print")#
+#styleSheetLinkTag("screen,ie,style")#
+#styleSheetLinkTag(source="print", media="print")#
 ```
 
 The 'styleSheetLinkTag' would find the Sass file we just wrote. That's a lame job, imagine if we had 100 view templates. What if we want to change the name of the stylesheet later? Ugh.
@@ -153,7 +171,8 @@ The 'styleSheetLinkTag' would find the Sass file we just wrote. That's a lame jo
 Wheels and ColdFusion both emphasize the idea of D.R.Y. 'Don't Repeat Yourself`. In the area of view templates, we can achieve this by creating a **layout**. A layout is a special view template that wraps other views. Look in your navigation pane for '/views/layout.cfm`, open that file. In this layout we'll put the view code that we want to render for every view template in the application. This code will go between the 'head' tags.
 
 ```cfm
-#styleSheetLinkTag("screen,ie,style")##styleSheetLinkTag(source="print", media="print")#
+#styleSheetLinkTag("screen,ie,style")#
+#styleSheetLinkTag(source="print", media="print")#
 ```
 
 Now refresh your article listing page and you should see the styles take effect. Whatever code is in the individual view template gets inserted into the layout where you see the 'includeContent()`. Using layouts makes it easy to add site-wide elements like navigation, sidebars, and so forth.
