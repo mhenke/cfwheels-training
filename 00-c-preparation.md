@@ -75,7 +75,7 @@ LoadModule proxy*http*module modules/mod*proxy*http.so
 Include conf/extra/httpd-vhosts.conf
 ```
 
-Next add this code to the bottom the the next file, `httpd-vhosts.conf`.
+Next add this code to the bottom the the next file, 'httpd-vhosts.conf`.
 
 - C:/Program Files (x86)/Apache Software/Foundation/Apache2.2/conf/extra/httpd-vhosts.conf
 
@@ -94,7 +94,7 @@ ProxyPass / [http://wheels.local:8301/](http://wheels.local:8301/)
 </VirtualHost>
 ```
 
-Finally, open the last file, `hosts`, and add this line at the  
+Finally, open the last file, 'hosts`, and add this line at the  
 top.
 
 - C:/Windows/System32/drivers/etc/hosts add this:
