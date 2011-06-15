@@ -19,7 +19,7 @@ Git for Windows: [http://kylecordes.com/2008/git-windows-go](http://kylecordes.c
 Git for OSX: [http://help.github.com/mac-git-installation/](http://help.github.com/mac-git-installation/)
 
 Problems? Questions? ============================ 
-If anything comes up you can email me at henke.mike@gmail.com or call/text me at 402~~577~~0056.
+If anything comes up you can email me at henke.mike@gmail.com or call/text me at 402-577-0056.
 
 Thanks,
 
