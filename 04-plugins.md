@@ -10,23 +10,23 @@ Download and drop the **Plugin Manager** in the '/plugins' folder. Reload the ap
 
 ### Event Handlers
 
-Once loaded, the **Plugin Manager** notices we haven't set a reloadPassword yet. For security on production we would probably have a password set so not everyone can reload our application. Most likely, we would set this in '/config/production/settings.cfm' but this instruction '<cfset set(reloadPassword="y0urPassw0rdShouldNotBeThis")>`. We will add '<cfset application.pluginManager.requirePassword = false>' to '/events/onapplicationstart.cfm`.
+Once loaded, the **Plugin Manager** notices we haven't set a reloadPassword yet. For security on production we would probably have a password set so not everyone can reload our application. Most likely, we would set this in '/config/production/settings.cfm' but this instruction '<cfset set(reloadPassword="y0urPassw0rdShouldNotBeThis")>'. We will add '<cfset application.pluginManager.requirePassword = false>' to '/events/onapplicationstart.cfm'.
 
-Events folder? Well, our 'Application.cfc' in Wheels include 'wheels/functions.cfm' which has a lot of framework code. As a general recommendation We never touch any files in the wheels folder. So how do we using the 'Application.cfc' events then? The answer is to use the events folder. There is a file in there for every single event that 'Application.cfc' can trigger plus some special events for Wheels like "On Error".
+**Events folder?** Well, our 'Application.cfc' in Wheels includes 'wheels/functions.cfm' which has a lot of framework code. As a general recommendation we never touch any files in the wheels folder. So how do we using the 'Application.cfc' events then? The answer is to use the events folder. There is a file in there for every single event that 'Application.cfc' can trigger plus some special events for Wheels like "On Error".
 
 ### Using the **Plugin Manager** (For Real)
 
-Now we can reload Wheels, and should see a list of all the Wheels plugins. First will be plugins we are currently using. If an upgrade exists, you will see "Version X.X.X Available: 'More Info' 'Auto Upgrade' 'Download`". We can select 'Auto Upgrade' so we won't have to worry about updates to plugins. 'Download' will download the plugin into our '/plugins/' folder.
+Now we can reload Wheels, and should see a list of all the Wheels plugins. First will be plugins we are currently using. If an upgrade exists, you will see "Version X.X.X Available: 'More Info' 'Auto Upgrade' 'Download'". We can select 'Auto Upgrade' so we won't have to worry about updates to plugins. 'Download' will download the plugin into our '/plugins/' folder.
 
 ### Responding with Multiple Formats
 
-Changing gears, Wheels controllers provide some powerful mechanisms for responding to requests for content in XML, JSON, and other formats. We want to provide our articles in html (default), pdf, json, and word. First we will add this code to '/controllers/Articles.cfc`. This code will tell the Wheels controller to be ready to provide content in these formats:
+Changing gears, Wheels controllers provide some powerful mechanisms for responding to requests for content in XML, JSON, and other formats. We want to provide our articles in html (default), pdf, json, and word. First we will add this code to '/controllers/Articles.cfc'. This code will tell the Wheels controller to be ready to provide content in these formats:
 
 ```cfm
  <cfset provides("html,json,pdf")>
 ```
 
-In our 'index' action of '/controllers/Articles.cfc' add this line '<cfset renderWith(articles)>`. Wheels can handle HTML, XML, JSON, CSV, PDF, and XLS. XML and JSON Formats can be automatic generated. Let's test the JSON response. Add '?format=json' to the end of our index page's url. It should return a JSON file. Try '?format=pdf`.
+In our 'index' action of '/controllers/Articles.cfc' add this line '<cfset renderWith(articles)>'. Wheels can handle HTML, XML, JSON, CSV, PDF, and XLS. XML and JSON Formats can be automatic generated. Let's test the JSON response. Add '?format=json' to the end of our index page's url. It should return a JSON file. Try '?format=pdf'.
 
 Element TEMPLATE is undefined in LOC. The error occurred in C:\\JRun4\\servers\\cfwheels\\cfusion.ear\\cfusion.war\\wheels\\controller\\provides.cfm: line 123
 
@@ -41,9 +41,9 @@ Reload the page with the error and you should see a pdf with our custom content.
 
 ### Adding a Word format
 
-In 'config/settings.cfm' add '<cfset addFormat(extension="doc", mimeType="application/msword")/>`.
+In 'config/settings.cfm' add '<cfset addFormat(extension="doc", mimeType="application/msword")/>'.
 
-Don't forget to add 'doc' to the 'provides' instruction in '/controllers/Articles.cfc`.
+Don't forget to add 'doc' to the 'provides' instruction in '/controllers/Articles.cfc'.
 
 Copy '/views/articles/index.pdf.cfm' and delete the starting and ending 'cfdocument' instructions. This isn't very DRY but you can fix that later. Then refresh the article list in your browser. Tada!
 
@@ -57,17 +57,17 @@ Sass makes CSS fun again. Sass is an extension of CSS3, adding nested rules, var
 
 ### Installing Sass and Compass
 
-First, you will need to grab and install Ruby. And under [Ruby on Windows](http://www.ruby-lang.org/en/downloads/) said our first option was using the [RubyInstaller](http://rubyinstaller.org/downloads/) so I went there and downloaded 'Ruby 1.8.7-p302' under RubyInstallers. After installing, open the Ruby command prompt under Start and then check to see if Ruby is there by this instruction: 'ruby —version`
+First, you will need to grab and install Ruby. And under [Ruby on Windows](http://www.ruby-lang.org/en/downloads/) said our first option was using the [RubyInstaller](http://rubyinstaller.org/downloads/) so I went there and downloaded 'Ruby 1.8.7-p302' under RubyInstallers. After installing, open the Ruby command prompt under Start and then check to see if Ruby is there by this instruction: 'ruby —version'
 
-Step 1 done. Now to install Compass. With the Command Prompt still open type: 'gem install compass`
+Step 1 done. Now install Compass. With the Command Prompt still open type: 'gem install compass'
 
 These steps will only be done once on each system you want to use Compass and Sass. Also since Compass will generate our CSS, we don't need to install this on environments like Production.
 
 Now for the big finale:
 
-1) we will setup a configuration file
-2) install Blueprint for a project, and
-3) start a watcher (this will automate the compiling of our css).
+1) We will setup a configuration file
+2) Install Blueprint for a project, and
+3) Start a watcher (this will automate the compiling of our css).
 
 Here are the steps in detail:
 
@@ -86,7 +86,7 @@ environment = :development
 output_style = :compressed
 ```
 
-The lines you may need to modify are the css\_dir, images\_dir, and javascript\_dir to match your folder structure. Notice it is a relative path from the location of config.rb file http\_stylesheets\_path, http\_javascripts\_path, and http\_images\_path are the url path to these folders.
+The lines you may need to modify are the css_dir, images_dir, and javascript_dir to match your folder structure. Notice it is a relative path from the location of config.rb file http_stylesheets_path, http_javascripts_path, and http_images_path are the url path to these folders.
 
 In the Command Prompt type in the path to your webroot and the Sass folder you created like "C:\\JRun4\\servers\\cfwheels\\cfusion.ear\\cfusion.war\\Sass".
 
@@ -96,11 +96,11 @@ Drop down one directory in your command prompt, so you are in your webroot and t
 
 Check your editor, you will need to refresh in Eclipse. You should see a '/Sass/src/' folder in your Sass folder. This is where you will be creating the Sass for your CSS. Also created are some compiled CSS files in your '/stylesheet/' location. Lets first check out the 'scss' files used to generate the stylesheets then the actual CSS.
 
-In '/Sass/src/' you'll see a 'partials' folder. This is exactly like Wheels partials with even the naming convention beginning with underscore '_`.
+In '/Sass/src/' you'll see a 'partials' folder. This is exactly like Wheels partials with even the naming convention beginning with underscore '_'.
 
 ### A Few Sass Examples
 
-Were not focusing on CSS development, so here are a few styles you can copy & paste and modify to your hearts content:
+Were not focusing on CSS development, so here are a few styles you can copy & paste and modify to your heart's content:
 
 ```sass
 $bgColor: #AAA;
@@ -168,11 +168,11 @@ We've created about a dozen view templates between our different models. We *cou
 
 The 'styleSheetLinkTag' would find the Sass file we just wrote. That's a lame job, imagine if we had 100 view templates. What if we want to change the name of the stylesheet later? Ugh.
 
-Wheels and ColdFusion both emphasize the idea of D.R.Y. 'Don't Repeat Yourself`. In the area of view templates, we can achieve this by creating a **layout**. A layout is a special view template that wraps other views. Look in your navigation pane for '/views/layout.cfm`, open that file. In this layout we'll put the view code that we want to render for every view template in the application. This code will go between the 'head' tags.
+Wheels and ColdFusion both emphasize the idea of D.R.Y. 'Don't Repeat Yourself'. In the area of view templates, we can achieve this by creating a **layout**. A layout is a special view template that wraps other views. Look in your navigation pane for '/views/layout.cfm', open that file. In this layout we'll put the view code that we want to render for every view template in the application. This code will go between the 'head' tags.
 
 ```cfm
 #styleSheetLinkTag("screen,ie,style")#
 #styleSheetLinkTag(source="print", media="print")#
 ```
 
-Now refresh your article listing page and you should see the styles take effect. Whatever code is in the individual view template gets inserted into the layout where you see the 'includeContent()`. Using layouts makes it easy to add site-wide elements like navigation, sidebars, and so forth.
+Now refresh your article listing page and you should see the styles take effect. Whatever code is in the individual view template gets inserted into the layout where you see the 'includeContent()'. Using layouts makes it easy to add site-wide elements like navigation, sidebars, and so forth.
