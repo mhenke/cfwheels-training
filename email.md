@@ -1,4 +1,4 @@
-Hi all, I hope you’re excited for the upcoming class. As a reminder---
+Hi all, I hope you're excited for the upcoming class. As a reminder---
 
 Event: Introduction Into ColdFusion on Wheels
 
@@ -8,7 +8,7 @@ Location: XXXX
 [https://github.com/mhenke/cfwheels-training/blob/develop/schedule.textile](https://github.com/mhenke/cfwheels-training/blob/develop/schedule.textile)
 
 Preparations ============================ 
-The most important thing is figuring out your laptop situation. Make sure you can install programs and don’t forget your laptop charger! A machine running Windows is ideal, but we should be able to get things going on MacOS or Linux too.
+The most important thing is figuring out your laptop situation. Make sure you can install programs and don't forget your laptop charger! A machine running Windows is ideal, but we should be able to get things going on MacOS or Linux too.
 
 Preparation for JSBloggers Project ============================  
 [https://github.com/mhenke/cfwheels-training/blob/develop/00-c-preparation.textile](https://github.com/mhenke/cfwheels-training/blob/develop/00-c-preparation.textile)
