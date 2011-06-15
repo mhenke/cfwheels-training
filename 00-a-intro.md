@@ -1,9 +1,8 @@
 # JSBlogger
 
-In this project you’ll create a simple blog system and learn the  
-basics of ColdFusion on Wheels including:
+In this project you'll create a simple blog system and learn the basics of ColdFusion on Wheels including:
 
-- Models, Views, and Controllers ( MVC )  
+- Models, Views, and Controllers (MVC)  
 - Data Structures & Relationships  
 - Routing  
 - Migrations  
