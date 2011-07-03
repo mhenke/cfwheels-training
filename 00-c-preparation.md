@@ -34,16 +34,23 @@ There are a few extra steps of preparation when working with Wheels projects:
 
 #### Create JSBloggers Database
 
-* Select Start --> MySQL - MySQL 5.1 Server --> MySQL Command Line Client
-* Type your password then "create database jsbloggers;" and press return
+Mysql commands can span several lines. Do not forget to end your mysql command with a semicolon. In the command prompt type:
+
+* mysql -u root -p
+
+* mysql> CREATE DATABASE jsbloggers;
+* mysql> exit
 
 ### Add JSBloggers connection
 
 Add DataSource through the ColdFusion Administrator
 
+* Driver: MySQL (4/5)
 * Name: JSBloggers
-* Driver: MySQL
-* URL: jdbc:mysql://localhost:3306/
+* Database: JSBloggers
+* Server: localhost
+* User name
+* Password
 
 ## Client Tools
 

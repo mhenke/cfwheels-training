@@ -1,6 +1,6 @@
 ## I0: Up and Running
 
-Part of the reason ColdFusion on Wheels became popular quickly is it takes a lot of the hard work off your hands, and it's especially true in starting up a project. Wheels' practice the idea of "sensible defaults" and tries to, with a couple simple actions; create a working application ready for your customization.
+Part of the reason ColdFusion on Wheels became popular quickly is it takes a lot of the hard work off your hands, and it's especially true in starting up a project. Wheels practices the idea of "sensible defaults" and tries to, with a couple simple actions; create a working application ready for your customization.
 
 ### Setting the Stage
 
@@ -8,27 +8,27 @@ First we need to make sure everything is setup and installed. See the [Preparati
 
 With that done, we need to create new project in Eclipse. Open Eclipse and…
 
-- File --> New--> ColdFusion Project  
-**** Project Name: JSBlogger
-**** Uncheck Use Default Location in Project Location put "C:/JRun4/servers/cfwheels101" 
-**** Click Finish
+* File --> New--> ColdFusion Project  
+* Project Name: JSBlogger
+* Uncheck Use Default Location in Project Location put "C:/JRun4/servers/cfwheels101" 
+* Click Finish
 
 Eclipse will then create a ColdFusion project for you and automatically open the project.
 
-Using ColdFusion Builder's Server view, we can add our ColdFusion server. Open up the Servers view (Window - Show Views - Servers). In the Server view, click the add server icon. In the New ColdFusion Server Setup window set:
+Using ColdFusion Builder's Server view, we can add our ColdFusion server. Open up the Servers view (Window * Show Views * Servers). In the Server view, click the add server icon. In the New ColdFusion Server Setup window set:
 
-- Server Name: JSBloggers  
-- Application Server: Jrun  
-- Host Name: wheels.local 
-**** Select Is Local  
-- WebServer Port: 80  
-- Click Finish
+* Server Name: JSBloggers  
+* Application Server: Jrun  
+* Host Name: wheels.local 
+* Select Is Local  
+* WebServer Port: 80  
+* Click Finish
 
 You should then see the 'JSBloggers' server in the Servers view. If it isn't Running, please start it. Once it's started, try loading the address [[http://wheels.local/](http://wheels.local/)](http://wheels.local/). You should see Wheels' "Congratulations" page. Scroll down and the Wheels debugging section displays the Wheels version, CFML Engine version along with other useful information.
 
 We need to change the Wheels datasource convention. Wheels assumes our datasource connection is the folder name Wheels resides in but for our case it is not 'cfwheels101' but 'JSBloggers'. We could have easily named our ColdFusion server instance but I wanted to show how we can easily override a Wheels convention.
 
-Press Ctrl+Shift+R while in Eclipse. This is the Open Resource window. I use this a lot when coding in Eclipse. Sometimes I highlight a file name in code and press Ctrl+Shift+R, other times I type in the file name like we will do next. Type in 'settings.cfm', and select 'settings.cfm - /JSBloggers/config'. This will open that file for use and type in '<cfset set(dataSourceName="JSBloggers") /\>' to tell Wheels to use this as are datasource. Also add in '<cfset set(URLRewriting="Partial") /\>' to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers. To reload Wheels, you can add '?reload=true' to the url or click on the 'Reload' link in the Wheels debug section.
+Press Ctrl+Shift+R while in Eclipse. This is the Open Resource window. I use this a lot when coding in Eclipse. Sometimes I highlight a file name in code and press Ctrl+Shift+R, other times I type in the file name like we will do next. Type in 'settings.cfm', and select 'settings.cfm * /JSBloggers/config'. This will open that file for use and type in '<cfset set(dataSourceName="JSBloggers") /\>' to tell Wheels to use this as are datasource. Also add in '<cfset set(URLRewriting="Partial") /\>' to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers. To reload Wheels, you can add '?reload=true' to the url or click on the 'Reload' link in the Wheels debug section.
 
 Our blog will be centered on "articles," so we'll need a table in the database to store all the articles and a model to allow our Wheels app to work with that data.
 
@@ -42,12 +42,12 @@ Migrations are a convenient way for you to alter your database in a structured a
 
 Let's generate a "Create table" migration for our articles. In the browser select, DBMigration link in the Wheels debugging section and open it in a new tab (This will make switching between plugins and our code easier). And complete the page like:
 
-- Template: Create table  
-- Migration prefix: Timestamp (e.g. 20110406075307)  
-- Migration description: create articles table  
-- Click create
+* Template: Create table  
+* Migration prefix: Timestamp (e.g. 20110406075307)  
+* Migration description: create articles table  
+* Click create
 
-On the page, you should see text like 'The migration 20110406195353\create\articles\table.cfc file was created' showing the "create" was successful. Two new sections appear also on the page: **Migrate** and **Available migrations**. Under **Available migrations** you should see something like '20110406195353 - create\articles\table (create articles table) - not migrated'. This is saying a migration script exists but hasn't been run.
+On the page, you should see text like 'The migration 20110406195353\create\articles\table.cfc file was created' showing the "create" was successful. Two new sections appear also on the page: **Migrate** and **Available migrations**. Under **Available migrations** you should see something like '20110406195353 * create\articles\table (create articles table) * not migrated'. This is saying a migration script exists but hasn't been run.
 
 Let's open '/db/migrate/(some\time*stamp)*\create\articles*table.cfc' and take a look. Press 'ctrl-shift-r' again, and type '*create*' and select our newly created migration file. First please note the filename is our comment with underlines instead of spaces and a timestamp of when the migration was created. Migrations need to be ordered, so the timestamp serves to keep them in chronologic order.  
 
@@ -76,8 +76,8 @@ But first you might be wondering "What is 't.timestamps' doing there?". The gene
 
 Well, what kind of fields does our Article need to have? Since migrations make it easy to add or change columns later, we don't need to think of EVERYTHING right now, we just need a few to get us rolling. Here's a starter set:
 
-- 'title' (a string)  
-- 'body' (a "text")
+* 'title' (a string)  
+* 'body' (a "text")
 
 So add these into your 'up' so it looks like this:
 
@@ -114,7 +114,7 @@ In this case we had one migration to run and it should print some output like th
 ```cfm  
 Migrating from 0 up to 20110406195353.
 
--------- 20110406195353*create*articles\table------—-—  
+-------* 20110406195353*create*articles\table------—-—  
 Created table articles  
 ```
 
@@ -128,7 +128,7 @@ We'll use one of Wheels' plugins called Scaffolding to create the required file.
 
 We used the **Scaffold** plugin, telling it to create a 'model', and naming that model 'Article'. From that information, the plugin creates the following files:
 
-- '/models/Article.cfc' : The file will hold the model code
+* '/models/Article.cfc' : The file will hold the model code
 
 With this file in place we can start developing!
 
@@ -136,13 +136,13 @@ With this file in place we can start developing!
 
 Another awesome feature of working with Wheels is the 'ORM'. The 'ORM' stands for Object-relational mapping. It allows you to map objects in your application to records in your database tables. This can simplify your development process and even once an app is in production the 'ORM' makes it very easy to do modifications, searches, and other data operations. So let's create a 'controller' to do some simple interactions with our 'model'.
 
-- File --> New--> ColdFusion Component  
-- Source Location: /JSBloggers/controllers 
+* File --> New--> ColdFusion Component  
+* Source Location: /JSBloggers/controllers 
 
-**** By clicking Browse…  
-- Component Name: Examples  
-- Extends: Controller  
-- Click Finish
+* By clicking Browse…  
+* Component Name: Examples  
+* Extends: Controller  
+* Click Finish
 
 Our new component opened automatically and we'll add some code in between the 'cfcomponent' instructions. Let's try some experiments… To view our first experiment, we'll go to [http://wheels.local/index.cfm/examples/one:http://wheels.local/index.cfm/examples/one.Enter](http://wheels.local/index.cfm/examples/one:http://wheels.local/index.cfm/examples/one.Enter) each of these instructions and observe the results:
 
@@ -184,7 +184,7 @@ Back to the '<cfset article = model("article").new() /\>' instruction. The 'new(
 
 Now you'll see the 'findAll()' command gave you back an query object holding the one article we created and saved. Go ahead and **create 3 more sample articles** in one request under a method called "moreSamples".
 
-### Moving Towards a Web Interface - Setting up the Router
+### Moving Towards a Web Interface * Setting up the Router
 
 We've created a few articles through the Examples controller, but we really don't have a web application until we have a better web interface. Let's get that started. We said "Wheels uses an **MVC** architecture", and we've worked with the Model, now we need a Controller and View.
 
@@ -208,7 +208,7 @@ Type **article** for the Object name and select **Controller** for Type. We'll l
 
 The output shows that the generator created this file for you:
 
-- '/controllers/Articles.cfc.cfc': The controller file itself
+* '/controllers/Articles.cfc.cfc': The controller file itself
 
 Let's open up the controller file, '/controllers/Articles.cfc'. You'll see the **Scaffold** plugin generated a lot of code. It created these actions for us: 'index', 'show', 'new', 'edit', 'create', 'update', and 'delete'.
 
@@ -268,8 +268,8 @@ Listing articles
 
 CFML is a templating language that allows us to mix CFML into our HTML. There are only a few things to know about CFML:
 
-- An CFML clause starts with '<cf..\>' and ends with '</cf..\>'  
-- If the clause started with <!---@ and ends with @--->, the result of the code in between will be commented out (not ran)
-- If the clause started with '<cfoutput>@ and ends with '</cfoutput>', the result of the CFML code will be output in place of the instructions
+* An CFML clause starts with '<cf..\>' and ends with '</cf..\>'  
+* If the clause started with <!---@ and ends with @--->, the result of the code in between will be commented out (not ran)
+* If the clause started with '<cfoutput>@ and ends with '</cfoutput>', the result of the CFML code will be output in place of the instructions
 
 Save the file and refresh your web browser. You should see a listing of the articles you created in the Examples. We've got the start of a web application!
