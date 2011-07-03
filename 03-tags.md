@@ -23,10 +23,10 @@ Even if Wheels did have 'hasAndBelongsToMany', most of the time this isn't the b
 With those relationships in mind, let's design the new models:
 
 - Tag 
-**** 'name' A string  
+*'name' A string  
 - Tagging  
-**** 'tagid' Integer holding the foreign key of the related Tag
-**** 'articleid' Integer holding the foreign key of the related Article
+*'tagid' Integer holding the foreign key of the related Tag
+*'articleid' Integer holding the foreign key of the related Article
 
 Note there are no changes necessary to Article because the foreign key is stored in the Tagging model. So now let's generate these two models with the DBMigrations plugin:
 
@@ -160,7 +160,7 @@ Adding the text field will take place in the file '/views/articles/\form.cfm'. A
 #textFieldTag (name='newTag', label='New Tag')#
 ```
 
-This is the first time we used 'textFieldTag', it builds and returns a string containing a text field form control based on the supplied name. An Article doesn't have a property named 'newTag' — we made it up. In order for us to add a new tag, we need to add a method to the 'article.cfc' file like this:
+This is the first time we used 'textFieldTag', it builds and returns a string containing a text field form control based on the supplied name. An Article doesn't have a property named 'newTag' - we made it up. In order for us to add a new tag, we need to add a method to the 'article.cfc' file like this:
 
 ```cfm
 <cffunction name="newTag">  
@@ -190,7 +190,7 @@ Did it really work? It's hard to tell. Let's jump into the Examples and have a l
 </cffunction>
 ```
 
-I bet the Examples Seven reported that 'a.tags' had '0' tags — an empty query. So we didn't generate an error, but we didn't create any tags either.
+I bet the Examples Seven reported that 'a.tags' had '0' tags - an empty query. So we didn't generate an error, but we didn't create any tags either.
 
 We will need to call our 'newTag' method within our 'create' and 'update' actions by adding '<cfset newTag()/\>'.
 

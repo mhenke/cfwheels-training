@@ -12,7 +12,7 @@ First, we need to brainstorm what a comment **is**…what kinds of data does it 
 - It usually has an optional URL  
 - It has a body
 
-With that understanding, let's create a Comment model. Switch over to Eclipse and right click on the models folder, then select New —> File and enter "Comment.cfc" for File name. The file will be created and automatically open, then you can add this code to it:
+With that understanding, let's create a Comment model. Switch over to Eclipse and right click on the models folder, then select New -> File and enter "Comment.cfc" for File name. The file will be created and automatically open, then you can add this code to it:
 
 ```cfm
 <cfcomponent extends="Model" output="false">  
@@ -46,7 +46,7 @@ Once that's complete, go to the **DBMigrate** plugin and run the migration by cl
 
 The power of SQL databases is the ability to express relationships between elements of data. We can join together the information about an order with the information about a customer. Or in our case here, join together an article (in the articles table) with its comments (in the comments table). We do this by using foreign keys.
 
-Foreign keys are a way of marking one-to-one and one-to-many relationships. An article might have zero, five, or one hundred comments. But a comment only belongs to one article. These objects have a one-to-many relationship — one article connects to many comments.
+Foreign keys are a way of marking one-to-one and one-to-many relationships. An article might have zero, five, or one hundred comments. But a comment only belongs to one article. These objects have a one-to-many relationship - one article connects to many comments.
 
 Part of the big deal with Wheels is it makes working with these relationships very easy. When we created the migration for comments we started with an 'integer' field named 'articleid'. The Wheels convention is, for a one-to-many relationship, the objects on the "many" end should have a foreign key referencing the "one" object.
   
@@ -89,7 +89,7 @@ Let's use the '/controllers/Examples.cfc' to test how this relationship works in
 </cffunction>
 ```
 
-When you called the 'comments' method on object 'a', it gave you back a blank array because that article doesn't have any comments. When you executed 'model("comment").new()' it gave you back a blank Comment object. But, if you look closely, when you did 'a.newComment()' the comment object you got back wasn't quite blank — it has the 'articleid' field already filled in with the ID number of article 'a'.
+When you called the 'comments' method on object 'a', it gave you back a blank array because that article doesn't have any comments. When you executed 'model("comment").new()' it gave you back a blank Comment object. But, if you look closely, when you did 'a.newComment()' the comment object you got back wasn't quite blank - it has the 'articleid' field already filled in with the ID number of article 'a'.
 
 Try creating a few comments for that article like this:
 
@@ -235,7 +235,7 @@ The first action we're interested in first is 'create'. You can cheat by looking
 <cfset redirectTo(controller="article",action="index")>
 ```
 
-Test out your form to create another comment now — and it should work!
+Test out your form to create another comment now - and it should work!
 
 #### Comment Validation
 

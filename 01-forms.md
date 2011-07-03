@@ -37,7 +37,7 @@ Refresh your browser and you should just see the heading "Create a New Article".
 
 ### Writing a Form
 
-It's not very impressive so far — we need to add a form to the 'new.cfm' so the user can enter in the article title and body.
+It's not very impressive so far - we need to add a form to the 'new.cfm' so the user can enter in the article title and body.
 
 Because we're following the RESTful conventions, Wheels can take care of many of the details. Inside the 'new.cfm', enter this code below your header:
 
@@ -58,9 +58,9 @@ What is all that? Let's look at it piece by piece:
 - 'startFormTag' is a Wheels helper instruction which takes an action parameter, in this case 'create', The first line basically says "Make an opening form tag with the name of the action included in the URL."  
 - The 'textField' helper creates a single-line text field control
 
-**** The 'objectName' parameter which says for this input use the object named 'article' to build the form control
-**** The 'property' parameter create the name of the property to use in the form control 
-**** The 'label' parameter creates an HTML label for the form control, this is good usability practice and will have some other benefits for us later  
+*The 'objectName' parameter which says for this input use the object named 'article' to build the form control
+*The 'property' parameter create the name of the property to use in the form control 
+*The 'label' parameter creates an HTML label for the form control, this is good usability practice and will have some other benefits for us later  
 
 - The 'textArea' helper creates a text area field form control  
 - The 'submitTag' helper creates a submit button labeled "Save  changes"  
@@ -86,7 +86,7 @@ Line 3 in viewsarticlesnew.cfm
 
 What's Wheels trying to tell us? In our 'new.cfm' on line #3 there was an error about "Wheels.ObjectNotFound". Somewhere in line #4 we're working with an object that doesn't exist.
 
-And since there's only one object in line #3, it makes it pretty obvious — the problem is we started talking about a thing named 'article' without ever creating that thing. Wheels uses some of the **reflection** techniques we talked about earlier in order to setup the form. Remember in the 'Examples.cfc' when we called 'Article.new' to create a new object? Wheels wants to do the same thing, but we need to create the blank object for it.
+And since there's only one object in line #3, it makes it pretty obvious - the problem is we started talking about a thing named 'article' without ever creating that thing. Wheels uses some of the **reflection** techniques we talked about earlier in order to setup the form. Remember in the 'Examples.cfc' when we called 'Article.new' to create a new object? Wheels wants to do the same thing, but we need to create the blank object for it.
 
 Go into your 'Articles.cfc', and **inside** the 'new' method, add this line:
 
@@ -207,7 +207,7 @@ Look at your 'index.cfm' and change the whole @ <li>@ segment so it looks like t
 </i>
 ```
 
-The first link we added, for edit, is pretty similar to what we've done before — creating a link with the text "edit" pointing to the address 'edit', which is defined by the router, and editing the key named 'id'.
+The first link we added, for edit, is pretty similar to what we've done before - creating a link with the text "edit" pointing to the address 'edit', which is defined by the router, and editing the key named 'id'.
 
 The second one is a little more complex. So this link will have the text "remove", will point to the 'delete'. We've also added a 'confirm' parameter. If a link has a 'confirm', then Wheels will generate some Javascript which will pop up a box when the link is clicked that contains the text in the 'confirm'. Here we're setting the message to check that the user wants to remove the article and including the article's title in the message.
 
@@ -315,7 +315,7 @@ This outputs the value stored in the 'flash' object with the key 'message'. If y
 
 Then go to your articles list, create another sample article, and when you click create you should see the flash message at the top of your view.
 
-Here's something cool about how Wheels handles the 'flash' — hit your browser's REFRESH button while looking at the articles list. See how the flash disappears? Once you display the message in a flash Wheels clears it out. That's why it's perfect for status messages like this.
+Here's something cool about how Wheels handles the 'flash' - hit your browser's REFRESH button while looking at the articles list. See how the flash disappears? Once you display the message in a flash Wheels clears it out. That's why it's perfect for status messages like this.
 
 Similarly, add a flash message into your 'delete' method and confirm that it shows up when an article is removed. Then add one to your 'update' method that'll display when an article is edited.
 

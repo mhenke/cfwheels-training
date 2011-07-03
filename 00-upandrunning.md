@@ -17,30 +17,30 @@ Eclipse will then create a ColdFusion project for you and automatically open the
 
 We need to change the Wheels datasource convention. Wheels assumes our datasource connection is the folder name Wheels resides in but for our case it is not 'cfwheels101' but 'JSBloggers'. We could have easily named our ColdFusion server instance but I wanted to show how we can easily override a Wheels convention.
 
-Press **Ctrl+Shift+R** while in Eclipse. This is the Open Resource window. I use this a lot when coding in Eclipse. Sometimes I highlight a file name in code and press **Ctrl+Shift+R**, other times I type in the file name like we will do next. Type in 'settings.cfm', and select 'settings.cfm - /JSBloggers/config'. This will open that file for use and type in ```<cfset set(dataSourceName="JSBloggers") /\>``` to tell Wheels to use this as are datasource. Also add in ```<cfset set(URLRewriting="Partial") /\>``` to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers. To reload Wheels, you can add ```?reload=true``` to the url or click on the 'Reload' link in the Wheels debug section.
+Press **Ctrl+Shift+R** while in Eclipse. This is the Open Resource window. I use this a lot when coding in Eclipse. Sometimes I highlight a file name in code and press **Ctrl+Shift+R**, other times I type in the file name like we will do next. Type in 'settings.cfm', and select 'settings.cfm - /JSBloggers/config'. This will open that file for us. In the file at the bottom, type ```<cfset set(dataSourceName="JSBloggers") /\>``` to tell Wheels to use this as are datasource. Also add ```<cfset set(URLRewriting="Partial") /\>``` to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers. To reload Wheels, you can add ```?reload=true``` to the url or click on the "Reload" link in the Wheels debug section.
 
-Our blog will be centered on "articles" so we'll need a table in the database to store all the articles and a model to allow our Wheels app to work with that data.
+Our blog will be centered on "articles" so we'll need a table in the database to store all the articles and a model to allow our Wheels app to work with that table.
 
 ### Working with the Database
 
-Wheels can uses migration files to perform modifications to the database with the **DBMigrate** plugin. Almost any modification you can make to a DB can be done through a migration. The killer feature about Wheels migrations is they're generally database agnostic. When developing applications a person might usually use MySQL as we are in this tutorial, but when deploying to their production server it is running PostgreSQL. Many others choose Microsoft SQL Server. It doesn't matter — the same migrations will work on all of them! This is an example of how Wheels takes some of the painful work off your hands. You write your migrations once, and then run them against almost any database.
+Wheels can uses migration files to perform modifications to the database with the **DBMigrate** plugin. Almost any modification you can make to a DB can be done through a migration. The killer feature about Wheels migrations is they're generally database agnostic. When developing applications a person might use MySQL as we are in this tutorial, but when deploying to their production server it is running Oracle. Many others choose Microsoft SQL Server. It doesn't matter - the same migrations will work on all of them! This is an example of how Wheels takes some of the painful work off your hands. You write your migrations once, and then run them against almost any database.
 
 #### What is a migration?
 
-Migrations are a convenient way for you to alter your database in a structured and organized manner. Migrations are meant to be **symmetric**. Whatever a migration changes inside the 'up' method should be **undone** with the 'down' method. Frequently in development you'll think you want the database to look one way, and then realize you need something different. You can create a migration to make your changes to the DB, start building, and then revert as necessary.
+Migrations are a convenient way for you to alter your database in a structured and organized manner. Migrations are meant to be **symmetric**. Whatever a migration changes inside the "up" method should be **undone** with the "down" method. Frequently in development you'll think you want the database to look one way, and then realize you need something different. You can create a migration to make your changes to the database, start building, and then revert as necessary.
 
-Let's generate a "Create table" migration for our articles. In the browser select, DBMigration link in the Wheels debugging section and open it in a new tab (This will make switching between plugins and our code easier). And complete the page like:
+Let's generate a "Create table" migration for our articles table. In the browser select, DBMigration link in the Wheels debugging section and open it in a new tab (This will make switching between plugins and our code easier). And complete the page like:
 
 * Template: Create table  
 * Migration prefix: Timestamp (e.g. 20110406075307)  
 * Migration description: create articles table  
 * Click create
 
-On the page, you should see text like 'The migration 20110406195353\create\articles\table.cfc file was created' showing the "create" was successful. Two new sections appear also on the page: **Migrate** and **Available migrations**. Under **Available migrations** you should see something like '20110406195353 **create\articles\table (create articles table)** not migrated'. This is saying a migration script exists but hasn't been run.
+On the page, you should see text like "The migration 20110406195353\create\articles\table.cfc file was created" showing the **create** was successful. Two new sections appear also on the page: **Migrate** and **Available migrations**. Under **Available migrations** you should see something like '20110406195353 **create\articles\table (create articles table)** not migrated'. This is saying a migration script exists but hasn't been run.
 
-Let's open '/db/migrate/(some\time*stamp)*\create\articles*table.cfc' and take a look. Press **Ctrl+Shift+R** again, and type '*create*' and select our newly created migration file. First please note the filename is our comment with underlines instead of spaces and a timestamp of when the migration was created. Migrations need to be ordered, so the timestamp serves to keep them in chronologic order.  
+Let's open '/db/migrate/(some\time*stamp)*\create\articles*table.cfc' and take a look. Press **Ctrl+Shift+R** again, and type '*create' and select our newly created migration file. The astrick is a wildcard in the Resource view.First please note the filename is our comment with underlines instead of spaces and a timestamp of when the migration was created. Migrations need to be ordered, so the timestamp serves to keep them in chronologic order.  
 
-Inside the file, you'll see two methods: 'up' and 'down'.
+Inside the file, you'll see two methods: "up" and "down".
 
 ```cfm
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="create articles table">  
@@ -59,16 +59,16 @@ Inside the file, you'll see two methods: 'up' and 'down'.
 </cfcomponent>
 ```
 
-Inside the 'up' method you'll see the generator has placed a call to the 'createTable' method, passed '[tableName]' as a parameter, and created a block with the variable 't' referencing the table that's created. Let's change '[tableName]' to '[articles]'. We can tell 't' what kind of columns we want in the 'articles' table.
+Inside the "up" method you'll see the generator has placed a call to the 'createTable' method, passed '[tableName]' as a parameter, and created a block with the variable 't' referencing the table that's created. Let's change '[tableName]' to '[articles]'. We can tell 't' what kind of columns we want in the "articles" table.
 
-But first you might be wondering "What is 't.timestamps' doing there?". The generator inserted that line. It will create three columns inside our table titled 'createdat' for when created, 'updatedat' for last updated, and 'deletedat' for soft deletes. Wheels will manage these columns for us, so when an article is created it's 'createdat' and 'updatedat' are automatically set. Each time we make a change to the article, the 'updatedat' will automatically be …uhhh… updated. Very handy.
+But first you might be wondering "**What is 't.timestamps' doing there?**". The generator inserted that line. It will create three columns inside our table titled **createdat** for when created, **updatedat** for last updated, and **deletedat** for soft deletes. Wheels will manage these columns for us, so when an article is created it's **createdat** and **updatedat** are automatically set. Each time we make a change to the article, the **updatedat** will automatically be …uhhh… updated. Very handy.
 
-Well, what kind of fields does our Article need to have? Since migrations make it easy to add or change columns later, we don't need to think of EVERYTHING right now, we just need a few to get us rolling. Here's a starter set:
+Well, what kind of fields does our Article need to have? Since migrations make it easy to add or change columns later, we don't need to think of **EVERYTHING** right now, we just need a few to get us rolling. Here's a starter set:
 
-* 'title' (a string)  
-* 'body' (a "text")
+* title (a "string")  
+* body (a "text")
 
-So add these into your 'up' so it looks like this:
+So add these into your "up" so it looks like this:
 
 ```cfm
 <cffunction name="up">  
@@ -82,34 +82,34 @@ So add these into your 'up' so it looks like this:
 </cffunction>
 ```
 
-That's it! You might be wondering, what is the "text" type? This is an example of relying on the Wheels database adapters to make the right call. For some DBs, large text fields are stored as 'varchar', while other's like Postgres use a 'text' type. The database adapter will figure out the best choice for us depending on the configured database — we don't have to worry about it.
+That's it! You might be wondering, what is the "text" type? This is an example of relying on the Wheels database adapters to make the right call. For some databases, large text fields are stored as "varchar", while other's like Postgres use a "text" type. The database adapter will figure out the best choice for us depending on the configured database - we don't have to worry about it.
 
-Now our 'up' migration is done. You might wonder, what about the 'down'? Didn't I say migrations need to be symmetric? If we added something to the 'up' it is **generally** the case we need to undo the same change in the 'down'. However, when the migration is creating a table, the 'down' can just drop that table regardless of what columns are inside of it. That's what the generator has setup for us here, where it says 'dropTable('[tableName]');' replace '[tableName]' with 'articles'.
+Now our "up" migration is done. You might wonder, what about the "down"? Didn't I say migrations need to be symmetric? If we added something to the "up" it is **generally** the case we need to undo the same change in the "down". However, when the migration is creating a table, the "down" can just drop that table regardless of what columns are inside of it. That's what the generator has setup for us here, where it says 'dropTable('[tableName]');' replace '[tableName]' with "articles".
 
 ```cfm
 <cffunction name="down">  
  <cfscript>  
- dropTable ('articles');  
+ dropTable ('articles');
  </cfscript>  
 </cffunction>
 ```
 
-Save that migration cfc file, switch over to your browser, and click 'go' under the **Migrate** section:
+Save that migration cfc file, switch over to your browser, and click "go" under the **Migrate** section:
 
-The 'All non-migrated' option finds all migrations in the '/db/migrate/' folder, determines which migrations have and have not been run yet, and then runs them. Pretty much it says "look in your set of cfcs for the database in '/db/migrate/' and run the migrations not yet ran."
+The "All non-migrated" option finds all migrations in the "/db/migrate/" folder, determines which migrations have and have not been run yet, and then runs them. Pretty much it says "**look in your set of cfcs for the database in '/db/migrate/'** and _run the migrations not yet ran_."
 
 In this case we had one migration to run and it should print some output like this to your browser under **Migration Results**:
 
 ```cfm  
 Migrating from 0 up to 20110406195353.
 
--------* 20110406195353*create*articles\table------—-—  
+-------* 20110406195353*create*articles\table---------  
 Created table articles  
 ```
 
 The migration page tells you the plugin ran the migration. As I said before, **DBMigrate** keeps track of which migrations **have** and **have not** been run. Try running 'All non-migrated' again now, and see what happens.
 
-We've now created the 'articles' table in the database and can start working on our 'Article' model. We can view the 'SQL' under '/db/sql'.
+We've now created the "articles" table in the database and can start working on our 'Article' model. We can view the 'SQL' under '/db/sql'.
 
 ### Creating the Article Model
 
@@ -147,7 +147,7 @@ Our new component opened automatically and we'll add some code in between the 'c
 </cffunction>
 ```
 
-The first line was to demonstrate we can do anything in our 'controller' we previously did during 'CFML in 100 minutes'. The third line referenced the 'Article' model and called the 'findAll' method which returns a query of all articles in the database — so far an empty result. The fifth line created a new article object and returns it. The object is not saved to the database; it only exists in memory. Property names and values can be passed in either using named arguments or as a structure to the properties argument.
+The first line was to demonstrate we can do anything in our 'controller' we previously did during 'CFML in 100 minutes'. The third line referenced the 'Article' model and called the 'findAll' method which returns a query of all articles in the database - so far an empty result. The fifth line created a new article object and returns it. The object is not saved to the database; it only exists in memory. Property names and values can be passed in either using named arguments or as a structure to the properties argument.
 
 All the information about the 'Article' model is in the file '/models/Article.cfc', so let's open that now.
 
@@ -199,7 +199,7 @@ The output shows that the generator created this file for you:
 
 * '/controllers/Articles.cfc.cfc': The controller file itself
 
-Let's open up the controller file, '/controllers/Articles.cfc'. You'll see the **Scaffold** plugin generated a lot of code. It created these actions for us: 'index', 'show', 'new', 'edit', 'create', 'update', and 'delete'.
+Let's open up the controller file, '/controllers/Articles.cfc'. You'll see the **Scaffold** plugin generated a lot of code. It created these actions for us: "index", 'show', 'new', 'edit', 'create', 'update', and 'delete'.
 
 Any additional code we add to the controller must go **between** the beginning and ending 'cfcomponent' instructions, outside any 'cffunction' instructions.
 
@@ -207,7 +207,7 @@ We have a working controller for CRUD (create, read, update, and delete) but we 
 
 ### Defining the Index Action
 
-The first action we want to talk about is the "index". This is what the app will send back when a user requests 'http://wheels.local/index.cfm/Articles/' — following the RESTful conventions, this should be a list of the articles. So when the router sees this request come in, it tries to call the 'index' action inside 'Articles' controller. It goes to the 'index' action which gets all our articles:
+The first action we want to talk about is the "index". This is what the app will send back when a user requests 'http://wheels.local/index.cfm/Articles/' - following the RESTful conventions, this should be a list of the articles. So when the router sees this request come in, it tries to call the "index" action inside "articles" controller. It goes to the "index" action which gets all our articles:
 
 ```cfm
 <cffunction name="index">  
@@ -217,9 +217,9 @@ The first action we want to talk about is the "index". This is what the app will
 
 #### Passing Action variables to Views
 
-What scope is 'articles'? Usually in a 'cfc' we will 'var' scope variables to stop data issues. The 'var' instruction marks the variable as a "local variable". We want the list of articles to be accessible from both the controller and the view we're about to create so in order for 'articles' to be visible in both places it has to be in the variable scope. If we had named it 'var articles', the local variable would only be available within the 'index' action of the controller.
+What scope is "articles"? Usually in a 'cfc' we will 'var' scope variables to stop data issues. The 'var' instruction marks the variable as a "local variable". We want the list of articles to be accessible from both the controller and the view we're about to create so in order for "articles" to be visible in both places it has to be in the variable scope. If we had named it 'var articles', the local variable would only be available within the "index" action of the controller.
 
-Let's load 'http://wheels.local/'. You'll notice our updated default route is mapping the code to the 'index' action of the 'Articles' controller but we are getting an error since the view doesn't exist.
+Let's load 'http://wheels.local/'. You'll notice our updated default route is mapping the code to the "index" action of the "articles" controller but we are getting an error since the view doesn't exist.
 
 ```cfm  
 Wheels.ViewNotFound  
@@ -232,9 +232,9 @@ Create a file named index.cfm in the views/articles directory (create the direct
 
 ### Creating the Index View
 
-The error message is pretty helpful. It tells us Wheels is looking for a template in '/views/Articles/' but it can't find one named 'index.cfm'. Wheels has **assumed** our 'index' action in the controller should have a corresponding 'index.cfm' view template in the views folder. We didn't have to put any code in the controller to tell it what view we wanted, Wheels figures it out.
+The error message is pretty helpful. It tells us Wheels is looking for a template in '/views/Articles/' but it can't find one named 'index.cfm'. Wheels has **assumed** our "index" action in the controller should have a corresponding 'index.cfm' view template in the views folder. We didn't have to put any code in the controller to tell it what view we wanted, Wheels figures it out.
 
-Let's create that view template now. In the left pane of your Eclipse window, expand the 'JSBloggers' project so you can see 'views', then expand 'views'. Right-click on the 'views' folder, select 'New' then 'Folder' and, in the popup, name the folder 'Articles'. Next repeat the process, but select 'File' and, in the popup, name the file 'index.cfm'.
+Let's create that view template now. In the left pane of your Eclipse window, expand the 'JSBloggers' project so you can see 'views', then expand 'views'. Right-click on the 'views' folder, select 'New' then 'Folder' and, in the popup, name the folder "articles". Next repeat the process, but select 'File' and, in the popup, name the file 'index.cfm'.
 
 Now you're looking at a blank file. Enter in this view template code which is a mix of HTML and what are called CFML tags:
 

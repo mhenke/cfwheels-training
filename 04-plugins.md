@@ -57,7 +57,7 @@ Sass makes CSS fun again. Sass is an extension of CSS3, adding nested rules, var
 
 ### Installing Sass and Compass
 
-First, you will need to grab and install Ruby. And under [Ruby on Windows](http://www.ruby-lang.org/en/downloads/) said our first option was using the [RubyInstaller](http://rubyinstaller.org/downloads/) so I went there and downloaded 'Ruby 1.8.7-p302' under RubyInstallers. After installing, open the Ruby command prompt under Start and then check to see if Ruby is there by this instruction: 'ruby —version'
+First, you will need to grab and install Ruby. And under [Ruby on Windows](http://www.ruby-lang.org/en/downloads/) said our first option was using the [RubyInstaller](http://rubyinstaller.org/downloads/) so I went there and downloaded 'Ruby 1.8.7-p302' under RubyInstallers. After installing, open the Ruby command prompt under Start and then check to see if Ruby is there by this instruction: 'ruby -version'
 
 Step 1 done. Now install Compass. With the Command Prompt still open type: 'gem install compass'
 
