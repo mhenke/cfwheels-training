@@ -15,20 +15,9 @@ With that done, we need to create new project in Eclipse. Open Eclipse and…
 
 Eclipse will then create a ColdFusion project for you and automatically open the project.
 
-Using ColdFusion Builder's Server view, we can add our ColdFusion server. Open up the Servers view (Window * Show Views * Servers). In the Server view, click the add server icon. In the New ColdFusion Server Setup window set:
-
-* Server Name: JSBloggers  
-* Application Server: Jrun  
-* Host Name: wheels.local 
-* Select Is Local  
-* WebServer Port: 80  
-* Click Finish
-
-You should then see the 'JSBloggers' server in the Servers view. If it isn't Running, please start it. Once it's started, try loading the address [[http://wheels.local/](http://wheels.local/)](http://wheels.local/). You should see Wheels' "Congratulations" page. Scroll down and the Wheels debugging section displays the Wheels version, CFML Engine version along with other useful information.
-
 We need to change the Wheels datasource convention. Wheels assumes our datasource connection is the folder name Wheels resides in but for our case it is not 'cfwheels101' but 'JSBloggers'. We could have easily named our ColdFusion server instance but I wanted to show how we can easily override a Wheels convention.
 
-Press Ctrl+Shift+R while in Eclipse. This is the Open Resource window. I use this a lot when coding in Eclipse. Sometimes I highlight a file name in code and press Ctrl+Shift+R, other times I type in the file name like we will do next. Type in 'settings.cfm', and select 'settings.cfm * /JSBloggers/config'. This will open that file for use and type in '<cfset set(dataSourceName="JSBloggers") /\>' to tell Wheels to use this as are datasource. Also add in '<cfset set(URLRewriting="Partial") /\>' to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers. To reload Wheels, you can add '?reload=true' to the url or click on the 'Reload' link in the Wheels debug section.
+Press **Ctrl+Shift+R** while in Eclipse. This is the Open Resource window. I use this a lot when coding in Eclipse. Sometimes I highlight a file name in code and press Ctrl+Shift+R, other times I type in the file name like we will do next. Type in 'settings.cfm', and select 'settings.cfm * /JSBloggers/config'. This will open that file for use and type in '<cfset set(dataSourceName="JSBloggers") /\>' to tell Wheels to use this as are datasource. Also add in '<cfset set(URLRewriting="Partial") /\>' to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers. To reload Wheels, you can add '?reload=true' to the url or click on the 'Reload' link in the Wheels debug section.
 
 Our blog will be centered on "articles," so we'll need a table in the database to store all the articles and a model to allow our Wheels app to work with that data.
 
