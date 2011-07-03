@@ -109,7 +109,7 @@ Created table articles
 
 The migration page tells you the plugin ran the migration. As I said before, **DBMigrate** keeps track of which migrations **have** and **have not** been run. Try running 'All non-migrated' again now, and see what happens.
 
-We've now created the "articles" table in the database and can start working on our 'Article' model. We can view the 'SQL' under '/db/sql'.
+We've now created the "articles" table in the database and can start working on our **Article** model. We can view the **SQL** under **/db/sql**.
 
 ### Creating the Article Model
 
