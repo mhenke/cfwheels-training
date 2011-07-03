@@ -17,9 +17,9 @@ Eclipse will then create a ColdFusion project for you and automatically open the
 
 We need to change the Wheels datasource convention. Wheels assumes our datasource connection is the folder name Wheels resides in but for our case it is not 'cfwheels101' but 'JSBloggers'. We could have easily named our ColdFusion server instance but I wanted to show how we can easily override a Wheels convention.
 
-Press **Ctrl+Shift+R** while in Eclipse. This is the Open Resource window. I use this a lot when coding in Eclipse. Sometimes I highlight a file name in code and press Ctrl+Shift+R, other times I type in the file name like we will do next. Type in 'settings.cfm', and select 'settings.cfm - /JSBloggers/config'. This will open that file for use and type in ```cfm <cfset set(dataSourceName="JSBloggers") /\>``` to tell Wheels to use this as are datasource. Also add in ```cfm <cfset set(URLRewriting="Partial") /\>``` to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers. To reload Wheels, you can add '?reload=true' to the url or click on the 'Reload' link in the Wheels debug section.
+Press **Ctrl+Shift+R** while in Eclipse. This is the Open Resource window. I use this a lot when coding in Eclipse. Sometimes I highlight a file name in code and press **Ctrl+Shift+R**, other times I type in the file name like we will do next. Type in 'settings.cfm', and select 'settings.cfm - /JSBloggers/config'. This will open that file for use and type in ```<cfset set(dataSourceName="JSBloggers") /\>``` to tell Wheels to use this as are datasource. Also add in ```<cfset set(URLRewriting="Partial") /\>``` to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers. To reload Wheels, you can add ```?reload=true``` to the url or click on the 'Reload' link in the Wheels debug section.
 
-Our blog will be centered on "articles," so we'll need a table in the database to store all the articles and a model to allow our Wheels app to work with that data.
+Our blog will be centered on "articles" so we'll need a table in the database to store all the articles and a model to allow our Wheels app to work with that data.
 
 ### Working with the Database
 
@@ -38,7 +38,7 @@ Let's generate a "Create table" migration for our articles. In the browser selec
 
 On the page, you should see text like 'The migration 20110406195353\create\articles\table.cfc file was created' showing the "create" was successful. Two new sections appear also on the page: **Migrate** and **Available migrations**. Under **Available migrations** you should see something like '20110406195353 * create\articles\table (create articles table) * not migrated'. This is saying a migration script exists but hasn't been run.
 
-Let's open '/db/migrate/(some\time*stamp)*\create\articles*table.cfc' and take a look. Press 'ctrl-shift-r' again, and type '*create*' and select our newly created migration file. First please note the filename is our comment with underlines instead of spaces and a timestamp of when the migration was created. Migrations need to be ordered, so the timestamp serves to keep them in chronologic order.  
+Let's open '/db/migrate/(some\time*stamp)*\create\articles*table.cfc' and take a look. Press **Ctrl+Shift+R** again, and type '*create*' and select our newly created migration file. First please note the filename is our comment with underlines instead of spaces and a timestamp of when the migration was created. Migrations need to be ordered, so the timestamp serves to keep them in chronologic order.  
 
 Inside the file, you'll see two methods: 'up' and 'down'.
 
