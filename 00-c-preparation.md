@@ -51,7 +51,7 @@ Add DataSource through the ColdFusion Administrator
 
 #### Windows and CFBuilder
 
-* Download and install as standalone [http://www.adobe.com/products/coldfusion/cfbuilder/features/ (http://www.adobe.com/products/coldfusion/cfbuilder/features/)
+* Download and install as standalone http://www.adobe.com/products/coldfusion/cfbuilder/features/
 
 ## Setup Git and Github
 
