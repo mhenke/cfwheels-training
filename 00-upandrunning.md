@@ -36,7 +36,7 @@ Let's generate a "Create table" migration for our articles. In the browser selec
 * Migration description: create articles table  
 * Click create
 
-On the page, you should see text like 'The migration 20110406195353\create\articles\table.cfc file was created' showing the "create" was successful. Two new sections appear also on the page: **Migrate** and **Available migrations**. Under **Available migrations** you should see something like '20110406195353 * create\articles\table (create articles table) * not migrated'. This is saying a migration script exists but hasn't been run.
+On the page, you should see text like 'The migration 20110406195353\create\articles\table.cfc file was created' showing the "create" was successful. Two new sections appear also on the page: **Migrate** and **Available migrations**. Under **Available migrations** you should see something like '20110406195353 **create\articles\table (create articles table)** not migrated'. This is saying a migration script exists but hasn't been run.
 
 Let's open '/db/migrate/(some\time*stamp)*\create\articles*table.cfc' and take a look. Press **Ctrl+Shift+R** again, and type '*create*' and select our newly created migration file. First please note the filename is our comment with underlines instead of spaces and a timestamp of when the migration was created. Migrations need to be ordered, so the timestamp serves to keep them in chronologic order.  
 
