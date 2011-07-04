@@ -133,7 +133,7 @@ Another awesome feature of working with Wheels is the "ORM". The "ORM" stands fo
 * Extends: Controller  
 * Click Finish
 
-Our new component opened automatically and we'll add some code in between the "cfcomponent" instructions. Let's try some experiments… To view our first experiment, we'll go to [http://wheels.local/index.cfm/examples/one:http://wheels.local/index.cfm/examples/one.Enter](http://wheels.local/index.cfm/examples/one:http://wheels.local/index.cfm/examples/one.Enter) each of these instructions and observe the results:
+Our new component opened automatically and we'll add some code in between the ```cfcomponent``` instructions. Let's try some experiments… To view our first experiment, we'll go to [http://wheels.local/index.cfm/examples/one:http://wheels.local/index.cfm/examples/one.Enter](http://wheels.local/index.cfm/examples/one:http://wheels.local/index.cfm/examples/one.Enter) each of these instructions and observe the results:
 
 ```cfm
 <cffunction name="one">  
@@ -147,9 +147,9 @@ Our new component opened automatically and we'll add some code in between the "c
 </cffunction>
 ```
 
-The first line was to demonstrate we can do anything in our "controller" we previously did during "CFML in 100 minutes". The third line referenced the "Article" model and called the "findAll" method which returns a query of all articles in the database * so far an empty result. The fifth line created a new article object and returns it. The object is not saved to the database; it only exists in memory. Property names and values can be passed in either using named arguments or as a structure to the properties argument.
+The first line was to demonstrate we can do anything in our "controller" we previously did during "CFML in 100 minutes". The third line referenced the **Article** model and called the ```findAll``` method which returns a query of all articles in the database * so far an empty result. The fifth line created a new article object and returns it. The object is not saved to the database; it only exists in memory. Property names and values can be passed in either using named arguments or as a structure to the properties argument.
 
-All the information about the "Article" model is in the file _/models/Article.cfc_, so let's open that now.
+All the information about the **Article** model is in the file _/models/Article.cfc_, so let's open that now.
 
 Not very impressive, right? There are no attributes defined inside the model, so how does Wheels know an Article should have a "title", a "body", etc? It queries the database, looks at the articles table, and assumes whatever columns the table has should probably be the attributes accessible through the model.
 
@@ -201,9 +201,9 @@ The output shows that the generator created this file for you:
 
 Let's open up the controller file, _/controllers/Articles.cfc_. You'll see the **Scaffold** plugin generated a lot of code. It created these actions for us: "index", "show", "new", "edit", "create", "update", and "delete".
 
-Any additional code we add to the controller must go **between** the beginning and ending "cfcomponent" instructions, outside any "cffunction" instructions.
+Any additional code we add to the controller must go **between** the beginning and ending ```cfcomponent``` instructions, outside any ```cffunction``` instructions.
 
-We have a working controller for CRUD (create, read, update, and delete) but we didn't learn anything so let's comment out everything between the beginning and ending "cfcomponent" instructions. We can review this generated code later if you want.
+We have a working controller for CRUD (create, read, update, and delete) but we didn't learn anything so let's comment out everything between the beginning and ending ```cfcomponent``` instructions. We can review this generated code later if you want.
 
 ### Defining the Index Action
 
