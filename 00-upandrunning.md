@@ -157,7 +157,7 @@ Not very impressive, right? There are no attributes defined inside the model, so
 
 You created most of the columns in your migration file, but what about the "id"? Every table you create with a migration will automatically have an "id" column which serves as the table's primary key. When you want to find a specific article, you'll look it up in the articles table by its unique ID number. Wheels and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
 
-Back to the ```<cfset article = model("article").new() />``` instruction. The ```new()``` method doesn't change values in the database until we explicitly call the ```save``` method on an object in our example the "Article" object didn't have that? attributes "id", "title", "body", "createdat", and "updatedat". Let's create a sample article and you'll see how it to add these. Enter each of the following lines:
+Back to the ```<cfset article = model("article").new() />``` instruction. The ```new()``` method doesn't change values in the database until we explicitly call the ```save``` method on an object in our example the **Article** object didn't have that? attributes "id", "title", "body", "createdat", and "updatedat". Let's create a sample article and you'll see how it to add these. Enter each of the following lines:
 
 ```cfm
 <cffunction name="two">  
