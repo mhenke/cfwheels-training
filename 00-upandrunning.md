@@ -207,7 +207,7 @@ We have a working controller for CRUD (create, read, update, and delete) but we 
 
 ### Defining the Index Action
 
-The first action we want to talk about is the "index". This is what the app will send back when a user requests "http://wheels.local/index.cfm/Articles/" * following the RESTful conventions, this should be a list of the articles. So when the router sees this request come in, it tries to call the "index" action inside "articles" controller. It goes to the "index" action which gets all our articles:
+The first action we want to talk about is the ```index```. This is what the app will send back when a user requests "http://wheels.local/index.cfm/Articles/" * following the RESTful conventions, this should be a list of the articles. So when the router sees this request come in, it tries to call the ```index``` action inside **Articles** controller. It goes to the ```index``` action which gets all our articles:
 
 ```cfm
 <cffunction name="index">  
@@ -217,9 +217,9 @@ The first action we want to talk about is the "index". This is what the app will
 
 #### Passing Action variables to Views
 
-What scope is "articles"? Usually in a "cfc" we will "var" scope variables to stop data issues. The "var" instruction marks the variable as a "local variable". We want the list of articles to be accessible from both the controller and the view we're about to create so in order for "articles" to be visible in both places it has to be in the variable scope. If we had named it "var articles", the local variable would only be available within the "index" action of the controller.
+What scope is "articles"? Usually in a "cfc" we will "var" scope variables to stop data issues. The ```var``` instruction marks the variable as a "local variable". We want the list of articles to be accessible from both the controller and the view we're about to create so in order for "articles" to be visible in both places it has to be in the variable scope. If we had named it "var articles", the local variable would only be available within the ```index``` action of the controller.
 
-Let's load "http://wheels.local/". You'll notice our updated default route is mapping the code to the "index" action of the "articles" controller but we are getting an error since the view doesn't exist.
+Let's load "http://wheels.local/". You'll notice our updated default route is mapping the code to the ```index``` action of the **Articles** controller but we are getting an error since the view doesn't exist.
 
 ```cfm  
 Wheels.ViewNotFound  
@@ -232,7 +232,7 @@ Create a file named index.cfm in the views/articles directory (create the direct
 
 ### Creating the Index View
 
-The error message is pretty helpful. It tells us Wheels is looking for a template in "/views/Articles/" but it can't find one named _index.cfm_. Wheels has **assumed** our "index" action in the controller should have a corresponding _index.cfm_ view template in the views folder. We didn't have to put any code in the controller to tell it what view we wanted, Wheels figures it out.
+The error message is pretty helpful. It tells us Wheels is looking for a template in "/views/Articles/" but it can't find one named _index.cfm_. Wheels has **assumed** our ```index``` action in the controller should have a corresponding _index.cfm_ view template in the views folder. We didn't have to put any code in the controller to tell it what view we wanted, Wheels figures it out.
 
 Let's create that view template now. In the left pane of your Eclipse window, expand the "JSBloggers" project so you can see "views", then expand "views". Right-click on the "views" folder, select "New" then "Folder" and, in the popup, name the folder "articles". Next repeat the process, but select "File" and, in the popup, name the file _index.cfm_.
 
