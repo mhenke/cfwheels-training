@@ -5,7 +5,7 @@ Event: Introduction Into ColdFusion on Wheels
 Date: XXXX
 Location: XXXX
 
-[https://github.com/mhenke/cfwheels-training/blob/develop/schedule.textile](https://github.com/mhenke/cfwheels-training/blob/develop/schedule.textile)
+[https://github.com/mhenke/cfwheels-training/blob/develop/schedule.markdown](https://github.com/mhenke/cfwheels-training/blob/develop/schedule.markdown)
 
 Preparations ============================
 
@@ -13,7 +13,7 @@ The most important thing is figuring out your laptop situation. Make sure you ca
 
 Preparation for JSBloggers Project ============================ 
 
-[https://github.com/mhenke/cfwheels-training/blob/develop/00-c-preparation.textile](https://github.com/mhenke/cfwheels-training/blob/develop/00-c-preparation.textile)
+[https://github.com/mhenke/cfwheels-training/blob/develop/00-c-preparation.markdown](https://github.com/mhenke/cfwheels-training/blob/develop/00-c-preparation.markdown)
 
 Git and Github Account ============================ 
 

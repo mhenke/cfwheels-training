@@ -14,4 +14,4 @@ Bring a pen or pencil, marker, highlighter, and a few sheets of paper for making
 
 ### Prepare your Computer
 
-To cover the maximum amount of material during the class, you'll need to configure your laptop **in advance** of attendance. Please see the [Preparation for Wheels Projects](https://github.com/mhenke/cfwheels-training/blob/develop/00-c-preparation.textile) for the details on configuring the software you'll need.
+To cover the maximum amount of material during the class, you'll need to configure your laptop **in advance** of attendance. Please see the [Preparation for Wheels Projects](https://github.com/mhenke/cfwheels-training/blob/develop/00-c-preparation.markdown) for the details on configuring the software you'll need.
