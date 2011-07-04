@@ -258,7 +258,7 @@ Listing articles
 CFML is a templating language that allows us to mix CFML into our HTML. There are only a few things to know about CFML:
 
 * An CFML clause starts with ```<cf..>``` and ends with ```</cf..>``` 
-* If the clause started with ```<!---@ and ends with @--->```, the result of the code in between will be commented out (not ran)
+* If the clause started with ```<!---``` and ends with ```--->```, the result of the code in between will be commented out (not ran)
 * If the clause started with ```<cfoutput>``` and ends with ```</cfoutput>```, the result of the CFML code will be output in place of the instructions
 
 Save the file and refresh your web browser. You should see a listing of the articles you created in the Examples. We've got the start of a web application!
