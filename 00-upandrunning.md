@@ -96,7 +96,7 @@ Now our ```up``` migration is done. You might wonder, what about the ```down```?
 
 Save that migration cfc file, switch over to your browser, and click "go" under the **Migrate** section:
 
-The "All non-migrated" option finds all migrations in the _/db/migrate/_ folder, determines which migrations have and have not been run yet, and then runs them. Pretty much it says "**look in your set of cfcs for the database in "/db/migrate/"** and _run the migrations not yet ran_."
+The "All non-migrated" option finds all migrations in the _/db/migrate/_ folder, determines which migrations have and have not been run yet, and then runs them. Pretty much it says "**look in your set of cfcs for the database in _/db/migrate/_** and _run the migrations not yet ran_."
 
 In this case we had one migration to run and it should print some output like this to your browser under **Migration Results**:
 
@@ -232,7 +232,7 @@ Create a file named index.cfm in the views/articles directory (create the direct
 
 ### Creating the Index View
 
-The error message is pretty helpful. It tells us Wheels is looking for a template in "/views/Articles/" but it can't find one named _index.cfm_. Wheels has **assumed** our ```index``` action in the controller should have a corresponding _index.cfm_ view template in the views folder. We didn't have to put any code in the controller to tell it what view we wanted, Wheels figures it out.
+The error message is pretty helpful. It tells us Wheels is looking for a template in _/views/Articles/_ but it can't find one named _index.cfm_. Wheels has **assumed** our ```index``` action in the controller should have a corresponding _index.cfm_ view template in the views folder. We didn't have to put any code in the controller to tell it what view we wanted, Wheels figures it out.
 
 Let's create that view template now. In the left pane of your Eclipse window, expand the "JSBloggers" project so you can see "views", then expand "views". Right-click on the "views" folder, select "New" then "Folder" and, in the popup, name the folder "articles". Next repeat the process, but select "File" and, in the popup, name the file _index.cfm_.
 
