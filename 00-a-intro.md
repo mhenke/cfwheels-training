@@ -2,13 +2,13 @@
 
 In this project you'll create a simple blog system and learn the basics of ColdFusion on Wheels including:
 
-- Models, Views, and Controllers (MVC)  
-- Data Structures & Relationships  
-- Routing  
-- Migrations  
-- Views with forms, partials, and helpers  
-- RESTful design  
-- Using Wheels plugins
+* Models, Views, and Controllers (MVC)  
+* Data Structures & Relationships  
+* Routing  
+* Migrations  
+* Views with forms, partials, and helpers  
+* RESTful design  
+* Using Wheels plugins
 
 The project will be developed in five iterations below. The completed iterations are zip files located at [[https://github.com/mhenke/cfwheels-training/](https://github.com/mhenke/cfwheels-training/)](https://github.com/mhenke/cfwheels-training/):
 

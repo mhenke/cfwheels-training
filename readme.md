@@ -8,13 +8,13 @@ ColdFusion On Wheels Training was modified from [JSBlogger](http://jumpstartlab.
 
 You'll spend the two days working through a single concept by creating a simple blog system and learning the basics of ColdFusion On Wheels including:
 
-- Models, Views, and Controllers  
-- Data Structures & Relationships  
-- Routing  
-- Migrations  
-- Views with forms, partials, and helpers  
-- RESTful design  
-- Using Wheels plugins
+* Models, Views, and Controllers  
+* Data Structures & Relationships  
+* Routing  
+* Migrations  
+* Views with forms, partials, and helpers  
+* RESTful design  
+* Using Wheels plugins
 
 ## Wheels History
 
@@ -30,8 +30,8 @@ These works were created by Jeff Casimir ([jeff@jumpstartlab.com](mailto:jeff@ju
 
 Please add yourself if you helped:
 
-Mike Henke ([henke.mike@gmail.com](mailto:henke.mike@gmail.com)) - [[https://github.com/mhenke/](https://github.com/mhenke/)](https://github.com/mhenke/) 
-Troy Murray - [[https://github.com/talltroym/](https://github.com/talltroym/)](https://github.com/talltroym/)
+Mike Henke ([henke.mike@gmail.com](mailto:henke.mike@gmail.com)) * [[https://github.com/mhenke/](https://github.com/mhenke/)](https://github.com/mhenke/) 
+Troy Murray * [[https://github.com/talltroym/](https://github.com/talltroym/)](https://github.com/talltroym/)
 
 ## Git Workflow for Contributors
 
