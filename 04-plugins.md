@@ -10,9 +10,9 @@ Download and drop the **Plugin Manager** in the _/plugins_ folder. Reload the ap
 
 ### Event Handlers
 
-Once loaded, the **Plugin Manager** notices we haven't set a reloadPassword yet. For security on production we would probably have a password set so not everyone can reload our application. Most likely, we would set this in _/config/production/settings.cfm_ but this instruction "<cfset set(reloadPassword="y0urPassw0rdShouldNotBeThis")>". We will add "<cfset application.pluginManager.requirePassword = false>" to "/events/onapplicationstart.cfm".
+Once loaded, the **Plugin Manager** notices we haven't set a reloadPassword yet. For security on production we would probably have a password set so not everyone can reload our application. Most likely, we would set this in _/config/production/settings.cfm_ but this instruction ```<cfset set(reloadPassword="y0urPassw0rdShouldNotBeThis")>```. We will add ```<cfset application.pluginManager.requirePassword = false>``` to _/events/onapplicationstart.cfm_.
 
-**Events folder?** Well, our "Application.cfc" in Wheels includes "wheels/functions.cfm" which has a lot of framework code. As a general recommendation we never touch any files in the wheels folder. So how do we using the "Application.cfc" events then? The answer is to use the events folder. There is a file in there for every single event that "Application.cfc" can trigger plus some special events for Wheels like "On Error".
+**Events folder?** Well, our _Application.cfc_ in Wheels includes _wheels/functions.cfm_ which has a lot of framework code. As a general recommendation we never touch any files in the wheels folder. So how do we using the _Application.cfc_ events then? The answer is to use the events folder. There is a file in there for every single event that _Application.cfc_ can trigger plus some special events for Wheels like "On Error".
 
 ### Using the **Plugin Manager** (For Real)
 
@@ -26,7 +26,7 @@ Changing gears, Wheels controllers provide some powerful mechanisms for respondi
  <cfset provides("html,json,pdf")>
 ```
 
-In our "index" action of _/controllers/Articles.cfc_ add this line "<cfset renderWith(articles)>". Wheels can handle HTML, XML, JSON, CSV, PDF, and XLS. XML and JSON Formats can be automatic generated. Let's test the JSON response. Add "?format=json" to the end of our index page's url. It should return a JSON file. Try "?format=pdf".
+In our "index" action of _/controllers/Articles.cfc_ add this line ```<cfset renderWith(articles)>```. Wheels can handle HTML, XML, JSON, CSV, PDF, and XLS. XML and JSON Formats can be automatic generated. Let's test the JSON response. Add "?format=json" to the end of our index page's url. It should return a JSON file. Try "?format=pdf".
 
 Element TEMPLATE is undefined in LOC. The error occurred in C:\\JRun4\\servers\\cfwheels\\cfusion.ear\\cfusion.war\\wheels\\controller\\provides.cfm: line 123
 
@@ -41,7 +41,7 @@ Reload the page with the error and you should see a pdf with our custom content.
 
 ### Adding a Word format
 
-In "config/settings.cfm" add "<cfset addFormat(extension="doc", mimeType="application/msword")/>".
+In _config/settings.cfm_ add ```<cfset addFormat(extension="doc", mimeType="application/msword")/>```.
 
 Don't forget to add "doc" to the "provides" instruction in _/controllers/Articles.cfc_.
 

@@ -17,7 +17,7 @@ Eclipse will then create a ColdFusion project for you and automatically open the
 
 We need to change the Wheels datasource convention. Wheels assumes our datasource connection is the folder name Wheels resides in but for our case it is not "cfwheels101" but "JSBloggers". We could have easily named our ColdFusion server instance but I wanted to show how we can easily override a Wheels convention.
 
-Press **Ctrl+Shift+R** while in Eclipse. This is the Open Resource window. I use this a lot when coding in Eclipse. Sometimes I highlight a file name in code and press **Ctrl+Shift+R**, other times I type in the file name like we will do next. Type in "settings.cfm", and select "settings.cfm * /JSBloggers/config". This will open that file for us. In the file at the bottom, type ```<cfset set(dataSourceName="JSBloggers") />``` to tell Wheels to use this as are datasource. Also add ```<cfset set(URLRewriting="Partial") />``` to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers. To reload Wheels, you can add ```?reload=true``` to the url or click on the "Reload" link in the Wheels debug section.
+Press **Ctrl+Shift+R** while in Eclipse. This is the Open Resource window. I use this a lot when coding in Eclipse. Sometimes I highlight a file name in code and press **Ctrl+Shift+R**, other times I type in the file name like we will do next. Type in _settings.cfm_, and select "settings.cfm * /JSBloggers/config". This will open that file for us. In the file at the bottom, type ```<cfset set(dataSourceName="JSBloggers") />``` to tell Wheels to use this as are datasource. Also add ```<cfset set(URLRewriting="Partial") />``` to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers. To reload Wheels, you can add ```?reload=true``` to the url or click on the "Reload" link in the Wheels debug section.
 
 Our blog will be centered on "articles" so we'll need a table in the database to store all the articles and a model to allow our Wheels app to work with that table.
 
@@ -103,7 +103,7 @@ In this case we had one migration to run and it should print some output like th
 ```cfm  
 Migrating from 0 up to 20110406195353.
 
-------* 20110406195353createarticles\table --------*  
+------ 20110406195353createarticles\table --------  
 Created table articles  
 ```
 
@@ -177,7 +177,7 @@ Now you'll see the "findAll()" command gave you back an query object holding the
 
 We've created a few articles through the Examples controller, but we really don't have a web application until we have a better web interface. Let's get that started. We said "Wheels uses an **MVC** architecture", and we've worked with the Model, now we need a Controller and View.
 
-When a Wheels application gets a request from a web browser it first goes to the **router**. The router decides what the request is trying to do and what resources it is trying to interact with. The router dissects a request based on the address it is requesting. Let's open the router's configuration file, "/config/routes.cfm".
+When a Wheels application gets a request from a web browser it first goes to the **router**. The router decides what the request is trying to do and what resources it is trying to interact with. The router dissects a request based on the address it is requesting. Let's open the router's configuration file, _/config/routes.cfm_.
 
 Inside this file you'll see ```<cfset addRoute(name="home", pattern="", controller="wheels", action="wheels") />```. This is the default route and it directs to the Congratulations page, you saw when we first loaded our application. Let's replace it with:
 
@@ -197,9 +197,9 @@ Type **article** for the Object name and select **Controller** for Type. We'll l
 
 The output shows that the generator created this file for you:
 
-* "/controllers/Articles.cfc.cfc": The controller file itself
+* _/controllers/Articles.cfc.cfc_: The controller file itself
 
-Let's open up the controller file, "/controllers/Articles.cfc". You'll see the **Scaffold** plugin generated a lot of code. It created these actions for us: "index", "show", "new", "edit", "create", "update", and "delete".
+Let's open up the controller file, _/controllers/Articles.cfc_. You'll see the **Scaffold** plugin generated a lot of code. It created these actions for us: "index", "show", "new", "edit", "create", "update", and "delete".
 
 Any additional code we add to the controller must go **between** the beginning and ending "cfcomponent" instructions, outside any "cffunction" instructions.
 
@@ -232,9 +232,9 @@ Create a file named index.cfm in the views/articles directory (create the direct
 
 ### Creating the Index View
 
-The error message is pretty helpful. It tells us Wheels is looking for a template in "/views/Articles/" but it can't find one named "index.cfm". Wheels has **assumed** our "index" action in the controller should have a corresponding "index.cfm" view template in the views folder. We didn't have to put any code in the controller to tell it what view we wanted, Wheels figures it out.
+The error message is pretty helpful. It tells us Wheels is looking for a template in "/views/Articles/" but it can't find one named _index.cfm_. Wheels has **assumed** our "index" action in the controller should have a corresponding _index.cfm_ view template in the views folder. We didn't have to put any code in the controller to tell it what view we wanted, Wheels figures it out.
 
-Let's create that view template now. In the left pane of your Eclipse window, expand the "JSBloggers" project so you can see "views", then expand "views". Right-click on the "views" folder, select "New" then "Folder" and, in the popup, name the folder "articles". Next repeat the process, but select "File" and, in the popup, name the file "index.cfm".
+Let's create that view template now. In the left pane of your Eclipse window, expand the "JSBloggers" project so you can see "views", then expand "views". Right-click on the "views" folder, select "New" then "Folder" and, in the popup, name the folder "articles". Next repeat the process, but select "File" and, in the popup, name the file _index.cfm_.
 
 Now you're looking at a blank file. Enter in this view template code which is a mix of HTML and what are called CFML tags:
 
