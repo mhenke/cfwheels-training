@@ -27,7 +27,7 @@ Wheels can uses migration files to perform modifications to the database with th
 
 #### What is a migration?
 
-Migrations are a convenient way for you to alter your database in a structured and organized manner. Migrations are meant to be **symmetric**. Whatever a migration changes inside the "up" method should be **undone** with the "down" method. Frequently in development you'll think you want the database to look one way, and then realize you need something different. You can create a migration to make your changes to the database, start building, and then revert as necessary.
+Migrations are a convenient way for you to alter your database in a structured and organized manner. Migrations are meant to be **symmetric**. Whatever a migration changes inside the ```up``` method should be **undone** with the ```down``` method. Frequently in development you'll think you want the database to look one way, and then realize you need something different. You can create a migration to make your changes to the database, start building, and then revert as necessary.
 
 Let's generate a "Create table" migration for our articles table. In the browser select, DBMigration link in the Wheels debugging section and open it in a new tab (This will make switching between plugins and our code easier). And complete the page like:
 
@@ -40,7 +40,7 @@ On the page, you should see text like "The migration 20110406195353\create\artic
 
 Let's open _/db/migrate/(some\time*stamp)*\create\articles*table.cfc_ and take a look. Press **Ctrl+Shift+R** again, and type "*create" and select our newly created migration file. The astrick is a wildcard in the Resource view.First please note the filename is our comment with underlines instead of spaces and a timestamp of when the migration was created. Migrations need to be ordered, so the timestamp serves to keep them in chronologic order.  
 
-Inside the file, you'll see two methods: "up" and "down".
+Inside the file, you'll see two methods: ```up``` and ```down```.
 
 ```cfm
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="create articles table">  
@@ -59,7 +59,7 @@ Inside the file, you'll see two methods: "up" and "down".
 </cfcomponent>
 ```
 
-Inside the "up" method you'll see the generator has placed a call to the "createTable" method, passed "[tableName]" as a parameter, and created a block with the variable "t" referencing the table that's created. Let's change "[tableName]" to "[articles]". We can tell "t" what kind of columns we want in the "articles" table.
+Inside the ```up``` method you'll see the generator has placed a call to the ```createTable``` method, passed "[tableName]" as a parameter, and created a block with the variable "t" referencing the table that's created. Let's change "[tableName]" to "[articles]". We can tell "t" what kind of columns we want in the "articles" table.
 
 But first you might be wondering "**What is "t.timestamps" doing there?**". The generator inserted that line. It will create three columns inside our table titled **createdat** for when created, **updatedat** for last updated, and **deletedat** for soft deletes. Wheels will manage these columns for us, so when an article is created it's **createdat** and **updatedat** are automatically set. Each time we make a change to the article, the **updatedat** will automatically be …uhhh… updated. Very handy.
 
@@ -68,7 +68,7 @@ Well, what kind of fields does our Article need to have? Since migrations make i
 * title (a "string")  
 * body (a "text")
 
-So add these into your "up" so it looks like this:
+So add these into your ```up``` so it looks like this:
 
 ```cfm
 <cffunction name="up">  
@@ -84,7 +84,7 @@ So add these into your "up" so it looks like this:
 
 That's it! You might be wondering, what is the "text" type? This is an example of relying on the Wheels database adapters to make the right call. For some databases, large text fields are stored as "varchar", while other's like Postgres use a "text" type. The database adapter will figure out the best choice for us depending on the configured database * we don't have to worry about it.
 
-Now our "up" migration is done. You might wonder, what about the "down"? Didn't I say migrations need to be symmetric? If we added something to the "up" it is **generally** the case we need to undo the same change in the "down". However, when the migration is creating a table, the "down" can just drop that table regardless of what columns are inside of it. That's what the generator has setup for us here, where it says "dropTable("[tableName]");" replace "[tableName]" with "articles".
+Now our ```up``` migration is done. You might wonder, what about the ```down```? Didn't I say migrations need to be symmetric? If we added something to the ```up``` it is **generally** the case we need to undo the same change in the ```down```. However, when the migration is creating a table, the ```down``` can just drop that table regardless of what columns are inside of it. That's what the generator has setup for us here, where it says "dropTable("[tableName]");" replace "[tableName]" with "articles".
 
 ```cfm
 <cffunction name="down">  
@@ -157,7 +157,7 @@ Not very impressive, right? There are no attributes defined inside the model, so
 
 You created most of the columns in your migration file, but what about the "id"? Every table you create with a migration will automatically have an "id" column which serves as the table's primary key. When you want to find a specific article, you'll look it up in the articles table by its unique ID number. Wheels and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
 
-Back to the ```<cfset article = model("article").new() />``` instruction. The ```new()``` method doesn't change values in the database until we explicitly call the "save" method on an object in our example the "Article" object didn't have that? attributes "id", "title", "body", "createdat", and "updatedat". Let's create a sample article and you'll see how it to add these. Enter each of the following lines:
+Back to the ```<cfset article = model("article").new() />``` instruction. The ```new()``` method doesn't change values in the database until we explicitly call the ```save``` method on an object in our example the "Article" object didn't have that? attributes "id", "title", "body", "createdat", and "updatedat". Let's create a sample article and you'll see how it to add these. Enter each of the following lines:
 
 ```cfm
 <cffunction name="two">  
@@ -171,7 +171,7 @@ Back to the ```<cfset article = model("article").new() />``` instruction. The ``
 </cffunction>
 ```
 
-Now you'll see the "findAll()" command gave you back an query object holding the one article we created and saved. Go ahead and **create 3 more sample articles** in one request under a method called "moreSamples".
+Now you'll see the ```findAll()``` command gave you back an query object holding the one article we created and saved. Go ahead and **create 3 more sample articles** in one request under a method called "moreSamples".
 
 ### Moving Towards a Web Interface * Setting up the Router
 
