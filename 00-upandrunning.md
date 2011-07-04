@@ -115,7 +115,7 @@ We've now created the "articles" table in the database and can start working on 
 
 We'll use one of Wheels" plugins called Scaffolding to create the required file. Click the Scaffold link in the Wheels debugging section. Then type "Article" for the Object name and select **Model** for Type. We'll leave the Template as default and click Generate. The page should refresh and **File "_models/Article.cfc_" created.** should appear.
 
-We used the **Scaffold** plugin, telling it to create a "model", and naming that model "Article". From that information, the plugin creates the following files:
+We used the **Scaffold** plugin, telling it to create a "model", and naming that model **Article**. From that information, the plugin creates the following files:
 
 * _/models/Article.cfc_ : The file will hold the model code
 
