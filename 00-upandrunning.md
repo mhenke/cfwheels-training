@@ -113,9 +113,13 @@ We've now created the "articles" table in the database and can start working on 
 
 ### Creating the Article Model
 
-We'll use one of Wheels" plugins called Scaffolding to create the required file. Click the Scaffold link in the Wheels debugging section. Then type "Article" for the Object name and select **Model** for Type. We'll leave the Template as default and click Generate. The page should refresh and **File "_models/Article.cfc_" created.** should appear.
+We'll create an **Article Model** to represent the **Articles** table. In Eclipse, right-click on the _models_ folder and select New --> File. In the file name input type _Article.cfc_ and press **Finish**. Type this in the blank file:
 
-We used the **Scaffold** plugin, telling it to create a "model", and naming that model **Article**. From that information, the plugin creates the following files:
+```cfm
+<cfcomponent extends="Model" output="false">
+	
+</cfcomponent>
+```
 
 * _/models/Article.cfc_ : The file will hold the model code
 
@@ -123,17 +127,19 @@ With this file in place we can start developing!
 
 ### Working with a Model
 
-Another awesome feature of working with Wheels is the "ORM". The "ORM" stands for Object-relational mapping. It allows you to map objects in your application to records in your database tables. This can simplify your development process and even once an app is in production the "ORM" makes it very easy to do modifications, searches, and other data operations. So let's create a "controller" to do some simple interactions with our "model".
+Another awesome feature of working with Wheels is the **ORM**. **ORM** stands for Object-Relational Mapping. It allows you to map objects in your application to records in your database tables. This can simplify your development process and the **ORM** makes it very easy to do modifications, searches, and other data operations. So let's create a **Controller** to demonstrate some simple interactions with our **Model**.
+
+In the Eclipse menu:
 
 * File --> New--> ColdFusion Component  
 * Source Location: /JSBloggers/controllers 
 
-* By clicking Browse…  
+* By clicking Browse…
 * Component Name: Examples  
 * Extends: Controller  
 * Click Finish
 
-Our new component opened automatically and we'll add some code in between the ```cfcomponent``` instructions. Let's try some experiments… To view our first experiment, we'll go to [http://wheels.local/index.cfm/examples/one:http://wheels.local/index.cfm/examples/one.Enter](http://wheels.local/index.cfm/examples/one:http://wheels.local/index.cfm/examples/one.Enter) each of these instructions and observe the results:
+Our new component will open automatically and we'll add some code in between the ```cfcomponent``` instructions. Let's try some experiments… To view our first experiment, we'll go to http://wheels.local/index.cfm/examples/one. So type these instructions and observe the results when running the page:
 
 ```cfm
 <cffunction name="one">  
@@ -147,7 +153,7 @@ Our new component opened automatically and we'll add some code in between the ``
 </cffunction>
 ```
 
-The first line was to demonstrate we can do anything in our "controller" we previously did during "CFML in 100 minutes". The third line referenced the **Article** model and called the ```findAll``` method which returns a query of all articles in the database * so far an empty result. The fifth line created a new article object and returns it. The object is not saved to the database; it only exists in memory. Property names and values can be passed in either using named arguments or as a structure to the properties argument.
+The first line was to demonstrate we can do anything in our **Controller** we previously did during "CFML in 100 minutes". The third line referenced the **Article** model and called the ```findAll``` method which returns a query of all articles in the database * so far an empty result. The fifth line created a new article object and returns it. The object is not saved to the database; it only exists in memory. Property names and values can be passed in either using named arguments or as a structure to the properties argument.
 
 All the information about the **Article** model is in the file _/models/Article.cfc_, so let's open that now.
 
@@ -187,7 +193,7 @@ Inside this file you'll see ```<cfset addRoute(name="home", pattern="", controll
 
 This line tells Wheels to do a lot of work. It declares that we have a resource named "home" and the router should expect requests to follow the **RESTful** model of web interaction (**RE**presentational State Transfer). The details don't matter to you right now, but just know that when you make a request like "http://wheels.local/" and the router will know you're looking for a "index action" of the "Articles controller".
 
-Now the router knows how to handle requests about articles, it needs a place to actually send those requests, the "Controller".
+Now the router knows how to handle requests about articles, it needs a place to actually send those requests, the **Controller**.
 
 ### Creating the Articles Controller
 

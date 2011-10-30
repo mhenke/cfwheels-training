@@ -21,8 +21,15 @@ There are a few extra steps of preparation when working with Wheels projects:
 
 #### Install DBMigrate Plugin
 
-* Download [http://code.google.com/p/cfwheels-dbmigrate/](http://code.google.com/p/cfwheels-dbmigrate/)
-* Move the downloaded zip into "C:\\JRun4\\servers\\cfwheels101\\plugins"
+* Download [http://cfwheels.org/plugins/listing/28](http://cfwheels.org/plugins/listing/28)
+* Move the downloaded zip into the plugins folder. Example: "C:\\JRun4\\servers\\cfwheels101\\plugins"
+* Reload CFWheels [http://wheels.local/](http://wheels.local/)
+* You should see **DBMigrate** under Plugins
+
+#### Install Scaffold Plugin
+
+* Download [http://cfwheels.org/plugins/listing/9](http://cfwheels.org/plugins/listing/9)
+* Move the downloaded zip into the plugins folder. Example: "C:\\JRun4\\servers\\cfwheels101\\plugins"
 * Reload CFWheels [http://wheels.local/](http://wheels.local/)
 * You should see **DBMigrate** under Plugins
 
@@ -38,7 +45,7 @@ Mysql commands can span several lines. Do not forget to end your mysql command w
 
 * mysql -u root -p
 
-* mysql> CREATE DATABASE jsbloggers;
+* mysql> CREATE DATABASE JSBloggers;
 * mysql> exit
 
 ### Add JSBloggers connection
@@ -56,9 +63,11 @@ Add DataSource through the ColdFusion Administrator
 
 ### Install ColdFusion Builder or CFEclipse
 
-#### Windows and CFBuilder
+#### Editor
 
 * Download and install as standalone http://www.adobe.com/products/coldfusion/cfbuilder/features/
+OR
+* Download and install Eclipse, then add CFEclipse
 
 ## Setup Git and Github
 
