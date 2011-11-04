@@ -2,7 +2,7 @@
 
 ## What to Bring
 
-So you're signed up now what? You'll want to have the following items with you to complete this course. These can be installed on your primary operating system or a virtual machine running on your system using tools like VirtualBox for example.
+So you're signed up, now what? You'll want to have the following items with you to complete this course. These can be installed on your primary operating system or a virtual machine running on your system using tools like VirtualBox for example.
 
 ### Laptop
 
