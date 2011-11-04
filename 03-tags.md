@@ -36,7 +36,7 @@ The tags migration should look like this:
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="creates tags tables">  
  <cffunction name="up" >  
  <cfscript >  
- t = createTable ("tags");  
+ t = createTable ("tags",id=false);  
  t = t.string ("name");  
  t.timestamps ();  
  t.create ();  
