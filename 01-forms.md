@@ -127,6 +127,10 @@ This method says…
 
 Go back in your browser so you get to the form with the sample data you entered and click "Save changes". You should then bounce to the full articles list with your new article added.
 
+#### Params Structure
+
+We snuck in a structure called _params_ in the _create_ action. Wheels simplifies the request handling for you using the _params_ structure. It combines the **url** and **form** scopes. This is something that most CFML frameworks do as well.
+
 ### Adding Navigation to the Index
 
 Right now our article list is very plain with only the Title showing. Let's add some links. Open your _/views/articles/index.cfm_ and…
