@@ -305,7 +305,7 @@ Try it out in your browser.
 
 It would be nice, though, if we gave the user some kind of status message about the operation that took place. When we create an article the message might say "Article "the-article-title" was created", or "Article "the-article-title" was removed" for the remove action. We can accomplish this with a special object called the "flash".
 
-Wheels creates the object named **flash**, so we don't need to do anything to set it up. We can start by integrating it into our "index.cfm" by adding this line at the very top:
+Wheels creates the object named **flash**, so we don't need to do anything to set it up. We can start by integrating it into our _index.cfm_ by adding this line at the very top:
 
 ```cfm
 <div class="flash">
@@ -315,7 +315,7 @@ Wheels creates the object named **flash**, so we don't need to do anything to se
 </p>
 </div>
 ```
-This outputs the value stored in the "flash" object with the key "message". If you refresh your articles list you won't see anything because we haven't stored a message in there yet. Look at "Articles.cfc" and add this line right after the "save!" line in your "create" method:
+This outputs the value stored in the **flash** object with the key **message**. If you refresh your articles list you won't see anything because we haven't stored a message in there yet. Look at _Articles.cfc_ and add this line right after the _save_ in your _create_ action:
 
 ```cfm
 <cfset flashInsert(message="Article "#article.title#" was created.") />
@@ -323,8 +323,8 @@ This outputs the value stored in the "flash" object with the key "message". If y
 
 Then go to your articles list, create another sample article, and when you click create you should see the flash message at the top of your view.
 
-Here's something cool about how Wheels handles the "flash" -- hit your browser's REFRESH button while looking at the articles list. See how the flash disappears? Once you display the message in a flash Wheels clears it out. That's why it's perfect for status messages like this.
+Here's something cool about how Wheels handles the **flash** -- hit your browser's REFRESH button while looking at the articles list. See how the flash disappears? Once you display the message in a flash Wheels clears it out. That's why it's perfect for status messages like this.
 
-Similarly, add a flash message into your "delete" method and confirm that it shows up when an article is removed. Then add one to your "update" method that'll display when an article is edited.
+Similarly, add a flash message into your _delete_ action and confirm it shows up when an article is removed. Then add one to your _update_ action and _show_ view that'll display when an article is edited.
 
 And, finally, you're done with I1!
