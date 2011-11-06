@@ -318,7 +318,7 @@ Wheels creates the object named **flash**, so we don't need to do anything to se
 This outputs the value stored in the **flash** object with the key **message**. If you refresh your articles list you won't see anything because we haven't stored a message in there yet. Look at _Articles.cfc_ and add this line right after the _save_ in your _create_ action:
 
 ```cfm
-<cfset flashInsert(message="Article "#article.title#" was created.") />
+<cfset flashInsert(message="Article '#article.title#' was created.") />
 ```
 
 Then go to your articles list, create another sample article, and when you click create you should see the flash message at the top of your view.
