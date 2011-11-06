@@ -38,10 +38,13 @@ There are a few extra steps of preparation when working with Wheels projects:
 #### Windows
 
 * Download and install [http://dev.mysql.com/downloads/mirror.php?id=401202](http://dev.mysql.com/downloads/mirror.php?id=401202)
+* Remember the password you enter when installing.
 
 #### Create JSBloggers Database
 
-Mysql commands can span several lines. Do not forget to end your mysql command with a semicolon. In the command prompt type:
+Mysql commands can span several lines. Do not forget to end your mysql command with a semicolon. You may need to usethe "MySQL Command Line" in the start menu if the normal command prompt doesn't work when issuing the following commands.
+
+In the command prompt type:
 
 * mysql -u root -p
 
@@ -56,8 +59,8 @@ Add DataSource through the ColdFusion Administrator
 * Name: JSBloggers
 * Database: JSBloggers
 * Server: localhost
-* User name
-* Password
+* User name: root
+* Password: Password entered when installing MySQL
 
 ## Client Tools
 

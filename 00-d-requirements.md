@@ -19,4 +19,4 @@ There are very few requirements to participate in this course:
 
 ### Accessibility 
 
-* As much as possible all projected materials (documents, slides, code) are available in print and on your screen for easy viewing. We want to be fully inclusive, so if there is something you need to work at your best, let us know and well do our best to make it happen.
+* As much as possible all projected materials (documents, slides, code) are available in print and on your screen for easy viewing. We want to be fully inclusive, so if there is something you need to work at your best, let us know and we'll do our best to make it happen.

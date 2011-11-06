@@ -17,13 +17,13 @@ Eclipse will then create a ColdFusion project for you and automatically open the
 
 We need to change the Wheels datasource convention. Wheels assumes our datasource connection is the folder name Wheels resides in but for our case it is not "cfwheels101" but "JSBloggers". We could have easily named our ColdFusion server instance but I wanted to show how we can easily override a Wheels convention.
 
-Press **Ctrl+Shift+R** while in Eclipse. This is the Open Resource window. I use this a lot when coding in Eclipse. Sometimes I highlight a file name in code and press **Ctrl+Shift+R**, other times I type in the file name like we will do next. Type in _settings.cfm_, and select "settings.cfm * /JSBloggers/config". This will open that file for us. In the file at the bottom, type ```<cfset set(dataSourceName="JSBloggers") />``` to tell Wheels to use this as are datasource. Also add ```<cfset set(URLRewriting="Partial") />``` to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers. To reload Wheels, you can add ```?reload=true``` to the url or click on the "Reload" link in the Wheels debug section.
+Press **Ctrl+Shift+R** while in Eclipse. This is the Open Resource window. I use this a lot when coding in Eclipse. Sometimes I highlight a file name in code and press **Ctrl+Shift+R**, other times I type in the file name like we will do next. Type in _settings.cfm_, and select "settings.cfm * /JSBloggers/config". This will open that file for us. In the file at the bottom, type ```<cfset set(dataSourceName="JSBloggers") />``` to tell Wheels to use this as are datasource. Also add ```<cfset set(URLRewriting="Partial") />``` to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers. To reload Wheels, you can 1) add ```?reload=true``` to the url or 2) click on the "Reload" link in the Wheels debug section. Reloading refreshes any cached items.
 
 Our blog will be centered on "articles" so we'll need a table in the database to store all the articles and a model to allow our Wheels app to work with that table.
 
 ### Working with the Database
 
-Wheels can uses migration files to perform modifications to the database with the **DBMigrate** plugin. Almost any modification you can make to a DB can be done through a migration. The killer feature about Wheels migrations is they're generally database agnostic. When developing applications a person might use MySQL as we are in this tutorial, but when deploying to their production server it is running Oracle. Many others choose Microsoft SQL Server. It doesn't matter * the same migrations will work on all of them! This is an example of how Wheels takes some of the painful work off your hands. You write your migrations once, and then run them against almost any database.
+Wheels can uses migration files to perform modifications to the database with the **DBMigrate** plugin. Almost any modification you can make to a DB can be done through a migration. The killer feature about Wheels migrations is they're generally database agnostic. When developing applications a person might use MySQL as we are in this tutorial, but when deploying to their production server it is running Oracle. Many others choose Microsoft SQL Server. It doesn't matter -- the same migrations will work on all of them! This is an example of how Wheels takes some of the painful work off your hands. You write your migrations once, and then run them against almost any database.
 
 #### What is a migration?
 
@@ -36,9 +36,9 @@ Let's generate a "Create table" migration for our articles table. In the browser
 * Migration description: create articles table  
 * Click create
 
-On the page, you should see text like "The migration 20110406195353\create\articles\table.cfc file was created" showing the **create** was successful. Two new sections appear also on the page: **Migrate** and **Available migrations**. Under **Available migrations** you should see something like "20110406195353 **create\articles\table (create articles table)** not migrated". This is saying a migration script exists but hasn't been run.
+On the page, you should see text like "The migration 20110406195353_create_articles_table.cfc file was created" showing the **create** was successful. Two new sections appear also on the page: **Migrate** and **Available migrations**. Under **Available migrations** you should see something like "20110406195353 **create_articles_table (create articles table)** not migrated". This is saying a migration script exists but hasn't been run.
 
-Let's open _/db/migrate/(some\time*stamp)*\create\articles*table.cfc_ and take a look. Press **Ctrl+Shift+R** again, and type "*create" and select our newly created migration file. The astrick is a wildcard in the Resource view.First please note the filename is our comment with underlines instead of spaces and a timestamp of when the migration was created. Migrations need to be ordered, so the timestamp serves to keep them in chronologic order.  
+Let's open _/db/migrate/(some\time*stamp)*\create\articles*table.cfc_ and take a look. You may need to refresh the project to see any new resources. Press **Ctrl+Shift+R** again, and type "*create" and select our newly created migration file. The astrick is a wildcard in the Resource view.First please note the filename is our comment with underlines instead of spaces and a timestamp of when the migration was created. Migrations need to be ordered, so the timestamp serves to keep them in chronologic order.  
 
 Inside the file, you'll see two methods: ```up``` and ```down```.
 
@@ -163,7 +163,9 @@ Not very impressive, right? There are no attributes defined inside the model, so
 
 You created most of the columns in your migration file, but what about the "id"? Every table you create with a migration will automatically have an "id" column which serves as the table's primary key. When you want to find a specific article, you'll look it up in the articles table by its unique ID number. Wheels and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
 
-Back to the ```<cfset article = model("article").new() />``` instruction. The ```new()``` method doesn't change values in the database until we explicitly call the ```save``` method on an object in our example the **Article** object didn't have that? attributes "id", "title", "body", "createdat", and "updatedat". Let's create a sample article and you'll see how it to add these. Enter each of the following lines:
+Back to the ```<cfset article = model("article").new() />``` instruction. in the controller. The ```new()``` method doesn't change values in the database until we explicitly call the ```save``` method on an object. 
+
+ Let's create a sample article and you'll see how to use ```save``` method. In our previous example the **Article** object didn't have the attributes "id", "title", "body", "createdat", and "updatedat". Enter each of the following lines to add them:
 
 ```cfm
 <cffunction name="two">  
@@ -203,7 +205,7 @@ Type **article** for the Object name and select **Controller** for Type. We'll l
 
 The output shows that the generator created this file for you:
 
-* _/controllers/Articles.cfc.cfc_: The controller file itself
+* _/controllers/Articles.cfc_: The controller file itself
 
 Let's open up the controller file, _/controllers/Articles.cfc_. You'll see the **Scaffold** plugin generated a lot of code. It created these actions for us: "index", "show", "new", "edit", "create", "update", and "delete".
 
