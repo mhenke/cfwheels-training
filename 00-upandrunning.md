@@ -17,7 +17,7 @@ Eclipse will then create a ColdFusion project for you and automatically open the
 
 We need to change the Wheels datasource convention. Wheels assumes our datasource connection is the folder name Wheels resides in but for our case it is not "cfwheels101" but "JSBloggers". We could have easily named our ColdFusion server instance but I wanted to show how we can easily override a Wheels convention.
 
-Press **Ctrl+Shift+R** while in Eclipse. This is the Open Resource window. I use this a lot when coding in Eclipse. Sometimes I highlight a file name in code and press **Ctrl+Shift+R**, other times I type in the file name like we will do next. Type in _settings.cfm_, and select "settings.cfm * /JSBloggers/config". This will open that file for us. In the file at the bottom, type ```<cfset set(dataSourceName="JSBloggers") />``` to tell Wheels to use this as are datasource. Also add ```<cfset set(URLRewriting="Partial") />``` to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers. To reload Wheels, you can 1) add ```?reload=true``` to the url or 2) click on the "Reload" link in the Wheels debug section. Reloading refreshes any cached items.
+Press **Ctrl+Shift+R** while in Eclipse. This is the Open Resource window. I use this a lot when coding in Eclipse. Sometimes I highlight a file name in code and press **Ctrl+Shift+R**, other times I type in the file name like we will do next. Type in _settings.cfm_, and select "settings.cfm -- /JSBloggers/config". This will open that file for us. In the file at the bottom, type ```<cfset set(dataSourceName="JSBloggers") />``` to tell Wheels to use this as are datasource. Also add ```<cfset set(URLRewriting="Partial") />``` to tell Wheels to use Partial for URL Rewriting. Then reload Wheels and you should see under DataSource, JSBloggers. To reload Wheels, you can 1) add ```?reload=true``` to the url or 2) click on the "Reload" link in the Wheels debug section. Reloading refreshes any cached items.
 
 Our blog will be centered on "articles" so we'll need a table in the database to store all the articles and a model to allow our Wheels app to work with that table.
 
@@ -82,7 +82,7 @@ So add these into your ```up``` so it looks like this:
 </cffunction>
 ```
 
-That's it! You might be wondering, what is the "text" type? This is an example of relying on the Wheels database adapters to make the right call. For some databases, large text fields are stored as "varchar", while other's like Postgres use a "text" type. The database adapter will figure out the best choice for us depending on the configured database * we don't have to worry about it.
+That's it! You might be wondering, what is the "text" type? This is an example of relying on the Wheels database adapters to make the right call. For some databases, large text fields are stored as "varchar", while other's like Postgres use a "text" type. The database adapter will figure out the best choice for us depending on the configured database -- we don't have to worry about it.
 
 Now our ```up``` migration is done. You might wonder, what about the ```down```? Didn't I say migrations need to be symmetric? If we added something to the ```up``` it is **generally** the case we need to undo the same change in the ```down```. However, when the migration is creating a table, the ```down``` can just drop that table regardless of what columns are inside of it. That's what the generator has setup for us here, where it says "dropTable("[tableName]");" replace "[tableName]" with "articles".
 
@@ -184,7 +184,7 @@ Back to the ```<cfset article = model("article").new() />``` instruction. in the
 
 Now you'll see the ```findAll()``` command gave you back an query object holding the one article we created and saved. Go ahead and **create 3 more sample articles** in one request under a method called "moreSamples".
 
-### Moving Towards a Web Interface * Setting up the Route
+### Moving Towards a Web Interface -- Setting up the Route
 
 We've created a few articles through the Examples controller, but we really don't have a web application until we have a better web interface. Let's get that started. We said "Wheels uses an **MVC** architecture", and we've worked with the Model, now we need a View and Controller.
 
@@ -218,7 +218,7 @@ We have a working controller for CRUD (create, read, update, and delete) but we 
 
 ### Defining the Index Action
 
-The first action we want to talk about is the ```index```. This is what the app will send back when a user requests "http://localhost:8301/index.cfm/Articles/" * following the RESTful conventions, this should be a list of the articles. So when the router sees this request come in, it tries to call the ```index``` action inside **Articles** controller. It goes to the ```index``` **action** which gets all our articles then renders the ```index``` **view**:
+The first action we want to talk about is the ```index```. This is what the app will send back when a user requests "http://localhost:8301/index.cfm/Articles/" -- following the RESTful conventions, this should be a list of the articles. So when the router sees this request come in, it tries to call the ```index``` action inside **Articles** controller. It goes to the ```index``` **action** which gets all our articles then renders the ```index``` **view**:
 
 ```cfm
 <cffunction name="index">  
@@ -261,8 +261,7 @@ Listing articles
 <cfoutput query="articles">  
 
 <li>
-<b>#articles.title#</b><br/>  
-
+<b>#articles.title#</b><br/> 
 </li>
 </cfoutput>  
 
