@@ -109,21 +109,10 @@ Created table articles
 
 The migration page tells you the plugin ran the migration. As I said before, **DBMigrate** keeps track of which migrations **have** and **have not** been run. Try running "All non-migrated" again now, and see what happens.
 
-We've now created the "articles" table in the database and can start working on our **Article** model. We can view the **SQL** under **/db/sql**.
-
-### Creating the Article Model
-
-We'll create an **Article Model** to represent the **Articles** table. In Eclipse, right-click on the _models_ folder and select New --> File. In the file name input type _Article.cfc_ and press **Finish**. Type this in the blank file:
-
-```cfm
-<cfcomponent extends="Model" output="false">
-	
-</cfcomponent>
-```
-
-* _/models/Article.cfc_ : The file will hold the model code
-
-With this file in place we can start developing!
+We've now created the "articles" table in the database and can start working on our **Article** model. We can view the **SQL** under **/db/sql**. We can see the new table exists and its structure in MySQL by running these command in the prompt:
+* USE JSBloggers;
+* SHOW TABLES;
+* DESCRIBE articles;
 
 ### Working with a Model
 
@@ -139,12 +128,12 @@ In the Eclipse menu:
 * Extends: Controller  
 * Click Finish
 
-Our new component will open automatically and we'll add some code in between the ```cfcomponent``` instructions. Let's try some experiments… To view our first experiment, we'll go to http://wheels.local/index.cfm/examples/one. So type these instructions and observe the results when running the page:
+Our new component will open automatically and we'll add some code in between the ```cfcomponent``` instructions. Let's try some experiments… To view our first experiment, we'll go to http://localhost:8301/index.cfm/examples/one. So type these instructions and observe the results when running the page:
 
 ```cfm
 <cffunction name="one">  
  <cfset time = now() />  
- <cfdump var="#now()#" />  
+ <cfdump var="#time#" />  
  <cfset articles = model("article").findAll() />  
  <cfdump var="#articles#" />  
  <cfset article = model("article").new() />  
@@ -153,13 +142,27 @@ Our new component will open automatically and we'll add some code in between the
 </cffunction>
 ```
 
-The first line was to demonstrate we can do anything in our **Controller** we previously did during "CFML in 100 minutes". The third line referenced the **Article** model and called the ```findAll``` method which returns a query of all articles in the database * so far an empty result. The fifth line created a new article object and returns it. The object is not saved to the database; it only exists in memory. Property names and values can be passed in either using named arguments or as a structure to the properties argument.
+The first line was to demonstrate we can do anything in our **Controller** we previously did during "CFML in 100 minutes". The third line referenced the **Article** model and called the ```findAll``` method which returns a query of all articles in the database -- so far an empty result. The fifth line created a new article object and returns it. The object is not saved to the database; it only exists in memory. Property names and values can be passed in either using named arguments or as a structure to the properties argument.
 
-All the information about the **Article** model is in the file _/models/Article.cfc_, so let's open that now.
+All the information about the **Article** model is in the file _/models/Article.cfc_, so let's open that now. Did you find it, hopefully not since it doesn't exist. We are following Wheels **conventions** so everything is **assumed** and it isn't needed yet. We'll create it next because eventually we'll need to define some model settings.
+
+### Creating the Article Model
+
+We'll create an **Article Model** to represent the **Articles** table. In Eclipse, right-click on the _models_ folder and select New --> File. In the file name input type _Article.cfc_ and press **Finish**. Type this in the blank file:
+
+```cfm
+<cfcomponent extends="Model" output="false">
+	
+</cfcomponent>
+```
+
+* _/models/Article.cfc_ : The file will hold the model code
 
 Not very impressive, right? There are no attributes defined inside the model, so how does Wheels know an Article should have a "title", a "body", etc? It queries the database, looks at the articles table, and assumes whatever columns the table has should probably be the attributes accessible through the model.
 
 #### Let's look at the Articles table
+
+In the command prompt, run: _Show articles;_
 
 You created most of the columns in your migration file, but what about the "id"? Every table you create with a migration will automatically have an "id" column which serves as the table's primary key. When you want to find a specific article, you'll look it up in the articles table by its unique ID number. Wheels and the database work together to make sure that these IDs are unique, usually using a special column type in the DB like "serial".
 
@@ -181,11 +184,11 @@ Back to the ```<cfset article = model("article").new() />``` instruction. in the
 
 Now you'll see the ```findAll()``` command gave you back an query object holding the one article we created and saved. Go ahead and **create 3 more sample articles** in one request under a method called "moreSamples".
 
-### Moving Towards a Web Interface * Setting up the Router
+### Moving Towards a Web Interface * Setting up the Route
 
-We've created a few articles through the Examples controller, but we really don't have a web application until we have a better web interface. Let's get that started. We said "Wheels uses an **MVC** architecture", and we've worked with the Model, now we need a Controller and View.
+We've created a few articles through the Examples controller, but we really don't have a web application until we have a better web interface. Let's get that started. We said "Wheels uses an **MVC** architecture", and we've worked with the Model, now we need a View and Controller.
 
-When a Wheels application gets a request from a web browser it first goes to the **router**. The router decides what the request is trying to do and what resources it is trying to interact with. The router dissects a request based on the address it is requesting. Let's open the router's configuration file, _/config/routes.cfm_.
+When a Wheels application gets a request from a web browser, it first goes to the **router**. The router decides what the request is trying to do and what resources it is trying to interact with. The router dissects a request based on the address it is requesting. Let's open the router's configuration file, _/config/routes.cfm_.
 
 Inside this file you'll see ```<cfset addRoute(name="home", pattern="", controller="wheels", action="wheels") />```. This is the default route and it directs to the Congratulations page, you saw when we first loaded our application. Let's replace it with:
 
@@ -193,17 +196,17 @@ Inside this file you'll see ```<cfset addRoute(name="home", pattern="", controll
 <cfset addRoute(name="home", pattern="", controller="Articles", action="index") />
 ```
 
-This line tells Wheels to do a lot of work. It declares that we have a resource named "home" and the router should expect requests to follow the **RESTful** model of web interaction (**RE**presentational State Transfer). The details don't matter to you right now, but just know that when you make a request like "http://wheels.local/" and the router will know you're looking for a "index action" of the "Articles controller".
+This line tells Wheels to do a lot of work. It declares that we have a resource named "home" and the router should expect requests to follow the **RESTful** model of web interaction (**RE**presentational State Transfer). The details don't matter to you right now, but just know that when you make a request like "http://localhost:8301/" and the router will know you're looking for a **index** action of the **Articles** controller.
 
 Now the router knows how to handle requests about articles, it needs a place to actually send those requests, the **Controller**.
 
 ### Creating the Articles Controller
 
-We're going to use the Scaffold plugin again. In your browser, enter this url to get to the Scaffold plugin: "http://wheels.local/index.cfm?controller=wheels&action=wheels&view=plugins&name=scaffold"
+We're going to use the Scaffold plugin again. In your browser, click the "Scaffold" link under Plugins in the Wheels debugging section.
 
-Type **article** for the Object name and select **Controller** for Type. We'll leave the Template as default and click Generate. The page should refresh and "**File "controllers/Articles.cfc" created.**" should appear.
+Type **article** for the Object name and select **Controller** for Type. We'll leave the Template as default and click _Generate_. The page should refresh and "**File "controllers/Articles.cfc" created.**" should appear.
 
-The output shows that the generator created this file for you:
+The output should show the generator created this file for you:
 
 * _/controllers/Articles.cfc_: The controller file itself
 
@@ -215,19 +218,22 @@ We have a working controller for CRUD (create, read, update, and delete) but we 
 
 ### Defining the Index Action
 
-The first action we want to talk about is the ```index```. This is what the app will send back when a user requests "http://wheels.local/index.cfm/Articles/" * following the RESTful conventions, this should be a list of the articles. So when the router sees this request come in, it tries to call the ```index``` action inside **Articles** controller. It goes to the ```index``` action which gets all our articles:
+The first action we want to talk about is the ```index```. This is what the app will send back when a user requests "http://localhost:8301/index.cfm/Articles/" * following the RESTful conventions, this should be a list of the articles. So when the router sees this request come in, it tries to call the ```index``` action inside **Articles** controller. It goes to the ```index``` **action** which gets all our articles then renders the ```index``` **view**:
 
 ```cfm
 <cffunction name="index">  
- <cfset articles = model("Article").findAll() />  
+ <cfset articles = model("Article").findAll() /> 
+ <cfset renderPage(action="index")>
 </cffunction>
 ```
 
+We can actually remove the renderPage instruction because Wheels **conventions** will **assume** the ```view ``` is the same name as the ```action```. We would use it if we wanted to **override** the assumption. Lets remove the _renderPage_ instruction.
+
 #### Passing Action variables to Views
 
-What scope is "articles"? Usually in a "cfc" we will "var" scope variables to stop data issues. The ```var``` instruction marks the variable as a "local variable". We want the list of articles to be accessible from both the controller and the view we're about to create so in order for "articles" to be visible in both places it has to be in the variable scope. If we had named it "var articles", the local variable would only be available within the ```index``` action of the controller.
+What scope is "articles"? Usually in a "cfc" we will "var" scope variables to stop data clashing issues. The ```var``` instruction marks the variable as a "local variable". We specifically want the list of articles to be accessible from both the controller and the view we're about to create. In order for "articles" variable to be visible in both places, it has to be in the variables scope. If we had named it "var articles", the local variable would only be available within the ```index``` action of the controller.
 
-Let's load "http://wheels.local/". You'll notice our updated default route is mapping the code to the ```index``` action of the **Articles** controller but we are getting an error since the view doesn't exist.
+Let's load "http://localhost:8301/". You'll notice our updated default route is mapping the code to the ```index``` action of the **Articles** controller but we are getting an error since the view doesn't exist.
 
 ```cfm  
 Wheels.ViewNotFound  
