@@ -46,14 +46,14 @@ Inside the file, you'll see two methods: ```up``` and ```down```.
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="create articles table">  
  <cffunction name="up">  
  <cfscript>  
- t = createTable ("[tableName]");  
- t.timestamps ();  
- t.create ();  
+ t = createTable("[tableName]");  
+ t.timestamps();  
+ t.create();  
  </cfscript>  
  </cffunction>  
  <cffunction name="down">  
  <cfscript>  
- dropTable ("[tableName]");  
+ dropTable("[tableName]");  
  </cfscript>  
  </cffunction>  
 </cfcomponent>
@@ -65,19 +65,19 @@ But first you might be wondering "**What is "t.timestamps" doing there?**". The 
 
 Well, what kind of fields does our Article need to have? Since migrations make it easy to add or change columns later, we don't need to think of **EVERYTHING** right now, we just need a few to get us rolling. Here's a starter set:
 
-* title (a "string")  
-* body (a "text")
+* title(a "string")  
+* body(a "text")
 
 So add these into your ```up``` so it looks like this:
 
 ```cfm
 <cffunction name="up">  
  <cfscript>  
- t = createTable ("articles");  
- t.string ("title");  
- t.text ("body");  
- t.timestamps ();  
- t.create ();  
+ t = createTable("articles");  
+ t.string("title");  
+ t.text("body");  
+ t.timestamps();  
+ t.create();  
  </cfscript>  
 </cffunction>
 ```
@@ -89,7 +89,7 @@ Now our ```up``` migration is done. You might wonder, what about the ```down```?
 ```cfm
 <cffunction name="down">  
  <cfscript>  
- dropTable ("articles");
+ dropTable("articles");
  </cfscript>  
 </cffunction>
 ```

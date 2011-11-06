@@ -43,18 +43,18 @@ Because we're following the RESTful conventions, Wheels can take care of many of
 
 ```cfm
 <cfoutput>  
- #errorMessagesFor ("article")#  
- #startFormTag (action="create")#  
- #textField (objectName="article", property="title", label="Title")#  
- #textArea (objectName="article", property="body", label="Body")#  
- #submitTag ()#  
- #endFormTag ()#  
+ #errorMessagesFor("article")#  
+ #startFormTag(action="create")#  
+ #textField(objectName="article", property="title", label="Title")#  
+ #textArea(objectName="article", property="body", label="Body")#  
+ #submitTag()#  
+ #endFormTag()#  
 </cfoutput>
 ```
 
 What is all that? Let's look at it piece by piece:
 
-* "errorMessagesFor" is a Wheels helper instruction which builds and returns a list containing all the error messages (if any).
+* "errorMessagesFor" is a Wheels helper instruction which builds and returns a list containing all the error messages(if any).
 * "startFormTag" is a Wheels helper instruction which takes an action parameter, in this case "create", The first line basically says "Make an opening form tag with the name of the action included in the URL."  
 * The "textField" helper creates a single-line text field control
 
@@ -77,11 +77,11 @@ Error location
 Line 3 in viewsarticlesnew.cfm
 
 2: <cfoutput>  
-3: #errorMessagesFor ("article")#  
-4: #startFormTag (action="create")#  
-5: #textField (objectName="article", property="title", label="Title")#  
-6: #textArea (objectName="article", property="body", label="Body")#  
-7: #submitTag ()#  
+3: #errorMessagesFor("article")#  
+4: #startFormTag(action="create")#  
+5: #textField(objectName="article", property="title", label="Title")#  
+6: #textArea(objectName="article", property="body", label="Body")#  
+7: #submitTag()#  
 ```
 
 What's Wheels trying to tell us? In our "new.cfm" on line #3 there was an error about "Wheels.ObjectNotFound". Somewhere in line #4 we're working with an object that doesn't exist.
@@ -105,10 +105,10 @@ Could not find the view page for the create action in the Articles controller.
 
 Suggested action
 
-Create a file named create.cfm in the views/articles directory (create the directory as well if it doesn't already exist).  
+Create a file named create.cfm in the views/articles directory(create the directory as well if it doesn't already exist).  
 ```
 
-When we loaded the form, we accessed the "new" action, but when the form is submitted to the application, following the REST convention, it goes to a "create" action. We set this _action_ in the **startFormTag** instruction. We need to create the action. Inside your "Articles.cfc" add the "create" method (again, **inside** the "cfcomponent" instruction, but **outside** the other actions):
+When we loaded the form, we accessed the "new" action, but when the form is submitted to the application, following the REST convention, it goes to a "create" action. We set this _action_ in the **startFormTag** instruction. We need to create the action. Inside your "Articles.cfc" add the "create" method(again, **inside** the "cfcomponent" instruction, but **outside** the other actions):
 
 ```cfm
 <cffunction name="create">  
@@ -145,12 +145,12 @@ This _linkTo_ helper says…
 ```cfm
 <cfoutput>  
 <p>
-#linkTo (text="Create a New Article", action="new")#
+#linkTo(text="Create a New Article", action="new")#
 </p>
 </cfoutput>
 ```
 
-This code uses the Wheels _linkTo_ helper, it tells Wheels we want a link with the text "Create a New Article" that points to the action "new" (which the router handles for us).
+This code uses the Wheels _linkTo_ helper, it tells Wheels we want a link with the text "Create a New Article" that points to the action "new"(which the router handles for us).
 
 Refresh your browser and you should now see a list of the article titles that are linked somewhere and a link at the bottom to "Create a New Article". Test the create link and it takes you to the new article form. Then go back to the article list and click one of the article titles.
 
@@ -182,7 +182,7 @@ Now create the file _/views/articles/show.cfm_ and add this code:
 <cfoutput>  
 <h2>#article.title#</h2>
 <p>#article.body#</p>
-#linkTo (text="<< Back to Articles List", controller="articles", action="index")#  
+#linkTo(text="<< Back to Articles List", controller="articles", action="index")#  
 </cfoutput>
 ```
 
@@ -232,12 +232,12 @@ Edit an Article
 
 </h1>
 <cfoutput>  
- #errorMessagesFor ("article")#  
- #startFormTag (action="update")#  
- #textField (objectName="article", property="title", label="Title")#  
- #textArea (objectName="article", property="body", label="Body")#  
- #submitTag (value="Update")#  
- #endFormTag ()#  
+ #errorMessagesFor("article")#  
+ #startFormTag(action="update")#  
+ #textField(objectName="article", property="title", label="Title")#  
+ #textArea(objectName="article", property="body", label="Body")#  
+ #submitTag(value="Update")#  
+ #endFormTag()#  
 </cfoutput>
 ```
 
@@ -245,28 +245,33 @@ In the ColdFusion and Wheels communities there is a mantra of "Don't Repeat Your
   
 This view is basically the same as the _new.cfm_ -- the only changes are the H1 and the submit button now has a value parameter. It will display in the button form control. We can abstract this form into a single file called a **partial**, then reference this partial from both _new.cfm_ and _edit.cfm_.
 
-Create a file _/views/articles/form.cfm_ and, yes, it has to have the underscore at the beginning of the filename. Go into your _/views/articles/new.cfm_ and **CUT** all the text from and including the "cfoutput" line all the way to its ending "cfoutput". The only thing left will be your H1 line. Then add the following code at the bottom of that view:
+#### Creating an Partial
+
+Create a file **/views/articles/_form.cfm** and, **yes**, it has to have the underscore at the beginning of the filename. Go into your _/views/articles/new.cfm_ and **CUT** all the text from and including the _cfoutput_ line all the way to its ending _cfoutput_. The only thing left will be your H1 line. Now go back to the **_form.cfm** and paste the form code. Change the "startFormTag" to ```#startFormTag(action=myaction)#```. We will also change the text on the "submit" button to say "Save" so it makes sense both when creating a new article and editing and existing one. This is done by adding _value="Save"_ to the _submitTag()_.
+
+Now return to the _new.cfm_ and add the following code at the bottom of that view:
 
 ```cfm
-<cfoutput>#includePartial ("form")#</cfoutput>
+<cfoutput>#includePartial("form")#</cfoutput>
 ```
-Now go back to the _\form.cfm_ and paste the form code. Change the "startFormTag" to ```#startFormTag(action=myaction)#``` and the text on the "submit" button to say "Save" so it makes sense both when creating a new article and editing and existing one.
 
-Also for editing we need to have a hidden field for the article's "id". So please add this above the "submitTag" in our partial.
+Also for editing we need to have a hidden field for the article's "id". So please add this above the _submitTag_ in our partial.
 
 ```cfm
-<cfif myaction EQ "update">  
- #hiddenField (objectName="article", property="id")#  
+<cfif not article.isNew()>  
+#hiddenFieldTag(name="key", value=article.id)#
 </cfif>
 ```
 
-Then look at your _edit.cfm_ file, write an H1 header saying "Edit an Article", then use the same code to render the partial named  "form".
+Hold on, what is the **article.isNew()** and **hiddenFieldTag**? Well, our _article_ object has built in methods. The _isNew()_ returns true or false based on if the _article_ object is new. The _hiddenFieldTag_ is like the other help instructions but this one builds the html based on the supplied **name**. The other helper tags not ending with **Tag** build and return a string based on the supplied _objectName_ and _property_.
+
+Then create your _edit.cfm_ file, copy and paste the _new.cfm_ into the _edit.cfm_, and change the h1 tag to "Edit an Article".
 
 We will need to add ```<cfset myaction="create" />``` to the "new" action in the _/controllers/Articles.cfc_ along with in the "edit" action ```<cfset myaction="update" />```
 
-Go back to your articles list and try creating a new article -- it should work just fine. Try editing an article and you should see the form with the existing article's data-- it works OK until you click SAVE.
+Go back to your articles list and try creating a new article -- it should work just fine. Try editing an article and you should see the form with the existing article's data -- it works **OK** until you click _Save_.
 
-The router is looking for an action named "update". Just like the "new" action sends its form data to the "create" action, the "edit" action sends its form data to the "update" action. In fact, within our "Articles.cfc", the "update" method will look very similar to "create"
+The router is looking for an action named _update_. Just like the _new_ action sends its form data to the _create_ action, the _edit_ action sends its form data to the _update_ action. In fact, within our "Articles.cfc", the "update" method will look very similar to _create_ action.
 
 ```cfm
 <cffunction name="update">  
@@ -276,13 +281,13 @@ The router is looking for an action named "update". Just like the "new" action s
 </cffunction>
 ```
 
-The new bits here are the "update" method and "key" in our "redirect". The "update" method works very similar to when we called the "new" method and passed in the structure of form data. When we call "update" on the "Article" object and pass in the data from the form, it changes the values in the object to match the values submitted with the form. And saves the object to the database and redirect to the articles list. The "key" in "redirect" tells Wheels to show the same article being update after updated. 
+The new bits here are the _update_ action and **key** in our _redirect_. The _update_ action works very similar to when we called the _new_ action and passed in the structure of form data. When we call **update** on the _Article_ object and pass in the data from the form, it changes the values in the object to match the values submitted with the form. And saves the object to the database and redirect to the articles list. The **key** in _redirectTo_ tells Wheels to show the same article being update after **updated**. 
 
 Now try editing and saving some of your articles.
 
 ### Creating a Delete Action
 
-Next, click the **REMOVE** link for an article and hit OK. You can see the router is expecting a "delete" action. Go into "Articles.cfc" and add a delete method like this:
+Next, click the **REMOVE** link for an article and hit OK. You can see the router is expecting a "delete" action. Go into "Articles.cfc" and add a _delete_ action like this:
 
 ```cfm
 <cffunction name="delete">  
@@ -292,7 +297,7 @@ Next, click the **REMOVE** link for an article and hit OK. You can see the route
 </cffunction>
 ```
 
-Here we're doing a "findByKey" based on "params.key" like we did in the "show" action. We call that object's "delete" method, then redirect back to the articles list.
+Here we're doing a _findByKey_ based on _params.key_ like we did in the _show_ action. We call that object's _delete_ action, then redirect back to the articles list.
 
 Try it out in your browser.
 
@@ -300,12 +305,12 @@ Try it out in your browser.
 
 It would be nice, though, if we gave the user some kind of status message about the operation that took place. When we create an article the message might say "Article "the-article-title" was created", or "Article "the-article-title" was removed" for the remove action. We can accomplish this with a special object called the "flash".
 
-Wheels creates the object named "flash", so we don't need to do anything to set it up. We can start by integrating it into our "index.cfm" by adding this line at the very top:
+Wheels creates the object named **flash**, so we don't need to do anything to set it up. We can start by integrating it into our "index.cfm" by adding this line at the very top:
 
 ```cfm
 <div class="flash">
 <p>
-<cfoutput>#flash ("message")#</cfoutput>
+<cfoutput>#flash("message")#</cfoutput>
 
 </p>
 </div>
