@@ -142,7 +142,9 @@ Our new component will open automatically and we'll add some code in between the
 </cffunction>
 ```
 
-The first line was to demonstrate we can do anything in our **Controller** we previously did during "CFML in 100 minutes". The third line referenced the **Article** model and called the ```findAll``` method which returns a query of all articles in the database -- so far an empty result. The fifth line created a new article object and returns it. The object is not saved to the database; it only exists in memory. Property names and values can be passed in either using named arguments or as a structure to the properties argument.
+* The first line was to demonstrate we can do anything in our **Controller** we previously did during "CFML in 100 minutes". 
+* The third line referenced the **Article** model and called the ```findAll``` method which returns a query of all articles in the database -- so far an empty result. 
+* The fifth line created a new article object and returns it. The object is not saved to the database; it only exists in memory. Property names and values can be passed in either using named arguments or as a structure to the properties argument.
 
 All the information about the **Article** model is in the file _/models/Article.cfc_, so let's open that now. Did you find it, hopefully not since it doesn't exist. We are following Wheels **conventions** so everything is **assumed** and it isn't needed yet. We'll create it next because eventually we'll need to define some model settings.
 
