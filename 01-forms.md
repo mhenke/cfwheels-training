@@ -17,7 +17,7 @@ Create a file named new.cfm in the views/articles directory (create the director
 
 This is an error message we've seen before. The router went looking for an action named "new" inside the "Articles.cfc" and didn't find it.
 
-So first let's create the action. Open _/controllers/Articles.cfc_ and add this method structure, making sure it's **inside** the "cfcomponent" instruction, but **outside** the existing "index" method:
+So first let's create the action. Open _/controllers/Articles.cfc_ and add this method structure, making sure it's **inside** the "cfcomponent" instruction, but **outside** the existing _index_ action:
 
 ```cfm
 <cffunction name="new">
@@ -88,7 +88,7 @@ What's Wheels trying to tell us? In our "new.cfm" on line #3 there was an error 
 
 And since there's only one object in line #3, it makes it pretty obvious -- the problem is we started talking about a thing named "Article" without ever creating that thing. Wheels uses some of the **reflection** techniques we talked about earlier in order to setup the form. Remember in the "Examples.cfc" when we called "Article.new()" to create a new object? We need to create the blank object for it.
 
-Go into your "Articles.cfc", and **inside** the "new" method, add this line:
+Go into your "Articles.cfc", and **inside** the _new_ action, add this line:
 
 ```cfm
 <cfset article = model("Article").new() />
@@ -108,7 +108,7 @@ Suggested action
 Create a file named create.cfm in the views/articles directory(create the directory as well if it doesn't already exist).  
 ```
 
-When we loaded the form, we accessed the "new" action, but when the form is submitted to the application, following the REST convention, it goes to a "create" action. We set this _action_ in the **startFormTag** instruction. We need to create the action. Inside your "Articles.cfc" add the "create" method(again, **inside** the "cfcomponent" instruction, but **outside** the other actions):
+When we loaded the form, we accessed the _new_ action, but when the form is submitted to the application, following the REST convention, it goes to a _create_ action. We set this _action_ in the **startFormTag** instruction. We need to create the action. Inside your _Articles.cfc_ add the _create_ action(again, **inside** the "cfcomponent" instruction, but **outside** the other actions):
 
 ```cfm
 <cffunction name="create">  
@@ -121,7 +121,7 @@ When we loaded the form, we accessed the "new" action, but when the form is subm
 This method says…
 
 * Create an object named "Article" and send in the parameter "params.article"  
-* Wheels makes the form data available inside the variable named "params". If we're to look at "params" as a data structure, it'd be a structure with only a key called "Article". The value of the pair is another structure with keys "title" and "body". The values for those keys are the data we entered into the text boxes on the form. So when "Article.new" is called and the structure "params.article" is passed in, the "new" method looks for the value with key "title" and puts that into the Article's "title" attribute. Then it looks for the value for key "body" and puts that into the article's "body" attribute.  
+* Wheels makes the form data available inside the variable named "params". If we're to look at "params" as a data structure, it'd be a structure with only a key called "Article". The value of the pair is another structure with keys "title" and "body". The values for those keys are the data we entered into the text boxes on the form. So when "Article.new" is called and the structure "params.article" is passed in, the _new_ action looks for the value with key "title" and puts that into the Article's "title" attribute. Then it looks for the value for key "body" and puts that into the article's "body" attribute.  
 * The line ```<cfset article.save() />``` saves the object to the database, just like we did in the examples.  
 * Finally, the "redirectTo" tells Wheels we don't want to follow the **conventions** and render a view for this action. Once the previous steps are done, we want to bounce to the list of all articles. The _renderPage(action="index")_ resolve to [http://localhost:8301/index.cfm/articles/index.](http://localhost:8301/index.cfm/articles/index.)
 
@@ -275,7 +275,7 @@ We will need to add ```<cfset myaction="create" />``` to the "new" action in the
 
 Go back to your articles list and try creating a new article -- it should work just fine. Try editing an article and you should see the form with the existing article's data -- it works **OK** until you click _Save_.
 
-The router is looking for an action named _update_. Just like the _new_ action sends its form data to the _create_ action, the _edit_ action sends its form data to the _update_ action. In fact, within our "Articles.cfc", the "update" method will look very similar to _create_ action.
+The router is looking for an action named _update_. Just like the _new_ action sends its form data to the _create_ action, the _edit_ action sends its form data to the _update_ action. In fact, within our "Articles.cfc", the _update_ action will look very similar to _create_ action.
 
 ```cfm
 <cffunction name="update">  

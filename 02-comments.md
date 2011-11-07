@@ -117,7 +117,7 @@ Try creating a few comments for that article like this:
 ```
 
 * For the first comment, "c", I used a series of commands like we've done before. 
-* For the second comment, "d", I used the "create" method. When you use "new" it doesn't go to the database until you call "save". With "create" you usually pass in the attributes then the object is created, those attributes set, and the object saved to the database all in one step.
+* For the second comment, "d", I used the _create_ action. When you use "new" it doesn't go to the database until you call "save". With "create" you usually pass in the attributes then the object is created, those attributes set, and the object saved to the database all in one step.
 
 Now you've created a few comments, try executing "a.comments" again in the example _three_.
 
@@ -182,7 +182,7 @@ Obviously this is expecting a file _/views/articles/_comment_form.cfm_, so creat
 
 Look at an article in your browser to make sure the partial is showing up. Then we can start figuring out the details of the form.
 
-Ok, now look at your "Articles.cfc" in the "new" method. Remember how we had to create a blank Article object so Wheels could figure out which fields an article has? We need to do the same thing before we create a form for the comment. But when we view the article and display the comment form we're not running the article's "new" method, we're running the "show" method. So we'll need to create a blank Comment object inside that "show" method like this:
+Ok, now look at your "Articles.cfc" in the _new_ action. Remember how we had to create a blank Article object so Wheels could figure out which fields an article has? We need to do the same thing before we create a form for the comment. But when we view the article and display the comment form we're not running the article's _new_ action, we're running the _how_ action. So we'll need to create a blank Comment object inside that _show_ action like this:
 
 ```cfm
 <cfset comment = article.newComments() />
@@ -242,7 +242,7 @@ Just like we needed an "Articles.cfc" to manipulate our Articles, we'll need a "
 </cfcomponenet>
 ```
 
-The first action we're interested in first is "create". You can cheat by looking at the "create" method in your "Articles.cfc". For your "Comments.cfc", everything should be the same just replace article with comment. Then the "redirectTo" is a little different, use this:
+The first action we're interested in first is "create". You can cheat by looking at the _create_ action in your _Articles.cfc_. For your _Comments.cfc_, everything should be the same just replace article with comment. Then the _redirectTo_ is a little different, use this:
 
 ```cfm
 <cfset redirectTo(controller="article",action="index")>
