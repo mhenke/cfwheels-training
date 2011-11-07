@@ -225,7 +225,7 @@ The "startFormTag" helper is trying to build the form so that it submits to _/co
 
 ### Creating a Comments Controller
 
-Just like we needed an "Articles.cfc" to manipulate our Articles, we'll need a "Comments.cfc" to manipulate our Comments. Create it to add this code:
+Just like we needed an _Articles.cfc_ controller to manipulate our Articles, we'll need a _Comments.cfc_ controller to manipulate our Comments. Create it to add this code:
 
 ```cfm
 <cfcomponent extends="Controller" output="false">
@@ -242,7 +242,7 @@ Just like we needed an "Articles.cfc" to manipulate our Articles, we'll need a "
 </cfcomponenet>
 ```
 
-The first action we're interested in first is "create". You can cheat by looking at the _create_ action in your _Articles.cfc_. For your _Comments.cfc_, everything should be the same just replace article with comment. Then the _redirectTo_ is a little different, use this:
+The first action we're interested in first is _create_ action. You can cheat by looking at the _create_ action in your _Articles.cfc_ controller. For your _Comments.cfc_ controller, everything should be the same just replace article with comment. Then the _redirectTo_ is a little different, use this:
 
 ```cfm
 <cfset redirectTo(controller="article",action="index")>
