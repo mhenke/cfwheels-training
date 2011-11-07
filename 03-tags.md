@@ -192,7 +192,7 @@ Did it really work? It's hard to tell. Let's jump into the Examples and have a l
 
 I bet the Examples Seven reported that "a.tags" had "0" tags * an empty query. So we didn't generate an error, but we didn't create any tags either.
 
-We will need to call our "newTag" method within our "create" and "update" actions by adding ```<cfset newTag()/>```.
+We will need to call our _newTag_ action within our "create" and "update" actions by adding ```<cfset newTag()/>```.
 
 ```cfm
 <cffunction name="create">  
@@ -239,7 +239,7 @@ Attribute validation error for tag cfloop.
 The value of the attribute query, which is currently tags, is invalid.  
 ```
 
-The "show" page is trying to use "tags", but the action doesn't know anything about our "tags" variable. We need to create the "tags" variable in the "show" action of the _/controllers/Article.cfc_. Open up _/controllers/Article.cfc_ and add this code ```<cfset tags = article.tags(order="name")/>``` inside the "show" method.
+The "show" page is trying to use "tags", but the action doesn't know anything about our "tags" variable. We need to create the "tags" variable in the "show" action of the _/controllers/Article.cfc_. Open up _/controllers/Article.cfc_ and add this code ```<cfset tags = article.tags(order="name")/>``` inside the _show_ action.
 
 Now refresh your view and you should see your tags showing up on the individual article pages.
 
@@ -286,7 +286,7 @@ It prevents duplicates and allows you to remove tags from the edit form. Test it
 
 ### Listing Articles by Tag
 
-The links for our tags are showing up, but if you click on them you'll get our old friend, the "Wheels.ViewNotFound". Create your _/controllers/Tags.cfc_ and add a "show" method like this:
+The links for our tags are showing up, but if you click on them you'll get our old friend, the "Wheels.ViewNotFound". Create your _/controllers/Tags.cfc_ and add a _show_ action like this:
 
 ```cfm
 <cfcomponent extends="Controller" output="false">
@@ -320,6 +320,6 @@ We've built the "show" action, but the reader should also be able to browse the 
   
 Look at your "Articles.cfc" and Article "index.cfm" if you need some clues.
 
-If that's easy, try creating a "delete" method in your "tags.cfc" and adding a delete link to the tag list. If you do this, change the association in your "tag.cfc" so that it says "hasMany:taggings, :dependent => :delete". That'll prevent orphaned Tagging objects from hanging around.
+If that's easy, try creating a _delete_ action in your _Tags.cfc_ and adding a delete link to the tag list. If you do this, change the association in your "tag.cfc" so that it says "hasMany:taggings, :dependent => :delete". That'll prevent orphaned Tagging objects from hanging around.
 
 With that, a long Iteration 3 is complete!
