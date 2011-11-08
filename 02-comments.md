@@ -260,6 +260,8 @@ Test out your form to create another comment now -- and it should work!
 
 #### Validation
 
+TODO: REWORD THIS SENTENCE
+
 Wheels utilizes validation setup within the model to enforce appropriate data constraints and persistence. Validation may be performed for saves, creates, and updates. We can make sure _authorname_ and _body_ are present when making a comment. Also we can make sure the _url_ and _authoremail_ are correct.
 
 ```cfm
@@ -269,6 +271,8 @@ Wheels utilizes validation setup within the model to enforce appropriate data co
 <cfset validatesFormatOf(property="authorurl",type="url",allowBlank="true")>
 <cfset validatesFormatOf(property="authoremail",type="email",allowBlank="true")>
 ```
+
+TODO: REWORD THIS SENTENCE
 
 This is fairly readable on its own, but this example defines the following rules that will be run before a create, update, or save is called:
 
@@ -299,6 +303,9 @@ Notice, we aren't passing in the _article.comments_ array now, so we will need t
 Now with this in place, let's test are validation.
 
 #### Automatic Validations
+
+TODO: REWORD THIS SECTION
+
 Now that you have a good understanding of how validations work in the model, here is a piece of good news. By default, Wheels will perform many of these validations for you based on how you have your fields set up in the database.
 
 By default, these validations will run without your needing to set up anything in the model:
@@ -313,13 +320,30 @@ Note these extra behaviors as well:
 * If you've already set a validation on a particular property in your model, the automatic validations will be overridden by your settings.
 * If your database column provides a default value for a given field, Wheels will not enforce a validatesPresenceOf() rule on that property.
 
-#### Other Stuff
+#### Comments Count
 
-TODO: WRITE UP CHANGES
+Let's make it so where the view template has the "Comments" header it displays how many comments there are, like "Comments ( 3 )". Open up your article's "show.cfm" and change the comments header so it looks like this:
 
-During creating this training, I noticed a "bug" with the _renderPage_ and ```#includePartial(article.comments)#``` combination. It seems _includePartial_ used this way doesn't allow another controller to be called so, I copied _/views/articles/comment.cfm_ to _/views/comments_. This allows error messages to appear along with the form being populated again. Another fix could be to do a _redirectTo_. I also had to change the ```redirectTo(back=true)``` to ```<cfset redirectTo(controller="articles",action="show",key=comment.articleid``` this way if an error happens, then a successful comment, we get back to the appropriate place.
+```cfm
+<h3>
+Comments ( #article.commentCount()# )
+</h3>
+```
 
-### Cleaning Up
+#### Add Timestamp to the Comment Display
+
+We should add something about when the comment was posted. Wheels has a really neat helper named "distanceOfTimeInWords" which takes two dates and creates a text description of their difference like "32 minutes later", "3 months later", and so on. You can use it in your "_comment.cfm" partial like this:
+
+```cfm
+<p>
+Posted #distanceOfTimeInWords(arguments.comment.createdat, now())# later
+
+</p>
+```
+
+With that, you're done with I2!
+
+### Extra Cleaning Up
 
 We've got some decent comment functionality, but there are a few things we should add and tweak.
 
@@ -355,25 +379,6 @@ Refresh and you should see html source like this:
 </p>
 ```
 
-#### Comments Count
+#### Layouts
 
-Let's make it so where the view template has the "Comments" header it displays how many comments there are, like "Comments ( 3 )". Open up your article's "show.cfm" and change the comments header so it looks like this:
-
-```cfm
-<h3>
-Comments ( #article.commentCount()# )
-</h3>
-```
-
-#### Add Timestamp to the Comment Display
-
-We should add something about when the comment was posted. Wheels has a really neat helper named "distanceOfTimeInWords" which takes two dates and creates a text description of their difference like "32 minutes later", "3 months later", and so on. You can use it in your "_comment.cfm" partial like this:
-
-```cfm
-<p>
-Posted #distanceOfTimeInWords(arguments.comment.createdat, now())# later
-
-</p>
-```
-
-With that, you're done with I2!
+TODO: COVER LAYOUTS

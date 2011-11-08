@@ -121,7 +121,6 @@ When we loaded the form, we accessed the _new_ action, but when the form is subm
 This method says…
 
 * Create an object named "Article" and send in the parameter "params.article"  
-* Wheels makes the form data available inside the variable named "params". If we're to look at "params" as a data structure, it'd be a structure with only a key called "Article". The value of the pair is another structure with keys "title" and "body". The values for those keys are the data we entered into the text boxes on the form. So when "Article.new" is called and the structure "params.article" is passed in, the _new_ action looks for the value with key "title" and puts that into the Article's "title" attribute. Then it looks for the value for key "body" and puts that into the article's "body" attribute.  
 * The line ```<cfset article.save() />``` saves the object to the database, just like we did in the examples.  
 * Finally, the "redirectTo" tells Wheels we don't want to follow the **conventions** and render a view for this action. Once the previous steps are done, we want to bounce to the list of all articles. The _renderPage(action="index")_ resolve to [http://localhost:8301/index.cfm/articles/index.](http://localhost:8301/index.cfm/articles/index.)
 
@@ -129,7 +128,9 @@ Go back in your browser so you get to the form with the sample data you entered 
 
 #### Params Structure
 
-We snuck in a structure called _params_ in the _create_ action. Wheels simplifies the request handling for you using the _params_ structure. It combines the **url** and **form** scopes. This is something that most CFML frameworks do as well.
+We snuck in a structure called _params_ in the _create_ action. Wheels simplifies the request handling for you using the _params_ structure. It combines the **url** and **form** scopes. This is something that most CFML frameworks do as well. 
+
+Wheels makes the form data available inside the variable named "params". If we're to look at "params" as a data structure, it'd be a structure with only a key called "Article". The value of the pair is another structure with keys "title" and "body". The values for those keys are the data we entered into the text boxes on the form. So when "Article.new" is called and the structure "params.article" is passed in, the _new_ action looks for the value with key "title" and puts that into the Article's "title" attribute. Then it looks for the value for key "body" and puts that into the article's "body" attribute.  
 
 ### Adding Navigation to the Index
 
