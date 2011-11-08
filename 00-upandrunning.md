@@ -116,7 +116,7 @@ We've now created the "articles" table in the database and can start working on 
 
 ### Working with a Model
 
-Another awesome feature of working with Wheels is the **ORM**. **ORM** stands for Object-Relational Mapping. It allows you to map objects in your application to records in your database tables. This can simplify your development process and the **ORM** makes it very easy to do modifications, searches, and other data operations. So let's create a **Controller** to demonstrate some simple interactions with our **Model**.
+Another awesome feature of working with Wheels is the **ORM**. **ORM** stands for Object-Relational Mapping. It allows you to map objects in your application to records in your database tables. This can simplify your development process and the **ORM** makes it very easy to do modifications, searches, and other data operations. Wheels automatically convert all the inputs we passed into to the ORM methods to _cfqueryparam_ for people interested in sql injection protection. So let's create a **Controller** to demonstrate some simple interactions with our **Model**. 
 
 In the Eclipse menu:
 
@@ -178,13 +178,15 @@ Back to the ```<cfset article = model("article").new() />``` instruction. in the
  <cfset a.body = "This is the text for my article, woo hoo!" />  
  <cfset article = model("article").new(a) />  
  <cfset article.save() />  
- <cfset articles = model("article").findAll() />  
+ <cfset articles = model("article").findAll(select="body",order="id",where="title='Sample Article Title'") />  
  <cfdump var="#articles#" />  
  <cfabort>  
 </cffunction>
 ```
 
-Now you'll see the ```findAll()``` command gave you back an query object holding the one article we created and saved. Go ahead and **create 3 more sample articles** in one request under a method called "moreSamples".
+Now you'll see the ```findAll()``` command gave you back an query object holding the one article we created and saved. We added some parameters to the command. The _select_ determines how the SELECT clause for the query used to return data will look. The _order_ maps to the ORDER BY clause of the query. The _where_ argument maps to the WHERE clause of the query. You can review all the parameters on the Wheels website, cfwheels.org. http://cfwheels.org/docs/1-1/function/findAll
+
+Go ahead and **create 3 more sample articles** in one request under a method called "moreSamples".
 
 ### Moving Towards a Web Interface -- Setting up the Route
 
