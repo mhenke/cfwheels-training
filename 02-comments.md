@@ -336,8 +336,7 @@ We should add something about when the comment was posted. Wheels has a really n
 
 ```cfm
 <p>
-Posted #distanceOfTimeInWords(arguments.comment.createdat, now())# later
-
+Posted #distanceOfTimeInWords(comment.createdat, now())# later
 </p>
 ```
 
