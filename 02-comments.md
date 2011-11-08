@@ -257,11 +257,15 @@ Wheels utilizes validation setup within the model to enforce appropriate data co
 <cfset validatesPresenceOf(
 	properties="authorname,body"
     )>
-<cfset validatesFormatOf(property="url",allowBlank="true")>
-<cfset validatesFormatOf(property="authoremail",allowBlank="true")>
+<cfset validatesFormatOf(property="authorurl",type="url",allowBlank="true")>
+<cfset validatesFormatOf(property="authoremail",type="email",allowBlank="true")>
 ```
 
-TODO: OTHER STUFF
+This is fairly readable on its own, but this example defines the following rules that will be run before a create, update, or save is called:
+
+* The authorname and body fields must be provided, and they can't be blank.
+* The value provided for authorurl must be a valid urladdress if present.
+* The value provided for authoremail must be a valid email address if present.
 
 #### Automatic Validations
 Now that you have a good understanding of how validations work in the model, here is a piece of good news. By default, Wheels will perform many of these validations for you based on how you have your fields set up in the database.
@@ -279,6 +283,8 @@ Note these extra behaviors as well:
 * If your database column provides a default value for a given field, Wheels will not enforce a validatesPresenceOf() rule on that property.
 
 #### Other Stuff
+
+TODO: WRITE UP CHANGES
 
 During creating this training, I noticed a "bug" with the _renderPage_ and ```#includePartial(article.comments)#``` combination. It seems _includePartial_ used this way doesn't allow another controller to be called so, I copied _/views/articles/comment.cfm_ to _/views/comments_. This allows error messages to appear along with the form being populated again. Another fix could be to do a _redirectTo_. I also had to change the ```redirectTo(back=true)``` to ```<cfset redirectTo(controller="articles",action="show",key=comment.articleid``` this way if an error happens, then a successful comment, we get back to the appropriate place.
 
