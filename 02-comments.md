@@ -185,7 +185,7 @@ Look at an article in your browser to make sure the partial is showing up. Then 
 Ok, now look at your _Articles.cfc_ in the _new_ action. Remember how we had to create a blank Article object so Wheels could figure out which fields an article has? We need to do the same thing before we create a form for the comment. But when we view the article and display the comment form we're not running the article's _new_ action, we're running the _show_ action. So we'll need to create a blank Comment object inside that _show_ action like this:
 
 ```cfm
-<cfset comment = article.newComment() />
+<cfset newcomment = article.newComment() />
 ```
 
 This is just like we did it in the Examples. Now we can create a form inside our _commentform.cfm_ partial like this:
@@ -193,13 +193,13 @@ This is just like we did it in the Examples. Now we can create a form inside our
 ```cfm
 <h3>Post a Comment</h3>
 <cfoutput>  
- #errorMessagesFor("comment")#  
+ #errorMessagesFor("newcomment")# 
  #startFormTag(controller="comments",action="create")#  
- #hiddenField(objectName="comment", property="articleid")#  
- #textField(objectName="comment", property="authorname")#  
- #textField(objectName="comment", property="authoremail")#  
- #textField(objectName="comment", property="authorurl")#  
- #textArea(objectName="comment", property="body")#  
+ #hiddenField(objectName="newcomment", property="articleid")#  
+ #textField(objectName="newcomment", property="authorname")#  
+ #textField(objectName="newcomment", property="authoremail")#  
+ #textField(objectName="newcomment", property="authorurl")#  
+ #textArea(objectName="newcomment", property="body")#  
  #submitTag(value="Create Comment")#  
  #endFormTag()#  
 </cfoutput>
@@ -239,13 +239,22 @@ Just like we needed an _Articles.cfc_ controller to manipulate our Articles, we'
 </cfcomponenet>
 ```
 
-The first action we're interested in first is _create_ action. You can cheat by looking at the _create_ action in your _Articles.cfc_ controller. For your _Comments.cfc_ controller, everything should be the same just replace _article_ with _comment_. Then the _redirectTo_ is a little different, use this:
+The first action we're interested in first is _create_ action. We will want to populate a _newcomment_ with the items from the comment form and save.
 
 ```cfm
-<cfset redirectTo(controller="articles",action="index")>
+<cffunction name="create">  
+ <cfset newcomment = model("Comment").new(params.newcomment) />  
+ <cfif newcomment.save()>
+ 	<cfset flashInsert(message="Comment by '#newcomment.authorname#' was created.") />
+ 	<cfset redirectTo(controller="Articles",action="show",key="#newcomment.articleid#") />
+ <cfelse>
+ 	<cfset article = model("Article").findByKey(key=params.newcomment.articleid, include="comments") />
+ 	<cfset renderPage(controller="Articles",action="show",key="#params.newcomment.articleid#") />
+ </cfif>
+</cffunction>
 ```
 
-Also a _title_ doesn't exist for a comment, so change that to _authorname_.
+This create is a litte more complex then the _create_ action in the _Articles_ controller. A true or false will be returned when saving, so we are checking this. If true, we insert a flash message and redirect back to the article. If false, we get our article then render the article along with passing the id. 
 
 Test out your form to create another comment now -- and it should work!
 
@@ -266,6 +275,28 @@ This is fairly readable on its own, but this example defines the following rules
 * The authorname and body fields must be provided, and they can't be blank.
 * The value provided for authorurl must be a valid urladdress if present.
 * The value provided for authoremail must be a valid email address if present.
+
+In the _create_ action of the _Comments_ controller, we render the page since any validation errors will be attached to the _newcomment_ object it tried to save. We also create an _article_ object since _show_ of _Articles_ controller expects it. Since we are now calling the _show_ from _Articles_ controller can be called from two actions, we will need to change our partials slight. Before our _includePartial_ was **assuming** the partial was in the same folder as the controller but now the it could be either controller so change the _\views\articles\show.cfm_ include partials to:
+
+```cfm
+#includePartial("/articles/comment")#
+#includePartial("/articles/commentform")#
+```
+
+Notice, we aren't passing in the _article.comments_ array now, so we will need to change the ***_comment.cfm** partial slightly to:
+
+```cfm
+<cfoutput>  
+<cfloop array=#article.comments# index="comment">
+<div class="comment">
+ <h4>Comment by #comment.authorname#</h4> 
+ <p>#comment.body#</p>
+</div>
+</cfloop>
+</cfoutput>
+```
+
+Now with this in place, let's test are validation.
 
 #### Automatic Validations
 Now that you have a good understanding of how validations work in the model, here is a piece of good news. By default, Wheels will perform many of these validations for you based on how you have your fields set up in the database.
