@@ -166,10 +166,10 @@ Good start, but our users (hopefully) can't get into the Examples code to create
 Let's start with the form. The comment form should be embedded into the article's "show" template. So let's add this code right above the "<< Back to Articles List" in the articles "show.cfm"
 
 ```cfm
-#includePartial("comment\form")#
+#includePartial("commentform")#
 ```
 
-Obviously this is expecting a file _/views/articles/_comment_form.cfm_, so create the file and add this content for now:
+Obviously this is expecting a file **/views/articles/_commentform.cfm**, so create the file and add this content for now:
 
 ```cfm
 <h3>
@@ -182,19 +182,16 @@ Obviously this is expecting a file _/views/articles/_comment_form.cfm_, so creat
 
 Look at an article in your browser to make sure the partial is showing up. Then we can start figuring out the details of the form.
 
-Ok, now look at your "Articles.cfc" in the _new_ action. Remember how we had to create a blank Article object so Wheels could figure out which fields an article has? We need to do the same thing before we create a form for the comment. But when we view the article and display the comment form we're not running the article's _new_ action, we're running the _how_ action. So we'll need to create a blank Comment object inside that _show_ action like this:
+Ok, now look at your _Articles.cfc_ in the _new_ action. Remember how we had to create a blank Article object so Wheels could figure out which fields an article has? We need to do the same thing before we create a form for the comment. But when we view the article and display the comment form we're not running the article's _new_ action, we're running the _show_ action. So we'll need to create a blank Comment object inside that _show_ action like this:
 
 ```cfm
-<cfset comment = article.newComments() />
+<cfset comment = article.newComment() />
 ```
 
-This is just like we did it in the Examples. Now we can create a form inside our "\comment\form.cfm" partial like this:
+This is just like we did it in the Examples. Now we can create a form inside our _commentform.cfm_ partial like this:
 
 ```cfm
-<h3>
-Post a Comment
-
-</h3>
+<h3>Post a Comment</h3>
 <cfoutput>  
  #errorMessagesFor("comment")#  
  #startFormTag(controller="comments",action="create")#  
@@ -242,25 +239,52 @@ Just like we needed an _Articles.cfc_ controller to manipulate our Articles, we'
 </cfcomponenet>
 ```
 
-The first action we're interested in first is _create_ action. You can cheat by looking at the _create_ action in your _Articles.cfc_ controller. For your _Comments.cfc_ controller, everything should be the same just replace article with comment. Then the _redirectTo_ is a little different, use this:
+The first action we're interested in first is _create_ action. You can cheat by looking at the _create_ action in your _Articles.cfc_ controller. For your _Comments.cfc_ controller, everything should be the same just replace _article_ with _comment_. Then the _redirectTo_ is a little different, use this:
 
 ```cfm
-<cfset redirectTo(controller="article",action="index")>
+<cfset redirectTo(controller="articles",action="index")>
 ```
+
+Also a _title_ doesn't exist for a comment, so change that to _authorname_.
 
 Test out your form to create another comment now -- and it should work!
 
-#### Comment Validation
+#### Validation
 
-During creating this training, I noticed a "bug" with the "renderPage" and ```#includePartial(article.comments)#``` combination. It seems "includePartial" used this way doesn't allow another controller to be called so, I copied "/views/articles/\comment.cfm" to "/views/comments". This allows error messages to appear along with the form being populated again. Another fix could be to do a "redirectTo". I also had to change the ```redirectTo(back=true)``` to ```<cfset redirectTo(controller="articles",action="show",key=comment.articleid``` this way if an error happens, then a successful comment, we get back to the appropriate place.
+Wheels utilizes validation setup within the model to enforce appropriate data constraints and persistence. Validation may be performed for saves, creates, and updates. We can make sure _authorname_ and _body_ are present when making a comment. Also we can make sure the _url_ and _authoremail_ are correct.
+
+```cfm
+<cfset validatesPresenceOf(
+	properties="authorname,body"
+    )>
+<cfset validatesFormatOf(property="url",allowBlank="true")>
+<cfset validatesFormatOf(property="authoremail",allowBlank="true")>
+```
+
+TODO: OTHER STUFF
+
+#### Automatic Validations
+Now that you have a good understanding of how validations work in the model, here is a piece of good news. By default, Wheels will perform many of these validations for you based on how you have your fields set up in the database.
+
+By default, these validations will run without your needing to set up anything in the model:
+
+* Fields set to NOT NULL will automatically trigger validatesPresenceOf().
+* Numeric fields will automatically trigger validatesNumericalityOf().
+* Date or time fields will be checked for the appropriate format.
+* Fields that have a maximum length will automatically trigger validatesLengthOf().
+
+Note these extra behaviors as well:
+* Automatic validations will not run for Automatic Time Stamps.
+* If you've already set a validation on a particular property in your model, the automatic validations will be overridden by your settings.
+* If your database column provides a default value for a given field, Wheels will not enforce a validatesPresenceOf() rule on that property.
+
+#### Other Stuff
+
+During creating this training, I noticed a "bug" with the _renderPage_ and ```#includePartial(article.comments)#``` combination. It seems _includePartial_ used this way doesn't allow another controller to be called so, I copied _/views/articles/comment.cfm_ to _/views/comments_. This allows error messages to appear along with the form being populated again. Another fix could be to do a _redirectTo_. I also had to change the ```redirectTo(back=true)``` to ```<cfset redirectTo(controller="articles",action="show",key=comment.articleid``` this way if an error happens, then a successful comment, we get back to the appropriate place.
 
 ### Cleaning Up
 
 We've got some decent comment functionality, but there are a few things we should add and tweak.
-
-#### Validation for Articles and Comments
-
-TODO: add section for validation of articles and comments
 
 #### Form Labels
 
