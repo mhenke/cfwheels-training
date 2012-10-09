@@ -37,7 +37,7 @@ There are a few extra steps of preparation when working with Wheels projects:
 
 #### Windows
 
-* Download and install [http://dev.mysql.com/downloads/mirror.php?id=401202](http://dev.mysql.com/downloads/mirror.php?id=401202)
+* Download and install [http://dev.mysql.com/downloads/](http://dev.mysql.com/downloads/)
 * Remember the password you enter when installing.
 
 #### Create JSBloggers Database
